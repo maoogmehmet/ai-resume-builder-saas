@@ -11,7 +11,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { resumeId } = await req.json();
+        const { resumeId, template, versionId } = await req.json();
 
         if (!resumeId) {
             return NextResponse.json({ error: 'Resume ID is required' }, { status: 400 });
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
         let isLinkActive = true;
         if (profile) {
             const isTrialActive = new Date(profile.trial_end_date) > new Date();
-            const isSubscribed = profile.subscription_status === 'active';
+            const isSubscribed = profile.subscription_status === 'active' || profile.subscription_status === 'trialing';
             if (!isTrialActive && !isSubscribed) {
                 isLinkActive = false;
             }
@@ -48,7 +48,11 @@ export async function POST(req: Request) {
 
         if (existingLink) {
             // Update its state to current
-            await supabase.from('public_links').update({ is_active: isLinkActive }).eq('id', existingLink.id);
+            await supabase.from('public_links').update({
+                is_active: isLinkActive,
+                template: template || existingLink.template,
+                version_id: versionId || existingLink.version_id
+            }).eq('id', existingLink.id);
             return NextResponse.json({ success: true, url: `${process.env.NEXT_PUBLIC_APP_URL}/r/${existingLink.slug}`, isActive: isLinkActive });
         }
 
@@ -80,7 +84,9 @@ export async function POST(req: Request) {
                 resume_id: resumeId,
                 user_id: user.id,
                 slug: finalSlug,
-                is_active: isLinkActive
+                is_active: isLinkActive,
+                template: template || 'classic',
+                version_id: versionId || null
             })
             .select()
             .single();
@@ -93,7 +99,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ success: true, url: `${process.env.NEXT_PUBLIC_APP_URL}/r/${inserted.slug}`, isActive: isLinkActive });
 
     } catch (error: any) {
-        console.error('LinkedIn Job Scrape API Error:', error);
+        console.error('Public Link API Error:', error);
         return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
     }
 }

@@ -8,9 +8,11 @@ import { Badge } from '@/components/ui/badge'
 
 interface PublicLinkManagerProps {
     resumeId: string;
+    template?: string;
+    versionId?: string;
 }
 
-export function PublicLinkManager({ resumeId }: PublicLinkManagerProps) {
+export function PublicLinkManager({ resumeId, template, versionId }: PublicLinkManagerProps) {
     const [isLoading, setIsLoading] = useState(false)
     const [linkData, setLinkData] = useState<{ url: string, isActive: boolean } | null>(null)
 
@@ -22,7 +24,7 @@ export function PublicLinkManager({ resumeId }: PublicLinkManagerProps) {
             const resp = await fetch('/api/resume/create-public-link', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ resumeId })
+                body: JSON.stringify({ resumeId, template, versionId })
             })
 
             const data = await resp.json()

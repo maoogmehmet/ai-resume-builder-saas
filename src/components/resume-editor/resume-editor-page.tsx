@@ -161,7 +161,11 @@ export function ResumeEditorPage() {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <PublicLinkManager resumeId={resumeId} />
+                    <PublicLinkManager
+                        resumeId={resumeId}
+                        template={template}
+                        versionId={currentVersionId}
+                    />
                     <PdfDownloadButton resumeData={resumeData} />
                     <JobOptimizerDialog
                         resumeId={resumeId}

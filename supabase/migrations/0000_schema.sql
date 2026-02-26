@@ -47,6 +47,8 @@ CREATE TABLE public.public_links (
   user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
   slug TEXT UNIQUE NOT NULL,
   is_active BOOLEAN DEFAULT TRUE,
+  template TEXT DEFAULT 'classic',
+  version_id UUID REFERENCES public.resume_versions(id) ON DELETE SET NULL,
   view_count INTEGER DEFAULT 0,
   last_viewed_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ DEFAULT NOW(),

@@ -4,15 +4,16 @@ import { ResumePreview } from '@/components/resume-preview'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Download } from 'lucide-react'
+import { Download, Globe, Sparkles } from 'lucide-react'
 import { PdfDownloadButton } from '@/components/pdf-download-button'
 
 export default async function PublicResumePage({ params }: { params: { slug: string } }) {
     const supabase = await createClient()
 
+    // Fetch link with joined resume and profile
     const { data: link, error: linkError } = await supabase
         .from('public_links')
-        .select('*, resumes(*), profiles(*)')
+        .select('*, resumes(*), profiles(*), version:resume_versions(*)')
         .eq('slug', params.slug)
         .single()
 
@@ -22,36 +23,53 @@ export default async function PublicResumePage({ params }: { params: { slug: str
 
     if (!link.is_active) {
         return (
-            <div className="min-h-screen bg-zinc-50 flex flex-col items-center justify-center p-4">
-                <Card className="max-w-md w-full p-8 text-center space-y-4 shadow-sm border-zinc-200">
-                    <div className="h-12 w-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4 font-bold text-xl">!</div>
-                    <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Link Inactive</h1>
-                    <p className="text-zinc-500 pb-4">This resume link has expired or been disabled by the owner.</p>
-                    <Button asChild className="w-full bg-zinc-900"><Link href="/">Build your own with AI</Link></Button>
+            <div className="min-h-screen bg-zinc-100 flex flex-col items-center justify-center p-6 sm:p-12">
+                <Card className="max-w-md w-full p-10 text-center space-y-6 shadow-2xl border-zinc-200 rounded-[2rem] bg-white">
+                    <div className="h-16 w-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-2 border border-red-100">
+                        <Globe className="h-8 w-8" />
+                    </div>
+                    <div>
+                        <h1 className="text-3xl font-black tracking-tight text-zinc-900 mb-2">Link Expired</h1>
+                        <p className="text-zinc-500 text-lg">This professional profile is no longer public or the subscription has lapsed.</p>
+                    </div>
+                    <Button asChild className="w-full h-14 rounded-2xl bg-zinc-900 font-bold text-lg shadow-lg hover:bg-black transition-all">
+                        <Link href="/">Create Your AI Resume</Link>
+                    </Button>
                 </Card>
             </div>
         )
     }
 
-    const resumeData = link.resumes?.ai_generated_json || link.resumes?.original_linkedin_json
+    // Use versioned JSON if specified, otherwise main resume JSON
+    const resumeData = link.version?.optimized_json || link.resumes?.ai_generated_json || link.resumes?.original_linkedin_json
+    const template = link.template || 'classic'
 
     return (
-        <div className="min-h-screen bg-zinc-100 flex flex-col">
-            <header className="bg-white border-b sticky top-0 z-10 px-6 py-4 flex items-center justify-between shadow-sm">
-                <div className="flex items-center gap-2">
-                    <span className="font-bold text-lg tracking-tight">AI Resume Builder</span>
+        <div className="min-h-screen bg-zinc-50 flex flex-col selection:bg-zinc-900 selection:text-white">
+            <header className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-50 px-6 sm:px-12 py-4 flex items-center justify-between shadow-sm">
+                <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 bg-zinc-900 rounded-xl flex items-center justify-center shadow-lg">
+                        <Sparkles className="h-5 w-5 text-white" />
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="font-black text-lg tracking-tighter leading-none text-zinc-900">AI RESUME.</span>
+                        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Verified Profile</span>
+                    </div>
                 </div>
-                <div className="flex gap-4 items-center">
-                    <PdfDownloadButton resumeData={resumeData} />
-                    <Button asChild variant="default" className="bg-zinc-900 shadow-sm hidden sm:flex">
-                        <Link href="/">Create your own resume</Link>
+                <div className="flex gap-3 items-center">
+                    <PdfDownloadButton resumeData={resumeData} template={template as any} />
+                    <Button asChild variant="default" className="bg-zinc-900 shadow-xl hidden sm:flex h-10 px-6 font-bold rounded-xl hover:bg-black">
+                        <Link href="/">Build Yours Free</Link>
                     </Button>
                 </div>
             </header>
 
-            <main className="flex-1 w-full max-w-5xl mx-auto p-4 sm:p-8 h-[calc(100vh-73px)] overflow-hidden">
-                <div className="w-full h-full pb-20 aspect-[1/1.414] shadow-2xl relative mx-auto bg-white rounded-lg overflow-hidden border">
-                    <ResumePreview data={resumeData} isLoading={false} />
+            <main className="flex-1 w-full max-w-6xl mx-auto p-4 sm:p-10 lg:p-16 h-[calc(100vh-73px)] overflow-hidden">
+                <div className="w-full h-full pb-24 shadow-2xl relative mx-auto bg-white rounded-3xl overflow-hidden border border-zinc-200">
+                    <ResumePreview data={resumeData} isLoading={false} template={template as any} />
+                </div>
+                <div className="mt-8 text-center text-zinc-400 font-bold text-xs uppercase tracking-[0.2em]">
+                    Powered by AI Resume Builder • Claude 3.5 Sonnet
                 </div>
             </main>
         </div>
