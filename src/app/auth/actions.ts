@@ -1,0 +1,48 @@
+'use server'
+
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
+import { sendWelcomeEmail } from '@/lib/email'
+
+export async function login(formData: FormData) {
+    const supabase = await createClient()
+
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+
+    if (error) {
+        return redirect('/auth/signin?error=Could not authenticate user')
+    }
+
+    revalidatePath('/', 'layout')
+    redirect('/dashboard')
+}
+
+export async function signup(formData: FormData) {
+    const supabase = await createClient()
+
+    const email = formData.get('email') as string
+    const password = formData.get('password') as string
+
+    const { error } = await supabase.auth.signUp({ email, password })
+
+    if (error) {
+        return redirect('/auth/signup?error=Could not authenticate user')
+    }
+
+    // Send Welcome Email
+    await sendWelcomeEmail(email)
+
+    revalidatePath('/', 'layout')
+    redirect('/auth/signin?message=Check your email to continue sign in process')
+}
+
+export async function signout() {
+    const supabase = await createClient()
+    await supabase.auth.signOut()
+    revalidatePath('/', 'layout')
+    redirect('/')
+}
