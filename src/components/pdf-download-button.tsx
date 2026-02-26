@@ -9,7 +9,13 @@ import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 
-export function PdfDownloadButton({ resumeData, disabled }: { resumeData: any, disabled?: boolean }) {
+interface PdfDownloadButtonProps {
+    resumeData: any;
+    disabled?: boolean;
+    template?: 'classic' | 'modern';
+}
+
+export function PdfDownloadButton({ resumeData, disabled, template = 'classic' }: PdfDownloadButtonProps) {
     const [isDownloading, setIsDownloading] = useState(false)
     const supabase = createClient()
     const router = useRouter()
@@ -17,14 +23,12 @@ export function PdfDownloadButton({ resumeData, disabled }: { resumeData: any, d
     const handleDownload = async () => {
         setIsDownloading(true)
         try {
-            // Optioanl: Check trial status on frontend securely or rely on backend download API.
-            // Doing simple frontend check
             const { data: { user } } = await supabase.auth.getUser()
             if (user) {
                 const { data: profile } = await supabase.from('profiles').select('trial_end_date, subscription_status').eq('id', user.id).single();
                 if (profile) {
                     const isTrialActive = new Date(profile.trial_end_date) > new Date();
-                    const isSubscribed = profile.subscription_status === 'active';
+                    const isSubscribed = profile.subscription_status === 'active' || profile.subscription_status === 'trialing';
                     if (!isTrialActive && !isSubscribed) {
                         toast.error('Trial expired', { description: 'Please upgrade to download PDFs' })
                         router.push('/upgrade')
@@ -35,7 +39,7 @@ export function PdfDownloadButton({ resumeData, disabled }: { resumeData: any, d
 
             if (!resumeData) throw new Error('No resume data to download')
 
-            const doc = <ResumePDFDocument data={resumeData} />
+            const doc = <ResumePDFDocument data={resumeData} template={template} />
             const blob = await pdf(doc).toBlob()
             const url = URL.createObjectURL(blob)
             const link = document.createElement('a')
@@ -59,7 +63,7 @@ export function PdfDownloadButton({ resumeData, disabled }: { resumeData: any, d
             variant="outline"
             onClick={handleDownload}
             disabled={isDownloading || disabled || !resumeData}
-            className="gap-2 text-zinc-600 font-medium"
+            className="gap-2 text-zinc-600 font-medium h-9"
         >
             {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
             Download PDF

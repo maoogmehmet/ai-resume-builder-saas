@@ -1,14 +1,17 @@
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
-import { Sparkles, Trophy, AlertTriangle, Lightbulb } from "lucide-react"
+import { Sparkles, Trophy, AlertTriangle, Lightbulb, Loader2 } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 interface AtsScoreDisplayProps {
     scoreData: any;
+    isLoading?: boolean;
     onRecalculate?: () => void;
     onOptimize?: () => void;
+    onApplyOptimization: (optimizedBullets: any) => void;
 }
 
-export function AtsScoreDisplay({ scoreData, onRecalculate, onOptimize }: AtsScoreDisplayProps) {
+export function AtsScoreDisplay({ scoreData, isLoading, onRecalculate, onOptimize, onApplyOptimization }: AtsScoreDisplayProps) {
     if (!scoreData) return null
 
     const score = scoreData.ats_score || 0
@@ -77,6 +80,14 @@ export function AtsScoreDisplay({ scoreData, onRecalculate, onOptimize }: AtsSco
                         <ul className="text-sm text-zinc-700 space-y-2 list-disc pl-5">
                             {scoreData.suggestions.map((sug: string, i: number) => <li key={i}>{sug}</li>)}
                         </ul>
+                        <Button
+                            className="mt-6 w-full gap-2 bg-blue-600 hover:bg-blue-700 font-medium h-11"
+                            onClick={() => onApplyOptimization(scoreData.optimized_bullets)}
+                            disabled={isLoading}
+                        >
+                            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                            Apply AI Recommendations
+                        </Button>
                     </>
                 )}
             </div>

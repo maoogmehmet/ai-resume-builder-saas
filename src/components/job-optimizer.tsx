@@ -21,11 +21,15 @@ import { AtsScoreDisplay } from '@/components/ats-score'
 
 interface JobOptimizerProps {
     resumeId: string;
+    resumeData: any;
+    onOptimizationApplied: (newVersion: any) => void;
 }
 
-export function JobOptimizerDialog({ resumeId }: JobOptimizerProps) {
+export function JobOptimizerDialog({ resumeId, resumeData, onOptimizationApplied }: JobOptimizerProps) {
     const [url, setUrl] = useState('')
     const [jobDescription, setJobDescription] = useState('')
+    const [jobTitle, setJobTitle] = useState('')
+    const [companyName, setCompanyName] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)
     const [activeTab, setActiveTab] = useState('url')
@@ -52,6 +56,8 @@ export function JobOptimizerDialog({ resumeId }: JobOptimizerProps) {
             if (!resp.ok) throw new Error(data.error)
 
             setJobDescription(data.description || '')
+            setJobTitle(data.title || '')
+            setCompanyName(data.company || '')
             setActiveTab('manual') // switch to manual tab to show the scraped desc
             toast.success('Job details extracted!')
 
@@ -96,9 +102,63 @@ export function JobOptimizerDialog({ resumeId }: JobOptimizerProps) {
         }
     }
 
+    const handleApplyOptimization = async (optimizedBullets: any) => {
+        setIsLoading(true)
+        toast.info('Applying optimization...')
+
+        try {
+            // Create the optimized JSON
+            const optimizedJson = JSON.parse(JSON.stringify(resumeData))
+
+            // Apply bullets if they exist
+            if (optimizedBullets) {
+                // The AI returns optimized_bullets: { experience_0_bullet_1: "..." }
+                // We need to map this back to our array
+                Object.keys(optimizedBullets).forEach(key => {
+                    const match = key.match(/experience_(\d+)_bullet_(\d+)/)
+                    if (match) {
+                        const expIdx = parseInt(match[1])
+                        const bulletIdx = parseInt(match[2])
+                        if (optimizedJson.experience[expIdx] && optimizedJson.experience[expIdx].bullets) {
+                            optimizedJson.experience[expIdx].bullets[bulletIdx] = optimizedBullets[key]
+                        }
+                    }
+                })
+            }
+
+            // Save as new version
+            const resp = await fetch('/api/resume/versions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    resumeId,
+                    jobTitle: jobTitle || 'Optimized Version',
+                    companyName: companyName || 'Generic',
+                    optimizedJson,
+                    atsScore: atsResult.ats_score,
+                    atsAnalysis: atsResult
+                })
+            })
+
+            const data = await resp.json()
+            if (!resp.ok) throw new Error(data.error)
+
+            toast.success('Optimization Applied!', { description: 'A new version has been created.' })
+            onOptimizationApplied(data.version)
+            setOpen(false)
+
+        } catch (error: any) {
+            toast.error('Application Failed', { description: error.message })
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     const resetState = () => {
         setAtsResult(null)
         setJobDescription('')
+        setJobTitle('')
+        setCompanyName('')
         setUrl('')
         setActiveTab('url')
     }
@@ -157,6 +217,16 @@ export function JobOptimizerDialog({ resumeId }: JobOptimizerProps) {
                                     disabled={isLoading}
                                 />
                             </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="grid gap-2">
+                                    <Label>Job Title (Optional)</Label>
+                                    <Input value={jobTitle} onChange={e => setJobTitle(e.target.value)} placeholder="e.g. Frontend Engineer" />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label>Company (Optional)</Label>
+                                    <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. Google" />
+                                </div>
+                            </div>
                             <Button onClick={handleAnalyze} disabled={isLoading || !jobDescription.trim()} type="button">
                                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                                 Analyze Resume
@@ -164,9 +234,12 @@ export function JobOptimizerDialog({ resumeId }: JobOptimizerProps) {
                         </TabsContent>
                     </Tabs>
                 ) : (
-                    <AtsScoreDisplay scoreData={atsResult} onRecalculate={() => setAtsResult(null)} onOptimize={() => {
-                        toast.info('Feature Coming Soon', { description: 'Automatic AI resume tuning will be in Phase 6!' })
-                    }} />
+                    <AtsScoreDisplay
+                        scoreData={atsResult}
+                        isLoading={isLoading}
+                        onRecalculate={() => setAtsResult(null)}
+                        onApplyOptimization={handleApplyOptimization}
+                    />
                 )}
 
             </DialogContent>

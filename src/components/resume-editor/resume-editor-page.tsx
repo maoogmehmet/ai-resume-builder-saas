@@ -22,6 +22,7 @@ import { ResumePreview } from '@/components/resume-preview'
 import { JobOptimizerDialog } from '@/components/job-optimizer'
 import { PdfDownloadButton } from '@/components/pdf-download-button'
 import { PublicLinkManager } from '@/components/public-link-manager'
+import { ResumeVersions } from '@/components/resume-versions'
 
 export function ResumeEditorPage() {
     const router = useRouter()
@@ -32,6 +33,8 @@ export function ResumeEditorPage() {
     const [isSaving, setIsSaving] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
     const [lastSaved, setLastSaved] = useState<Date | null>(null)
+    const [currentVersionId, setCurrentVersionId] = useState<string | undefined>()
+    const [template, setTemplate] = useState<'classic' | 'modern'>('classic')
 
     const resumeId = params?.id as string
 
@@ -94,7 +97,7 @@ export function ResumeEditorPage() {
 
     // Debounced Save
     useEffect(() => {
-        if (!resumeData || isLoading) return;
+        if (!resumeData || isLoading || currentVersionId) return; // Don't auto-save if viewing a specific version
 
         const timeout = setTimeout(async () => {
             setIsSaving(true)
@@ -115,11 +118,17 @@ export function ResumeEditorPage() {
         }, 2000)
 
         return () => clearTimeout(timeout)
-    }, [resumeData, resumeId, isLoading])
+    }, [resumeData, resumeId, isLoading, currentVersionId])
 
     const handleUpdate = useCallback((section: string, data: any) => {
         setResumeData((prev: any) => ({ ...prev, [section]: data }))
     }, [])
+
+    const handleVersionSelect = (version: any) => {
+        setResumeData(version.optimized_json)
+        setCurrentVersionId(version.id)
+        toast.info(`Switched to version: ${version.company_name || 'Generic'}`)
+    }
 
     if (isLoading && !resumeData) {
         return <div className="flex w-full min-h-screen items-center justify-center bg-zinc-50"><Loader2 className="animate-spin h-8 w-8 text-zinc-400" /></div>
@@ -133,7 +142,7 @@ export function ResumeEditorPage() {
                         <Link href="/dashboard"><ArrowLeft className="h-4 w-4" /></Link>
                     </Button>
                     <div className="flex flex-col h-full justify-center">
-                        <h1 className="font-semibold text-zinc-900 tracking-tight leading-none">Editor</h1>
+                        <h1 className="font-semibold text-zinc-900 tracking-tight leading-none text-lg">Editor</h1>
                         <div className="flex items-center gap-2 mt-1">
                             {isSaving ? (
                                 <span className="text-xs text-zinc-500 font-medium animate-pulse flex items-center">
@@ -143,6 +152,10 @@ export function ResumeEditorPage() {
                                 <span className="text-xs text-green-600 font-medium flex items-center gap-1">
                                     <CheckCircle2 className="h-3 w-3" /> Saved at {lastSaved.toLocaleTimeString()}
                                 </span>
+                            ) : currentVersionId ? (
+                                <span className="text-xs text-blue-600 font-medium flex items-center gap-1">
+                                    <Badge variant="outline" className="text-[10px] py-0 px-1 border-blue-200 bg-blue-50 text-blue-600">Viewing Saved Version</Badge>
+                                </span>
                             ) : null}
                         </div>
                     </div>
@@ -150,7 +163,11 @@ export function ResumeEditorPage() {
                 <div className="flex items-center gap-3">
                     <PublicLinkManager resumeId={resumeId} />
                     <PdfDownloadButton resumeData={resumeData} />
-                    <JobOptimizerDialog resumeId={resumeId} />
+                    <JobOptimizerDialog
+                        resumeId={resumeId}
+                        resumeData={resumeData}
+                        onOptimizationApplied={(v) => handleVersionSelect(v)}
+                    />
                 </div>
             </header>
 
@@ -172,7 +189,6 @@ export function ResumeEditorPage() {
                                 Professional Summary
                             </AccordionTrigger>
                             <AccordionContent className="pt-2 pb-4">
-                                {/* Embedded simplified Textarea for summary */}
                                 <textarea
                                     className="w-full min-h-[150px] p-3 rounded-md border border-zinc-200 focus:ring-2 focus:ring-zinc-400 outline-none transition-all text-sm"
                                     value={resumeData.summary || ''}
@@ -209,12 +225,18 @@ export function ResumeEditorPage() {
                             </AccordionContent>
                         </AccordionItem>
                     </Accordion>
+
+                    <ResumeVersions
+                        resumeId={resumeId}
+                        currentVersionId={currentVersionId}
+                        onSelectVersion={handleVersionSelect}
+                    />
                 </div>
 
                 {/* RIGHT PANE - Live Preview */}
                 <div className="hidden lg:block w-1/2 p-10 bg-zinc-200/50 h-[calc(100vh-65px)] overflow-y-auto items-center justify-center border-l flex-shrink-0">
                     <div className="max-w-[850px] mx-auto w-full h-full pb-32 aspect-[1/1.414]">
-                        <ResumePreview data={resumeData} isLoading={isLoading} />
+                        <ResumePreview data={resumeData} isLoading={isLoading} template={template} />
                     </div>
                 </div>
             </main>

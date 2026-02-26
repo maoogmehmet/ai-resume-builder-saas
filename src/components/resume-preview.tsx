@@ -9,9 +9,10 @@ import { Skeleton } from './ui/skeleton'
 interface ResumePreviewProps {
     data: any;
     isLoading: boolean;
+    template?: 'classic' | 'modern';
 }
 
-export function ResumePreview({ data, isLoading }: ResumePreviewProps) {
+export function ResumePreview({ data, isLoading, template = 'classic' }: ResumePreviewProps) {
     const [isClient, setIsClient] = useState(false)
 
     useEffect(() => {
@@ -44,9 +45,9 @@ export function ResumePreview({ data, isLoading }: ResumePreviewProps) {
     }
 
     return (
-        <div className="h-full w-full bg-zinc-100 rounded-lg overflow-hidden border border-zinc-200 shadow-inner flex flex-col relative top-0 sticky h-[calc(100vh-8rem)]">
+        <div className="h-full w-full bg-zinc-100 rounded-lg overflow-hidden border border-zinc-200 shadow-inner flex flex-col">
             <PDFViewer showToolbar={false} className="w-full h-full border-none">
-                <ResumePDFDocument data={data} />
+                <ResumePDFDocument data={data} template={template} />
             </PDFViewer>
         </div>
     )
