@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { motion, useScroll, useTransform, Variants } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Sparkles, Zap, Shield, FileText, Globe, Target, ArrowRight, CheckCircle2, PlayCircle, Star, Quote } from 'lucide-react'
@@ -23,12 +23,12 @@ export function LandingClient({ user }: { user: any }) {
         avatar3: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200"
     }
 
-    const fadeInUp = {
+    const fadeInUp: Variants = {
         hidden: { opacity: 0, y: 40 },
         visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
     }
 
-    const staggerContainer = {
+    const staggerContainer: Variants = {
         hidden: { opacity: 0 },
         visible: {
             opacity: 1,
