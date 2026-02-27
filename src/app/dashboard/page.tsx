@@ -39,6 +39,11 @@ export default async function DashboardPage({
         .select('*', { count: 'exact', head: true })
         .eq('user_id', user.id)
 
+    const { count: letterCount } = await supabase
+        .from('cover_letters')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', user.id)
+
     const isTrialActive = profile && new Date(profile.trial_end_date) > new Date()
     const isSubscribed = profile?.subscription_status === 'active' || profile?.subscription_status === 'trialing'
     const trialDaysLeft = profile ? Math.max(0, Math.ceil((new Date(profile.trial_end_date).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))) : 0
@@ -93,7 +98,7 @@ export default async function DashboardPage({
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
                             </div>
                             <div>
-                                <p className="text-3xl font-bold text-slate-900">0</p>
+                                <p className="text-3xl font-bold text-slate-900">{letterCount || 0}</p>
                                 <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Cover Letters</p>
                             </div>
                         </div>

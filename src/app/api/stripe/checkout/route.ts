@@ -45,11 +45,14 @@ export async function POST(req: Request) {
                 },
             ],
             mode: 'subscription',
+            metadata: {
+                user_id: user.id,
+            },
             subscription_data: {
                 trial_period_days: 7, // Default trial
             },
             success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true`,
-            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/upgrade?canceled=true`,
+            cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/upgrade?canceled=true`,
         });
 
         return NextResponse.json({ url: session.url });
