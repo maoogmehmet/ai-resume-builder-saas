@@ -25,7 +25,7 @@ export function LandingClient({ user }: { user: any }) {
 
     const fadeInUp: Variants = {
         hidden: { opacity: 0, y: 40 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
+        visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" as const } }
     }
 
     const staggerContainer: Variants = {
@@ -48,7 +48,7 @@ export function LandingClient({ user }: { user: any }) {
             <motion.header
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
+                transition={{ duration: 0.5, ease: "easeOut" as const }}
                 className="fixed top-0 w-full z-50 transition-all border-b border-zinc-100 bg-white/70 backdrop-blur-xl"
             >
                 <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-6 lg:px-12">
