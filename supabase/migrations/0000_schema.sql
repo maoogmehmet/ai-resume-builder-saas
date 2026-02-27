@@ -55,16 +55,27 @@ CREATE TABLE public.public_links (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- ai_generations table
+CREATE TABLE public.ai_generations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  generation_type TEXT NOT NULL CHECK (generation_type IN ('resume_creation', 'ats_optimization', 'job_analysis')),
+  tokens_used INTEGER,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Indexes
 CREATE INDEX idx_resumes_user_id ON public.resumes(user_id);
 CREATE INDEX idx_resume_versions_resume_id ON public.resume_versions(resume_id);
 CREATE INDEX idx_public_links_slug ON public.public_links(slug);
+CREATE INDEX idx_ai_generations_user_id ON public.ai_generations(user_id);
 
 -- RLS
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.resumes ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.resume_versions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.public_links ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ai_generations ENABLE ROW LEVEL SECURITY;
 
 -- Policies
 CREATE POLICY "Users can view own profile" ON public.profiles FOR SELECT USING (auth.uid() = id);
@@ -85,12 +96,32 @@ CREATE POLICY "Users can insert own versions" ON public.resume_versions FOR INSE
 CREATE POLICY "Anyone can view active public links" ON public.public_links FOR SELECT USING (is_active = TRUE);
 CREATE POLICY "Users can manage own public links" ON public.public_links FOR ALL USING (auth.uid() = user_id);
 
+CREATE POLICY "Users can view own generations" ON public.ai_generations FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own generations" ON public.ai_generations FOR INSERT WITH CHECK (auth.uid() = user_id);
+
+-- Trial status check function
+CREATE OR REPLACE FUNCTION public.check_trial_status()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.trial_end_date < NOW() AND (NEW.subscription_status IS NULL OR NEW.subscription_status NOT IN ('active', 'trialing')) THEN
+    UPDATE public.public_links 
+    SET is_active = FALSE 
+    WHERE user_id = NEW.id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER on_profile_updated_check_trial
+  AFTER UPDATE OF trial_end_date, subscription_status ON public.profiles
+  FOR EACH ROW EXECUTE FUNCTION public.check_trial_status();
+
 -- Profile trigger on auth.signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, email)
-  VALUES (new.id, new.email);
+  INSERT INTO public.profiles (id, email, trial_start_date, trial_end_date)
+  VALUES (new.id, new.email, NOW(), NOW() + INTERVAL '7 days');
   RETURN new;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;

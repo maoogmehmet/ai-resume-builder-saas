@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
-import { ApifyClient } from 'apify-client';
+import { scrapeSingleLinkedInJob } from '@/lib/apify';
 import { createClient } from '@/lib/supabase/server';
 
-const apifyClient = new ApifyClient({
-    token: process.env.APIFY_API_KEY,
-});
+export const dynamic = 'force-dynamic';
+export const maxDuration = 120;
 
 export async function POST(req: Request) {
     try {
@@ -21,23 +20,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Invalid LinkedIn Job URL' }, { status: 400 });
         }
 
-        const run = await apifyClient.actor('curious_coder/linkedin-jobs-scraper').call({
-            queries: [jobUrl],
-            limit: 1 // only one job from URL
-        });
-
-        const { items } = await apifyClient.dataset(run.defaultDatasetId).listItems();
-
-        if (!items || items.length === 0) {
-            return NextResponse.json({ error: 'Could not scrape job data' }, { status: 404 });
-        }
-
-        const jobData = items[0];
+        const jobData = await scrapeSingleLinkedInJob(jobUrl);
 
         return NextResponse.json({
             title: jobData.title,
-            company: jobData.companyName,
-            description: jobData.descriptionText || jobData.descriptionHTML || jobData.description
+            company: jobData.company,
+            description: jobData.description
         });
 
     } catch (error: any) {

@@ -56,7 +56,7 @@ export function LinkedinImportDialog() {
 
             setOpen(false)
             // Navigate to the dashboard or resume editor with the new ID
-            router.push(`/dashboard/resume/${data.resumeId}`)
+            router.push(`/editor/${data.resumeId}`)
 
         } catch (error: any) {
             toast.error('Import Error', {

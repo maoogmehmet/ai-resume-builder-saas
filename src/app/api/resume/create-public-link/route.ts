@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { generateSlug } from '@/lib/slug-generator';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
     try {
         const supabase = await createClient();
@@ -11,7 +13,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { resumeId, template, versionId } = await req.json();
+        const { resumeId, template, versionId, linkName } = await req.json();
 
         if (!resumeId) {
             return NextResponse.json({ error: 'Resume ID is required' }, { status: 400 });
@@ -39,21 +41,24 @@ export async function POST(req: Request) {
             }
         }
 
-        // Find if link exists
-        const { data: existingLink } = await supabase
-            .from('public_links')
-            .select('*')
-            .eq('resume_id', resumeId)
-            .single();
+        if (!linkName) {
+            // Find if default link exists
+            const { data: existingLink } = await supabase
+                .from('public_links')
+                .select('*')
+                .eq('resume_id', resumeId)
+                .is('link_name', null)
+                .single();
 
-        if (existingLink) {
-            // Update its state to current
-            await supabase.from('public_links').update({
-                is_active: isLinkActive,
-                template: template || existingLink.template,
-                version_id: versionId || existingLink.version_id
-            }).eq('id', existingLink.id);
-            return NextResponse.json({ success: true, url: `${process.env.NEXT_PUBLIC_APP_URL}/r/${existingLink.slug}`, isActive: isLinkActive });
+            if (existingLink) {
+                // Update its state to current
+                await supabase.from('public_links').update({
+                    is_active: isLinkActive,
+                    template: template || existingLink.template,
+                    version_id: versionId || existingLink.version_id
+                }).eq('id', existingLink.id);
+                return NextResponse.json({ success: true, url: `${process.env.NEXT_PUBLIC_APP_URL}/r/${existingLink.slug}`, isActive: isLinkActive });
+            }
         }
 
         let fullName = 'Unknown';
@@ -86,7 +91,8 @@ export async function POST(req: Request) {
                 slug: finalSlug,
                 is_active: isLinkActive,
                 template: template || 'classic',
-                version_id: versionId || null
+                version_id: versionId || null,
+                link_name: linkName || null
             })
             .select()
             .single();

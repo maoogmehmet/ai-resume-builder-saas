@@ -34,7 +34,7 @@ function SortableEducationItem({ edu, idx, onUpdate, onRemove }: any) {
         transform,
         transition,
         isDragging
-    } = useSortable({ id: edu.id || idx });
+    } = useSortable({ id: edu.id });
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -64,20 +64,20 @@ function SortableEducationItem({ edu, idx, onUpdate, onRemove }: any) {
                 <CardContent className="pt-6 pl-12 grid gap-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
-                            <Label>School / University</Label>
-                            <Input value={edu.school} onChange={(e) => onUpdate(idx, 'school', e.target.value)} />
+                            <Label className="flex justify-between">School / University <span className="text-zinc-400 text-[10px] uppercase">{edu.school?.length || 0}/100</span></Label>
+                            <Input maxLength={100} value={edu.school} onChange={(e) => onUpdate(idx, 'school', e.target.value)} />
                         </div>
                         <div className="grid gap-2">
-                            <Label>Degree</Label>
-                            <Input value={edu.degree} onChange={(e) => onUpdate(idx, 'degree', e.target.value)} />
+                            <Label className="flex justify-between">Degree <span className="text-zinc-400 text-[10px] uppercase">{edu.degree?.length || 0}/100</span></Label>
+                            <Input maxLength={100} value={edu.degree} onChange={(e) => onUpdate(idx, 'degree', e.target.value)} />
                         </div>
                         <div className="grid gap-2">
                             <Label>Graduation Date</Label>
-                            <Input placeholder="MM/YYYY" value={edu.graduation_date} onChange={(e) => onUpdate(idx, 'graduation_date', e.target.value)} />
+                            <Input maxLength={20} placeholder="MM/YYYY" value={edu.graduation_date} onChange={(e) => onUpdate(idx, 'graduation_date', e.target.value)} />
                         </div>
                         <div className="grid gap-2">
-                            <Label>GPA (optional)</Label>
-                            <Input value={edu.gpa} onChange={(e) => onUpdate(idx, 'gpa', e.target.value)} />
+                            <Label className="flex justify-between">GPA (optional) <span className="text-zinc-400 text-[10px] uppercase">{edu.gpa?.length || 0}/10</span></Label>
+                            <Input maxLength={10} value={edu.gpa} onChange={(e) => onUpdate(idx, 'gpa', e.target.value)} />
                         </div>
                     </div>
                 </CardContent>
@@ -87,10 +87,20 @@ function SortableEducationItem({ edu, idx, onUpdate, onRemove }: any) {
 }
 
 export function EducationSection({ data, onChange }: EducationProps) {
-    const [educations, setEducations] = useState<any[]>(data || [])
+    const [educations, setEducations] = useState<any[]>(() => {
+        return (data || []).map((edu, i) => ({
+            ...edu,
+            id: edu.id || `edu-${i}-${Date.now()}`
+        }))
+    })
 
     useEffect(() => {
-        if (data) setEducations(data)
+        if (data) {
+            setEducations(data.map((edu, i) => ({
+                ...edu,
+                id: edu.id || `edu-${i}-${Date.now()}`
+            })))
+        }
     }, [data])
 
     const sensors = useSensors(
@@ -147,12 +157,12 @@ export function EducationSection({ data, onChange }: EducationProps) {
                 onDragEnd={handleDragEnd}
             >
                 <SortableContext
-                    items={educations.map((edu, i) => edu.id || i)}
+                    items={educations.map((edu) => edu.id)}
                     strategy={verticalListSortingStrategy}
                 >
                     {educations.map((edu, idx) => (
                         <SortableEducationItem
-                            key={edu.id || idx}
+                            key={edu.id}
                             edu={edu}
                             idx={idx}
                             onUpdate={handleUpdate}

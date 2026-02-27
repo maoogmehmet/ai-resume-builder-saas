@@ -1,9 +1,12 @@
-import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { Page, Text, View, Document, StyleSheet, Image } from '@react-pdf/renderer';
 import { ModernTemplate } from './pdf-templates/modern';
+import { ExecutiveTemplate } from './pdf-templates/executive';
 
 const styles = StyleSheet.create({
     page: { padding: 30, fontFamily: 'Helvetica', fontSize: 10, color: '#000000', lineHeight: 1.5 },
-    header: { marginBottom: 15, textAlign: 'center' },
+    header: { marginBottom: 15, flexDirection: 'row', alignItems: 'center', gap: 20 },
+    headerText: { flex: 1 },
+    profileImage: { width: 60, height: 60, borderRadius: 30 },
     name: { fontSize: 18, fontFamily: 'Helvetica-Bold', marginBottom: 4 },
     contact: { fontSize: 10, color: '#333333', marginBottom: 2 },
     summary: { marginBottom: 15 },
@@ -27,11 +30,16 @@ export const ClassicTemplate = ({ data }: { data: any }) => {
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={styles.header}>
-                    <Text style={styles.name}>{personal_info.full_name}</Text>
-                    <Text style={styles.contact}>
-                        {[personal_info.email, personal_info.phone, personal_info.location, personal_info.linkedin]
-                            .filter(Boolean).join(' | ')}
-                    </Text>
+                    {personal_info.profile_image && (
+                        <Image src={personal_info.profile_image} style={styles.profileImage} />
+                    )}
+                    <View style={styles.headerText}>
+                        <Text style={styles.name}>{personal_info.full_name}</Text>
+                        <Text style={styles.contact}>
+                            {[personal_info.email, personal_info.phone, personal_info.location, personal_info.linkedin]
+                                .filter(Boolean).join(' | ')}
+                        </Text>
+                    </View>
                 </View>
                 {summary && <View style={styles.summary}><Text>{summary}</Text></View>}
                 {experience?.length > 0 && (
@@ -81,10 +89,20 @@ export const ClassicTemplate = ({ data }: { data: any }) => {
 };
 
 export const ResumePDFDocument = ({ data, template = 'classic' }: { data: any, template?: string }) => {
-    if (!data || !data.personal_info) return <Document><Page size="A4"><Text>No data</Text></Page></Document>;
+    if (!data || !data.personal_info) return (
+        <Document>
+            <Page size="A4">
+                <Text>No data available</Text>
+            </Page>
+        </Document>
+    );
 
     if (template === 'modern') {
         return <ModernTemplate data={data} />;
+    }
+
+    if (template === 'executive') {
+        return <ExecutiveTemplate data={data} />;
     }
 
     return <ClassicTemplate data={data} />;

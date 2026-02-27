@@ -1,25 +1,63 @@
 'use client'
 
-import { PDFViewer } from '@react-pdf/renderer'
-import { ResumePDFDocument } from '@/lib/pdf-generator'
 import { Card } from './ui/card'
 import { useState, useEffect } from 'react'
 import { Skeleton } from './ui/skeleton'
+import { Loader2 } from 'lucide-react'
 
 interface ResumePreviewProps {
     data: any;
     isLoading: boolean;
-    template?: 'classic' | 'modern';
+    template?: 'classic' | 'modern' | 'executive';
 }
 
 export function ResumePreview({ data, isLoading, template = 'classic' }: ResumePreviewProps) {
     const [isClient, setIsClient] = useState(false)
+    const [pdfUrl, setPdfUrl] = useState<string | null>(null)
+    const [isGenerating, setIsGenerating] = useState(false)
 
     useEffect(() => {
         setIsClient(true)
     }, [])
 
-    if (isLoading || !isClient) {
+    useEffect(() => {
+        if (!isClient || !data || !('personal_info' in data)) return
+
+        let isMounted = true;
+        const generatePdf = async () => {
+            setIsGenerating(true)
+            try {
+                // Completely dynamic native import of both the renderer and the component
+                // This bypasses Next.js 14 Turbopack SSR + next/dynamic wrapper bugs entirely
+                const { pdf } = await import('@react-pdf/renderer');
+                const { ResumePDFDocument } = await import('@/lib/pdf-generator');
+
+                const doc = <ResumePDFDocument data={data} template={template} />;
+                const blob = await pdf(doc).toBlob();
+
+                if (isMounted) {
+                    setPdfUrl(URL.createObjectURL(blob))
+                }
+            } catch (e) {
+                console.error('PDF Generation error:', e)
+            } finally {
+                if (isMounted) setIsGenerating(false)
+            }
+        }
+
+        const timeoutId = setTimeout(generatePdf, 500);
+
+        return () => {
+            isMounted = false
+            clearTimeout(timeoutId)
+            if (pdfUrl) {
+                URL.revokeObjectURL(pdfUrl)
+            }
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data, template, isClient])
+
+    if (!isClient || isLoading) {
         return (
             <Card className="flex flex-col h-full w-full min-h-[800px] border-zinc-200 shadow-sm bg-white p-6">
                 <Skeleton className="h-10 w-[200px] mb-8" />
@@ -33,8 +71,7 @@ export function ResumePreview({ data, isLoading, template = 'classic' }: ResumeP
         )
     }
 
-    // Check if data has at least something to show
-    const hasData = data && (data.personal_info?.full_name || data.experience?.length > 0 || data.education?.length > 0)
+    const hasData = data && typeof data === 'object' && 'personal_info' in data
 
     if (!hasData) {
         return (
@@ -45,10 +82,18 @@ export function ResumePreview({ data, isLoading, template = 'classic' }: ResumeP
     }
 
     return (
-        <div className="h-full w-full bg-zinc-100 rounded-lg overflow-hidden border border-zinc-200 shadow-inner flex flex-col">
-            <PDFViewer showToolbar={false} className="w-full h-full border-none">
-                <ResumePDFDocument data={data} template={template} />
-            </PDFViewer>
+        <div className="h-full w-full bg-zinc-100 rounded-lg overflow-hidden border border-zinc-200 shadow-inner flex flex-col relative">
+            {isGenerating && (
+                <div className="absolute inset-0 bg-white/50 backdrop-blur-sm z-10 flex items-center justify-center">
+                    <div className="bg-white shadow-xl border border-zinc-200 rounded-xl px-4 py-3 flex items-center gap-3">
+                        <Loader2 className="h-5 w-5 animate-spin text-zinc-900" />
+                        <span className="font-semibold text-sm text-zinc-800">Updating PDF...</span>
+                    </div>
+                </div>
+            )}
+            {pdfUrl ? (
+                <iframe src={pdfUrl} className="w-full h-full border-none" title="Resume Preview" />
+            ) : null}
         </div>
     )
 }

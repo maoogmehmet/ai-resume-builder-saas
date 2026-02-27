@@ -1,48 +1,83 @@
 import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { ResumePreview } from '@/components/resume-preview'
-import { Card } from '@/components/ui/card'
+import { Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Download, Globe, Sparkles } from 'lucide-react'
 import { PdfDownloadButton } from '@/components/pdf-download-button'
+import { PresentationOverlay } from '@/components/presentation-overlay'
 
-export default async function PublicResumePage({ params }: { params: { slug: string } }) {
+export default async function PublicResumePage({ params }: { params: Promise<{ slug: string }> }) {
+    const { slug } = await params
     const supabase = await createClient()
 
     // Fetch link with joined resume and profile
     const { data: link, error: linkError } = await supabase
         .from('public_links')
         .select('*, resumes(*), profiles(*), version:resume_versions(*)')
-        .eq('slug', params.slug)
+        .eq('slug', slug)
         .single()
 
     if (linkError || !link) {
         notFound()
     }
 
-    if (!link.is_active) {
-        return (
-            <div className="min-h-screen bg-zinc-100 flex flex-col items-center justify-center p-6 sm:p-12">
-                <Card className="max-w-md w-full p-10 text-center space-y-6 shadow-2xl border-zinc-200 rounded-[2rem] bg-white">
-                    <div className="h-16 w-16 bg-red-50 text-red-500 rounded-full flex items-center justify-center mx-auto mb-2 border border-red-100">
-                        <Globe className="h-8 w-8" />
-                    </div>
-                    <div>
-                        <h1 className="text-3xl font-black tracking-tight text-zinc-900 mb-2">Link Expired</h1>
-                        <p className="text-zinc-500 text-lg">This professional profile is no longer public or the subscription has lapsed.</p>
-                    </div>
-                    <Button asChild className="w-full h-14 rounded-2xl bg-zinc-900 font-bold text-lg shadow-lg hover:bg-black transition-all">
-                        <Link href="/">Create Your AI Resume</Link>
-                    </Button>
-                </Card>
-            </div>
-        )
+    const { data: { user } } = await supabase.auth.getUser()
+    const isOwner = user?.id === link.profiles.id
+
+    // Check trial/subscription status
+    const isPremium = ['active', 'trialing'].includes(link.profiles?.subscription_status || '')
+
+    // Check if link is older than 7 days
+    const linkCreatedAt = new Date(link.created_at)
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const isLinkOlderThan7Days = linkCreatedAt < sevenDaysAgo;
+
+    const isTrialEndedForLegacy = link.profiles?.trial_end_date && new Date(link.profiles.trial_end_date) < new Date()
+
+    // It's expired if user is not premium AND the link has aged past 7 days (or legacy manual deactivation/trial end)
+    const showExpired = !link.is_active || (!isPremium && (isLinkOlderThan7Days || isTrialEndedForLegacy))
+
+    // Increment view count (fire and forget) if active
+    if (!showExpired) {
+        supabase
+            .from('public_links')
+            .update({
+                view_count: (link.view_count || 0) + 1,
+                last_viewed_at: new Date().toISOString()
+            })
+            .eq('id', link.id)
+            .then()
+    }
+
+    if (showExpired) {
+        if (user) {
+            redirect('/dashboard/upgrade')
+        } else {
+            redirect('/auth/signup?reason=link_expired')
+        }
     }
 
     // Use versioned JSON if specified, otherwise main resume JSON
     const resumeData = link.version?.optimized_json || link.resumes?.ai_generated_json || link.resumes?.original_linkedin_json
     const template = link.template || 'classic'
+
+    // Fetch the automated pitch deck (if any)
+    const { data: pitchDeck } = await supabase
+        .from('cover_letters')
+        .select('*')
+        .eq('resume_id', link.resumes?.id)
+        .order('created_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+    let slides = null;
+    if (pitchDeck && pitchDeck.content) {
+        try {
+            slides = JSON.parse(pitchDeck.content);
+        } catch (e) { /* ignore */ }
+    }
 
     return (
         <div className="min-h-screen bg-zinc-50 flex flex-col selection:bg-zinc-900 selection:text-white">
@@ -57,6 +92,7 @@ export default async function PublicResumePage({ params }: { params: { slug: str
                     </div>
                 </div>
                 <div className="flex gap-3 items-center">
+                    <PresentationOverlay slides={slides} />
                     <PdfDownloadButton resumeData={resumeData} template={template as any} />
                     <Button asChild variant="default" className="bg-zinc-900 shadow-xl hidden sm:flex h-10 px-6 font-bold rounded-xl hover:bg-black">
                         <Link href="/">Build Yours Free</Link>

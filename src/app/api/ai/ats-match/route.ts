@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
+
+export const dynamic = 'force-dynamic';
+
 import Anthropic from '@anthropic-ai/sdk';
 import { ATS_MATCHING_PROMPT } from '@/lib/ai-prompts';
 
 const anthropic = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY,
+    apiKey: process.env.ANTHROPIC_API_KEY || 'sk-ant-placeholder',
 });
 
 export async function POST(req: Request) {
@@ -38,7 +41,7 @@ export async function POST(req: Request) {
 
         // AI Request to Score Match
         const response = await anthropic.messages.create({
-            model: "claude-3-5-sonnet-20241022",
+            model: "claude-3-haiku-20240307",
             max_tokens: 3500,
             temperature: 0.1, // strict response formatting
             system: "You are an ATS matching engine. Output ONLY valid JSON representing the ATS score and analysis metrics. Do not include markdown or conversational text.",
@@ -61,6 +64,12 @@ export async function POST(req: Request) {
         } catch {
             return NextResponse.json({ error: 'Invalid JSON from AI' }, { status: 500 });
         }
+
+        // Track AI usage
+        await supabase.from('ai_generations').insert({
+            user_id: user.id,
+            generation_type: 'job_analysis'
+        });
 
         return NextResponse.json({ success: true, result: atsAnalysisResult });
 

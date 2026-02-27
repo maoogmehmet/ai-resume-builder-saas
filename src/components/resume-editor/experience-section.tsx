@@ -35,7 +35,7 @@ function SortableExperienceItem({ exp, expIdx, onUpdate, onRemove, onAddBullet, 
         transform,
         transition,
         isDragging
-    } = useSortable({ id: exp.id || expIdx });
+    } = useSortable({ id: exp.id });
 
     const style = {
         transform: CSS.Transform.toString(transform),
@@ -65,40 +65,44 @@ function SortableExperienceItem({ exp, expIdx, onUpdate, onRemove, onAddBullet, 
                 <CardContent className="pt-6 pl-12 grid gap-4">
                     <div className="grid grid-cols-2 gap-4">
                         <div className="grid gap-2">
-                            <Label>Job Title</Label>
-                            <Input value={exp.title} onChange={(e) => onUpdate(expIdx, 'title', e.target.value)} />
+                            <Label className="flex justify-between">Job Title <span className="text-zinc-400 text-[10px] uppercase">{exp.title?.length || 0}/100</span></Label>
+                            <Input maxLength={100} value={exp.title} onChange={(e) => onUpdate(expIdx, 'title', e.target.value)} />
                         </div>
                         <div className="grid gap-2">
-                            <Label>Company</Label>
-                            <Input value={exp.company} onChange={(e) => onUpdate(expIdx, 'company', e.target.value)} />
+                            <Label className="flex justify-between">Company <span className="text-zinc-400 text-[10px] uppercase">{exp.company?.length || 0}/100</span></Label>
+                            <Input maxLength={100} value={exp.company} onChange={(e) => onUpdate(expIdx, 'company', e.target.value)} />
                         </div>
                         <div className="grid gap-2">
-                            <Label>Location</Label>
-                            <Input value={exp.location} onChange={(e) => onUpdate(expIdx, 'location', e.target.value)} />
+                            <Label className="flex justify-between">Location <span className="text-zinc-400 text-[10px] uppercase">{exp.location?.length || 0}/100</span></Label>
+                            <Input maxLength={100} value={exp.location} onChange={(e) => onUpdate(expIdx, 'location', e.target.value)} />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <Label>Start Date</Label>
-                                <Input placeholder="MM/YYYY" value={exp.start_date} onChange={(e) => onUpdate(expIdx, 'start_date', e.target.value)} />
+                                <Input maxLength={20} placeholder="MM/YYYY" value={exp.start_date} onChange={(e) => onUpdate(expIdx, 'start_date', e.target.value)} />
                             </div>
                             <div className="grid gap-2">
                                 <Label>End Date</Label>
-                                <Input placeholder="MM/YYYY or Present" value={exp.end_date} onChange={(e) => onUpdate(expIdx, 'end_date', e.target.value)} />
+                                <Input maxLength={20} placeholder="MM/YYYY or Present" value={exp.end_date} onChange={(e) => onUpdate(expIdx, 'end_date', e.target.value)} />
                             </div>
                         </div>
 
                         <div className="col-span-2 mt-4 space-y-3">
                             <Label className="text-sm font-semibold">Bullet Points</Label>
                             {exp.bullets.map((bullet: string, bIdx: number) => (
-                                <div key={bIdx} className="flex gap-2">
-                                    <Textarea
-                                        value={bullet}
-                                        onChange={(e) => onBulletUpdate(expIdx, bIdx, e.target.value)}
-                                        className="min-h-[60px] text-sm"
-                                    />
-                                    <Button variant="ghost" size="icon" onClick={() => onRemoveBullet(expIdx, bIdx)} className="text-zinc-400 mt-2">
-                                        <Trash2 className="h-4 w-4" />
-                                    </Button>
+                                <div key={bIdx} className="flex flex-col gap-1">
+                                    <div className="flex gap-2">
+                                        <Textarea
+                                            value={bullet}
+                                            maxLength={300}
+                                            onChange={(e) => onBulletUpdate(expIdx, bIdx, e.target.value)}
+                                            className="min-h-[60px] text-sm"
+                                        />
+                                        <Button variant="ghost" size="icon" onClick={() => onRemoveBullet(expIdx, bIdx)} className="text-zinc-400 mt-2">
+                                            <Trash2 className="h-4 w-4" />
+                                        </Button>
+                                    </div>
+                                    <span className="text-zinc-400 text-[9px] text-right font-medium tracking-widest">{bullet?.length || 0}/300</span>
                                 </div>
                             ))}
                             <Button variant="outline" size="sm" onClick={() => onAddBullet(expIdx)} className="w-full gap-2 border-dashed">
@@ -113,10 +117,20 @@ function SortableExperienceItem({ exp, expIdx, onUpdate, onRemove, onAddBullet, 
 }
 
 export function ExperienceSection({ data, onChange }: ExperienceProps) {
-    const [experiences, setExperiences] = useState<any[]>(data || [])
+    const [experiences, setExperiences] = useState<any[]>(() => {
+        return (data || []).map((exp, i) => ({
+            ...exp,
+            id: exp.id || `exp-${i}-${Date.now()}`
+        }))
+    })
 
     useEffect(() => {
-        if (data) setExperiences(data)
+        if (data) {
+            setExperiences(data.map((exp, i) => ({
+                ...exp,
+                id: exp.id || `exp-${i}-${Date.now()}`
+            })))
+        }
     }, [data])
 
     const sensors = useSensors(
@@ -196,12 +210,12 @@ export function ExperienceSection({ data, onChange }: ExperienceProps) {
                 onDragEnd={handleDragEnd}
             >
                 <SortableContext
-                    items={experiences.map((exp, i) => exp.id || i)}
+                    items={experiences.map((exp) => exp.id)}
                     strategy={verticalListSortingStrategy}
                 >
                     {experiences.map((exp, expIdx) => (
                         <SortableExperienceItem
-                            key={exp.id || expIdx}
+                            key={exp.id}
                             exp={exp}
                             expIdx={expIdx}
                             onUpdate={handleUpdate}

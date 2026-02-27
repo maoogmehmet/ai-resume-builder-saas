@@ -101,7 +101,11 @@ JSON OUTPUT FORMAT:
     "Mention Kubernetes in container orchestration context"
   ],
   "optimized_bullets": {
-    "experience_0_bullet_1": "Optimized Python microservices deployed on AWS using Docker containers"
+    "experience_0_bullet_1": "Optimized Python microservices deployed on AWS using Docker containers",
+    "experience_0_bullet_2": "...",
+    "summary": "Updated summary incorporating keywords..."
   }
 }
+
+NOTE: The 'optimized_bullets' object should contain rewritten versions of existing resume bullet points or summary that better incorporate the missing keywords. Follow the key format 'experience_INDEX_bullet_INDEX'.
 `;

@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation'
 interface PdfDownloadButtonProps {
     resumeData: any;
     disabled?: boolean;
-    template?: 'classic' | 'modern';
+    template?: 'classic' | 'modern' | 'executive';
 }
 
 export function PdfDownloadButton({ resumeData, disabled, template = 'classic' }: PdfDownloadButtonProps) {

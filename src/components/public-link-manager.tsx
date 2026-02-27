@@ -61,6 +61,16 @@ export function PublicLinkManager({ resumeId, template, versionId }: PublicLinkM
                         <ExternalLink className="h-3 w-3" />
                     </a>
                 </Button>
+                <Button variant="ghost" size="icon" asChild className="h-6 w-6 text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                    <a
+                        href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(linkData.url)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Share on LinkedIn"
+                    >
+                        <Linkedin className="h-3.5 w-3.5 fill-current" />
+                    </a>
+                </Button>
             </div>
         )
     }

@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { scrapeLinkedInProfile } from '@/lib/apify';
 import { createClient } from '@/lib/supabase/server';
 
+export const dynamic = 'force-dynamic';
+export const maxDuration = 60;
 export async function POST(req: Request) {
     try {
         const supabase = await createClient();

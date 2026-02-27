@@ -37,8 +37,8 @@ export function JobOptimizerDialog({ resumeId, resumeData, onOptimizationApplied
     const [atsResult, setAtsResult] = useState<any>(null)
 
     const handleScrape = async () => {
-        if (!url.includes('linkedin.com/jobs/')) {
-            toast.error('Invalid URL', { description: 'Please enter a valid LinkedIn Job URL' })
+        if (!url.includes('linkedin.com/')) {
+            toast.error('Invalid URL', { description: 'Please enter a valid LinkedIn URL (e.g. linkedin.com/jobs/view/...)' })
             return;
         }
 
