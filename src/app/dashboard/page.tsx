@@ -51,82 +51,88 @@ export default async function DashboardPage({
 
 
     return (
-        <div className="flex flex-col min-h-screen bg-white w-full font-sans">
-            <div className="max-w-7xl mx-auto w-full p-8 space-y-8">
-                {/* Header matching screenshot exactly */}
+        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-zinc-100">
+            <div className="max-w-6xl mx-auto w-full p-8 space-y-6">
+                {/* Header */}
                 <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-2 gap-4">
-                    <div>
-                        <h1 className="text-[28px] font-bold tracking-tight text-[#1E293B]">
-                            Dashboard
-                        </h1>
-                        <p className="text-[#64748B] text-base font-medium mt-1">
-                            Manage your CVs and cover letters.
-                        </p>
-                    </div>
-                    <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 h-11 rounded-xl shadow-sm">
-                        <Link href="/dashboard/builder">
-                            <span className="text-lg mr-2 leading-none">+</span> CV Builder
-                        </Link>
-                    </Button>
+                    <h1 className="text-2xl font-bold tracking-tight text-white">
+                        Overview
+                    </h1>
                 </header>
 
-                <main className="space-y-10">
-                    {/* The 3 Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="bg-white border border-slate-200 rounded-2xl p-6 flex items-center gap-5 shadow-sm">
-                            <div className="h-14 w-14 bg-blue-50 text-blue-500 rounded-xl flex items-center justify-center shrink-0">
-                                <FileText className="h-6 w-6" />
-                            </div>
-                            <div>
-                                <p className="text-3xl font-bold text-slate-900">{resumeCount || 0}</p>
-                                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Total Documents</p>
-                            </div>
+                <main className="space-y-6">
+                    {/* Top Segmented Controls & Actions */}
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="flex items-center gap-1 bg-white/5 p-1 rounded-lg border border-white/5">
+                            <button className="px-3 py-1.5 text-sm font-medium bg-white/10 text-white rounded-md shadow-sm">
+                                Resumes
+                            </button>
+                            <button className="px-3 py-1.5 text-sm font-medium text-zinc-400 hover:text-zinc-200 transition-colors rounded-md">
+                                Cover Letters
+                            </button>
                         </div>
-
-                        <div className="bg-white border border-slate-200 rounded-2xl p-6 flex items-center gap-5 shadow-sm">
-                            <div className="h-14 w-14 bg-emerald-50 text-emerald-500 rounded-xl flex items-center justify-center shrink-0">
-                                <FileText className="h-6 w-6" />
-                            </div>
-                            <div>
-                                <p className="text-3xl font-bold text-slate-900">{resumeCount || 0}</p>
-                                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">CVs Created</p>
-                            </div>
-                        </div>
-
-                        <div className="bg-white border border-slate-200 rounded-2xl p-6 flex items-center gap-5 shadow-sm">
-                            <div className="h-14 w-14 bg-purple-50 text-purple-500 rounded-xl flex items-center justify-center shrink-0">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
-                            </div>
-                            <div>
-                                <p className="text-3xl font-bold text-slate-900">{letterCount || 0}</p>
-                                <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mt-1">Cover Letters</p>
-                            </div>
+                        <div className="flex items-center gap-2">
+                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md border border-white/10 bg-black hover:bg-white/5 text-zinc-400">
+                                <span className="text-xs font-mono">{"</>"}</span>
+                            </Button>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-md border border-white/10 bg-black hover:bg-white/5 text-zinc-400">
+                                <span className="text-xs">•••</span>
+                            </Button>
+                            <Button asChild className="ml-2 h-8 px-4 text-sm font-medium bg-white text-black hover:bg-zinc-200 rounded-md">
+                                <Link href="/dashboard/builder">
+                                    New Document
+                                </Link>
+                            </Button>
                         </div>
                     </div>
 
-                    {/* Recent CVs Section */}
-                    <div>
-                        <div className="flex items-center justify-between mb-4">
-                            <h2 className="text-base font-bold text-slate-900">Recent CVs</h2>
-                            <span className="text-sm font-medium text-slate-500">Sorted by last updated</span>
+                    {/* Search & Filters */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                        <div className="relative flex-1">
+                            <svg className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                            </svg>
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                className="w-full h-9 bg-white/5 border border-white/10 rounded-md pl-9 pr-4 text-sm text-zinc-200 placeholder:text-zinc-500 focus:outline-none focus:ring-1 focus:ring-white/20 focus:border-white/20 transition-all font-medium"
+                            />
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <select className="h-9 bg-white/5 border border-white/10 rounded-md px-3 py-0 text-sm font-medium text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none pr-8 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2371717a%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1em] bg-[right_0.5rem_center] bg-no-repeat w-[140px]">
+                                <option className="bg-zinc-900">Last 15 days</option>
+                                <option className="bg-zinc-900">Last 30 days</option>
+                                <option className="bg-zinc-900">All time</option>
+                            </select>
+                            <select className="h-9 bg-white/5 border border-white/10 rounded-md px-3 py-0 text-sm font-medium text-zinc-300 focus:outline-none focus:ring-1 focus:ring-white/20 appearance-none pr-8 bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2371717a%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1em] bg-[right_0.5rem_center] bg-no-repeat w-[140px]">
+                                <option className="bg-zinc-900">All Statuses</option>
+                                <option className="bg-zinc-900">Completed</option>
+                                <option className="bg-zinc-900">Drafts</option>
+                            </select>
+                            <Button variant="ghost" size="icon" className="h-9 w-9 rounded-md border border-white/10 bg-white/5 hover:bg-white/10 text-zinc-400">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></svg>
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Data Table */}
+                    <div className="w-full">
+                        <div className="grid grid-cols-12 gap-4 px-4 py-2 border-b border-white/10 text-[11px] font-semibold text-zinc-500 uppercase tracking-wider">
+                            <div className="col-span-5">Document</div>
+                            <div className="col-span-2">Status</div>
+                            <div className="col-span-3">Target Role</div>
+                            <div className="col-span-2 text-right">Updated</div>
                         </div>
 
-                        <div className="bg-white border border-slate-200 rounded-2xl p-8 min-h-[300px] flex items-center justify-center shadow-sm">
+                        <div className="flex flex-col min-h-[300px]">
                             {(!resumes || resumes.length === 0) ? (
-                                <div className="text-center flex flex-col items-center max-w-sm mx-auto">
-                                    <FileText className="h-14 w-14 text-slate-300 mb-5" />
-                                    <h3 className="text-lg font-bold text-slate-900 mb-2">No CVs yet</h3>
-                                    <p className="text-slate-500 text-sm mb-6">Create your first CV to get started</p>
-                                    <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 h-11 rounded-xl shadow-sm w-full">
-                                        <Link href="/dashboard/builder">
-                                            <span className="text-lg mr-2 leading-none">+</span> Create Your First CV
-                                        </Link>
-                                    </Button>
+                                <div className="flex-1 flex flex-col items-center justify-center text-center">
+                                    <FileText className="h-10 w-10 text-zinc-700 mb-4" />
+                                    <h3 className="text-base font-semibold text-zinc-300 mb-1">No documents found</h3>
+                                    <p className="text-zinc-500 text-sm">Create your first CV to see it here.</p>
                                 </div>
                             ) : (
-                                <div className="w-full">
-                                    <ResumeList initialResumes={resumes} />
-                                </div>
+                                <ResumeList initialResumes={resumes} />
                             )}
                         </div>
                     </div>

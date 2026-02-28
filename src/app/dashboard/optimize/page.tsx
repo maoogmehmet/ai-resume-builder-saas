@@ -84,17 +84,17 @@ export default function OptimizePage() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-white w-full font-sans">
-            <div className="max-w-7xl mx-auto w-full p-8 space-y-8">
+        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-zinc-100">
+            <div className="max-w-6xl mx-auto w-full p-8 space-y-8">
                 {/* Header */}
                 <header className="pb-4">
                     <div className="flex items-center gap-3">
-                        <Target className="h-8 w-8 text-slate-800" />
-                        <h1 className="text-[28px] font-bold tracking-tight text-[#1E293B]">
+                        <Target className="h-8 w-8 text-white" />
+                        <h1 className="text-2xl font-bold tracking-tight text-white">
                             CV Optimizer
                         </h1>
                     </div>
-                    <p className="text-[#64748B] text-base font-medium mt-2">
+                    <p className="text-zinc-400 text-sm font-medium mt-2">
                         Paste a job description to see how well your CV matches and get improvement suggestions.
                     </p>
                 </header>
@@ -102,48 +102,48 @@ export default function OptimizePage() {
                 <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
                     {/* Left Column - Form */}
-                    <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
+                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 shadow-sm">
 
                         <div className="mb-6 space-y-2">
-                            <Label className="text-sm font-semibold text-slate-700">Select Resume to Optimize *</Label>
+                            <Label className="text-[13px] font-semibold text-zinc-300">Select Resume to Optimize *</Label>
                             {resumes.length === 0 ? (
-                                <div className="text-sm text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                                <div className="text-sm text-zinc-400 bg-white/5 p-3 rounded-lg border border-white/10">
                                     You don&apos;t have any resumes yet. Go to CV Builder to create one first.
                                 </div>
                             ) : (
                                 <Select value={selectedResumeUrl} onValueChange={setSelectedResumeUrl}>
-                                    <SelectTrigger className="w-full h-11 border-slate-200 bg-zinc-50 font-medium">
+                                    <SelectTrigger className="w-full h-11 border-white/10 bg-black text-white font-medium text-sm focus:ring-white/20">
                                         <SelectValue placeholder="Select a resume" />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent className="bg-[#1e1e1e] border-white/10 text-white">
                                         {resumes.map(r => (
-                                            <SelectItem key={r.id} value={r.id}>{r.title || 'Untitled Resume'}</SelectItem>
+                                            <SelectItem key={r.id} value={r.id} className="hover:bg-white/5 focus:bg-white/5 focus:text-white cursor-pointer">{r.title || 'Untitled Resume'}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
                             )}
                         </div>
 
-                        <div className="w-full h-px bg-slate-100 my-8" />
+                        <div className="w-full h-px bg-white/10 my-8" />
 
-                        <h2 className="text-xl font-bold text-slate-900 mb-1">Job Details</h2>
-                        <p className="text-slate-500 text-sm mb-6">Tell us about the role you&apos;re targeting.</p>
+                        <h2 className="text-lg font-bold text-white mb-1">Job Details</h2>
+                        <p className="text-zinc-400 text-[13px] mb-6">Tell us about the role you&apos;re targeting.</p>
 
                         <div className="grid grid-cols-2 gap-6 mb-6">
                             <div className="space-y-2">
-                                <Label className="text-sm font-semibold text-slate-700">Job Title</Label>
+                                <Label className="text-[13px] font-semibold text-zinc-300">Job Title</Label>
                                 <Input
                                     placeholder="e.g. Frontend Developer"
-                                    className="bg-zinc-50 h-11 border-slate-200"
+                                    className="bg-black h-11 border-white/10 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label className="text-sm font-semibold text-slate-700">Company</Label>
+                                <Label className="text-[13px] font-semibold text-zinc-300">Company</Label>
                                 <Input
                                     placeholder="e.g. Google"
-                                    className="bg-zinc-50 h-11 border-slate-200"
+                                    className="bg-black h-11 border-white/10 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
                                     value={company}
                                     onChange={(e) => setCompany(e.target.value)}
                                 />
@@ -151,10 +151,10 @@ export default function OptimizePage() {
                         </div>
 
                         <div className="space-y-2 mb-8">
-                            <Label className="text-sm font-semibold text-slate-700">Job Description *</Label>
+                            <Label className="text-[13px] font-semibold text-zinc-300">Job Description *</Label>
                             <Textarea
                                 placeholder="Paste the full job description here..."
-                                className="min-h-[220px] bg-zinc-50 resize-y border-slate-200 p-4"
+                                className="min-h-[220px] bg-black resize-y border-white/10 p-4 leading-relaxed text-sm text-white focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
                                 value={desc}
                                 onChange={(e) => setDesc(e.target.value)}
                             />
@@ -163,7 +163,7 @@ export default function OptimizePage() {
                         <Button
                             onClick={handleAnalyze}
                             disabled={!isValid || isAnalyzing}
-                            className={`w-full h-12 text-base font-semibold rounded-xl flex items-center gap-2 ${(isValid && !isAnalyzing) ? 'bg-[#1E293B] hover:bg-slate-900 text-white shadow-xl' : 'bg-slate-400 text-white cursor-not-allowed'}`}
+                            className={`w-full h-12 text-base font-semibold rounded-xl flex items-center gap-2 ${(isValid && !isAnalyzing) ? 'bg-white text-black hover:bg-zinc-200 shadow-xl' : 'bg-white/10 text-zinc-500 cursor-not-allowed'}`}
                         >
                             {isAnalyzing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
                             {isAnalyzing ? 'Analyzing...' : 'Analyze My CV'}
@@ -172,52 +172,52 @@ export default function OptimizePage() {
 
                     {/* Right Column - Results Empty State or Results */}
                     {results ? (
-                        <div className="bg-white border border-slate-200 rounded-2xl p-8 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] space-y-8 animate-in fade-in zoom-in-95 duration-500">
+                        <div className="bg-[#1e1e1e] border border-white/10 rounded-2xl p-8 shadow-sm space-y-8 animate-in fade-in zoom-in-95 duration-500 text-white">
                             <div className="flex items-center gap-6">
-                                <div className="relative h-24 w-24 flex items-center justify-center rounded-full border-4 border-slate-100 shadow-inner">
+                                <div className="relative h-24 w-24 flex items-center justify-center rounded-full border-4 border-white/5 shadow-inner">
                                     <svg className="absolute inset-0 w-full h-full -rotate-90">
-                                        <circle cx="44" cy="44" r="44" fill="none" strokeWidth="8" stroke="#f1f5f9" className="translate-x-1 translate-y-1" />
+                                        <circle cx="44" cy="44" r="44" fill="none" strokeWidth="8" stroke="rgba(255,255,255,0.05)" className="translate-x-1 translate-y-1" />
                                         <circle cx="44" cy="44" r="44" fill="none" strokeWidth="8" stroke={results.match_score >= 80 ? '#22c55e' : results.match_score >= 60 ? '#eab308' : '#ef4444'} strokeDasharray="276" strokeDashoffset={276 - (276 * results.match_score) / 100} strokeLinecap="round" className="translate-x-1 translate-y-1 transition-all duration-1000" />
                                     </svg>
-                                    <span className="text-3xl font-black text-slate-800">{results.match_score}<span className="text-lg text-slate-400">%</span></span>
+                                    <span className="text-3xl font-black text-white">{results.match_score}<span className="text-lg text-zinc-500">%</span></span>
                                 </div>
                                 <div>
-                                    <h2 className="text-2xl font-bold text-slate-900 mb-1">Match Score</h2>
-                                    <p className="text-slate-500 font-medium">{results.match_score >= 80 ? 'Excellent match! You are highly qualified.' : results.match_score >= 60 ? 'Good match. Some optimizations needed.' : 'Low match. Significant updates required.'}</p>
+                                    <h2 className="text-2xl font-bold text-white mb-1">Match Score</h2>
+                                    <p className="text-zinc-400 font-medium">{results.match_score >= 80 ? 'Excellent match! You are highly qualified.' : results.match_score >= 60 ? 'Good match. Some optimizations needed.' : 'Low match. Significant updates required.'}</p>
                                 </div>
                             </div>
 
                             {results.missing_skills && results.missing_skills.length > 0 && (
                                 <div className="space-y-4">
-                                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2"><AlertCircle className="h-5 w-5 text-red-500" /> Missing Keywords</h3>
+                                    <h3 className="text-lg font-bold text-white flex items-center gap-2"><AlertCircle className="h-5 w-5 text-red-500" /> Missing Keywords</h3>
                                     <div className="flex flex-wrap gap-2">
                                         {results.missing_skills.map((skill: string, i: number) => (
-                                            <span key={i} className="px-3 py-1.5 bg-red-50 text-red-700 border border-red-100 rounded-lg text-sm font-bold">{skill}</span>
+                                            <span key={i} className="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-sm font-bold">{skill}</span>
                                         ))}
                                     </div>
-                                    <p className="text-sm text-slate-500 italic">Consider strategically adding these to your experience if applicable.</p>
+                                    <p className="text-sm text-zinc-500 italic">Consider strategically adding these to your experience if applicable.</p>
                                 </div>
                             )}
 
                             {results.matching_skills && results.matching_skills.length > 0 && (
                                 <div className="space-y-4">
-                                    <h3 className="text-lg font-bold text-slate-900 flex items-center gap-2"><CheckCircle className="h-5 w-5 text-green-500" /> Matched Keywords</h3>
+                                    <h3 className="text-lg font-bold text-white flex items-center gap-2"><CheckCircle className="h-5 w-5 text-emerald-500" /> Matched Keywords</h3>
                                     <div className="flex flex-wrap gap-2">
                                         {results.matching_skills.map((skill: string, i: number) => (
-                                            <span key={i} className="px-3 py-1.5 bg-green-50 text-green-700 border border-green-100 rounded-lg text-sm font-bold">{skill}</span>
+                                            <span key={i} className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg text-sm font-bold">{skill}</span>
                                         ))}
                                     </div>
                                 </div>
                             )}
 
                             {results.recommendations && (
-                                <div className="space-y-4 pt-4 border-t border-slate-100">
-                                    <h3 className="text-lg font-bold text-slate-900">Expert Recommendations</h3>
+                                <div className="space-y-4 pt-4 border-t border-white/10">
+                                    <h3 className="text-lg font-bold text-white">Expert Recommendations</h3>
                                     <ul className="space-y-3">
                                         {results.recommendations.map((rec: string, i: number) => (
-                                            <li key={i} className="flex items-start gap-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
-                                                <Target className="h-5 w-5 text-blue-500 shrink-0 mt-0.5" />
-                                                <span className="text-sm text-slate-700 font-medium leading-relaxed">{rec}</span>
+                                            <li key={i} className="flex items-start gap-3 bg-white/5 p-4 rounded-xl border border-white/5">
+                                                <Target className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
+                                                <span className="text-sm text-zinc-300 font-medium leading-relaxed">{rec}</span>
                                             </li>
                                         ))}
                                     </ul>
@@ -225,11 +225,11 @@ export default function OptimizePage() {
                             )}
                         </div>
                     ) : (
-                        <div className="bg-[#fafafa] border border-slate-200 rounded-2xl min-h-[550px] flex flex-col items-center justify-center p-8 text-center shadow-inner">
-                            <div className="h-20 w-20 flex items-center justify-center rounded-full bg-white border border-slate-200 shadow-sm mb-6">
-                                <Target className="h-8 w-8 text-slate-300" />
+                        <div className="bg-black border border-white/10 rounded-2xl min-h-[550px] flex flex-col items-center justify-center p-8 text-center shadow-inner">
+                            <div className="h-20 w-20 flex items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-sm mb-6">
+                                <Target className="h-8 w-8 text-zinc-500" />
                             </div>
-                            <p className="text-slate-500 font-medium max-w-[250px]">
+                            <p className="text-zinc-500 font-medium max-w-[250px]">
                                 {isAnalyzing ? 'Analyzing your CV against the job description...' : 'Enter a job description and select a resume to see your match score'}
                             </p>
                         </div>

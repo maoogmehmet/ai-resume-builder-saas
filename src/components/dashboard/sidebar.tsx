@@ -35,14 +35,18 @@ export function Sidebar() {
     const pathname = usePathname()
 
     return (
-        <aside className="w-[260px] border-r border-zinc-200 bg-white h-screen flex flex-col sticky top-0 hidden md:flex">
-            <div className="p-6 pt-8 mb-4">
-                <Link href="/dashboard" className="flex items-center gap-2">
-                    <span className="font-bold tracking-tight text-xl text-zinc-900">CV Optimizer</span>
+        <aside className="w-[240px] border-r border-white/10 bg-black h-screen flex flex-col sticky top-0 hidden md:flex">
+            {/* Top Workspace Selector Simulation */}
+            <div className="p-4 mb-2 flex items-center justify-between border-b border-white/5">
+                <Link href="/dashboard" className="flex items-center gap-3 hover:bg-white/5 p-2 rounded-md w-full transition-colors">
+                    <div className="w-6 h-6 rounded-sm bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-xs font-bold text-purple-400">
+                        C
+                    </div>
+                    <span className="font-medium tracking-tight text-sm text-zinc-200">CV Workspace</span>
                 </Link>
             </div>
 
-            <div className="flex-1 px-4 space-y-1 overflow-y-auto">
+            <div className="flex-1 px-3 space-y-0.5 overflow-y-auto">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/dashboard')
                     return (
@@ -50,24 +54,25 @@ export function Sidebar() {
                             key={item.href}
                             href={item.href}
                             className={cn(
-                                "flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors duration-200",
+                                "flex items-center gap-3 px-3 py-2 rounded-md transition-colors duration-200",
                                 isActive
-                                    ? "font-semibold text-zinc-900 bg-zinc-50"
-                                    : "text-zinc-600 font-medium hover:bg-zinc-50 hover:text-zinc-900"
+                                    ? "font-medium text-white bg-white/10"
+                                    : "text-zinc-400 font-medium hover:bg-white/5 hover:text-white"
                             )}
                         >
-                            <item.icon className={cn("h-4 w-4", isActive ? "text-zinc-900" : "text-zinc-500")} />
-                            <span className="text-sm">{item.name}</span>
+                            <item.icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-white" : "text-zinc-400")} />
+                            <span className="text-[13px]">{item.name}</span>
                         </Link>
                     )
                 })}
             </div>
 
-            <div className="p-4 mt-auto">
+            {/* Bottom Profile / Settings block */}
+            <div className="p-4 mt-auto border-t border-white/5">
                 <form action={signout}>
-                    <Button variant="outline" className="w-full justify-start gap-3 h-10 px-4 text-zinc-600 border-zinc-200 hover:bg-zinc-50 hover:text-zinc-900 rounded-lg transition-all" type="submit">
+                    <Button variant="ghost" className="w-full justify-start gap-3 h-10 px-3 text-zinc-400 hover:bg-white/5 hover:text-white rounded-md transition-all" type="submit">
                         <LogOut className="h-4 w-4" />
-                        <span className="text-sm font-medium">Sign Out</span>
+                        <span className="text-[13px] font-medium">Log out</span>
                     </Button>
                 </form>
             </div>

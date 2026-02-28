@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import {
@@ -108,87 +108,99 @@ export function ResumeCard({ resume, onRefresh }: { resume: Resume, onRefresh: (
         }
     }
 
+    const isCompleted = !!resume.pdf_url;
+
     return (
         <>
-            <Card className="group flex flex-col border-zinc-200 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-300 overflow-hidden bg-white">
-                <CardHeader className="p-0 border-b relative">
-                    <div className="aspect-[16/9] bg-gradient-to-br from-zinc-50 to-zinc-100 flex items-center justify-center overflow-hidden relative">
-                        {resume.pdf_url ? (
-                            <FileText className="h-16 w-16 text-blue-500/50 group-hover:scale-110 transition-transform duration-500" />
+            <div className="group flex items-center justify-between px-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors duration-200">
+                {/* Content Container simulating a 12-col grid implicitly through flex widths */}
+                <div className="flex items-center w-full gap-4">
+                    {/* Document Name (5/12) */}
+                    <div className="flex items-center gap-3 w-[41.666%] shrink-0">
+                        <div className={`h-8 w-8 rounded-md flex items-center justify-center shrink-0 ${isCompleted ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-zinc-500/10 border border-zinc-500/20'}`}>
+                            <FileText className={`h-4 w-4 ${isCompleted ? 'text-emerald-500' : 'text-zinc-500'}`} />
+                        </div>
+                        <span className="font-medium text-zinc-200 truncate pr-4 text-[13px] cursor-pointer hover:underline" onClick={() => router.push(`/editor/${resume.id}`)}>
+                            {resume.title}
+                        </span>
+                    </div>
+
+                    {/* Status (2/12) */}
+                    <div className="w-[16.666%] shrink-0 flex items-center">
+                        {isCompleted ? (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                                Completed
+                            </span>
                         ) : (
-                            <FileText className="h-16 w-16 text-zinc-300 group-hover:scale-110 transition-transform duration-500" />
+                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-500/10 text-zinc-400 border border-zinc-500/20">
+                                Draft
+                            </span>
                         )}
-                        <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-colors duration-300" />
                     </div>
-                    {/* Floating PDF Badge */}
-                    {resume.pdf_url && (
-                        <div className="absolute top-3 left-3">
-                            <Badge className="bg-emerald-500 text-white border-transparent hover:bg-emerald-600 shadow-sm">PDF Ready</Badge>
-                        </div>
-                    )}
-                </CardHeader>
 
-                <CardContent className="p-5 flex-1 space-y-3">
-                    <div className="flex items-start justify-between gap-4">
-                        <div className="space-y-1 overflow-hidden">
-                            <h3 className="font-bold text-lg text-zinc-900 truncate leading-tight group-hover:text-blue-600 transition-colors">
-                                {resume.title}
-                            </h3>
-                            <p className="text-xs font-semibold text-zinc-400 capitalize flex items-center gap-1.5">
-                                <span className="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>
-                                Edited {new Date(resume.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                            </p>
-                        </div>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-600 -mr-2 shrink-0" onClick={() => setIsRenameOpen(true)}>
-                            <Pencil className="h-4 w-4" />
-                        </Button>
+                    {/* Target Role (3/12) */}
+                    <div className="w-[25%] shrink-0 flex items-center">
+                        <span className="text-[13px] text-zinc-400 truncate pr-4">
+                            {resume.ai_generated_json?.personal_info?.title || 'General Application'}
+                        </span>
                     </div>
-                </CardContent>
 
-                <CardFooter className="p-4 pt-0 bg-white space-y-3 flex-col">
-                    <div className="w-full h-px bg-zinc-100 mb-2 mt-0" />
-                    <div className="flex items-center justify-between w-full">
-                        <Button asChild size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 rounded-lg shadow-sm shadow-blue-600/20 transition-all">
-                            <Link href={`/editor/${resume.id}`}>
-                                Edit CV
-                            </Link>
-                        </Button>
-                        <div className="flex items-center gap-1.5">
-                            {resume.pdf_url && (
-                                <Button size="icon" variant="ghost" className="h-8 w-8 text-zinc-500 hover:text-blue-600 hover:bg-blue-50 transition-colors tooltip-trigger" title="Download PDF" onClick={() => window.open(resume.pdf_url, '_blank')}>
-                                    <DownloadCloud className="h-4 w-4" />
+                    {/* Updated & Actions (2/12) */}
+                    <div className="w-[16.666%] shrink-0 flex items-center justify-end gap-4 text-[13px] text-zinc-500">
+                        <span className="whitespace-nowrap">
+                            {new Date(resume.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </span>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-500 hover:text-white hover:bg-white/10 rounded-md shrink-0">
+                                    <span className="text-xs">•••</span>
                                 </Button>
-                            )}
-                            <Button size="icon" variant="ghost" className="h-8 w-8 text-zinc-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors tooltip-trigger" title="Duplicate CV" onClick={handleDuplicate} disabled={isLoading}>
-                                <Copy className="h-4 w-4" />
-                            </Button>
-                            <Button size="icon" variant="ghost" className="h-8 w-8 text-zinc-500 hover:text-red-600 hover:bg-red-50 transition-colors tooltip-trigger" title="Delete CV" onClick={handleDelete} disabled={isLoading}>
-                                <Trash2 className="h-4 w-4" />
-                            </Button>
-                        </div>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-48 bg-[#1e1e1e] border-white/10 text-zinc-200 shadow-xl">
+                                <DropdownMenuItem onClick={() => router.push(`/editor/${resume.id}`)} className="hover:bg-white/5 focus:bg-white/5 cursor-pointer text-sm">
+                                    <Pencil className="mr-2 h-4 w-4" /> Edit CV
+                                </DropdownMenuItem>
+                                {isCompleted && (
+                                    <DropdownMenuItem onClick={() => window.open(resume.pdf_url, '_blank')} className="hover:bg-white/5 focus:bg-white/5 cursor-pointer text-sm">
+                                        <DownloadCloud className="mr-2 h-4 w-4" /> Download PDF
+                                    </DropdownMenuItem>
+                                )}
+                                <DropdownMenuItem onClick={() => setIsRenameOpen(true)} className="hover:bg-white/5 focus:bg-white/5 cursor-pointer text-sm">
+                                    <Type className="mr-2 h-4 w-4" /> Rename
+                                </DropdownMenuItem>
+                                <DropdownMenuItem onClick={handleDuplicate} disabled={isLoading} className="hover:bg-white/5 focus:bg-white/5 cursor-pointer text-sm">
+                                    <Copy className="mr-2 h-4 w-4" /> Duplicate
+                                </DropdownMenuItem>
+                                <div className="my-1 h-px bg-white/10" />
+                                <DropdownMenuItem onClick={handleDelete} disabled={isLoading} className="text-red-400 hover:bg-red-400/10 focus:bg-red-400/10 cursor-pointer text-sm">
+                                    <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
-                </CardFooter>
-            </Card>
+                </div>
+            </div>
 
             <Dialog open={isRenameOpen} onOpenChange={setIsRenameOpen}>
-                <DialogContent>
+                <DialogContent className="bg-[#1e1e1e] border-white/10 text-white sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle>Rename Resume</DialogTitle>
+                        <DialogTitle className="text-xl font-semibold">Rename Resume</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="title">New Title</Label>
+                            <Label htmlFor="title" className="text-zinc-400">New Title</Label>
                             <Input
                                 id="title"
                                 value={newTitle}
                                 onChange={(e) => setNewTitle(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleRename()}
+                                className="bg-black border-white/10 focus-visible:ring-1 focus-visible:ring-white/20 text-white"
                             />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setIsRenameOpen(false)}>Cancel</Button>
-                        <Button onClick={handleRename} disabled={isLoading}>Save Changes</Button>
+                        <Button variant="ghost" onClick={() => setIsRenameOpen(false)} className="hover:bg-white/10 text-white">Cancel</Button>
+                        <Button onClick={handleRename} disabled={isLoading} className="bg-white text-black hover:bg-zinc-200">Save Changes</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
@@ -228,7 +240,7 @@ export function ResumeList({ initialResumes }: { initialResumes: Resume[] }) {
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        <div className="flex flex-col w-full">
             {resumes.map((resume) => (
                 <ResumeCard key={resume.id} resume={resume} onRefresh={refreshResumes} />
             ))}
