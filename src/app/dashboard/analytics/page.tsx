@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
     BarChart3, ExternalLink, Copy, Trash2, Loader2,
-    Eye, Clock, Link2, Lock, Check, Globe, Shield
+    Eye, Clock, Link2, Lock, Check, Globe, Shield,
+    ChevronDown, HelpCircle, ArrowUpRight
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
@@ -61,186 +61,223 @@ export default function AnalyticsPage() {
         const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
         const remainingDays = 7 - diffDays
 
-        if (!link.is_active) return { status: 'expired', label: 'Deactivated', color: 'bg-red-100 text-red-700', remainingDays: 0 }
-        if (remainingDays <= 0) return { status: 'expired', label: 'Expired (7d)', color: 'bg-red-100 text-red-700', remainingDays: 0 }
-        if (remainingDays <= 2) return { status: 'expiring', label: `${remainingDays}d left`, color: 'bg-amber-100 text-amber-700', remainingDays }
-        return { status: 'active', label: `${remainingDays}d left`, color: 'bg-emerald-100 text-emerald-700', remainingDays }
+        if (!link.is_active) return { status: 'expired', label: 'Deactivated', color: 'bg-red-500/10 text-red-500', remainingDays: 0 }
+        if (remainingDays <= 0) return { status: 'expired', label: 'Expired', color: 'bg-red-500/10 text-red-500', remainingDays: 0 }
+        if (remainingDays <= 2) return { status: 'expiring', label: `${remainingDays}d left`, color: 'bg-amber-500/10 text-amber-500', remainingDays }
+        return { status: 'active', label: `${remainingDays}d left`, color: 'bg-emerald-500/10 text-emerald-500', remainingDays }
     }
 
     const totals = {
         views: links.reduce((sum, l) => sum + (l.view_count || 0), 0),
         active: links.filter(l => getLinkStatus(l).status !== 'expired').length,
         expired: links.filter(l => getLinkStatus(l).status === 'expired').length,
+        avgViews: links.length > 0 ? (links.reduce((sum, l) => sum + (l.view_count || 0), 0) / links.length).toFixed(1) : 0
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-white w-full font-sans">
-            <div className="max-w-7xl mx-auto w-full p-8 space-y-8">
+        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-zinc-100">
+            <div className="max-w-7xl mx-auto w-full p-8 px-12 space-y-12">
 
                 {/* Header */}
-                <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-2 gap-4">
-                    <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0">
-                            <BarChart3 className="h-5 w-5 text-slate-700" />
-                        </div>
-                        <div>
-                            <h1 className="text-xl font-bold tracking-tight text-[#1E293B] leading-none mb-1">
-                                Link Analytics
-                            </h1>
-                            <p className="text-[#64748B] text-xs font-medium uppercase tracking-wider">
-                                Track your shared CV links
-                            </p>
-                        </div>
+                <header className="flex items-center justify-between pb-4">
+                    <h1 className="text-3xl font-bold tracking-tight text-white">
+                        Metrics
+                    </h1>
+                    <div className="flex items-center gap-2">
+                        <Button variant="outline" className="h-9 px-4 rounded-lg bg-white/5 border-white/10 hover:bg-white/10 text-zinc-300 text-xs font-medium gap-2">
+                            All Links <ChevronDown className="h-3.5 w-3.5 opacity-50" />
+                        </Button>
+                        <Button variant="outline" className="h-9 px-4 rounded-lg bg-white/5 border-white/10 hover:bg-white/10 text-zinc-300 text-xs font-medium gap-2">
+                            Last 7 days <ChevronDown className="h-3.5 w-3.5 opacity-50" />
+                        </Button>
                     </div>
                 </header>
 
-                {/* Stats Cards */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div className="border border-slate-200 rounded-2xl p-6 bg-white shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-                        <div className="flex items-center gap-3 mb-3">
-                            <div className="h-9 w-9 bg-blue-50 rounded-lg flex items-center justify-center">
-                                <Eye className="h-4 w-4 text-blue-600" />
+                {/* Main Stats Box */}
+                <div className="border border-white/10 rounded-2xl bg-[#0a0a0a] overflow-hidden">
+                    <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-12 border-b border-white/10">
+                        <div className="space-y-2">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Total Views</p>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-6xl font-black text-white">{totals.views}</span>
+                                <span className="text-xs text-emerald-500 font-bold flex items-center gap-0.5">
+                                    <ArrowUpRight className="h-3 w-3" /> 12%
+                                </span>
                             </div>
-                            <span className="text-sm font-semibold text-slate-500">Total Views</span>
                         </div>
-                        <p className="text-3xl font-black text-slate-900">{totals.views}</p>
-                    </div>
-                    <div className="border border-slate-200 rounded-2xl p-6 bg-white shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-                        <div className="flex items-center gap-3 mb-3">
-                            <div className="h-9 w-9 bg-emerald-50 rounded-lg flex items-center justify-center">
-                                <Globe className="h-4 w-4 text-emerald-600" />
+                        <div className="space-y-2">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Active Links</p>
+                            <div className="flex items-baseline gap-2">
+                                <span className="text-6xl font-black text-white">{totals.active}</span>
+                                <span className="text-xs text-zinc-500 font-bold">/ {links.length} total</span>
                             </div>
-                            <span className="text-sm font-semibold text-slate-500">Active Links</span>
                         </div>
-                        <p className="text-3xl font-black text-slate-900">{totals.active}</p>
                     </div>
-                    <div className="border border-slate-200 rounded-2xl p-6 bg-white shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)]">
-                        <div className="flex items-center gap-3 mb-3">
-                            <div className="h-9 w-9 bg-red-50 rounded-lg flex items-center justify-center">
-                                <Lock className="h-4 w-4 text-red-500" />
-                            </div>
-                            <span className="text-sm font-semibold text-slate-500">Expired Links</span>
+                    {/* Placeholder Chart Area */}
+                    <div className="h-64 w-full p-8 relative flex items-end">
+                        <div className="absolute inset-0 flex flex-col justify-between p-8 pointer-events-none opacity-20">
+                            {[1, 2, 3, 4].map(i => <div key={i} className="w-full border-t border-dashed border-white/30" />)}
                         </div>
-                        <p className="text-3xl font-black text-slate-900">{totals.expired}</p>
-                    </div>
-                </div>
-
-                {/* Links Table */}
-                <div className="border border-slate-200 rounded-2xl bg-white shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] overflow-hidden">
-                    <div className="p-6 border-b border-slate-100">
-                        <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-                            <Link2 className="h-5 w-5 text-slate-400" />
-                            All Shared Links
-                        </h2>
-                    </div>
-
-                    {isLoading ? (
-                        <div className="py-20 flex justify-center">
-                            <Loader2 className="h-8 w-8 animate-spin text-slate-300" />
-                        </div>
-                    ) : links.length === 0 ? (
-                        <div className="py-20 flex flex-col items-center justify-center text-center px-8">
-                            <div className="h-14 w-14 bg-slate-50 rounded-2xl flex items-center justify-center mb-4">
-                                <Link2 className="h-7 w-7 text-slate-300" />
-                            </div>
-                            <h3 className="text-lg font-bold text-slate-900 mb-2">No shared links yet</h3>
-                            <p className="text-sm text-slate-500 max-w-sm">
-                                When you create a public link for your CV, it will appear here with detailed view analytics.
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="divide-y divide-slate-100">
-                            {links.map((link) => {
-                                const statusInfo = getLinkStatus(link)
-                                const isExpired = statusInfo.status === 'expired'
-
+                        <div className="w-full h-full flex items-end gap-1 relative z-10 pt-4 px-2">
+                            {/* Simple visual representation of a chart if no data */}
+                            {Array.from({ length: 14 }).map((_, i) => {
+                                const height = Math.random() * 80 + 10
                                 return (
-                                    <div key={link.id} className={`p-5 flex flex-col sm:flex-row items-start sm:items-center gap-4 hover:bg-slate-50/50 transition-colors ${isExpired ? 'opacity-70' : ''}`}>
-                                        {/* Left: Info */}
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <h4 className="font-bold text-slate-900 truncate">
-                                                    {link.link_name || link.resumes?.title || 'Untitled Resume'}
-                                                </h4>
-                                                <Badge className={`${statusInfo.color} text-[10px] font-bold px-2 py-0.5 border-0`}>
-                                                    {statusInfo.label}
-                                                </Badge>
+                                    <div key={i} className="flex-1 group relative h-full flex flex-col justify-end">
+                                        <div
+                                            className="w-full bg-emerald-500/20 group-hover:bg-emerald-500/40 rounded-t-sm transition-all"
+                                            style={{ height: `${height}%` }}
+                                        />
+                                        {i === 12 && (
+                                            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4">
+                                                <div className="bg-emerald-500 h-2 w-2 rounded-full shadow-[0_0_10px_rgba(16,185,129,0.8)]" />
                                             </div>
-                                            <p className="text-xs text-slate-400 font-medium truncate">
-                                                {appUrl}/r/{link.slug}
-                                            </p>
-                                            {link.version && (
-                                                <p className="text-xs text-blue-500 font-semibold mt-1">
-                                                    Tailored for: {link.version.job_title} at {link.version.company_name}
-                                                </p>
-                                            )}
-                                        </div>
-
-                                        {/* Middle: Views & Date */}
-                                        <div className="flex items-center gap-6 text-sm shrink-0">
-                                            <div className="flex items-center gap-1.5 text-slate-700">
-                                                <Eye className="h-4 w-4 text-slate-400" />
-                                                <span className="font-bold">{link.view_count || 0}</span>
-                                                <span className="text-slate-400 text-xs">views</span>
-                                            </div>
-                                            <div className="flex items-center gap-1.5 text-slate-500 text-xs">
-                                                <Clock className="h-3.5 w-3.5" />
-                                                {link.last_viewed_at
-                                                    ? new Date(link.last_viewed_at).toLocaleDateString()
-                                                    : 'Never viewed'}
-                                            </div>
-                                        </div>
-
-                                        {/* Right: Actions */}
-                                        <div className="flex items-center gap-2 shrink-0">
-                                            <Button
-                                                variant="outline"
-                                                size="sm"
-                                                className="h-8 gap-1.5 text-xs font-semibold"
-                                                onClick={() => copyLink(link.slug)}
-                                            >
-                                                {copiedSlug === link.slug ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-                                                {copiedSlug === link.slug ? 'Copied' : 'Copy'}
-                                            </Button>
-                                            <a
-                                                href={`/r/${link.slug}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="h-8 w-8 inline-flex items-center justify-center rounded-md border border-slate-200 hover:bg-slate-50 text-slate-500"
-                                            >
-                                                <ExternalLink className="h-3.5 w-3.5" />
-                                            </a>
-                                            {isExpired && (
-                                                <Button
-                                                    size="sm"
-                                                    className="h-8 gap-1.5 text-xs font-semibold bg-[#2563EB] hover:bg-blue-700 text-white"
-                                                    onClick={() => window.location.href = '/dashboard/upgrade'}
-                                                >
-                                                    <Shield className="h-3.5 w-3.5" />
-                                                    Unlock
-                                                </Button>
-                                            )}
-                                        </div>
+                                        )}
                                     </div>
                                 )
                             })}
                         </div>
-                    )}
+                        {/* Legend */}
+                        <div className="absolute bottom-4 left-8 right-8 flex justify-between text-[10px] font-bold text-zinc-600 uppercase tracking-widest">
+                            <span>Feb 22</span>
+                            <span>Feb 24</span>
+                            <span>Feb 26</span>
+                            <span>Feb 28</span>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Footer Info */}
-                <div className="bg-slate-50 border border-slate-200 rounded-xl p-5">
-                    <div className="flex items-start gap-3">
-                        <div className="h-8 w-8 bg-blue-50 rounded-lg flex items-center justify-center shrink-0 mt-0.5">
-                            <Shield className="h-4 w-4 text-blue-600" />
+                {/* Bottom Stats Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="border border-white/10 rounded-2xl p-8 bg-[#0a0a0a] space-y-4">
+                        <div className="flex items-center justify-between">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Expired Links</p>
+                            <HelpCircle className="h-4 w-4 text-zinc-700" />
                         </div>
-                        <div>
-                            <h4 className="text-sm font-bold text-slate-800 mb-1">Free Plan: 7-Day Links</h4>
-                            <p className="text-xs text-slate-500 leading-relaxed">
-                                On the free plan, shared CV links expire after 7 days. Upgrade to Premium for permanent links,
-                                unlimited views, and advanced analytics. Your recruiters will always have access to your profile.
-                            </p>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-5xl font-black text-white">{totals.expired}</span>
+                            <span className="text-xs text-zinc-500 font-bold">Total inactive</span>
                         </div>
+                        <div className="h-1 w-full bg-red-500/10 rounded-full overflow-hidden">
+                            <div className="h-full bg-red-500" style={{ width: `${(totals.expired / (links.length || 1)) * 100}%` }} />
+                        </div>
+                    </div>
+
+                    <div className="border border-white/10 rounded-2xl p-8 bg-[#0a0a0a] space-y-4">
+                        <div className="flex items-center justify-between">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Views per Link</p>
+                            <HelpCircle className="h-4 w-4 text-zinc-700" />
+                        </div>
+                        <div className="flex items-baseline gap-2">
+                            <span className="text-5xl font-black text-white">{totals.avgViews}</span>
+                            <span className="text-xs text-zinc-500 font-bold">Average engagement</span>
+                        </div>
+                        <div className="h-1 w-full bg-emerald-500/10 rounded-full overflow-hidden">
+                            <div className="h-full bg-emerald-500" style={{ width: '70%' }} />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Links Table List */}
+                <div className="space-y-6">
+                    <div className="flex items-center justify-between">
+                        <h2 className="text-sm font-bold text-zinc-400 uppercase tracking-widest">Linked History</h2>
+                        <Button variant="ghost" className="text-xs text-zinc-500 hover:text-white font-bold h-8">View all</Button>
+                    </div>
+
+                    <div className="divide-y divide-white/5 border-t border-white/10">
+                        {isLoading ? (
+                            <div className="py-12 flex justify-center w-full">
+                                <Loader2 className="h-6 w-6 animate-spin text-zinc-800" />
+                            </div>
+                        ) : links.length === 0 ? (
+                            <div className="py-12 text-center text-zinc-600 font-medium text-sm">
+                                No links generated yet.
+                            </div>
+                        ) : (
+                            links.map((link) => {
+                                const statusInfo = getLinkStatus(link)
+                                const isExpired = statusInfo.status === 'expired'
+
+                                return (
+                                    <div key={link.id} className="group py-4 flex items-center justify-between hover:bg-white/[0.02] -mx-4 px-4 rounded-xl transition-all">
+                                        <div className="flex items-center gap-4">
+                                            <div className="h-10 w-10 rounded-lg bg-zinc-900 border border-white/5 flex items-center justify-center">
+                                                <Link2 className="h-4 w-4 text-zinc-500" />
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center gap-2">
+                                                    <h4 className="text-sm font-bold text-white">
+                                                        {link.link_name || link.resumes?.title || 'Untitled Resume'}
+                                                    </h4>
+                                                    <div className={`h-1.5 w-1.5 rounded-full ${isExpired ? 'bg-red-500' : 'bg-emerald-500'}`} />
+                                                </div>
+                                                <p className="text-[10px] text-zinc-500 font-medium mt-0.5">
+                                                    {link.slug} • {new Date(link.created_at).toLocaleDateString()}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-12">
+                                            <div className="text-right">
+                                                <p className="text-xs font-bold text-white">{link.view_count || 0}</p>
+                                                <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-wider">Views</p>
+                                            </div>
+                                            <div className="text-right w-20">
+                                                <p className={`text-xs font-bold ${isExpired ? 'text-red-400' : 'text-emerald-400'}`}>
+                                                    {statusInfo.status === 'active' ? statusInfo.label.split(' ')[0] : 'Expired'}
+                                                </p>
+                                                <p className="text-[10px] text-zinc-600 font-bold uppercase tracking-wider">Status</p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    onClick={() => copyLink(link.slug)}
+                                                    className="h-8 w-8 p-0 text-zinc-600 hover:text-white"
+                                                >
+                                                    {copiedSlug === link.slug ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
+                                                </Button>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    asChild
+                                                    className="h-8 w-8 p-0 text-zinc-600 hover:text-white"
+                                                >
+                                                    <a href={`/r/${link.slug}`} target="_blank" rel="noopener noreferrer">
+                                                        <ExternalLink className="h-3.5 w-3.5" />
+                                                    </a>
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )
+                            })
+                        )}
+                    </div>
+                </div>
+
+                {/* Upgrade CTA */}
+                <div className="rounded-3xl bg-[#0a0a0a] border border-white/10 p-1 bg-gradient-to-br from-white/5 to-transparent">
+                    <div className="p-8 flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div className="flex items-start gap-4">
+                            <div className="h-12 w-12 rounded-2xl bg-white flex items-center justify-center shrink-0">
+                                <Shield className="h-6 w-6 text-black" />
+                            </div>
+                            <div>
+                                <h4 className="text-lg font-bold text-white mb-1">Make your links permanent</h4>
+                                <p className="text-sm text-zinc-400 max-w-md">
+                                    Free plan links expire after 7 days. Upgrade to Pro to get permanent URLs,
+                                    detailed view location analytics, and custom slugs.
+                                </p>
+                            </div>
+                        </div>
+                        <Button
+                            className="bg-zinc-100 text-black hover:bg-white font-bold px-8 rounded-xl h-12"
+                            onClick={() => window.location.href = '/dashboard/upgrade'}
+                        >
+                            Upgrade Now
+                        </Button>
                     </div>
                 </div>
             </div>

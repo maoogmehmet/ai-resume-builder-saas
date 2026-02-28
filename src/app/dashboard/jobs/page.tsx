@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { MapPin, Search, Briefcase, ExternalLink, Loader2, Bookmark, BookmarkCheck, FileCheck2, Sparkles, X, TrendingUp, CheckCircle2, Circle, Trash2 } from 'lucide-react'
+import { MapPin, Search, Briefcase, ExternalLink, Loader2, Bookmark, BookmarkCheck, FileCheck2, Sparkles, X, TrendingUp, CheckCircle2, Circle, Trash2, ChevronDown } from 'lucide-react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
@@ -36,14 +36,14 @@ export default function JobsPage() {
     const toggleJobSelection = (job: any, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
         setSelectedJobs(prev => {
-            const exists = prev.find(j => (j.jobUrl || j.job_url) === (job.jobUrl || job.job_url))
+            const exists = prev.find(j => (j.jobUrl || j.job_url) === (job.jobUrl || j.job_url))
             if (exists) {
-                return prev.filter(j => (j.jobUrl || j.job_url) !== (job.jobUrl || job.job_url))
+                return prev.filter(j => (j.jobUrl || j.job_url) !== (job.jobUrl || j.job_url))
             }
             return [...prev, job]
         })
     }
-    const isJobSelected = (job: any) => selectedJobs.some(j => (j.jobUrl || j.job_url) === (job.jobUrl || job.job_url))
+    const isJobSelected = (job: any) => selectedJobs.some(j => (j.jobUrl || j.job_url) === (job.jobUrl || j.job_url))
 
     useEffect(() => {
         const fetchSavedJobs = async () => {
@@ -121,7 +121,7 @@ export default function JobsPage() {
             const data = await res.json()
             if (res.ok && data.success) {
                 toast.success('Job saved!')
-                setSavedJobs(prev => [data.job, ...prev.filter(j => j.job_url !== (job.jobUrl || job.job_url))])
+                setSavedJobs(prev => [data.job, ...prev.filter(j => j.job_url !== (job.jobUrl || j.job_url))])
             } else {
                 toast.error(data.error || 'Failed to save job.')
             }
@@ -210,40 +210,38 @@ export default function JobsPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-white w-full font-sans">
-            <div className="max-w-7xl mx-auto w-full p-8 space-y-8">
+        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white">
+            <div className="max-w-7xl mx-auto w-full p-8 px-12 space-y-12">
 
-                <header className="flex flex-col xl:flex-row items-start xl:items-center justify-between pb-8 border-b border-slate-100 gap-6">
+                <header className="flex flex-col xl:flex-row items-start xl:items-center justify-between pb-4 gap-8">
                     <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 bg-slate-100 rounded-lg flex items-center justify-center shrink-0">
-                            <Briefcase className="h-5 w-5 text-slate-700" />
-                        </div>
-                        <div>
-                            <h1 className="text-xl font-bold tracking-tight text-[#1E293B] leading-none mb-1">
-                                Job Finder
-                            </h1>
-                            <p className="text-[#64748B] text-xs font-medium uppercase tracking-wider">
-                                Power Search (100 Results Limit)
-                            </p>
-                        </div>
+                        <h1 className="text-3xl font-bold tracking-tight text-white">
+                            Job Finder
+                        </h1>
+                        {!hasSearched && savedJobs.length > 0 && (
+                            <Badge variant="outline" className="h-5 bg-white/5 border-white/10 text-zinc-500 font-bold uppercase tracking-widest text-[10px]">
+                                {savedJobs.length} Saved
+                            </Badge>
+                        )}
                     </div>
 
-                    <div className="flex w-full xl:w-auto items-center gap-3 bg-white p-1 rounded-xl">
-                        <div className="relative flex-1 xl:w-[350px]">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                    <div className="flex w-full xl:w-auto items-center gap-2 bg-[#0a0a0a] p-1.5 rounded-2xl border border-white/10">
+                        <div className="relative flex-1 xl:w-[300px]">
+                            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600" />
                             <Input
-                                placeholder="Search Jobs (e.g. 'Frontend Developer')"
-                                className="h-11 pl-9 bg-white border-slate-200 focus:bg-white text-sm"
+                                placeholder="Search Jobs..."
+                                className="h-10 pl-10 bg-transparent border-none focus-visible:ring-0 text-white text-sm placeholder:text-zinc-600"
                                 value={jobQuery}
                                 onChange={(e) => setJobQuery(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleJobSearch()}
                             />
                         </div>
-                        <div className="relative w-full xl:w-[200px]">
-                            <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                        <div className="h-4 w-px bg-white/5" />
+                        <div className="relative w-full xl:w-[150px]">
+                            <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600" />
                             <Input
                                 placeholder="Location"
-                                className="h-11 pl-9 bg-white border-slate-200 focus:bg-white text-sm"
+                                className="h-10 pl-10 bg-transparent border-none focus-visible:ring-0 text-white text-sm placeholder:text-zinc-600"
                                 value={location}
                                 onChange={(e) => setLocation(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleJobSearch()}
@@ -252,353 +250,340 @@ export default function JobsPage() {
                         <Button
                             onClick={handleJobSearch}
                             disabled={isJobsLoading}
-                            className="h-11 px-8 bg-[#2563EB] hover:bg-blue-700 text-white font-medium rounded-lg"
+                            className="h-9 px-6 bg-white text-black hover:bg-zinc-200 font-bold rounded-xl text-xs"
                         >
-                            {isJobsLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Search'}
+                            {isJobsLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Search'}
                         </Button>
                     </div>
                 </header>
 
                 <main>
                     {!hasSearched ? (
-                        <>
-                            <div className="mb-8">
-                                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Start Your Search</h3>
-                                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6">Saved Jobs</h3>
+                        <div className="space-y-12">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-sm font-bold text-zinc-500 uppercase tracking-widest">Saved Opportunities</h2>
+                                <Button variant="ghost" className="text-xs text-zinc-500 hover:text-white font-bold h-8">Sort by Date <ChevronDown className="h-3 w-3 ml-1 opacity-50" /></Button>
+                            </div>
 
-                                {isLoadingSaved ? (
-                                    <div className="flex items-center gap-2 text-sm text-slate-500"><Loader2 className="h-4 w-4 animate-spin" /> Loading saved jobs...</div>
-                                ) : savedJobs.length > 0 ? (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                        {savedJobs.map((savedJob) => {
-                                            const selected = isJobSelected(savedJob)
-                                            return (
-                                                <div key={savedJob.id}
-                                                    onClick={() => toggleJobSelection(savedJob)}
-                                                    className={`flex flex-col sm:flex-row gap-5 border p-5 rounded-2xl bg-white transition-all cursor-pointer ${selected ? 'border-blue-500 shadow-sm ring-1 ring-blue-500/20' : 'border-slate-200 hover:border-slate-300'}`}>
-                                                    <div className="h-14 w-14 rounded-xl flex items-center justify-center shrink-0 bg-[#3B82F6] text-white overflow-hidden shadow-sm">
-                                                        {savedJob.company_logo ? (
-                                                            <img src={savedJob.company_logo} className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            <span className="text-xl font-bold">{savedJob.company_name?.charAt(0) || 'C'}</span>
-                                                        )}
+                            {isLoadingSaved ? (
+                                <div className="py-24 flex justify-center w-full">
+                                    <Loader2 className="h-6 w-6 animate-spin text-zinc-800" />
+                                </div>
+                            ) : savedJobs.length > 0 ? (
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {savedJobs.map((savedJob) => {
+                                        const selected = isJobSelected(savedJob)
+                                        return (
+                                            <div key={savedJob.id}
+                                                onClick={() => toggleJobSelection(savedJob)}
+                                                className={`flex flex-col border rounded-[2rem] bg-[#0a0a0a] transition-all cursor-pointer group relative overflow-hidden ${selected ? 'border-white/40 ring-1 ring-white/10 shadow-2xl shadow-white/5' : 'border-white/10 hover:border-white/20'}`}>
+
+                                                <div className="p-8 pb-4">
+                                                    <div className="flex justify-between items-start mb-6">
+                                                        <div className="h-12 w-12 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center shrink-0 overflow-hidden">
+                                                            {savedJob.company_logo ? (
+                                                                <img src={savedJob.company_logo} alt={savedJob.company_name} className="w-full h-full object-cover" />
+                                                            ) : (
+                                                                <span className="text-lg font-bold text-zinc-500">{savedJob.company_name?.charAt(0) || 'C'}</span>
+                                                            )}
+                                                        </div>
+                                                        <div className={`h-5 w-5 rounded-full border border-white/10 flex items-center justify-center transition-all ${selected ? 'bg-white border-white' : 'group-hover:border-white/30'}`}>
+                                                            {selected && <CheckCircle2 className="h-3 w-3 text-black fill-black" />}
+                                                        </div>
                                                     </div>
-                                                    <div className="flex-1 min-w-0 flex flex-col">
-                                                        <div className="flex items-start justify-between gap-4 mb-2">
-                                                            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                                                <h4 className="font-bold text-[17px] text-[#2563EB] leading-snug">{savedJob.title}</h4>
-                                                                <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">{new Date(savedJob.created_at).toLocaleDateString()}</span>
-                                                            </div>
-                                                            <div className="text-slate-300 shrink-0">
-                                                                {selected ? <CheckCircle2 className="h-6 w-6 text-blue-500 fill-blue-50" /> : <Circle className="h-6 w-6 text-slate-200 hover:text-slate-300 transition-colors" />}
-                                                            </div>
-                                                        </div>
 
-                                                        <div className="flex items-center gap-4 text-sm font-medium text-slate-500 mb-3">
-                                                            <div className="flex items-center gap-1.5"><Briefcase className="h-4 w-4 text-slate-400" />{savedJob.company_name}</div>
-                                                            <div className="flex items-center gap-1.5"><MapPin className="h-4 w-4 text-slate-400" />{savedJob.location || 'Remote'}</div>
-                                                        </div>
-
-                                                        <p className="text-sm text-slate-500 line-clamp-2 mb-5 leading-relaxed">
-                                                            {savedJob.description || "No preview description available."}
-                                                        </p>
-
-                                                        <div className="flex items-center gap-2 mt-auto">
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                className="h-8 shadow-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 gap-2 font-semibold text-xs rounded-lg px-3"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation()
-                                                                    sessionStorage.setItem('optimizeJob', JSON.stringify({
-                                                                        title: savedJob.title, companyName: savedJob.company_name, description: savedJob.description
-                                                                    }))
-                                                                    window.location.href = '/dashboard/optimize?from=search'
-                                                                }}
-                                                            >
-                                                                <TrendingUp className="h-3.5 w-3.5 text-slate-400" /> Optimize CV
-                                                            </Button>
-
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                onClick={(e) => handleDeleteSavedJob(savedJob.id, e)}
-                                                                disabled={deletingJobIds.has(savedJob.id)}
-                                                                className="h-8 w-8 p-0 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg flex-shrink-0"
-                                                            >
-                                                                {deletingJobIds.has(savedJob.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                                                            </Button>
-
-                                                            <a href={savedJob.job_url} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="text-[13px] font-semibold text-slate-400 hover:text-slate-600 flex items-center gap-1 ml-auto transition-colors">
-                                                                View Details <ExternalLink className="h-3.5 w-3.5" />
-                                                            </a>
-                                                        </div>
+                                                    <div className="space-y-1">
+                                                        <h4 className="font-bold text-lg text-white leading-tight line-clamp-1">{savedJob.title}</h4>
+                                                        <p className="text-sm font-medium text-emerald-500/80">{savedJob.company_name}</p>
                                                     </div>
                                                 </div>
-                                            )
-                                        })}
-                                    </div>
-                                ) : (
-                                    <div className="border border-slate-200 border-dashed rounded-xl p-6 bg-slate-50/50 flex flex-col items-center justify-center text-center">
-                                        <Bookmark className="h-6 w-6 text-slate-300 mb-2" />
-                                        <p className="text-sm font-medium text-slate-500">No saved jobs yet.</p>
-                                    </div>
-                                )}
-                            </div>
 
-                            <p className="text-center text-xs text-slate-400 mt-12 mb-8">Search for jobs to populate your list</p>
+                                                <div className="px-8 pb-6 flex-1 space-y-4">
+                                                    <div className="flex items-center gap-3 text-xs font-bold text-zinc-500">
+                                                        <div className="flex items-center gap-1"><MapPin className="h-3 w-3 opacity-50" /> {savedJob.location || 'Remote'}</div>
+                                                        <div className="h-1 w-1 rounded-full bg-zinc-800" />
+                                                        <div>{new Date(savedJob.created_at).toLocaleDateString()}</div>
+                                                    </div>
+                                                    <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed h-8">
+                                                        {savedJob.description || "No preview description available."}
+                                                    </p>
+                                                </div>
 
-                            <div className="flex flex-col items-center justify-center min-h-[200px] text-center">
-                                <div className="h-16 w-16 rounded-full bg-slate-50 flex items-center justify-center mb-6">
-                                    <Search className="h-8 w-8 text-slate-300" />
+                                                <div className="p-6 pt-0 mt-auto flex items-center justify-between gap-3 border-t border-white/5">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        className="flex-1 h-10 bg-white/5 hover:bg-white/10 text-white font-bold text-xs rounded-xl gap-2"
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            sessionStorage.setItem('optimizeJob', JSON.stringify({
+                                                                title: savedJob.title, companyName: savedJob.company_name, description: savedJob.description
+                                                            }))
+                                                            window.location.href = '/dashboard/optimize'
+                                                        }}
+                                                    >
+                                                        <Sparkles className="h-3.5 w-3.5 text-emerald-500" /> Optimize
+                                                    </Button>
+
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={(e) => handleDeleteSavedJob(savedJob.id, e)}
+                                                        disabled={deletingJobIds.has(savedJob.id)}
+                                                        className="h-10 w-10 p-0 text-zinc-600 hover:text-red-500 hover:bg-red-50 rounded-xl"
+                                                    >
+                                                        {deletingJobIds.has(savedJob.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
-                                <h3 className="text-xl font-bold text-slate-900 mb-2">Ready to find your dream job?</h3>
-                                <p className="text-slate-500 font-medium max-w-sm">
-                                    Enter a job title and location above to search through the best opportunities on LinkedIn.
-                                </p>
-                            </div>
-                        </>
+                            ) : (
+                                <div className="border border-white/10 border-dashed rounded-[2rem] p-24 bg-[#0a0a0a] flex flex-col items-center justify-center text-center">
+                                    <div className="h-16 w-16 rounded-3xl bg-white/5 flex items-center justify-center mb-6">
+                                        <Briefcase className="h-8 w-8 text-zinc-700" />
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-2">No saved jobs yet</h3>
+                                    <p className="text-zinc-500 text-sm max-w-sm mb-8">
+                                        Search and save jobs you're interested in to manage your pipeline efficiently.
+                                    </p>
+                                    <Button
+                                        onClick={() => setJobQuery('Frontend Developer')}
+                                        className="bg-white text-black hover:bg-zinc-200 font-bold px-8 rounded-xl h-12"
+                                    >
+                                        Explore Jobs
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
                     ) : (
-                        <div className="space-y-6">
+                        <div className="space-y-8">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    <h2 className="text-sm font-bold text-white uppercase tracking-widest">Search Results</h2>
+                                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 border-none px-2 py-0.5 font-bold uppercase tracking-widest text-[10px]">{jobs.length} found</Badge>
+                                </div>
+                                <Button variant="ghost" className="text-xs text-zinc-500 hover:text-white font-bold h-8" onClick={() => setHasSearched(false)}>Back to list</Button>
+                            </div>
+
                             {isJobsLoading ? (
-                                <div className="py-20 flex flex-col items-center justify-center text-center">
-                                    <Loader2 className="h-10 w-10 animate-spin text-blue-500 mb-4" />
-                                    <p className="text-slate-600 font-medium">Scraping latest opportunities...</p>
+                                <div className="py-32 flex flex-col items-center justify-center text-center">
+                                    <Loader2 className="h-12 w-12 animate-spin text-zinc-800 mb-6" />
+                                    <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Scanning LinkedIn for latest roles...</p>
                                 </div>
                             ) : jobError ? (
-                                <div className="py-20 flex flex-col items-center justify-center text-center">
-                                    <div className="h-16 w-16 bg-red-50 rounded-full flex items-center justify-center mb-4">
-                                        <span className="text-red-500 text-2xl font-bold">!</span>
+                                <div className="py-24 border border-white/10 rounded-[2rem] bg-[#0a0a0a] flex flex-col items-center justify-center text-center">
+                                    <div className="h-12 w-12 bg-red-500/10 rounded-2xl flex items-center justify-center mb-6">
+                                        <X className="h-6 w-6 text-red-500" />
                                     </div>
-                                    <h5 className="text-lg font-bold text-zinc-900 mb-2">Search Error</h5>
+                                    <h3 className="text-xl font-bold text-white mb-2">Search Error</h3>
                                     <p className="text-red-500 text-sm font-medium">{jobError}</p>
                                 </div>
                             ) : (
-                                <>
-                                    <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-                                        <div className="flex items-center gap-3">
-                                            <h2 className="text-lg font-bold text-slate-900">Search Results</h2>
-                                            <Badge variant="secondary" className="bg-blue-50 text-blue-700">{jobs.length} found</Badge>
-                                        </div>
-                                        <Button variant="outline" size="sm" onClick={() => setHasSearched(false)}>Back to Saved</Button>
-                                    </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                    {jobs.map((job, i) => {
+                                        const saved = isJobSaved(job.jobUrl)
+                                        const saving = savingJobUrls.has(job.jobUrl)
+                                        const selected = isJobSelected(job)
 
-                                    <div className="flex flex-col gap-4">
-                                        {jobs.map((job, i) => {
-                                            const defaultLetter = job.companyName?.charAt(0) || 'C'
-                                            const displayDate = job.postedAt || new Date().toLocaleDateString()
-                                            const saved = isJobSaved(job.jobUrl)
-                                            const saving = savingJobUrls.has(job.jobUrl)
-                                            const selected = isJobSelected(job)
+                                        return (
+                                            <div key={i}
+                                                onClick={() => toggleJobSelection(job)}
+                                                className={`flex flex-col border rounded-[2rem] bg-[#0a0a0a] transition-all cursor-pointer group relative ${selected ? 'border-white/40 ring-1 ring-white/10 shadow-2xl shadow-white/5' : 'border-white/10 hover:border-white/20'}`}>
 
-                                            return (
-                                                <div key={i}
-                                                    onClick={() => toggleJobSelection(job)}
-                                                    className={`flex flex-col sm:flex-row gap-5 border p-5 rounded-2xl bg-white transition-all cursor-pointer ${selected ? 'border-blue-500 shadow-sm ring-1 ring-blue-500/20' : 'border-slate-200 hover:border-slate-300 hover:shadow-sm'}`}>
-                                                    <div className="h-14 w-14 rounded-xl flex items-center justify-center shrink-0 bg-[#3B82F6] text-white shadow-sm overflow-hidden">
-                                                        {job.companyLogo ? (
-                                                            <img src={job.companyLogo} className="w-full h-full object-cover" />
-                                                        ) : (
-                                                            <span className="text-xl font-bold">{defaultLetter}</span>
-                                                        )}
+                                                <div className="p-8 pb-4">
+                                                    <div className="flex justify-between items-start mb-6">
+                                                        <div className="h-12 w-12 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center shrink-0 overflow-hidden">
+                                                            {job.companyLogo ? (
+                                                                <img src={job.companyLogo} alt={job.companyName} className="w-full h-full object-cover" />
+                                                            ) : (
+                                                                <span className="text-lg font-bold text-zinc-500">{job.companyName?.charAt(0) || 'C'}</span>
+                                                            )}
+                                                        </div>
+                                                        <div className={`h-5 w-5 rounded-full border border-white/10 flex items-center justify-center transition-all ${selected ? 'bg-white border-white' : 'group-hover:border-white/30'}`}>
+                                                            {selected && <CheckCircle2 className="h-3 w-3 text-black fill-black" />}
+                                                        </div>
                                                     </div>
 
-                                                    <div className="flex-1 min-w-0 flex flex-col">
-                                                        <div className="flex items-start justify-between gap-4 mb-2">
-                                                            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                                                                <h4 className="font-bold text-[17px] text-[#2563EB] leading-snug">{job.title}</h4>
-                                                                <span className="text-[11px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">{displayDate}</span>
-                                                            </div>
-                                                            <div className="text-slate-300 shrink-0">
-                                                                {selected ? <CheckCircle2 className="h-6 w-6 text-blue-500 fill-blue-50" /> : <Circle className="h-6 w-6 text-slate-200 hover:text-slate-300 transition-colors" />}
-                                                            </div>
-                                                        </div>
-
-                                                        <div className="flex items-center gap-4 text-sm font-medium text-slate-500 mb-3">
-                                                            <div className="flex items-center gap-1.5">
-                                                                <Briefcase className="h-4 w-4 text-slate-400" />
-                                                                {job.companyName}
-                                                            </div>
-                                                            <div className="flex items-center gap-1.5">
-                                                                <MapPin className="h-4 w-4 text-slate-400" />
-                                                                {job.location}
-                                                            </div>
-                                                        </div>
-
-                                                        <p className="text-sm text-slate-500 line-clamp-2 mb-5 leading-relaxed">
-                                                            {job.description || "No preview description available. Click details to read more."}
-                                                        </p>
-
-                                                        <div className="flex flex-wrap items-center gap-4 mt-auto">
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                className="h-8 shadow-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 gap-2 font-semibold text-xs rounded-lg px-3"
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation()
-                                                                    sessionStorage.setItem('optimizeJob', JSON.stringify({
-                                                                        title: job.title,
-                                                                        companyName: job.companyName,
-                                                                        description: job.description
-                                                                    }))
-                                                                    window.location.href = '/dashboard/optimize?from=search'
-                                                                }}
-                                                            >
-                                                                <TrendingUp className="h-3.5 w-3.5 text-slate-400" /> Optimize CV
-                                                            </Button>
-
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="sm"
-                                                                disabled={saving || saved}
-                                                                onClick={(e) => { e.stopPropagation(); handleSaveJob(job) }}
-                                                                className={`h-8 font-semibold text-xs rounded-lg px-3 gap-2 border bg-white shadow-sm ${saved ? 'text-emerald-700 border-emerald-200 hover:bg-emerald-50' : 'text-slate-600 border-slate-200 hover:bg-slate-50'}`}
-                                                            >
-                                                                {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : saved ? <BookmarkCheck className="h-3.5 w-3.5 text-emerald-600" /> : <Bookmark className="h-3.5 w-3.5 text-slate-400" />}
-                                                                {saved ? 'Saved' : 'Save'}
-                                                            </Button>
-
-                                                            <a href={job.jobUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()} className="ml-auto text-[13px] font-semibold text-slate-400 hover:text-slate-600 flex items-center gap-1 transition-colors">
-                                                                View Details <ExternalLink className="h-3.5 w-3.5" />
-                                                            </a>
-                                                        </div>
+                                                    <div className="space-y-1">
+                                                        <h4 className="font-bold text-lg text-white leading-tight line-clamp-1">{job.title}</h4>
+                                                        <p className="text-sm font-medium text-emerald-500/80">{job.companyName}</p>
                                                     </div>
                                                 </div>
-                                            )
-                                        })}
-                                    </div>
-                                </>
+
+                                                <div className="px-8 pb-6 flex-1 space-y-4">
+                                                    <div className="flex items-center gap-3 text-xs font-bold text-zinc-500">
+                                                        <div className="flex items-center gap-1"><MapPin className="h-3 w-3 opacity-50" /> {job.location || 'Remote'}</div>
+                                                        <div className="h-1 w-1 rounded-full bg-zinc-800" />
+                                                        <div>{job.postedAt || 'Recently'}</div>
+                                                    </div>
+                                                    <p className="text-xs text-zinc-500 line-clamp-2 leading-relaxed h-8">
+                                                        {job.description || "No preview description available."}
+                                                    </p>
+                                                </div>
+
+                                                <div className="p-6 pt-0 mt-auto flex items-center justify-between gap-3 border-t border-white/5">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        disabled={saving || saved}
+                                                        onClick={(e) => { e.stopPropagation(); handleSaveJob(job) }}
+                                                        className={`flex-1 h-10 font-bold text-xs rounded-xl gap-2 border bg-white/5 shadow-sm transition-all ${saved ? 'text-emerald-500 border-white/5' : 'text-white border-white/5 hover:bg-white/10'}`}
+                                                    >
+                                                        {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : saved ? <BookmarkCheck className="h-3.5 w-3.5" /> : <Bookmark className="h-3.5 w-3.5 opacity-50" />}
+                                                        {saved ? 'Saved' : 'Save'}
+                                                    </Button>
+
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        asChild
+                                                        className="h-10 w-10 p-0 text-zinc-600 hover:text-white hover:bg-white/5 rounded-xl"
+                                                        onClick={(e) => e.stopPropagation()}
+                                                    >
+                                                        <a href={job.jobUrl} target="_blank" rel="noopener noreferrer">
+                                                            <ExternalLink className="h-3.5 w-3.5" />
+                                                        </a>
+                                                    </Button>
+                                                </div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
                             )}
                         </div>
                     )}
                 </main>
-            </div>
 
-            {/* Batch Cover Letter Modal */}
-            {letterJobTargets.length > 0 && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={() => { if (!isGeneratingLetter && !generationComplete) setLetterJobTargets([]) }}>
-                    <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full" onClick={(e) => e.stopPropagation()}>
-                        <div className="p-6 border-b border-slate-100 flex items-center justify-between">
-                            <div>
-                                <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
-                                    <Sparkles className="h-5 w-5 text-purple-500" />
-                                    Generate Cover Letters
-                                </h3>
-                                <p className="text-sm font-medium text-slate-500 mt-1">Batch processing for {letterJobTargets.length} selected job(s)</p>
+                {/* Batch Cover Letter Modal - Overhauled to Dark */}
+                {letterJobTargets.length > 0 && (
+                    <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-in fade-in duration-300" onClick={() => { if (!isGeneratingLetter && !generationComplete) setLetterJobTargets([]) }}>
+                        <div className="bg-[#0a0a0a] border border-white/10 rounded-[2.5rem] shadow-2xl max-w-lg w-full overflow-hidden" onClick={(e) => e.stopPropagation()}>
+                            <div className="p-10 pb-6 flex items-center justify-between">
+                                <div>
+                                    <h3 className="text-2xl font-bold text-white flex items-center gap-3">
+                                        <Sparkles className="h-6 w-6 text-emerald-500" />
+                                        Magic Letters
+                                    </h3>
+                                    <p className="text-sm font-medium text-zinc-500 mt-2">Crafting {letterJobTargets.length} personalized documents</p>
+                                </div>
+                                {!isGeneratingLetter && (
+                                    <button onClick={() => setLetterJobTargets([])} className="h-10 w-10 rounded-xl hover:bg-white/5 flex items-center justify-center text-zinc-600 hover:text-white transition-colors">
+                                        <X className="h-6 w-6" />
+                                    </button>
+                                )}
                             </div>
-                            {!isGeneratingLetter && (
-                                <button onClick={() => setLetterJobTargets([])} className="h-8 w-8 rounded-lg hover:bg-slate-100 flex items-center justify-center text-slate-400">
-                                    <X className="h-5 w-5" />
-                                </button>
-                            )}
-                        </div>
 
-                        <div className="p-6">
-                            {!generationComplete ? (
-                                <div className="space-y-6">
-                                    <div>
-                                        <label className="text-sm font-semibold text-slate-700 block mb-2">Select Primary Resume *</label>
-                                        <p className="text-xs text-slate-500 mb-3 leading-relaxed">This resume will be analyzed to extract your skills and experience to write highly targeted cover letters tailored to each specific company.</p>
-                                        {resumes.length === 0 ? (
-                                            <p className="text-sm text-slate-500 bg-slate-50 p-3 rounded-lg border">No resumes found. Create one first in the Builder.</p>
-                                        ) : (
-                                            <select
-                                                className="w-full h-12 border border-slate-200 rounded-xl px-4 text-sm bg-zinc-50 font-medium cursor-pointer"
-                                                value={selectedResumeForLetter}
-                                                onChange={(e) => setSelectedResumeForLetter(e.target.value)}
+                            <div className="p-10 pt-4">
+                                {!generationComplete ? (
+                                    <div className="space-y-10">
+                                        <div className="space-y-4">
+                                            <label className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] block">Base Foundation</label>
+                                            {resumes.length === 0 ? (
+                                                <p className="text-sm text-zinc-500 bg-white/5 p-4 rounded-2xl border border-white/5">No resumes found. Create one in the Builder first.</p>
+                                            ) : (
+                                                <div className="relative group">
+                                                    <select
+                                                        className="w-full h-14 bg-black border border-white/10 group-hover:border-white/20 rounded-2xl px-5 text-sm font-bold text-white appearance-none cursor-pointer outline-none transition-all"
+                                                        value={selectedResumeForLetter}
+                                                        onChange={(e) => setSelectedResumeForLetter(e.target.value)}
+                                                    >
+                                                        {resumes.map(r => (
+                                                            <option key={r.id} value={r.id}>{r.title || 'Untitled Resume'}</option>
+                                                        ))}
+                                                    </select>
+                                                    <ChevronDown className="absolute right-5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-600 pointer-events-none group-hover:text-white transition-colors" />
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {!isGeneratingLetter ? (
+                                            <Button
+                                                onClick={handleBatchLetters}
+                                                disabled={resumes.length === 0}
+                                                className="w-full h-14 bg-white text-black hover:bg-zinc-200 font-bold rounded-2xl gap-3 shadow-[0_0_30px_rgba(255,255,255,0.05)] text-base"
                                             >
-                                                {resumes.map(r => (
-                                                    <option key={r.id} value={r.id}>{r.title || 'Untitled Resume'}</option>
-                                                ))}
-                                            </select>
+                                                <Sparkles className="h-5 w-5" />
+                                                Generate Now
+                                            </Button>
+                                        ) : (
+                                            <div className="bg-white/[0.02] border border-white/5 rounded-[2rem] p-8 text-center">
+                                                <Loader2 className="h-10 w-10 animate-spin text-emerald-500 mx-auto mb-6" />
+                                                <h4 className="font-bold text-white mb-2 text-lg">AI is writing...</h4>
+                                                <p className="text-xs font-bold text-zinc-600 uppercase tracking-widest">
+                                                    Page {generationProgress.current} / {generationProgress.total}
+                                                </p>
+                                                <div className="w-full bg-white/5 rounded-full h-1.5 mt-8 overflow-hidden">
+                                                    <div
+                                                        className="bg-emerald-500 h-1.5 rounded-full transition-all duration-300 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
+                                                        style={{ width: `${(generationProgress.current / generationProgress.total) * 100}%` }}
+                                                    ></div>
+                                                </div>
+                                            </div>
                                         )}
                                     </div>
-
-                                    {!isGeneratingLetter ? (
-                                        <Button
-                                            onClick={handleBatchLetters}
-                                            disabled={resumes.length === 0}
-                                            className="w-full h-12 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl gap-2 shadow-lg shadow-purple-500/20 text-base mt-4"
-                                        >
-                                            <Sparkles className="h-5 w-5" />
-                                            Generate {letterJobTargets.length} Letters
-                                        </Button>
-                                    ) : (
-                                        <div className="bg-slate-50 border border-slate-100 rounded-xl p-6 text-center mt-4">
-                                            <Loader2 className="h-8 w-8 animate-spin text-purple-500 mx-auto mb-4" />
-                                            <h4 className="font-bold text-slate-900 mb-1">Writing your letters...</h4>
-                                            <p className="text-sm font-medium text-slate-500">
-                                                Processing {generationProgress.current} of {generationProgress.total}
-                                            </p>
-                                            <div className="w-full bg-slate-200 rounded-full h-2 mt-4 overflow-hidden">
-                                                <div
-                                                    className="bg-purple-500 h-2 rounded-full transition-all duration-300"
-                                                    style={{ width: `${(generationProgress.current / generationProgress.total) * 100}%` }}
-                                                ></div>
-                                            </div>
+                                ) : (
+                                    <div className="space-y-8 text-center py-6">
+                                        <div className="h-20 w-20 bg-emerald-500/10 rounded-[2rem] flex items-center justify-center mx-auto mb-6 border border-emerald-500/20">
+                                            <CheckCircle2 className="h-10 w-10 text-emerald-500" />
                                         </div>
-                                    )}
-                                </div>
-                            ) : (
-                                <div className="space-y-6 text-center py-6">
-                                    <div className="h-16 w-16 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                                        <CheckCircle2 className="h-8 w-8 text-emerald-600" />
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-white mb-3">Generation Complete</h3>
+                                            <p className="text-zinc-500 text-sm max-w-[280px] mx-auto leading-relaxed font-medium">
+                                                All cover letters have been securely saved to your archive as beautiful documents.
+                                            </p>
+                                        </div>
+                                        <div className="flex gap-4 pt-6">
+                                            <Button
+                                                variant="outline"
+                                                className="flex-1 h-14 font-bold border-white/10 bg-white/5 hover:bg-white/10 text-white rounded-2xl"
+                                                onClick={() => setLetterJobTargets([])}
+                                            >
+                                                Done
+                                            </Button>
+                                            <Button
+                                                className="flex-1 h-14 font-bold bg-white text-black hover:bg-zinc-200 rounded-2xl"
+                                                onClick={() => window.location.href = '/dashboard/letters'}
+                                            >
+                                                View Archive
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className="text-xl font-bold text-slate-900 mb-2">Letters Generated Successfully!</h3>
-                                        <p className="text-slate-500 text-sm max-w-xs mx-auto">
-                                            All cover letters have been securely saved to your archive as beautiful PDFs.
-                                        </p>
-                                    </div>
-                                    <div className="flex gap-3 pt-4">
-                                        <Button
-                                            variant="outline"
-                                            className="flex-1 h-12 font-bold"
-                                            onClick={() => setLetterJobTargets([])}
-                                        >
-                                            Close
-                                        </Button>
-                                        <Button
-                                            className="flex-1 h-12 font-bold bg-[#1E293B] hover:bg-slate-900 text-white"
-                                            onClick={() => window.location.href = '/dashboard/letters'}
-                                        >
-                                            View in Archive
-                                        </Button>
-                                    </div>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Floating Action Bar */}
-            {selectedJobs.length > 0 && (
-                <div className="fixed bottom-8 left-0 right-0 z-40 flex justify-center px-4 animate-in slide-in-from-bottom-8 duration-300">
-                    <div className="bg-[#1E293B] text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-6 border border-slate-700/50">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-[#3B82F6] text-white text-xs font-bold h-6 w-6 rounded-full flex items-center justify-center">
-                                {selectedJobs.length}
+                                )}
                             </div>
-                            <span className="font-semibold text-[15px]">Jobs Selected</span>
-                        </div>
-                        <div className="flex items-center gap-3 border-l border-slate-700 pl-6">
-                            <button
-                                onClick={() => setSelectedJobs([])}
-                                className="text-sm font-semibold text-slate-400 hover:text-white transition-colors px-2"
-                            >
-                                Cancel
-                            </button>
-                            <Button
-                                className="h-10 px-5 gap-2 bg-white hover:bg-slate-100 text-slate-900 font-bold rounded-xl shadow-sm"
-                                onClick={() => setLetterJobTargets(selectedJobs)}
-                            >
-                                <Sparkles className="h-4 w-4 text-purple-600" /> Generate Letters
-                            </Button>
                         </div>
                     </div>
-                </div>
-            )}
+                )}
+
+                {/* Floating Action Bar - Overhauled to Dark */}
+                {selectedJobs.length > 0 && (
+                    <div className="fixed bottom-10 left-0 right-0 z-40 flex justify-center px-4 animate-in slide-in-from-bottom-10 duration-500">
+                        <div className="bg-[#0a0a0a] border border-white/10 text-white px-8 py-4 rounded-[2rem] shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex items-center gap-10">
+                            <div className="flex items-center gap-4">
+                                <div className="bg-emerald-500 text-black text-[10px] font-black h-5 w-5 rounded-full flex items-center justify-center shadow-[0_0_15px_rgba(16,185,129,0.5)]">
+                                    {selectedJobs.length}
+                                </div>
+                                <span className="font-bold text-sm tracking-tight">Active Selection</span>
+                            </div>
+                            <div className="flex items-center gap-6 border-l border-white/10 pl-10">
+                                <button
+                                    onClick={() => setSelectedJobs([])}
+                                    className="text-xs font-bold text-zinc-600 hover:text-white transition-colors uppercase tracking-widest"
+                                >
+                                    Clear
+                                </button>
+                                <Button
+                                    className="h-11 px-6 gap-2.5 bg-white hover:bg-zinc-200 text-black font-bold rounded-xl shadow-2xl transition-all active:scale-95"
+                                    onClick={() => setLetterJobTargets(selectedJobs)}
+                                >
+                                    <Sparkles className="h-4 w-4 text-emerald-500" /> Magic Letters
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

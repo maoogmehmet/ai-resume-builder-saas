@@ -288,53 +288,67 @@ export function LandingClient({ user }: { user: any }) {
                     </div>
                 </section>
 
-                {/* 6. PRICING PREVIEW */}
-                <section id="pricing" className="py-24 sm:py-32 px-6 lg:px-12 bg-white relative border-t border-zinc-100">
+                {/* 6. PRICING PREVIEW - Overhauled to Dark */}
+                <section id="pricing" className="py-24 sm:py-32 px-6 lg:px-12 bg-black relative border-t border-white/5">
                     <div className="mx-auto max-w-7xl">
                         <div className="text-center mb-16">
-                            <h2 className="text-5xl sm:text-6xl font-black tracking-tight text-zinc-900 mb-4">Pricing Plans</h2>
+                            <Badge variant="outline" className="mb-6 px-4 py-1.5 rounded-full border-white/10 bg-white/5 text-zinc-500 font-bold uppercase tracking-widest text-[10px]">Pricing</Badge>
+                            <h2 className="text-5xl sm:text-6xl font-black tracking-tight text-white mb-4 italic">The Right Plan for You.</h2>
                             <p className="text-xl text-zinc-500 font-medium">Simple, transparent pricing to help you build your career.</p>
                         </div>
                         <div className="flex flex-col lg:flex-row items-center justify-center gap-8 max-w-5xl mx-auto">
 
-                            {/* Free Plan */}
+                            {/* Free Plan - Resend Styled */}
                             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="w-full flex-1">
-                                <div className="bg-zinc-50 rounded-[3rem] p-10 sm:p-12 border border-zinc-200 transition-colors">
-                                    <h4 className="text-zinc-500 font-bold uppercase tracking-widest text-xs mb-6">Free Plan</h4>
-                                    <div className="flex items-baseline gap-2 mb-10 text-zinc-900">
-                                        <span className="text-6xl sm:text-7xl font-black tracking-tighter">$0</span>
+                                <div className="bg-[#0a0a0a] rounded-[3rem] p-12 border border-white/10 flex flex-col items-center text-center group hover:border-white/20 transition-all">
+                                    <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] mb-8">Basic Foundation</h4>
+                                    <div className="flex items-baseline gap-1 mb-10 text-white">
+                                        <span className="text-7xl font-black tracking-tighter">$0</span>
+                                        <span className="text-zinc-600 font-bold text-sm">/ forever</span>
                                     </div>
-                                    <ul className="space-y-4 mb-10">
-                                        {['1 CV Limit', 'Basic Template', 'Watermark on PDF', 'Limited Downloads'].map((feat, i) => (
-                                            <li key={i} className="flex items-center gap-3 text-sm font-bold text-zinc-600"><CheckCircle2 className="h-5 w-5 text-zinc-400" /> {feat}</li>
+                                    <div className="w-full space-y-4 mb-12">
+                                        {['1 Active CV', 'Recruiter Templates', 'Standard PDF Export', 'Cloud Storage'].map((feat, i) => (
+                                            <div key={i} className="flex items-center gap-3 text-sm font-bold text-zinc-400">
+                                                <div className="h-5 w-5 rounded-full border border-white/10 flex items-center justify-center shrink-0">
+                                                    <CheckCircle2 className="h-3 w-3 text-zinc-600" />
+                                                </div>
+                                                {feat}
+                                            </div>
                                         ))}
-                                    </ul>
-                                    <Button asChild size="lg" variant="outline" className="w-full font-black h-14 rounded-2xl text-lg border-zinc-300">
+                                    </div>
+                                    <Button asChild size="lg" variant="outline" className="w-full font-bold h-14 rounded-2xl text-base border-white/10 bg-white/5 hover:bg-white/10 text-white">
                                         <Link href="/auth/signup">Get Started</Link>
                                     </Button>
                                 </div>
                             </motion.div>
 
-                            {/* Pro Plan */}
+                            {/* Pro Plan - Resend Styled High Impact */}
                             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="w-full flex-1">
-                                <div className="bg-zinc-900 rounded-[3rem] p-10 sm:p-12 text-white shadow-2xl shadow-blue-900/20 relative overflow-hidden group border border-blue-600">
-                                    <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                                        <Sparkles className="h-32 w-32 text-blue-500 transform rotate-12" />
+                                <div className="bg-black rounded-[3rem] p-12 text-white border border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.03)] relative overflow-hidden flex flex-col items-center text-center scale-105 z-10">
+                                    <div className="absolute top-0 right-0 p-8 opacity-5">
+                                        <Sparkles className="h-40 w-40 text-white transform rotate-12" />
                                     </div>
-                                    <div className="relative z-10">
-                                        <h4 className="text-blue-400 font-bold uppercase tracking-widest text-xs mb-6 flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div> Pro Plan</h4>
-                                        <div className="flex items-baseline gap-2 mb-10 text-white">
-                                            <span className="text-6xl sm:text-7xl font-black tracking-tighter">$15<span className="text-xl text-zinc-400 font-medium">/mo</span></span>
-                                        </div>
-                                        <ul className="space-y-4 mb-10">
-                                            {['Unlimited CVs', 'All Premium Templates', 'No Watermark', 'AI Suggestions & Summaries', 'Unlimited Downloads'].map((feat, i) => (
-                                                <li key={i} className="flex items-center gap-3 text-sm font-bold text-zinc-300"><CheckCircle2 className="h-5 w-5 text-blue-500" /> {feat}</li>
-                                            ))}
-                                        </ul>
-                                        <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700 font-black h-14 rounded-2xl shadow-xl hover:scale-105 transition-transform text-lg border-none">
-                                            <Link href="/dashboard/upgrade">Upgrade to Pro</Link>
-                                        </Button>
+                                    <h4 className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
+                                        <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                        Unlimited Professional
+                                    </h4>
+                                    <div className="flex items-baseline gap-1 mb-10 text-white">
+                                        <span className="text-7xl font-black tracking-tighter">$15</span>
+                                        <span className="text-zinc-600 font-bold text-sm">/ month</span>
                                     </div>
+                                    <div className="w-full space-y-4 mb-12">
+                                        {['Unlimited CVs', 'Magic AI Assistant', 'No Watermark', 'Interactive Pitch Decks', 'Batch Job Applications'].map((feat, i) => (
+                                            <div key={i} className="flex items-center gap-3 text-sm font-bold text-white">
+                                                <div className="h-5 w-5 rounded-full bg-white flex items-center justify-center shrink-0">
+                                                    <CheckCircle2 className="h-3 w-3 text-black fill-black" />
+                                                </div>
+                                                {feat}
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <Button asChild size="lg" className="w-full bg-white text-black hover:bg-zinc-200 font-bold h-14 rounded-2xl shadow-2xl shadow-white/5 hover:scale-[1.02] transition-transform text-base border-none">
+                                        <Link href="/dashboard/upgrade">Go Premium Now</Link>
+                                    </Button>
                                 </div>
                             </motion.div>
 
