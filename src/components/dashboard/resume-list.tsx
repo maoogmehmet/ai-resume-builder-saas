@@ -110,68 +110,63 @@ export function ResumeCard({ resume, onRefresh }: { resume: Resume, onRefresh: (
 
     return (
         <>
-            <Card className="group overflow-hidden flex flex-col border-zinc-200 hover:border-zinc-300 hover:shadow-xl transition-all duration-300">
+            <Card className="group flex flex-col border-zinc-200 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-300 overflow-hidden bg-white">
                 <CardHeader className="p-0 border-b relative">
-                    <div className="aspect-[1.5/1] bg-zinc-100 flex items-center justify-center overflow-hidden">
-                        <FileText className="h-20 w-20 text-zinc-200 group-hover:scale-110 transition-transform duration-500" />
-                        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all" />
+                    <div className="aspect-[16/9] bg-gradient-to-br from-zinc-50 to-zinc-100 flex items-center justify-center overflow-hidden relative">
+                        {resume.pdf_url ? (
+                            <FileText className="h-16 w-16 text-blue-500/50 group-hover:scale-110 transition-transform duration-500" />
+                        ) : (
+                            <FileText className="h-16 w-16 text-zinc-300 group-hover:scale-110 transition-transform duration-500" />
+                        )}
+                        <div className="absolute inset-0 bg-blue-600/0 group-hover:bg-blue-600/5 transition-colors duration-300" />
                     </div>
-                    <div className="absolute top-4 right-4">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="secondary" size="icon" className="h-8 w-8 shadow-md" disabled={isLoading}>
-                                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <MoreVertical className="h-4 w-4" />}
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                {resume.pdf_url && (
-                                    <>
-                                        <DropdownMenuItem onClick={() => window.open(resume.pdf_url, '_blank')}>
-                                            <DownloadCloud className="h-4 w-4 mr-2" /> Download PDF
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem onClick={() => {
-                                            navigator.clipboard.writeText(resume.pdf_url!)
-                                            toast.success('PDF Link Copied to Clipboard')
-                                        }}>
-                                            <LinkIcon className="h-4 w-4 mr-2" /> Copy PDF Link
-                                        </DropdownMenuItem>
-                                    </>
-                                )}
-                                <DropdownMenuItem onClick={() => setIsRenameOpen(true)}>
-                                    <Type className="h-4 w-4 mr-2" /> Rename
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={handleDuplicate}>
-                                    <Copy className="h-4 w-4 mr-2" /> Duplicate
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={handleDelete} className="text-red-600 focus:text-red-600">
-                                    <Trash2 className="h-4 w-4 mr-2" /> Delete Permanently
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
+                    {/* Floating PDF Badge */}
+                    {resume.pdf_url && (
+                        <div className="absolute top-3 left-3">
+                            <Badge className="bg-emerald-500 text-white border-transparent hover:bg-emerald-600 shadow-sm">PDF Ready</Badge>
+                        </div>
+                    )}
                 </CardHeader>
-                <CardContent className="p-6 flex-1">
-                    <h3 className="font-bold text-lg text-zinc-900 truncate leading-tight">{resume.title}</h3>
-                    <div className="flex items-center gap-3 mt-3">
-                        <Badge variant="secondary" className="bg-zinc-100 text-zinc-600 font-medium">
-                            {resume.ai_generated_json ? 'AI Optimized' : 'Raw Import'}
-                        </Badge>
-                        <span className="text-[10px] text-zinc-400 font-bold uppercase tracking-wider">
-                            Edited {new Date(resume.updated_at).toLocaleDateString()}
-                        </span>
+
+                <CardContent className="p-5 flex-1 space-y-3">
+                    <div className="flex items-start justify-between gap-4">
+                        <div className="space-y-1 overflow-hidden">
+                            <h3 className="font-bold text-lg text-zinc-900 truncate leading-tight group-hover:text-blue-600 transition-colors">
+                                {resume.title}
+                            </h3>
+                            <p className="text-xs font-semibold text-zinc-400 capitalize flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-zinc-300"></span>
+                                Edited {new Date(resume.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </p>
+                        </div>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-600 -mr-2 shrink-0" onClick={() => setIsRenameOpen(true)}>
+                            <Pencil className="h-4 w-4" />
+                        </Button>
                     </div>
                 </CardContent>
-                <CardFooter className="p-4 pt-0 gap-3">
-                    <Button asChild variant="outline" size="sm" className="flex-1 font-semibold group-hover:bg-zinc-50 transition-colors">
-                        <Link href={`/editor/${resume.id}`}>
-                            <Pencil className="w-3.5 h-3.5 mr-2" /> Edit
-                        </Link>
-                    </Button>
-                    <Button asChild size="sm" className="flex-1 bg-zinc-900 group-hover:bg-black transition-colors">
-                        <Link href={`/editor/${resume.id}`}>
-                            <Eye className="w-3.5 h-3.5 mr-2" /> Preview
-                        </Link>
-                    </Button>
+
+                <CardFooter className="p-4 pt-0 bg-white space-y-3 flex-col">
+                    <div className="w-full h-px bg-zinc-100 mb-2 mt-0" />
+                    <div className="flex items-center justify-between w-full">
+                        <Button asChild size="sm" className="bg-blue-600 hover:bg-blue-700 text-white font-bold px-4 rounded-lg shadow-sm shadow-blue-600/20 transition-all">
+                            <Link href={`/editor/${resume.id}`}>
+                                Edit CV
+                            </Link>
+                        </Button>
+                        <div className="flex items-center gap-1.5">
+                            {resume.pdf_url && (
+                                <Button size="icon" variant="ghost" className="h-8 w-8 text-zinc-500 hover:text-blue-600 hover:bg-blue-50 transition-colors tooltip-trigger" title="Download PDF" onClick={() => window.open(resume.pdf_url, '_blank')}>
+                                    <DownloadCloud className="h-4 w-4" />
+                                </Button>
+                            )}
+                            <Button size="icon" variant="ghost" className="h-8 w-8 text-zinc-500 hover:text-emerald-600 hover:bg-emerald-50 transition-colors tooltip-trigger" title="Duplicate CV" onClick={handleDuplicate} disabled={isLoading}>
+                                <Copy className="h-4 w-4" />
+                            </Button>
+                            <Button size="icon" variant="ghost" className="h-8 w-8 text-zinc-500 hover:text-red-600 hover:bg-red-50 transition-colors tooltip-trigger" title="Delete CV" onClick={handleDelete} disabled={isLoading}>
+                                <Trash2 className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
                 </CardFooter>
             </Card>
 

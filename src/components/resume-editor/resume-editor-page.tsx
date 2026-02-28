@@ -326,16 +326,22 @@ export function ResumeEditorPage() {
                                     Professional Summary
                                 </div>
                             </AccordionTrigger>
-                            <AccordionContent className="px-5 pb-5 pt-2 border-t border-zinc-50">
+                            <AccordionContent className="px-5 pb-5 pt-2 border-t border-zinc-50 relative">
                                 <textarea
-                                    className="w-full min-h-[140px] p-4 rounded-xl border border-zinc-200 focus:ring-2 focus:ring-zinc-900 focus:border-transparent outline-none transition-all text-sm leading-relaxed resize-none bg-zinc-50/50"
+                                    className="w-full min-h-[140px] p-4 rounded-xl border border-zinc-200 focus:ring-2 focus:ring-zinc-900 focus:border-transparent outline-none transition-all text-sm leading-relaxed resize-none bg-zinc-50/50 mb-2"
                                     value={resumeData.summary || ''}
                                     maxLength={1000}
                                     onChange={(e) => handleUpdate('summary', e.target.value)}
                                     placeholder="Write a compelling professional summary highlighting your top achievements and career goals (2-4 sentences)."
                                 />
-                                <div className="flex justify-end mt-2 text-[10px] font-bold text-zinc-300 uppercase tracking-widest">
-                                    {(resumeData.summary || '').length} / 1000
+                                <div className="flex items-center justify-between mt-2">
+                                    <Button size="sm" variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-semibold shadow-sm transition-colors group">
+                                        <Sparkles className="w-4 h-4 mr-2 text-blue-500 group-hover:animate-pulse" />
+                                        Generate with AI
+                                    </Button>
+                                    <div className="text-[10px] font-bold text-zinc-300 uppercase tracking-widest">
+                                        {(resumeData.summary || '').length} / 1000
+                                    </div>
                                 </div>
                             </AccordionContent>
                         </AccordionItem>

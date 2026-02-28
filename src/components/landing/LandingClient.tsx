@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform, Variants } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Sparkles, Zap, Shield, FileText, Globe, Target, ArrowRight, CheckCircle2, PlayCircle, Star, Quote } from 'lucide-react'
+import { Sparkles, Zap, Shield, FileText, Globe, Target, ArrowRight, CheckCircle2, PlayCircle, Star, Quote, Download, Edit3, LayoutTemplate } from 'lucide-react'
 import { HeroSection } from '@/components/ui/hero-1'
 
 export function LandingClient({ user }: { user: any }) {
@@ -192,9 +192,12 @@ export function LandingClient({ user }: { user: any }) {
 
                         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[
-                                { title: "Live PDF Export", desc: "Pixel-perfect PDFs generated instantly in the cloud.", icon: FileText },
-                                { title: "Custom Public Links", desc: "Shareable ai-resume.com/r/your-name links.", icon: Globe },
-                                { title: "Secure Cloud Sync", desc: "Never lose a version again with Supabase storage.", icon: Shield },
+                                { title: "Smart CV Builder", desc: "Simple step-by-step builder with live preview.", icon: Edit3 },
+                                { title: "Modern Templates", desc: "Minimal, corporate, creative and executive styles.", icon: LayoutTemplate },
+                                { title: "Instant PDF Export", desc: "One-click high-quality PDF download.", icon: Download },
+                                { title: "AI Writing Assistant", desc: "Generate summaries and improve bullet points automatically.", icon: Sparkles },
+                                { title: "Multi-Language Ready", desc: "Structure ready for multi-language support.", icon: Globe },
+                                { title: "Secure Cloud Sync", desc: "Encrypted storage and secure authentication.", icon: Shield },
                             ].map((item, i) => (
                                 <motion.div key={i} variants={fadeInUp} className="bg-zinc-800/50 border border-zinc-700/50 backdrop-blur-md p-8 rounded-3xl hover:bg-zinc-800 transition-colors">
                                     <item.icon className="h-8 w-8 text-blue-400 mb-6" />
@@ -203,6 +206,36 @@ export function LandingClient({ user }: { user: any }) {
                                 </motion.div>
                             ))}
                         </motion.div>
+                    </div>
+                </section>
+
+                {/* HOW IT WORKS SECTION */}
+                <section className="py-24 sm:py-32 px-6 lg:px-12 bg-zinc-50 border-t border-zinc-100">
+                    <div className="max-w-7xl mx-auto">
+                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="text-center mb-20 text-balance">
+                            <h2 className="text-4xl sm:text-5xl font-black tracking-tight text-zinc-900 mb-6">How It Works</h2>
+                            <p className="text-lg text-zinc-500 font-medium max-w-2xl mx-auto">Build your professional CV in four simple steps and get ready to land your dream job.</p>
+                        </motion.div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 relative">
+                            {/* Connecting Line */}
+                            <div className="hidden md:block absolute top-12 left-[10%] right-[10%] h-[2px] bg-zinc-200"></div>
+
+                            {[
+                                { step: 1, title: 'Choose a Template', desc: 'Select from our recruiter-approved templates tailored to your industry.' },
+                                { step: 2, title: 'Fill Your Information', desc: 'Easily enter your experience, education, and skills or import them.' },
+                                { step: 3, title: 'Customize & Preview', desc: 'See your changes in real-time as you tweak colors, fonts, and layout.' },
+                                { step: 4, title: 'Download Your CV', desc: 'Export instantly as a high-quality PDF, ready to send to employers.' }
+                            ].map((item, i) => (
+                                <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="relative z-10 flex flex-col items-center text-center">
+                                    <div className="w-24 h-24 rounded-full bg-white border-4 border-blue-50 text-blue-600 flex items-center justify-center text-3xl font-black shadow-xl mb-6">
+                                        {item.step}
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-zinc-900 mb-4">{item.title}</h3>
+                                    <p className="text-zinc-500 font-medium px-4">{item.desc}</p>
+                                </motion.div>
+                            ))}
+                        </div>
                     </div>
                 </section>
 
@@ -243,33 +276,53 @@ export function LandingClient({ user }: { user: any }) {
                 {/* 6. PRICING PREVIEW */}
                 <section id="pricing" className="py-24 sm:py-32 px-6 lg:px-12 bg-white relative border-t border-zinc-100">
                     <div className="mx-auto max-w-7xl">
-                        <div className="flex flex-col lg:flex-row items-center gap-16">
-                            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="flex-1 space-y-8">
-                                <Badge variant="outline" className="px-4 py-1.5 rounded-full border-blue-200 bg-blue-50 text-blue-600 font-bold uppercase tracking-widest text-[10px]">Simple Pricing</Badge>
-                                <h2 className="text-5xl sm:text-7xl font-black tracking-tight text-zinc-900 leading-[0.9]">One Plan. <br /><span className="text-zinc-400">Unlimited Success.</span></h2>
-                                <p className="text-xl text-zinc-500 leading-relaxed font-medium">No complex tiers. Everything you need to land your next elite role, wrapped in one simple subscription.</p>
+                        <div className="text-center mb-16">
+                            <h2 className="text-5xl sm:text-6xl font-black tracking-tight text-zinc-900 mb-4">Pricing Plans</h2>
+                            <p className="text-xl text-zinc-500 font-medium">Simple, transparent pricing to help you build your career.</p>
+                        </div>
+                        <div className="flex flex-col lg:flex-row items-center justify-center gap-8 max-w-5xl mx-auto">
+
+                            {/* Free Plan */}
+                            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="w-full flex-1">
+                                <div className="bg-zinc-50 rounded-[3rem] p-10 sm:p-12 border border-zinc-200 transition-colors">
+                                    <h4 className="text-zinc-500 font-bold uppercase tracking-widest text-xs mb-6">Free Plan</h4>
+                                    <div className="flex items-baseline gap-2 mb-10 text-zinc-900">
+                                        <span className="text-6xl sm:text-7xl font-black tracking-tighter">$0</span>
+                                    </div>
+                                    <ul className="space-y-4 mb-10">
+                                        {['1 CV Limit', 'Basic Template', 'Watermark on PDF', 'Limited Downloads'].map((feat, i) => (
+                                            <li key={i} className="flex items-center gap-3 text-sm font-bold text-zinc-600"><CheckCircle2 className="h-5 w-5 text-zinc-400" /> {feat}</li>
+                                        ))}
+                                    </ul>
+                                    <Button asChild size="lg" variant="outline" className="w-full font-black h-14 rounded-2xl text-lg border-zinc-300">
+                                        <Link href="/auth/signup">Get Started</Link>
+                                    </Button>
+                                </div>
                             </motion.div>
-                            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="w-full max-w-md">
-                                <div className="bg-zinc-900 rounded-[3rem] p-12 text-white shadow-2xl shadow-zinc-900/30 relative overflow-hidden group border border-zinc-800 hover:border-zinc-700 transition-colors">
+
+                            {/* Pro Plan */}
+                            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="w-full flex-1">
+                                <div className="bg-zinc-900 rounded-[3rem] p-10 sm:p-12 text-white shadow-2xl shadow-blue-900/20 relative overflow-hidden group border border-blue-600">
                                     <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
-                                        <Sparkles className="h-32 w-32 text-white transform rotate-12" />
+                                        <Sparkles className="h-32 w-32 text-blue-500 transform rotate-12" />
                                     </div>
                                     <div className="relative z-10">
-                                        <h4 className="text-zinc-400 font-bold uppercase tracking-widest text-xs mb-6 flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div> Lifetime Professional</h4>
+                                        <h4 className="text-blue-400 font-bold uppercase tracking-widest text-xs mb-6 flex items-center gap-2"><div className="h-2 w-2 rounded-full bg-blue-500 animate-pulse"></div> Pro Plan</h4>
                                         <div className="flex items-baseline gap-2 mb-10 text-white">
-                                            <span className="text-7xl sm:text-8xl font-black tracking-tighter">$99</span>
+                                            <span className="text-6xl sm:text-7xl font-black tracking-tighter">$15<span className="text-xl text-zinc-400 font-medium">/mo</span></span>
                                         </div>
                                         <ul className="space-y-4 mb-10">
-                                            {['Unlimited AI Tokens', 'Unlimited CV & PDFs', 'Unlimited Pitch Decks', 'Interactive Public Links'].map((feat, i) => (
+                                            {['Unlimited CVs', 'All Premium Templates', 'No Watermark', 'AI Suggestions & Summaries', 'Unlimited Downloads'].map((feat, i) => (
                                                 <li key={i} className="flex items-center gap-3 text-sm font-bold text-zinc-300"><CheckCircle2 className="h-5 w-5 text-blue-500" /> {feat}</li>
                                             ))}
                                         </ul>
-                                        <Button asChild size="lg" className="w-full bg-white text-zinc-900 hover:bg-zinc-100 font-black h-16 rounded-2xl shadow-xl hover:scale-105 transition-transform text-lg">
-                                            <Link href="/auth/signup">Start Building Today</Link>
+                                        <Button asChild size="lg" className="w-full bg-blue-600 text-white hover:bg-blue-700 font-black h-14 rounded-2xl shadow-xl hover:scale-105 transition-transform text-lg border-none">
+                                            <Link href="/dashboard/upgrade">Upgrade to Pro</Link>
                                         </Button>
                                     </div>
                                 </div>
                             </motion.div>
+
                         </div>
                     </div>
                 </section>

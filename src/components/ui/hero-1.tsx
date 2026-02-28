@@ -54,25 +54,27 @@ export function HeroSection() {
 				<h1
 					className={cn(
 						"fade-in slide-in-from-bottom-10 animate-in text-balance fill-mode-backwards text-center text-5xl font-black tracking-tight delay-100 duration-500 ease-out md:text-7xl lg:text-8xl",
-						"text-shadow-[0_0px_50px_theme(--color-foreground/.2)] uppercase"
+						"text-shadow-[0_0px_50px_theme(--color-foreground/.2)]"
 					)}
 				>
-					Your career, <br /> <span className="text-zinc-400">optimized by AI.</span>
+					Build a Professional <br /> <span className="text-zinc-400">CV in Minutes.</span>
 				</h1>
 
 				<p className="fade-in slide-in-from-bottom-10 mx-auto max-w-xl animate-in fill-mode-backwards text-center text-base text-foreground/80 font-medium delay-200 duration-500 ease-out sm:text-lg">
-					The elite resume builder for high-performance professionals. Import LinkedIn, optimize for ATS, and land interviews at top-tier companies.
+					Create ATS-friendly resumes with smart suggestions and instant downloads.
 				</p>
 
 				<div className="fade-in slide-in-from-bottom-10 flex animate-in flex-row flex-wrap items-center justify-center gap-4 fill-mode-backwards pt-4 delay-300 duration-500 ease-out">
 					<Button asChild className="rounded-full shadow-lg h-12 px-8 font-bold" size="lg">
 						<a href="/auth/signup">
-							Start Building for Free
+							Create My CV
 							<ArrowRightIcon className="size-4 ms-2" data-icon="inline-end" />
 						</a>
 					</Button>
-					<Button className="rounded-full h-12 px-8 font-bold" size="lg" variant="secondary">
-						Watch Demo
+					<Button asChild className="rounded-full h-12 px-8 font-bold" size="lg" variant="secondary">
+						<a href="#templates">
+							See Templates
+						</a>
 					</Button>
 				</div>
 
