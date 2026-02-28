@@ -93,19 +93,19 @@ const LinkShortenerWidget = () => {
   // Framer Motion Variants for animations
   const cardVariants = {
     hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: 'easeOut' } },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: 'easeOut' as const } },
   };
 
   const resultVariants = {
     hidden: { opacity: 0, y: 20, scale: 0.9 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: 'easeOut', delay: 0.1 } },
-    exit: { opacity: 0, y: -20, scale: 0.9, transition: { duration: 0.3, ease: 'easeIn' } },
+    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: 'easeOut' as const, delay: 0.1 } },
+    exit: { opacity: 0, y: -20, scale: 0.9, transition: { duration: 0.3, ease: 'easeIn' as const } },
   };
 
   const errorVariants = {
     hidden: { opacity: 0, height: 0 },
-    visible: { opacity: 1, height: 'auto', transition: { duration: 0.3, ease: 'easeOut' } },
-    exit: { opacity: 0, height: 0, transition: { duration: 0.2, ease: 'easeIn' } },
+    visible: { opacity: 1, height: 'auto', transition: { duration: 0.3, ease: 'easeOut' as const } },
+    exit: { opacity: 0, height: 0, transition: { duration: 0.2, ease: 'easeIn' as const } },
   };
 
   return (
@@ -137,11 +137,10 @@ const LinkShortenerWidget = () => {
                   setLongLink(e.target.value);
                   setError(null);
                 }}
-                className={`transition-all duration-200 ${
-                  error
-                    ? 'border-destructive focus-visible:ring-destructive'
-                    : 'focus-visible:ring-primary'
-                }`}
+                className={`transition-all duration-200 ${error
+                  ? 'border-destructive focus-visible:ring-destructive'
+                  : 'focus-visible:ring-primary'
+                  }`}
                 disabled={isLoading}
               />
               <AnimatePresence>
@@ -163,8 +162,6 @@ const LinkShortenerWidget = () => {
               onClick={handleShorten}
               className="w-full relative h-10 overflow-hidden"
               disabled={isLoading || !longLink.trim()}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
             >
               <AnimatePresence mode="wait" initial={false}>
                 {isLoading ? (
@@ -221,8 +218,6 @@ const LinkShortenerWidget = () => {
                         className="absolute right-1 top-1 h-8 w-8 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
                         onClick={handleCopy}
                         aria-label="Copy short link"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
                       >
                         <AnimatePresence mode="wait">
                           {isCopied ? (
@@ -254,8 +249,6 @@ const LinkShortenerWidget = () => {
                     onClick={handleRestart}
                     variant="outline"
                     className="w-full text-muted-foreground hover:text-primary hover:border-primary"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
                   >
                     <RotateCcw className="mr-2 h-4 w-4" /> Shorten Another Link
                   </Button>
