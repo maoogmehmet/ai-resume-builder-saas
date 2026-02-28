@@ -97,6 +97,20 @@
     opacity: 1;
     }
   }
+  --color-destructive-foreground: oklch(1 0 0);
+  --color-color-destructive-foreground: var(----color-destructive-foreground);
+  --animate-marquee: marquee var(--duration) linear infinite;
+  --color-brand-foreground: var(----brand-foreground);
+  --color-brand: var(----brand);
+  --color-color-color-destructive-foreground: var(----color-color-destructive-foreground);
+  @keyframes marquee {
+  from {
+    transform: translateX(0);
+    }
+  to {
+    transform: translateX(calc(-100% - var(--gap)));
+    }
+  }
 }
 
 :root {
@@ -159,6 +173,9 @@
   --ds-red-100: oklch(96.5% 0.0223 13.09);
   --ds-amber-100: oklch(97.48% 0.0331 85.79);
   --ds-amber-900: oklch(52.79% 0.1496 54.65);
+  --destructive-foreground: oklch(1 0 0);
+  --brand: hsl(266 100% 50%);
+  --brand-foreground: hsl(270 100% 98%);
 }
 
 .dark {
@@ -216,6 +233,9 @@
   --ds-red-100: oklch(22.1% 0.0657 15.11);
   --ds-amber-100: oklch(22.46% 0.0538 76.04);
   --ds-amber-900: oklch(77.21% 0.1991 64.28);
+  --destructive-foreground: oklch(1 0 0);
+  --brand: hsl(266 70% 60%);
+  --brand-foreground: hsl(270 100% 98%);
 }
 
 @layer base {
