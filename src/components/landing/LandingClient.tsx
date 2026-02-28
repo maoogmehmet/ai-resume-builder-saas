@@ -306,23 +306,27 @@ export function LandingClient({ user }: { user: any }) {
 
                             {/* Free Plan - Resend Styled */}
                             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="w-full flex-1">
-                                <div className="bg-[#0a0a0a] rounded-[3rem] p-12 border border-white/10 flex flex-col items-center text-center group hover:border-white/20 transition-all">
-                                    <h4 className="text-[10px] font-bold text-zinc-500 uppercase tracking-[0.2em] mb-8">Basic Foundation</h4>
-                                    <div className="flex items-baseline gap-1 mb-10 text-white">
-                                        <span className="text-7xl font-black tracking-tighter">$0</span>
-                                        <span className="text-zinc-600 font-bold text-sm">/ forever</span>
+                                <div className="bg-[#0a0a0a] rounded-[3rem] p-12 border border-white/5 flex flex-col items-center text-center group hover:border-white/10 transition-all">
+                                    <h4 className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.3em] mb-8">Starter Foundation</h4>
+                                    <div className="flex items-center gap-1 mb-10 text-white">
+                                        <span className="text-7xl font-black tracking-tighter">FREE</span>
                                     </div>
-                                    <div className="w-full space-y-4 mb-12 text-left px-4">
-                                        {['1 Active CV', 'Recruiter Templates', 'Standard PDF Export', 'Cloud Storage'].map((feat, i) => (
-                                            <div key={i} className="flex items-center gap-3 text-sm font-bold text-zinc-400">
-                                                <div className="h-5 w-5 rounded-full border border-white/10 flex items-center justify-center shrink-0">
-                                                    <CheckCircle2 className="h-3 w-3 text-zinc-600" />
+                                    <div className="w-full space-y-5 mb-12 text-left px-4">
+                                        {[
+                                            { text: '1 Professional Resume', included: true },
+                                            { text: 'Basic PDF Download', included: true },
+                                            { text: 'Manual Resume Editor', included: true },
+                                            { text: 'Standard Support', included: true }
+                                        ].map((feat, i) => (
+                                            <div key={i} className="flex items-center gap-4 text-sm font-bold text-zinc-500">
+                                                <div className={`h-6 w-6 rounded-full border border-white/5 flex items-center justify-center shrink-0 ${feat.included ? 'opacity-100' : 'opacity-20'}`}>
+                                                    <CheckCircle2 className="h-3.5 w-3.5 text-zinc-600" />
                                                 </div>
-                                                {feat}
+                                                {feat.text}
                                             </div>
                                         ))}
                                     </div>
-                                    <Button asChild size="lg" variant="outline" className="w-full font-bold h-14 rounded-2xl text-base border-white/10 bg-white/5 hover:bg-white/10 text-white transition-all">
+                                    <Button asChild size="lg" variant="outline" className="w-full font-bold h-16 rounded-2xl text-base border-white/5 bg-white/5 hover:bg-white/10 text-white transition-all">
                                         <Link href="/auth/signup">Get Started</Link>
                                     </Button>
                                 </div>
@@ -330,29 +334,35 @@ export function LandingClient({ user }: { user: any }) {
 
                             {/* Pro Plan - Resend Styled High Impact */}
                             <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="w-full flex-1">
-                                <div className="bg-black rounded-[3rem] p-12 text-white border border-white/20 shadow-[0_0_50px_rgba(255,255,255,0.03)] relative overflow-hidden flex flex-col items-center text-center scale-105 z-10 transition-all hover:border-white/40">
-                                    <div className="absolute top-0 right-0 p-8 opacity-5">
-                                        <Sparkles className="h-40 w-40 text-white transform rotate-12" />
+                                <div className="bg-black rounded-[3rem] p-12 text-white border border-emerald-500/20 shadow-[0_0_80px_rgba(16,185,129,0.05)] relative overflow-hidden flex flex-col items-center text-center scale-105 z-10 transition-all hover:border-emerald-500/40">
+                                    <div className="absolute top-0 right-0 p-10 opacity-10">
+                                        <Sparkles className="h-40 w-40 text-emerald-500 transform rotate-12" />
                                     </div>
-                                    <h4 className="text-[10px] font-bold text-emerald-500 uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
-                                        <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
-                                        Unlimited Professional
+                                    <h4 className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em] mb-8 flex items-center gap-3">
+                                        <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                        Professional Elite
                                     </h4>
-                                    <div className="flex items-baseline gap-1 mb-10 text-white">
-                                        <span className="text-7xl font-black tracking-tighter">$15</span>
-                                        <span className="text-zinc-600 font-bold text-sm">/ month</span>
+                                    <div className="flex items-baseline gap-2 mb-10 text-white">
+                                        <span className="text-7xl font-black tracking-tighter">$99</span>
+                                        <span className="text-zinc-600 font-black text-[11px] uppercase tracking-widest">/ month</span>
                                     </div>
-                                    <div className="w-full space-y-4 mb-12 text-left px-4">
-                                        {['Unlimited CVs', 'Magic AI Assistant', 'No Watermark', 'Interactive Pitch Decks', 'Batch Job Applications'].map((feat, i) => (
-                                            <div key={i} className="flex items-center gap-3 text-sm font-bold text-white">
-                                                <div className="h-5 w-5 rounded-full bg-white flex items-center justify-center shrink-0">
-                                                    <CheckCircle2 className="h-3 w-3 text-black fill-black" />
+                                    <div className="w-full space-y-5 mb-12 text-left px-4">
+                                        {[
+                                            'Unlimited Smart Resumes',
+                                            'AI Resume Optimizer',
+                                            'AI Cover Letter Generator',
+                                            'Premium PDF Downloads',
+                                            'Priority 24/7 Support'
+                                        ].map((feat, i) => (
+                                            <div key={i} className="flex items-center gap-4 text-sm font-bold text-white">
+                                                <div className="h-6 w-6 rounded-full bg-emerald-500 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/20">
+                                                    <CheckCircle2 className="h-3.5 w-3.5 text-black fill-black" />
                                                 </div>
                                                 {feat}
                                             </div>
                                         ))}
                                     </div>
-                                    <Button asChild size="lg" className="w-full bg-white text-black hover:bg-zinc-200 font-bold h-14 rounded-2xl shadow-2xl shadow-white/5 hover:scale-[1.02] transition-transform text-base border-none">
+                                    <Button asChild size="lg" className="w-full bg-white text-black hover:bg-zinc-200 font-black h-16 rounded-2xl shadow-2xl shadow-white/10 hover:scale-[1.02] transition-transform text-base border-none">
                                         <Link href="/dashboard/upgrade">Go Premium Now</Link>
                                     </Button>
                                 </div>
