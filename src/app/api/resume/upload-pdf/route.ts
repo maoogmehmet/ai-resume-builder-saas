@@ -4,15 +4,15 @@ import { createClient } from '@supabase/supabase-js';
 
 export const dynamic = 'force-dynamic';
 
-// Use service role for storage uploads to bypass complex client RLS
-const supabaseAdmin = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
-
 export async function POST(req: Request) {
     try {
         const supabase = await createServerClient();
+
+        // Use service role for storage uploads to bypass complex client RLS
+        const supabaseAdmin = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY!
+        );
         const { data: { user } } = await supabase.auth.getUser();
 
         if (!user) {
