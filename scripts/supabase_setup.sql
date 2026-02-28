@@ -1,8 +1,9 @@
 -- ==========================================
--- SUPABASE ALTYAPI VE EKSİK TABLO KURULUMU (DÜZELTİLMİŞ VERSİYON)
+-- SUPABASE ALTYAPI VE EKSİK TABLO KURULUMU (SADELEŞTİRİLMİŞ VERSİYON)
 -- ==========================================
 
--- 1. EKSİK VEYA GÜNCEL OLMAYAN TABLOLARIN OLUŞTURULMASI
+-- SADECE KENDİ SAHİP OLDUĞUMUZ 'PUBLIC' TABLOLARINA İŞLEM YAPIYORUZ
+-- BÖYLECE "MUST BE OWNER" HATASI KESİNLİKLE ÇIKMAYACAKTIR.
 
 -- Cover Letters (Kapak Mektupları) Tablosu
 CREATE TABLE IF NOT EXISTS public.cover_letters (
@@ -47,7 +48,7 @@ ON public.cover_letters FOR UPDATE USING (auth.uid() = user_id);
 CREATE POLICY "Kullanıcılar kapak mektuplarını silebilir"
 ON public.cover_letters FOR DELETE USING (auth.uid() = user_id);
 
--- Public Links RLS Politikaları (Herkes okuyabilir, sadece sahibi değiştirebilir)
+-- Public Links RLS
 CREATE POLICY "Herkes aktif public linkleri görebilir"
 ON public.public_links FOR SELECT USING (is_active = true);
 
@@ -56,50 +57,27 @@ ON public.public_links FOR ALL USING (auth.uid() = user_id);
 
 
 -- ==========================================
--- 2. PDF DEPOLAMA (STORAGE) VE RLS AYARLARI
+-- 2. 7 GÜNLÜK OTOMATİK LİNK KAPATMA (CRON JOB)
 -- ==========================================
 
--- 'resumes' adında bir bucket (klasör) oluşturur 
-INSERT INTO storage.buckets (id, name, public) VALUES ('resumes', 'resumes', true) ON CONFLICT (id) DO NOTHING;
-
--- NOT: `ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;` SATIRI KALDIRILDI!
--- Storage tabloları zaten varsayılan olarak korunur ve `supabase_admin` rolüne aittir.
-
--- Kullanıcının sadece KENDİ dosyalarını Storage'a yüklemesine izin ver
-CREATE POLICY "Kullanıcılar kendi PDF'lerini yükleyebilir"
-ON storage.objects FOR INSERT TO authenticated
-WITH CHECK (bucket_id = 'resumes' AND (storage.foldername(name))[1] = auth.uid()::text);
-
-CREATE POLICY "Kullanıcılar kendi PDF'lerini silebilir"
-ON storage.objects FOR DELETE TO authenticated
-USING (bucket_id = 'resumes' AND (storage.foldername(name))[1] = auth.uid()::text);
-
-CREATE POLICY "Kullanıcıların kendi PDF'lerini güncellemesi"
-ON storage.objects FOR UPDATE TO authenticated
-USING (bucket_id = 'resumes' AND (storage.foldername(name))[1] = auth.uid()::text);
-
--- ==========================================
--- 3. 7 GÜNLÜK OTOMATİK LİNK KAPATMA (CRON JOB)
--- ==========================================
-
--- pg_cron eklentisini aktif et (Zamanlanmış görevler için)
 CREATE EXTENSION IF NOT EXISTS pg_cron;
 
--- Önce eski bir görev varsa silelim (Çakışmayı önlemek için)
-SELECT cron.unschedule('deactivate-expired-links');
+-- Varsa eskisini kaldır (Hata vermemesi için try-catch benzeri blok)
+DO $$
+BEGIN
+  PERFORM cron.unschedule('deactivate-expired-links');
+EXCEPTION WHEN OTHERS THEN
+  -- Hata verirse yoksay
+END $$;
 
--- Her gece saat 00:00'da çalışan bir görev oluştur
 SELECT cron.schedule(
-  'deactivate-expired-links', -- Görevin adı
-  '0 0 * * *',                -- Her gün gece yarısı çalış (Dakika 0, Saat 0)
+  'deactivate-expired-links', 
+  '0 0 * * *',
   $$
     UPDATE public.public_links
     SET is_active = false
-    WHERE is_active = true 
-      AND expires_at < NOW()
-      AND user_id IN (
-          SELECT id FROM public.profiles 
-          WHERE subscription_status NOT IN ('active', 'trialing')
+    WHERE is_active = true AND expires_at < NOW() AND user_id IN (
+          SELECT id FROM public.profiles WHERE subscription_status NOT IN ('active', 'trialing')
       );
   $$
 );
