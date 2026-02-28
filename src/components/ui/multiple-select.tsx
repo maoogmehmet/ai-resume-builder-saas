@@ -7,6 +7,7 @@ import {
   useEffect,
   useRef,
   useState,
+  useCallback,
 } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
@@ -33,6 +34,10 @@ export const MultipleSelect = ({
   const [selected, setSelected] = useState<TTag[]>(defaultValue ?? []);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  const onValueChange = useCallback((value: TTag[]) => {
+    onChange?.(value);
+  }, [onChange]);
+
   useEffect(() => {
     if (containerRef?.current) {
       containerRef.current.scrollBy({
@@ -41,11 +46,7 @@ export const MultipleSelect = ({
       });
     }
     onValueChange(selected);
-  }, [selected]);
-
-  const onValueChange = (value: TTag[]) => {
-    onChange?.(value);
-  };
+  }, [selected, onValueChange]);
 
   const onSelect = (item: TTag) => {
     setSelected((prev) => [...prev, item]);

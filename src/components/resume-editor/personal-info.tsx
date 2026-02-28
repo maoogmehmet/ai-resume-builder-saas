@@ -26,6 +26,7 @@ export function PersonalInfoSection({ data, onChange }: PersonalInfoProps) {
     const fileInputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (data) setInfo(data)
     }, [data])
 

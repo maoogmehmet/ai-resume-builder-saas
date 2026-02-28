@@ -96,6 +96,7 @@ export function EducationSection({ data, onChange }: EducationProps) {
 
     useEffect(() => {
         if (data) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setEducations(data.map((edu, i) => ({
                 ...edu,
                 id: edu.id || `edu-${i}-${Date.now()}`

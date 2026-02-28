@@ -28,17 +28,7 @@ export function PresentationViewer({ slides, onClose }: PresentationViewerProps)
         setCurrentIndex((prev) => (prev === 0 ? prev : prev - 1))
     }, [])
 
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide()
-            if (e.key === 'ArrowLeft') prevSlide()
-            if (e.key === 'Escape' && isFullscreen) toggleFullscreen()
-        }
-        window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
-    }, [nextSlide, prevSlide, isFullscreen])
-
-    const toggleFullscreen = () => {
+    const toggleFullscreen = useCallback(() => {
         if (!document.fullscreenElement) {
             document.documentElement.requestFullscreen().catch((err) => {
                 console.error(`Error attempting to enable full-screen mode: ${err.message}`);
@@ -50,7 +40,17 @@ export function PresentationViewer({ slides, onClose }: PresentationViewerProps)
                 setIsFullscreen(false)
             }
         }
-    }
+    }, [])
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowRight' || e.key === 'Space') nextSlide()
+            if (e.key === 'ArrowLeft') prevSlide()
+            if (e.key === 'Escape' && isFullscreen) toggleFullscreen()
+        }
+        window.addEventListener('keydown', handleKeyDown)
+        return () => window.removeEventListener('keydown', handleKeyDown)
+    }, [nextSlide, prevSlide, isFullscreen, toggleFullscreen])
 
     if (!slides || slides.length === 0) return null
 

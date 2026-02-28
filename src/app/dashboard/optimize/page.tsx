@@ -108,7 +108,7 @@ export default function OptimizePage() {
                             <Label className="text-sm font-semibold text-slate-700">Select Resume to Optimize *</Label>
                             {resumes.length === 0 ? (
                                 <div className="text-sm text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-200">
-                                    You don't have any resumes yet. Go to CV Builder to create one first.
+                                    You don&apos;t have any resumes yet. Go to CV Builder to create one first.
                                 </div>
                             ) : (
                                 <Select value={selectedResumeUrl} onValueChange={setSelectedResumeUrl}>
@@ -127,7 +127,7 @@ export default function OptimizePage() {
                         <div className="w-full h-px bg-slate-100 my-8" />
 
                         <h2 className="text-xl font-bold text-slate-900 mb-1">Job Details</h2>
-                        <p className="text-slate-500 text-sm mb-6">Tell us about the role you're targeting.</p>
+                        <p className="text-slate-500 text-sm mb-6">Tell us about the role you&apos;re targeting.</p>
 
                         <div className="grid grid-cols-2 gap-6 mb-6">
                             <div className="space-y-2">

@@ -18,7 +18,7 @@ export function Announcement({
   href,
   onClose,
 }: AnnouncementProps) {
-  const Content = () => (
+  const contentNode = (
     <section className="flex flex-col gap-1.5 rounded-lg border border-border bg-card p-3 transition-all hover:-translate-y-0.5 hover:border-border/60 hover:shadow-sm">
       <span className="flex items-center justify-between text-muted-foreground">
         <h5 className="text-[13px] font-medium">{title}</h5>
@@ -54,11 +54,11 @@ export function Announcement({
           rel="noreferrer"
           className="relative z-20 block h-fit w-full p-2 pt-0"
         >
-          <Content />
+          {contentNode}
         </a>
       ) : (
         <div className="relative z-20 block h-fit w-full p-2 pt-0">
-          <Content />
+          {contentNode}
         </div>
       )}
     </div>

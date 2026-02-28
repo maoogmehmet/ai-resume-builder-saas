@@ -126,6 +126,7 @@ export function ExperienceSection({ data, onChange }: ExperienceProps) {
 
     useEffect(() => {
         if (data) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setExperiences(data.map((exp, i) => ({
                 ...exp,
                 id: exp.id || `exp-${i}-${Date.now()}`

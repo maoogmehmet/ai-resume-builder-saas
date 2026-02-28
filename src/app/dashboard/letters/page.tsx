@@ -253,7 +253,7 @@ export default function LettersPage() {
                             <Label className="text-sm font-semibold text-slate-700">Select Resume Context *</Label>
                             {resumes.length === 0 ? (
                                 <div className="text-sm text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-200">
-                                    You don't have any resumes yet. Go to <Link href="/dashboard/builder" className="text-blue-500 underline">Builder</Link> first.
+                                    You don&apos;t have any resumes yet. Go to <Link href="/dashboard/builder" className="text-blue-500 underline">Builder</Link> first.
                                 </div>
                             ) : (
                                 <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>

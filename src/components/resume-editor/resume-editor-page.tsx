@@ -90,6 +90,7 @@ export function ResumeEditorPage() {
         }
 
         loadResume()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resumeId])
 
     const requestAIGeneration = async () => {
@@ -155,6 +156,7 @@ export function ResumeEditorPage() {
         }, 2000)
 
         return () => clearTimeout(timeout)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [resumeData, resumeId, isLoading, currentVersionId])
 
     const handleUpdate = useCallback((section: string, data: any) => {

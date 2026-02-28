@@ -71,7 +71,7 @@ export async function POST(req: Request) {
             }
         }
 
-        let baseSlug = generateSlug(fullName, jobTitle);
+        const baseSlug = generateSlug(fullName, jobTitle);
         let finalSlug = baseSlug;
         let counter = 1;
 

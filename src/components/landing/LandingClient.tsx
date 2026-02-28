@@ -224,7 +224,7 @@ export function LandingClient({ user }: { user: any }) {
                     <div className="max-w-7xl mx-auto relative z-10">
                         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="text-center mb-16">
                             <h2 className="text-3xl sm:text-5xl font-black mb-4">Every detail perfected.</h2>
-                            <p className="text-zinc-400 font-medium text-lg">We didn't just build a builder. We built an entire career operating system.</p>
+                            <p className="text-zinc-400 font-medium text-lg">We didn&apos;t just build a builder. We built an entire career operating system.</p>
                         </motion.div>
 
                         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={staggerContainer} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

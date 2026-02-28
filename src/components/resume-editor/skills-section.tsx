@@ -35,6 +35,7 @@ export function SkillsSection({ data, onChange }: SkillsProps) {
     const [softInput, setSoftInput] = useState('');
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (data) setSkills({ technical: data.technical || [], soft: data.soft || [] })
     }, [data])
 

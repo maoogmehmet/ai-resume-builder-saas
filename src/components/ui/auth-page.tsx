@@ -39,7 +39,7 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 				<div className="z-10 mt-auto">
 					<blockquote className="space-y-4">
 						<p className="text-2xl font-medium leading-relaxed">
-							&ldquo;The ATS optimization completely transformed my job search. It's not just a builder, it's a career growth engine.&rdquo;
+							&ldquo;The ATS optimization completely transformed my job search. It&apos;s not just a builder, it&apos;s a career growth engine.&rdquo;
 						</p>
 						<footer className="font-mono text-sm font-semibold">
 							~ Sofia Davis, Software Engineer
@@ -217,7 +217,7 @@ function FloatingPaths({ position }: { position: number }) {
 							pathOffset: [0, 1, 0],
 						}}
 						transition={{
-							duration: 20 + Math.random() * 10,
+							duration: 15 + (path.id % 10) * 2,
 							repeat: Number.POSITIVE_INFINITY,
 							ease: 'linear',
 						}}
