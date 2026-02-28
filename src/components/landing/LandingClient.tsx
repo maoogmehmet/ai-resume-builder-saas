@@ -5,8 +5,13 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform, Variants } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Sparkles, Zap, Shield, FileText, Globe, Target, ArrowRight, CheckCircle2, PlayCircle, Star, Quote, Download, Edit3, LayoutTemplate } from 'lucide-react'
+import { Sparkles, Zap, Shield, FileText, Globe, Target, ArrowRight, CheckCircle2, PlayCircle, Star, Download, Edit3, LayoutTemplate, Moon, Sun } from 'lucide-react'
 import { HeroSection } from '@/components/ui/hero-1'
+import { ShaderAnimation } from '@/components/ui/shader-animation'
+import TwitterTestimonialCards from '@/components/ui/twitter-testimonial-cards'
+import { ContainerScroll } from '@/components/ui/container-scroll-animation'
+import { Announcement } from '@/components/ui/announcement'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 export function LandingClient({ user }: { user: any }) {
     const { scrollYProgress } = useScroll()
@@ -44,12 +49,16 @@ export function LandingClient({ user }: { user: any }) {
     return (
         <div className="flex flex-col min-h-screen bg-[#FDFDFD] font-sans selection:bg-zinc-900 selection:text-white overflow-hidden">
 
+            <div className="w-full flex justify-center pt-2 pb-2 bg-zinc-900 absolute top-0 z-[60]">
+                <Announcement title="CV Builder 2.0" description="Enjoy 50% off Pro for a limited time." href="/auth/signup" />
+            </div>
+
             {/* STICKY NAVBAR */}
             <motion.header
                 initial={{ y: -100 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5, ease: "easeOut" as const }}
-                className="fixed top-0 w-full z-50 transition-all border-b border-zinc-100 bg-white/70 backdrop-blur-xl"
+                className="fixed top-12 w-full z-50 transition-all border-b border-zinc-100 bg-white/70 backdrop-blur-xl"
             >
                 <div className="mx-auto flex h-16 sm:h-20 max-w-7xl items-center justify-between px-6 lg:px-12">
                     <Link className="flex items-center gap-2" href="/">
@@ -62,6 +71,8 @@ export function LandingClient({ user }: { user: any }) {
                         <Link className="text-sm font-bold text-zinc-500 hover:text-zinc-900 transition-colors hidden md:block" href="#features">Platform</Link>
                         <Link className="text-sm font-bold text-zinc-500 hover:text-zinc-900 transition-colors hidden md:block" href="#testimonials">Reviews</Link>
                         <Link className="text-sm font-bold text-zinc-500 hover:text-zinc-900 transition-colors hidden md:block" href="#pricing">Pricing</Link>
+
+                        <ThemeToggle />
 
                         {user ? (
                             <div className="flex items-center gap-4 pl-4 border-l border-zinc-200">
@@ -83,11 +94,37 @@ export function LandingClient({ user }: { user: any }) {
             </motion.header>
 
             <main className="flex-1 w-full pt-20">
-                {/* 1. COMPONENT HERO SECTION */}
-                <HeroSection />
+                {/* 1. COMPONENT HERO SECTION WITH SHADER */}
+                <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+                    <div className="absolute inset-0 z-0">
+                        <ShaderAnimation />
+                    </div>
+                    {/* Dark gradient overlay to ensure text readability over the shader */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-zinc-900 z-[1] pointer-events-none" />
+
+                    <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 text-center flex flex-col items-center">
+                        <Badge variant="outline" className="mb-6 px-4 py-1.5 rounded-full border-blue-400 border bg-blue-500/10 text-blue-300 font-bold uppercase tracking-widest text-[10px] backdrop-blur-sm">
+                            CV Builder 2.0 Is Here
+                        </Badge>
+                        <h1 className="text-5xl sm:text-7xl lg:text-8xl font-black tracking-tighter text-white mb-6 leading-[1.1] max-w-4xl drop-shadow-2xl">
+                            Build a professional CV in minutes.
+                        </h1>
+                        <p className="text-xl sm:text-2xl text-zinc-300 font-medium max-w-2xl mb-12 drop-shadow-lg">
+                            Create ATS-friendly resumes with smart suggestions and instant downloads. Land your dream job faster.
+                        </p>
+                        <div className="flex flex-col sm:flex-row gap-4 items-center">
+                            <Button size="lg" asChild className="rounded-2xl px-8 bg-blue-600 text-white hover:bg-blue-700 font-bold h-14 shadow-2xl shadow-blue-500/20 text-lg border-none hover:scale-105 transition-transform">
+                                <Link href="/auth/signup">Create My CV <ArrowRight className="ml-2 h-5 w-5" /></Link>
+                            </Button>
+                            <Button size="lg" asChild variant="outline" className="rounded-2xl px-8 bg-white/5 border-white/20 text-white hover:bg-white/10 font-bold h-14 backdrop-blur-md text-lg">
+                                <Link href="#features">See Features</Link>
+                            </Button>
+                        </div>
+                    </div>
+                </section>
 
                 {/* 2. SOCIAL PROOF MARQUEE */}
-                <section className="py-12 border-y border-zinc-100 bg-zinc-50/50 overflow-hidden flex flex-col items-center">
+                <section className="py-12 border-y border-zinc-100 bg-zinc-50/50 overflow-hidden flex flex-col items-center relative z-20">
                     <p className="text-xs font-bold uppercase tracking-widest text-zinc-400 mb-6">Trusted by candidates hired at</p>
                     <div className="flex gap-16 animate-marquee whitespace-nowrap opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
                         {['Google', 'Microsoft', 'Netflix', 'Amazon', 'Apple', 'Meta', 'Stripe', 'Airbnb'].map((company, i) => (
@@ -97,84 +134,84 @@ export function LandingClient({ user }: { user: any }) {
                 </section>
 
                 {/* 3. DEEP-DIVE FEATURES (STORYTELLING WITH MOCKUPS) */}
-                <section id="features" className="py-24 sm:py-32 px-6 lg:px-12 bg-white">
-                    <div className="max-w-7xl mx-auto space-y-32">
-
-                        <div className="text-center max-w-3xl mx-auto mb-16">
-                            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp}>
+                <section id="features" className="py-12 sm:py-24 px-6 lg:px-12 bg-white flex flex-col items-center justify-center">
+                    <ContainerScroll
+                        titleComponent={
+                            <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} className="text-center max-w-3xl mx-auto mb-16">
                                 <Badge variant="outline" className="mb-6 px-4 py-1.5 rounded-full border-blue-200 bg-blue-50 text-blue-600 font-bold uppercase tracking-widest text-[10px]">The Platform</Badge>
-                                <h2 className="text-4xl sm:text-6xl font-black tracking-tight text-zinc-900 mb-6 leading-[1.1]">Everything you need to stand out.</h2>
+                                <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-zinc-900 mb-6 leading-[1.1]">Everything you need to stand out.</h1>
                                 <p className="text-xl text-zinc-500 leading-relaxed font-medium">We replaced the manual, tedious process of writing resumes with an intelligent AI engine that positions you as the perfect candidate.</p>
                             </motion.div>
+                        }
+                    >
+                        <div className="w-full h-full bg-zinc-50 rounded-2xl p-8 overflow-y-auto space-y-32">
+                            {/* Feature 1: LinkedIn Sync */}
+                            <div className="flex flex-col lg:flex-row items-center gap-16">
+                                <div className="flex-1 space-y-8">
+                                    <div className="h-14 w-14 bg-blue-50 rounded-2xl flex items-center justify-center">
+                                        <Zap className="h-7 w-7 text-blue-600" />
+                                    </div>
+                                    <h3 className="text-4xl sm:text-5xl font-black text-zinc-900 tracking-tight leading-[1.1]">One-click LinkedIn import.</h3>
+                                    <p className="text-lg text-zinc-500 font-medium leading-relaxed">Paste your LinkedIn URL and watch as our AI instantly extracts, parses, and rebuilds your entire professional history into a highly polished, ATS-ready format.</p>
+                                    <ul className="space-y-4">
+                                        {['Instant data extraction', 'Auto-formats into best practices', 'Zero manual typing required'].map((item, i) => (
+                                            <li key={i} className="flex items-center gap-3 text-zinc-700 font-bold"><CheckCircle2 className="h-5 w-5 text-blue-500" /> {item}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="flex-1 w-full">
+                                    <div className="rounded-[2.5rem] overflow-hidden shadow-2xl shadow-blue-900/10 border border-zinc-200/50 aspect-video relative">
+                                        <img src={images.feature1} alt="One click import" className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/20 to-transparent"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Feature 2: ATS Matcher (Reversed) */}
+                            <div className="flex flex-col lg:flex-row-reverse items-center gap-16">
+                                <div className="flex-1 space-y-8">
+                                    <div className="h-14 w-14 bg-emerald-50 rounded-2xl flex items-center justify-center">
+                                        <Target className="h-7 w-7 text-emerald-600" />
+                                    </div>
+                                    <h3 className="text-4xl sm:text-5xl font-black text-zinc-900 tracking-tight leading-[1.1]">Beat the ATS algorithm.</h3>
+                                    <p className="text-lg text-zinc-500 font-medium leading-relaxed">Stop guessing what recruiters want. Paste the link of the job you are applying to, and our Claude engine analyzes the post to score and inject missing keywords into your CV.</p>
+                                    <ul className="space-y-4">
+                                        {['Real-time match scoring', 'Automated keyword injection', 'Tailored summary rewriting'].map((item, i) => (
+                                            <li key={i} className="flex items-center gap-3 text-zinc-700 font-bold"><CheckCircle2 className="h-5 w-5 text-emerald-500" /> {item}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="flex-1 w-full">
+                                    <div className="rounded-[2.5rem] overflow-hidden shadow-2xl shadow-emerald-900/10 border border-zinc-200/50 aspect-video relative">
+                                        <img src={images.feature2} alt="ATS Analyzer dashboard" className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-emerald-900/20 to-transparent"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Feature 3: Interactive Pitch Decks */}
+                            <div className="flex flex-col lg:flex-row items-center gap-16">
+                                <div className="flex-1 space-y-8">
+                                    <div className="h-14 w-14 bg-purple-50 rounded-2xl flex items-center justify-center">
+                                        <PlayCircle className="h-7 w-7 text-purple-600" />
+                                    </div>
+                                    <h3 className="text-4xl sm:text-5xl font-black text-zinc-900 tracking-tight leading-[1.1]">Auto-generated Pitch Decks.</h3>
+                                    <p className="text-lg text-zinc-500 font-medium leading-relaxed">Cover letters are dead. When you build a CV, our AI automatically generates a stunning, 4-slide interactive presentation summarizing why you are perfect for the role.</p>
+                                    <ul className="space-y-4">
+                                        {['Beautiful fullscreen presentation mode', '30-60-90 day planning slides', 'Public URLs with paywall tracking'].map((item, i) => (
+                                            <li key={i} className="flex items-center gap-3 text-zinc-700 font-bold"><CheckCircle2 className="h-5 w-5 text-purple-500" /> {item}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                                <div className="flex-1 w-full">
+                                    <div className="rounded-[2.5rem] overflow-hidden shadow-2xl shadow-purple-900/10 border border-zinc-200/50 aspect-video relative">
+                                        <img src={images.feature3} alt="Presenting pitch deck" className="w-full h-full object-cover" />
+                                        <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/20 to-transparent"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
-                        {/* Feature 1: LinkedIn Sync */}
-                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} className="flex flex-col lg:flex-row items-center gap-16">
-                            <div className="flex-1 space-y-8">
-                                <div className="h-14 w-14 bg-blue-50 rounded-2xl flex items-center justify-center">
-                                    <Zap className="h-7 w-7 text-blue-600" />
-                                </div>
-                                <h3 className="text-4xl sm:text-5xl font-black text-zinc-900 tracking-tight leading-[1.1]">One-click LinkedIn import.</h3>
-                                <p className="text-lg text-zinc-500 font-medium leading-relaxed">Paste your LinkedIn URL and watch as our AI instantly extracts, parses, and rebuilds your entire professional history into a highly polished, ATS-ready format.</p>
-                                <ul className="space-y-4">
-                                    {['Instant data extraction', 'Auto-formats into best practices', 'Zero manual typing required'].map((item, i) => (
-                                        <li key={i} className="flex items-center gap-3 text-zinc-700 font-bold"><CheckCircle2 className="h-5 w-5 text-blue-500" /> {item}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="flex-1 w-full">
-                                <div className="rounded-[2.5rem] overflow-hidden shadow-2xl shadow-blue-900/10 border border-zinc-200/50 aspect-video relative">
-                                    <img src={images.feature1} alt="One click import" className="w-full h-full object-cover" />
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-blue-900/20 to-transparent"></div>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Feature 2: ATS Matcher (Reversed) */}
-                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} className="flex flex-col lg:flex-row-reverse items-center gap-16">
-                            <div className="flex-1 space-y-8">
-                                <div className="h-14 w-14 bg-emerald-50 rounded-2xl flex items-center justify-center">
-                                    <Target className="h-7 w-7 text-emerald-600" />
-                                </div>
-                                <h3 className="text-4xl sm:text-5xl font-black text-zinc-900 tracking-tight leading-[1.1]">Beat the ATS algorithm.</h3>
-                                <p className="text-lg text-zinc-500 font-medium leading-relaxed">Stop guessing what recruiters want. Paste the link of the job you are applying to, and our Claude 3.5 engine analyzes the post to score and inject missing keywords into your CV.</p>
-                                <ul className="space-y-4">
-                                    {['Real-time match scoring', 'Automated keyword injection', 'Tailored summary rewriting'].map((item, i) => (
-                                        <li key={i} className="flex items-center gap-3 text-zinc-700 font-bold"><CheckCircle2 className="h-5 w-5 text-emerald-500" /> {item}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="flex-1 w-full">
-                                <div className="rounded-[2.5rem] overflow-hidden shadow-2xl shadow-emerald-900/10 border border-zinc-200/50 aspect-video relative">
-                                    <img src={images.feature2} alt="ATS Analyzer dashboard" className="w-full h-full object-cover" />
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-emerald-900/20 to-transparent"></div>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                        {/* Feature 3: Interactive Pitch Decks */}
-                        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-100px" }} variants={fadeInUp} className="flex flex-col lg:flex-row items-center gap-16">
-                            <div className="flex-1 space-y-8">
-                                <div className="h-14 w-14 bg-purple-50 rounded-2xl flex items-center justify-center">
-                                    <PlayCircle className="h-7 w-7 text-purple-600" />
-                                </div>
-                                <h3 className="text-4xl sm:text-5xl font-black text-zinc-900 tracking-tight leading-[1.1]">Auto-generated Pitch Decks.</h3>
-                                <p className="text-lg text-zinc-500 font-medium leading-relaxed">Cover letters are dead. When you build a CV, our AI automatically generates a stunning, 4-slide interactive presentation summarizing why you are perfect for the role.</p>
-                                <ul className="space-y-4">
-                                    {['Beautiful fullscreen presentation mode', '30-60-90 day planning slides', 'Public URLs with paywall access tracking'].map((item, i) => (
-                                        <li key={i} className="flex items-center gap-3 text-zinc-700 font-bold"><CheckCircle2 className="h-5 w-5 text-purple-500" /> {item}</li>
-                                    ))}
-                                </ul>
-                            </div>
-                            <div className="flex-1 w-full">
-                                <div className="rounded-[2.5rem] overflow-hidden shadow-2xl shadow-purple-900/10 border border-zinc-200/50 aspect-video relative">
-                                    <img src={images.feature3} alt="Presenting pitch deck" className="w-full h-full object-cover" />
-                                    <div className="absolute inset-0 bg-gradient-to-tr from-purple-900/20 to-transparent"></div>
-                                </div>
-                            </div>
-                        </motion.div>
-
-                    </div>
+                    </ContainerScroll>
                 </section>
 
                 {/* 4. FAST FEATURES GRID */}
@@ -199,7 +236,7 @@ export function LandingClient({ user }: { user: any }) {
                                 { title: "Multi-Language Ready", desc: "Structure ready for multi-language support.", icon: Globe },
                                 { title: "Secure Cloud Sync", desc: "Encrypted storage and secure authentication.", icon: Shield },
                             ].map((item, i) => (
-                                <motion.div key={i} variants={fadeInUp} className="bg-zinc-800/50 border border-zinc-700/50 backdrop-blur-md p-8 rounded-3xl hover:bg-zinc-800 transition-colors">
+                                <motion.div key={i} variants={fadeInUp} className="bg-zinc-800/50 border border-zinc-700/50 backdrop-blur-md p-8 rounded-3xl hover:bg-zinc-800 transition-colors flex flex-col items-start text-left">
                                     <item.icon className="h-8 w-8 text-blue-400 mb-6" />
                                     <h4 className="text-xl font-bold mb-2">{item.title}</h4>
                                     <p className="text-zinc-400 font-medium">{item.desc}</p>
@@ -247,29 +284,7 @@ export function LandingClient({ user }: { user: any }) {
                             <p className="text-lg text-zinc-500 font-medium">Join thousands of professionals landing their dream roles.</p>
                         </motion.div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                            {[
-                                { name: "Sarah Jenkins", role: "Product Manager @ Airbnb", img: images.avatar1, text: "I imported my LinkedIn, applied the Modern template, and used the ATS optimizer. I got 3 interviews in my first week of applying." },
-                                { name: "David Chen", role: "Sr. Software Engineer @ Meta", img: images.avatar2, text: "The interactive Pitch Deck feature completely blew the hiring manager away. It was the deciding factor that got me the offer." },
-                                { name: "Emily Rodriguez", role: "Marketing Director @ Stripe", img: images.avatar3, text: "Finally, a resume builder that actually looks like it was designed in this decade. It's incredibly fast, and the AI rewriting is shockingly good." },
-                            ].map((review, i) => (
-                                <motion.div key={i} initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeInUp} className="bg-white p-8 rounded-3xl border border-zinc-200 shadow-xl shadow-zinc-200/50 flex flex-col justify-between">
-                                    <div>
-                                        <div className="flex gap-1 mb-6 text-yellow-400">
-                                            {[...Array(5)].map((_, j) => <Star key={j} className="h-5 w-5 fill-current" />)}
-                                        </div>
-                                        <p className="text-zinc-700 font-medium text-lg leading-relaxed mb-8">"{review.text}"</p>
-                                    </div>
-                                    <div className="flex items-center gap-4">
-                                        <img src={review.img} alt={review.name} className="h-12 w-12 rounded-full object-cover border-2 border-zinc-100" />
-                                        <div>
-                                            <div className="font-bold text-zinc-900">{review.name}</div>
-                                            <div className="text-xs font-bold text-zinc-400">{review.role}</div>
-                                        </div>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </div>
+                        <TwitterTestimonialCards />
                     </div>
                 </section>
 
