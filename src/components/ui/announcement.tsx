@@ -19,28 +19,28 @@ export function Announcement({
   onClose,
 }: AnnouncementProps) {
   const contentNode = (
-    <section className="flex flex-col gap-1.5 rounded-lg border border-border bg-card p-3 transition-all hover:-translate-y-0.5 hover:border-border/60 hover:shadow-sm">
-      <span className="flex items-center justify-between text-muted-foreground">
-        <h5 className="text-[13px] font-medium">{title}</h5>
+    <section className="flex flex-col gap-1.5 rounded-lg border border-white/10 bg-black p-3 transition-all hover:-translate-y-0.5 hover:border-white/20 hover:shadow-2xl shadow-black/50">
+      <span className="flex items-center justify-between text-zinc-500">
+        <h5 className="text-[11px] font-bold uppercase tracking-wider text-zinc-100">{title}</h5>
         {onClose && (
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   onClick={onClose}
-                  className="inline-flex h-5 w-5 items-center justify-center rounded-sm text-xs hover:bg-accent focus:bg-accent focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className="inline-flex h-5 w-5 items-center justify-center rounded-sm text-xs hover:bg-white/5 focus-visible:outline-none"
                 >
-                  <span className="text-lg">×</span>
+                  <span className="text-lg text-zinc-500 hover:text-white">×</span>
                 </button>
               </TooltipTrigger>
-              <TooltipContent>
+              <TooltipContent className="bg-zinc-900 border-white/10 text-white">
                 <p>Close</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         )}
       </span>
-      <p className="text-sm text-card-foreground">{description}</p>
+      <p className="text-sm text-zinc-400 font-medium leading-snug">{description}</p>
     </section>
   )
 
