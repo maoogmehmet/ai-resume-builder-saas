@@ -112,18 +112,18 @@ export default async function DashboardPage({
                         </div>
                     </div>
 
-                    {/* Data Table */}
-                    <div className="w-full pt-8">
-                        <div className="grid grid-cols-12 gap-4 px-6 py-4 border-b border-white/10 text-[11px] font-black italic text-zinc-500 uppercase tracking-[0.2em]">
-                            <div className="col-span-5">Document Name</div>
-                            <div className="col-span-2 text-center">Current Status</div>
-                            <div className="col-span-3">Target Profile</div>
-                            <div className="col-span-2 text-right">Last Modified</div>
+                    {/* Recent Documents */}
+                    <div className="w-full pt-4">
+                        <div className="flex items-center justify-between mb-8 px-2">
+                            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-zinc-500 italic">
+                                Recent Documents
+                            </h2>
+                            <div className="h-px flex-1 bg-white/5 mx-8" />
                         </div>
 
                         <div className="flex flex-col min-h-[300px]">
                             {(!resumes || resumes.length === 0) ? (
-                                <div className="flex-1 flex flex-col items-center justify-center text-center">
+                                <div className="flex-1 flex flex-col items-center justify-center text-center py-20 bg-white/[0.02] border border-white/5 rounded-[2.5rem]">
                                     <FileText className="h-10 w-10 text-zinc-700 mb-4" />
                                     <h3 className="text-base font-semibold text-zinc-300 mb-1">No documents found</h3>
                                     <p className="text-zinc-500 text-sm">Create your first CV to see it here.</p>
