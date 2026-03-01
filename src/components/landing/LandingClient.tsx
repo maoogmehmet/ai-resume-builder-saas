@@ -143,62 +143,65 @@ export function LandingClient({ user }: { user: any }) {
 
                 <LogoCloudPremium logos={logos} />
 
-                {/* DEEP-DIVE FEATURES */}
-                <section id="features" className="py-24 px-6 lg:px-12 bg-black flex flex-col items-center justify-center border-b border-white/5">
-                    <ContainerScroll
-                        titleComponent={
-                            <div className="text-center max-w-4xl mx-auto mb-16">
-                                <h1 className="text-5xl sm:text-7xl font-black tracking-tight text-white mb-8 leading-[1.1] italic">The Career Operating System.</h1>
-                                <p className="text-2xl text-zinc-500 leading-relaxed font-bold">Unfair advantages for candidates who want to lead.</p>
-                            </div>
-                        }
-                    >
-                        <div className="w-full h-full bg-zinc-950/50 backdrop-blur-3xl rounded-[3rem] p-12 overflow-y-auto space-y-40 border border-white/5 shadow-2xl">
-                            {/* Feature 1: LinkedIn Sync */}
-                            <div className="flex flex-col lg:flex-row items-center gap-20">
-                                <div className="flex-1 space-y-10">
-                                    <div className="h-16 w-16 bg-white/5 rounded-[1.5rem] flex items-center justify-center border border-white/10 shadow-2xl">
-                                        <Zap className="h-8 w-8 text-white animate-pulse" />
-                                    </div>
-                                    <h3 className="text-5xl sm:text-6xl font-black text-white tracking-tighter leading-[1.1] italic">Import. Sync. Win.</h3>
-                                    <p className="text-xl text-zinc-500 font-bold leading-relaxed">Paste your LinkedIn URL and watch our AI instantly reconstruct your entire career into a high-impact narrative.</p>
-                                    <ul className="space-y-6">
-                                        {['Instant Profile Parsing', 'Auto-Experience Mapping', 'Recruiter-Approved Formats'].map((item, i) => (
-                                            <li key={i} className="flex items-center gap-4 text-zinc-300 font-black text-xs uppercase tracking-widest"><div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div> {item}</li>
-                                        ))}
-                                    </ul>
+                {/* FEATURES SECTION - STATIC & CLEAN */}
+                <section id="features" className="py-32 px-6 lg:px-12 bg-black flex flex-col items-center">
+                    <div className="text-center max-w-4xl mx-auto mb-24">
+                        <h2 className="text-5xl sm:text-7xl font-black tracking-tight text-white mb-8 leading-[1.1] italic">
+                            The Career Operating System.
+                        </h2>
+                        <p className="text-2xl text-zinc-500 leading-relaxed font-bold">
+                            Unfair advantages for candidates who want to lead.
+                        </p>
+                    </div>
+
+                    <div className="w-full max-w-6xl bg-zinc-950/50 backdrop-blur-3xl rounded-[3rem] p-8 sm:p-16 border border-white/5 shadow-2xl overflow-hidden relative group">
+                        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+
+                        <div className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24 relative z-10">
+                            <div className="flex-1 space-y-10 order-2 lg:order-1">
+                                <div className="h-16 w-16 bg-white/5 rounded-[1.5rem] flex items-center justify-center border border-white/10 shadow-2xl">
+                                    <Zap className="h-8 w-8 text-white animate-pulse" />
                                 </div>
-                                <div className="flex-1 w-full group">
-                                    <div className="rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(255,255,255,0.05)] border border-white/10 aspect-video relative">
-                                        <img src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80&w=2070" alt="One click import" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105" />
-                                        <div className="absolute inset-0 bg-gradient-to-tr from-black/80 to-transparent"></div>
-                                    </div>
-                                </div>
+                                <h3 className="text-5xl sm:text-6xl font-black text-white tracking-tighter leading-[1.1] italic">
+                                    Import. Sync. Win.
+                                </h3>
+                                <p className="text-xl text-zinc-500 font-bold leading-relaxed">
+                                    Paste your LinkedIn URL and watch our AI instantly reconstruct your entire career into a high-impact narrative.
+                                </p>
+                                <ul className="space-y-6">
+                                    {['Instant Profile Parsing', 'Auto-Experience Mapping'].map((item, i) => (
+                                        <li key={i} className="flex items-center gap-4 text-zinc-300 font-black text-xs uppercase tracking-widest leading-none">
+                                            <div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div>
+                                            {item}
+                                        </li>
+                                    ))}
+                                </ul>
                             </div>
 
-                            {/* Feature 2: ATS Matcher */}
-                            <div className="flex flex-col lg:flex-row-reverse items-center gap-20">
-                                <div className="flex-1 space-y-10">
-                                    <div className="h-16 w-16 bg-white/5 rounded-[1.5rem] flex items-center justify-center border border-white/10 shadow-2xl">
-                                        <Target className="h-8 w-8 text-white" />
-                                    </div>
-                                    <h3 className="text-5xl sm:text-6xl font-black text-white tracking-tighter leading-[1.1] italic">Beat The Bot.</h3>
-                                    <p className="text-xl text-zinc-500 font-bold leading-relaxed">Stop guessing. We analyze job descriptions and inject the exact keywords Claude 3.5 identifies as critical.</p>
-                                    <ul className="space-y-6">
-                                        {['Real-time match scoring', 'Automated keyword injection', 'Tailored summary rewriting'].map((item, i) => (
-                                            <li key={i} className="flex items-center gap-4 text-zinc-300 font-black text-xs uppercase tracking-widest"><div className="h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"></div> {item}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                                <div className="flex-1 w-full group">
-                                    <div className="rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(255,255,255,0.05)] border border-white/10 aspect-video relative">
-                                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2070" alt="ATS Analyzer dashboard" className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105" />
-                                        <div className="absolute inset-0 bg-gradient-to-tr from-black/80 to-transparent"></div>
+                            <div className="flex-1 w-full order-1 lg:order-2">
+                                <div className="rounded-[2.5rem] overflow-hidden shadow-[0_0_100px_rgba(255,255,255,0.05)] border border-white/10 aspect-[4/3] relative bg-[#0a0a0a]">
+                                    <img
+                                        src="https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&q=80&w=2070"
+                                        alt="Modern Workspace"
+                                        className="w-full h-full object-cover grayscale opacity-50 transition-all duration-700 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105"
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/20 to-transparent"></div>
+
+                                    {/* Mock decorative UI element to match user's screenshot vibe */}
+                                    <div className="absolute bottom-6 right-6 left-6 p-6 rounded-2xl bg-black/40 backdrop-blur-md border border-white/10 flex items-center justify-center">
+                                        <div className="h-1 w-24 bg-white/20 rounded-full overflow-hidden">
+                                            <motion.div
+                                                className="h-full bg-emerald-500"
+                                                initial={{ width: 0 }}
+                                                animate={{ width: "100%" }}
+                                                transition={{ duration: 2, repeat: Infinity }}
+                                            />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </ContainerScroll>
+                    </div>
                 </section>
 
                 <TestimonialsSection
