@@ -147,15 +147,7 @@ export default function JobsPage() {
                 setJobError(data.error || 'Search failed')
                 toast.error(data.error || 'Job search failed')
             } else if (data.jobs && data.jobs.length > 0) {
-                // Filter out jobs with no valid URL, assign unique _uid
-                const validJobs = data.jobs
-                    .filter((j: any) => (j.jobUrl || j.url || '') !== '#' && (j.jobUrl || j.url || '') !== '')
-                    .map((j: any, idx: number) => ({ ...j, _uid: `search-${Date.now()}-${idx}` }))
-                if (validJobs.length > 0) {
-                    setJobs(validJobs)
-                } else {
-                    setJobError('No jobs found for this search. Try different keywords.')
-                }
+                setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `search-${Date.now()}-${idx}` })))
             } else {
                 setJobError('No jobs found for this search. Try different keywords.')
             }
@@ -375,14 +367,7 @@ export default function JobsPage() {
                                         if (!res.ok) {
                                             setJobError(data.error || 'Search failed')
                                         } else if (data.jobs && data.jobs.length > 0) {
-                                            const validJobs = data.jobs
-                                                .filter((j: any) => (j.jobUrl || j.url || '') !== '#' && (j.jobUrl || j.url || '') !== '')
-                                                .map((j: any, idx: number) => ({ ...j, _uid: `cat-${Date.now()}-${idx}` }))
-                                            if (validJobs.length > 0) {
-                                                setJobs(validJobs)
-                                            } else {
-                                                setJobError('No jobs found. Try a different category.')
-                                            }
+                                            setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `cat-${Date.now()}-${idx}` })))
                                         } else {
                                             setJobError('No jobs found. Try a different category.')
                                         }
@@ -440,14 +425,7 @@ export default function JobsPage() {
                                                 if (!res.ok) {
                                                     setJobError(data.error || 'Search failed')
                                                 } else if (data.jobs && data.jobs.length > 0) {
-                                                    const validJobs = data.jobs
-                                                        .filter((j: any) => (j.jobUrl || j.url || '') !== '#' && (j.jobUrl || j.url || '') !== '')
-                                                        .map((j: any, idx: number) => ({ ...j, _uid: `loc-${Date.now()}-${idx}` }))
-                                                    if (validJobs.length > 0) {
-                                                        setJobs(validJobs)
-                                                    } else {
-                                                        setJobError(`No jobs found in ${country.name}. Try a different location.`)
-                                                    }
+                                                    setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `loc-${Date.now()}-${idx}` })))
                                                 } else {
                                                     setJobError(`No jobs found in ${country.name}. Try a different location.`)
                                                 }
@@ -673,15 +651,15 @@ export default function JobsPage() {
                                                         className="flex-1 h-12"
                                                     />
 
-                                                    <div className="flex items-center gap-2">
-                                                        <button
-                                                            onClick={(e) => { e.stopPropagation(); handleSaveJob(job) }}
-                                                            className={`h-12 w-12 rounded-[1.25rem] flex items-center justify-center transition-all active:scale-95 border ${saved ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/20' : saving ? 'bg-white/5 text-zinc-400 border-white/5' : 'bg-transparent text-zinc-500 border-white/5 hover:text-white hover:bg-white/5'}`}
-                                                        >
-                                                            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
-                                                        </button>
+                                                    {jobLink && jobLink !== '#' && (
+                                                        <div className="flex items-center gap-2">
+                                                            <button
+                                                                onClick={(e) => { e.stopPropagation(); handleSaveJob(job) }}
+                                                                className={`h-12 w-12 rounded-[1.25rem] flex items-center justify-center transition-all active:scale-95 border ${saved ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/20' : saving ? 'bg-white/5 text-zinc-400 border-white/5' : 'bg-transparent text-zinc-500 border-white/5 hover:text-white hover:bg-white/5'}`}
+                                                            >
+                                                                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
+                                                            </button>
 
-                                                        {jobLink && jobLink !== '#' && (
                                                             <a
                                                                 href={jobLink}
                                                                 target="_blank"
@@ -691,8 +669,8 @@ export default function JobsPage() {
                                                             >
                                                                 <ExternalLink className="h-4 w-4" />
                                                             </a>
-                                                        )}
-                                                    </div>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         )
