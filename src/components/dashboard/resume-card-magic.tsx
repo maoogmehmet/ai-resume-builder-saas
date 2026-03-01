@@ -77,12 +77,21 @@ export function ResumeMagicCard({
                     {/* Action Menu Trigger */}
                     <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <DropdownMenu>
-                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                                <Button variant="ghost" size="icon" className="h-9 w-9 bg-black/40 hover:bg-black/80 text-white border border-white/10 rounded-xl backdrop-blur-xl">
+                            <DropdownMenuTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-9 w-9 bg-black/40 hover:bg-black/80 text-white border border-white/10 rounded-xl backdrop-blur-xl"
+                                    onClick={(e) => e.stopPropagation()}
+                                >
                                     <MoreHorizontal className="h-4 w-4" />
                                 </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-56 bg-[#0a0a0a] border-white/10 text-zinc-300 shadow-[0_10px_40px_rgba(0,0,0,0.5)] rounded-2xl p-1.5 backdrop-blur-2xl">
+                            <DropdownMenuContent
+                                align="end"
+                                className="w-56 bg-[#0a0a0a] border-white/10 text-zinc-300 shadow-[0_10px_40px_rgba(0,0,0,0.5)] rounded-2xl p-1.5 backdrop-blur-2xl"
+                                onClick={(e) => e.stopPropagation()}
+                            >
                                 <DropdownMenuItem onClick={onEdit} className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 rounded-xl cursor-pointer text-xs font-medium group/item">
                                     <Eye className="h-4 w-4 text-zinc-500 group-hover/item:text-white" /> View & Edit
                                 </DropdownMenuItem>
