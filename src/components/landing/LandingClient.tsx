@@ -143,7 +143,7 @@ export function LandingClient({ user }: { user: any }) {
                 </section>
 
                 {/* 2. LOGO CLOUD */}
-                <div className="py-20 border-y border-white/5 bg-white/[0.01]">
+                <div className="pt-32 pb-20 border-y border-white/5 bg-white/[0.01]">
                     <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Trusted by candidates from world-class companies</p>
                     </div>
