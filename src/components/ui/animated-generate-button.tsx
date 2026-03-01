@@ -95,7 +95,7 @@ export default function AnimatedGenerateButton({
 
           <div
             className={clsx(
-              "ui-anim-txt-1 absolute inset-0 flex items-center justify-start whitespace-nowrap",
+              "ui-anim-txt-1 absolute inset-0 flex items-center justify-center whitespace-nowrap",
               generating ? "opacity-0" : "animate-[ui-appear_1s_ease-in-out_forwards]"
             )}
           >
@@ -107,7 +107,7 @@ export default function AnimatedGenerateButton({
           </div>
           <div
             className={clsx(
-              "ui-anim-txt-2 absolute inset-0 flex items-center justify-start whitespace-nowrap",
+              "ui-anim-txt-2 absolute inset-0 flex items-center justify-center whitespace-nowrap",
               generating ? "opacity-100" : "opacity-0"
             )}
           >
