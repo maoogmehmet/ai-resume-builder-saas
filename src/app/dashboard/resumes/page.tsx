@@ -21,25 +21,22 @@ export default async function ResumesPage() {
 
     return (
         <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white">
-            <div className="max-w-7xl mx-auto w-full p-8 pt-12 space-y-12">
+            <div className="max-w-7xl mx-auto w-full p-8 pt-20 space-y-16">
                 {/* Header - Matching "Webhooks" Style */}
-                <header className="flex items-center justify-between">
+                <header className="flex items-center justify-between pb-4">
                     <div>
-                        <h1 className="text-3xl font-bold tracking-tight text-white">
+                        <h1 className="text-4xl font-black text-white italic tracking-tighter">
                             My CVs
                         </h1>
-                        <p className="text-zinc-500 text-sm font-medium mt-2">
+                        <p className="text-zinc-500 text-sm font-medium mt-3 tracking-wide">
                             Manage your professional resume library and AI-generated variations.
                         </p>
                     </div>
-                    <div className="flex items-center gap-3">
-                        <Button asChild className="bg-white text-black hover:bg-zinc-200 font-bold px-5 h-10 rounded-lg shadow-sm">
+                    <div className="flex items-center gap-4">
+                        <Button asChild className="bg-white text-black hover:bg-zinc-200 font-bold px-8 h-12 rounded-xl shadow-xl shadow-white/5 transition-all active:scale-[0.98]">
                             <Link href="/dashboard/builder">
-                                <Plus className="h-4 w-4 mr-2" /> New Resume
+                                <Plus className="h-5 w-5 mr-2" /> New Resume
                             </Link>
-                        </Button>
-                        <Button variant="outline" size="icon" className="h-10 w-10 border-white/10 bg-white/5 text-zinc-400 hover:text-white rounded-lg">
-                            <span className="text-[10px]">&lt;/&gt;</span>
                         </Button>
                     </div>
                 </header>

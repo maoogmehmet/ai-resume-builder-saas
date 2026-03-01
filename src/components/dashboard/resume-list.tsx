@@ -132,7 +132,7 @@ export function ResumeList({ initialResumes }: { initialResumes: Resume[] }) {
     }
 
     return (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-16 pb-20">
             {resumes.map((resume) => (
                 <ResumeCard key={resume.id} resume={resume} onRefresh={refreshResumes} />
             ))}
