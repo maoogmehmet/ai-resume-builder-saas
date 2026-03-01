@@ -5,9 +5,8 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Sparkles, Zap, Target, ArrowRight } from 'lucide-react'
+import { Sparkles, Zap, Target, ArrowRight, ChevronRight } from 'lucide-react'
 import { ShaderAnimation } from '@/components/ui/shader-animation'
-import { ContainerScroll } from '@/components/ui/container-scroll-animation'
 import { Announcement } from '@/components/ui/announcement'
 import { HeaderPremium } from './HeaderPremium'
 import { LogoCloudPremium } from './LogoCloudPremium'
@@ -16,8 +15,6 @@ import { PricingPremium } from './PricingPremium'
 import { FooterPremium } from './FooterPremium'
 
 export function LandingClient({ user }: { user: any }) {
-    // ... existing logic ...
-
     const testimonials = [
         {
             author: {
@@ -101,6 +98,7 @@ export function LandingClient({ user }: { user: any }) {
         }
     ];
 
+
     return (
         <div className="flex flex-col min-h-screen bg-black font-sans selection:bg-white selection:text-black overflow-hidden text-zinc-400">
 
@@ -152,292 +150,162 @@ export function LandingClient({ user }: { user: any }) {
                 {/* 2. LOGO CLOUD */}
                 <LogoCloudPremium logos={logos} />
 
-                {/* 3. RESEND-STYLE FEATURES SECTION */}
-                <section id="features" className="py-24 bg-black overflow-hidden">
-                    <div className="max-w-7xl mx-auto px-6 lg:px-12 space-y-48">
+                {/* 3. HYPER-PREMIUM BENTO FEATURES SECTION */}
+                <section id="features" className="py-32 bg-black overflow-hidden relative">
+                    {/* Background Ambient Glows */}
+                    <div className="absolute top-1/4 -left-1/4 w-[50%] h-[50%] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
+                    <div className="absolute bottom-1/4 -right-1/4 w-[50%] h-[50%] bg-purple-500/10 blur-[120px] rounded-full pointer-events-none" />
 
-                        {/* FEATURE 1: INTEGRATE THIS WEEKEND (LinkedIn Sync) */}
-                        <div className="flex flex-col items-center text-center">
-                            <h2 className="text-4xl sm:text-7xl font-medium tracking-tight text-white mb-6">
-                                Sync <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-emerald-400 to-blue-500">this weekend</span>
+                    <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
+                        <div className="text-center mb-24 space-y-4">
+                            <h2 className="text-4xl sm:text-7xl font-medium tracking-tight text-white">
+                                Everything you need to <br /> <span className="italic font-serif">conquer the market.</span>
                             </h2>
-                            <p className="text-zinc-500 text-lg sm:text-xl max-w-2xl mb-16 leading-relaxed">
-                                A simple, elegant interface so you can start optimizing in minutes. It fits right into your workflow with 1-click imports from your professional profiles.
+                            <p className="text-zinc-500 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
+                                We've built the ultimate toolset for elite candidates. Stop guessing, start winning with data-backed narratives.
                             </p>
-
-                            {/* Source Grid */}
-                            <div className="grid grid-cols-4 sm:grid-cols-8 gap-4 sm:gap-8 mb-20 w-full max-w-4xl">
-                                {[
-                                    { name: "LinkedIn", icon: <Zap className="h-5 w-5" /> },
-                                    { name: "PDF", icon: <Target className="h-5 w-5" /> },
-                                    { name: "Docx", icon: <Sparkles className="h-5 w-5" /> },
-                                    { name: "Text", icon: <Zap className="h-5 w-5" /> },
-                                    { name: "JSON", icon: <Target className="h-5 w-5" /> },
-                                    { name: "Web", icon: <Sparkles className="h-5 w-5" /> },
-                                    { name: "API", icon: <Zap className="h-5 w-5" /> },
-                                    { name: "Auto", icon: <Target className="h-5 w-5" /> }
-                                ].map((source, i) => (
-                                    <div key={i} className="flex flex-col items-center gap-3 group cursor-pointer">
-                                        <div className="h-12 w-12 rounded-xl bg-[#0a0a0a] border border-white/5 flex items-center justify-center text-zinc-500 group-hover:text-white group-hover:border-white/10 transition-all shadow-xl group-hover:shadow-white/5">
-                                            {source.icon}
-                                        </div>
-                                        <span className="text-[10px] uppercase tracking-widest font-bold text-zinc-600 group-hover:text-zinc-400">{source.name}</span>
-                                    </div>
-                                ))}
-                            </div>
-
-                            {/* Code/Sync Block */}
-                            <div className="w-full max-w-5xl rounded-3xl border border-white/5 bg-[#0a0a0a] overflow-hidden shadow-2xl relative group">
-                                <div className="absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent pointer-events-none" />
-                                <div className="p-4 border-b border-white/5 flex items-center gap-2 bg-black/40">
-                                    <div className="flex gap-1.5 ml-2">
-                                        <div className="h-2.5 w-2.5 rounded-full bg-red-500/20 border border-red-500/40" />
-                                        <div className="h-2.5 w-2.5 rounded-full bg-yellow-500/20 border border-yellow-500/40" />
-                                        <div className="h-2.5 w-2.5 rounded-full bg-green-500/20 border border-green-500/40" />
-                                    </div>
-                                    <div className="ml-4 flex gap-4 text-[11px] font-bold tracking-widest uppercase text-zinc-500">
-                                        <span className="text-white border-b border-emerald-500 pb-1">Sync</span>
-                                        <span>Optimize</span>
-                                        <span>Deploy</span>
-                                    </div>
-                                </div>
-                                <div className="p-8 text-left font-mono text-sm sm:text-base overflow-x-auto">
-                                    <div className="flex gap-4">
-                                        <span className="text-zinc-600 select-none">1</span>
-                                        <p className="text-zinc-400 capitalize underline decoration-emerald-500/50 underline-offset-4 decoration-2"># Import your career history from LinkedIn</p>
-                                    </div>
-                                    <div className="flex gap-4 mt-1">
-                                        <span className="text-zinc-600 select-none">2</span>
-                                        <p className="text-zinc-300">USER_URL = <span className="text-emerald-400">"linkedin.com/in/johndoe"</span></p>
-                                    </div>
-                                    <div className="flex gap-4 mt-1">
-                                        <span className="text-zinc-600 select-none">3</span>
-                                        <p className="text-zinc-300">PROCESS_MODE = <span className="text-emerald-400">'high_impact_narrative'</span></p>
-                                    </div>
-                                    <div className="flex gap-4 mt-6">
-                                        <span className="text-zinc-600 select-none">4</span>
-                                        <p className="text-zinc-400 capitalize"># Claude 3.5 AI starts reconstructing...</p>
-                                    </div>
-                                    <div className="flex gap-4 mt-1 pl-4">
-                                        <span className="text-zinc-600 select-none">5</span>
-                                        <p className="text-zinc-300">with <span className="text-purple-400 font-bold italic">ai_optimizer</span>(USER_URL):</p>
-                                    </div>
-                                    <div className="flex gap-4 mt-1 pl-8">
-                                        <span className="text-zinc-600 select-none">6</span>
-                                        <p className="text-zinc-300">result = <span className="text-blue-400">reconstruct</span>(</p>
-                                    </div>
-                                    <div className="flex gap-4 mt-1 pl-12">
-                                        <span className="text-zinc-600 select-none">7</span>
-                                        <p className="text-zinc-300 whitespace-nowrap">ats_score: <span className="text-emerald-400">92</span>,</p>
-                                    </div>
-                                    <div className="flex gap-4 mt-1 pl-12">
-                                        <span className="text-zinc-600 select-none">8</span>
-                                        <p className="text-zinc-300 whitespace-nowrap">keywords: [<span className="text-emerald-400">"LLM"</span>, <span className="text-emerald-400">"SaaS"</span>, <span className="text-emerald-400">"Scale"</span>],</p>
-                                    </div>
-                                    <div className="flex gap-4 mt-1 pl-12">
-                                        <span className="text-zinc-600 select-none">9</span>
-                                        <p className="text-zinc-300 whitespace-nowrap">tone: <span className="text-yellow-400">'visionary'</span></p>
-                                    </div>
-                                    <div className="flex gap-4 mt-1 pl-8">
-                                        <span className="text-zinc-600 select-none">10</span>
-                                        <p className="text-zinc-300">).<span className="text-purple-400">build</span>()</p>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
-                        {/* FEATURE 2: FIRST-CLASS CANDIDATE EXPERIENCE (Dual Cards) */}
-                        <div className="space-y-16">
-                            <div className="max-w-3xl">
-                                <h2 className="text-4xl sm:text-6xl font-medium tracking-tight text-white mb-6">
-                                    First-class <br />candidate experience
-                                </h2>
-                                <p className="text-zinc-500 text-lg leading-relaxed">
-                                    We are a team of recruiters who love building tools for candidates. Our goal is to create the career platform we've always wished we had — one that <span className="italic font-serif">just works.</span>
-                                </p>
-                            </div>
+                        {/* BENTO GRID */}
+                        <div className="grid grid-cols-1 md:grid-cols-6 gap-4 auto-rows-[300px] sm:auto-rows-[350px]">
 
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                {/* Test Mode / AI Optimizer */}
-                                <div className="group rounded-[2.5rem] bg-[#0a0a0a] border border-white/5 p-12 hover:border-white/10 transition-all flex flex-col justify-between min-h-[500px] relative overflow-hidden shadow-2xl shadow-emerald-500/5">
-                                    <div className="relative z-10 w-full mb-12">
-                                        <div className="flex items-center justify-between mb-8">
-                                            <div className="flex gap-2 p-1 bg-black/40 rounded-full border border-white/5">
-                                                <div className="px-4 py-1.5 rounded-full bg-emerald-500 text-black text-[10px] font-bold uppercase tracking-widest">Optimized</div>
-                                                <div className="px-4 py-1.5 rounded-full text-zinc-500 text-[10px] font-bold uppercase tracking-widest">v1.2.0</div>
-                                            </div>
-                                            <div className="h-10 w-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center">
-                                                <Zap className="h-4 w-4 text-white" />
-                                            </div>
-                                        </div>
-                                        <div className="space-y-4 font-mono text-[12px] text-zinc-500">
-                                            <div className="flex gap-4"><span>CLAUDE 3.5:</span> <span className="text-emerald-400">"Match found: 98%"</span></div>
-                                            <div className="flex gap-4"><span>ATS BOT:</span> <span className="text-emerald-400">"Parsed successfully"</span></div>
-                                            <div className="flex gap-4 border-l border-emerald-500/30 pl-4 py-2 bg-emerald-500/5 rounded-r-lg text-emerald-300">
-                                                <span>{`{ "status": "Ready", "quality": "Professional" }`}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="relative z-10">
-                                        <h3 className="text-2xl font-bold text-white mb-4">AI Optimizer</h3>
-                                        <p className="text-zinc-500 leading-relaxed max-w-sm mb-6">
-                                            Simulate how recruiters and ATS bots see your resume. Experiment with different tones without the risk of sounding robotic.
-                                        </p>
-                                        <Link href="#" className="text-white text-sm font-bold border-b border-white/10 hover:border-white/40 transition-all pb-1">Learn more</Link>
-                                    </div>
-                                    <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 blur-[100px] rounded-full pointer-events-none" />
-                                </div>
-
-                                {/* Modular Webhooks / Smart Tracking */}
-                                <div className="group rounded-[2.5rem] bg-[#0a0a0a] border border-white/5 p-12 hover:border-white/10 transition-all flex flex-col justify-between min-h-[500px] relative overflow-hidden shadow-2xl shadow-blue-500/5">
-                                    <div className="relative z-10 w-full mb-12">
-                                        <div className="space-y-6">
-                                            {[
-                                                { label: "Viewed", time: "12:08:06", location: "NYC, US", color: "bg-blue-500" },
-                                                { label: "Downloaded", time: "12:09:42", location: "SF, US", color: "bg-purple-500" },
-                                            ].map((status, i) => (
-                                                <div key={i} className="flex items-center gap-4 bg-black/40 p-4 rounded-2xl border border-white/5">
-                                                    <div className={`h-2 w-2 rounded-full ${status.color}`} />
-                                                    <span className="text-[11px] font-bold text-white uppercase tracking-widest">{status.label}</span>
-                                                    <span className="text-zinc-600 text-[10px] ml-auto">{status.time}</span>
+                            {/* CARD 1: AI SYNC (Large) */}
+                            <div className="md:col-span-4 md:row-span-2 group relative rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden shadow-2xl transition-all hover:border-white/10">
+                                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                <div className="p-10 flex flex-col h-full">
+                                    <div className="flex-1 flex items-center justify-center relative">
+                                        {/* Mock LinkedIn Sync Animation */}
+                                        <div className="w-full max-w-md bg-black/40 rounded-3xl border border-white/5 p-6 backdrop-blur-xl relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-700">
+                                            <div className="flex items-center gap-4 mb-6">
+                                                <div className="h-12 w-12 rounded-xl bg-blue-600/20 flex items-center justify-center border border-blue-500/30">
+                                                    <Zap className="h-6 w-6 text-blue-400" />
                                                 </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="relative z-10">
-                                        <h3 className="text-2xl font-bold text-white mb-4">Smart Tracking</h3>
-                                        <p className="text-zinc-500 leading-relaxed max-w-sm mb-6">
-                                            Receive real-time notifications directly to your phone. Every time your resume is viewed, downloaded, or shared by a recruiter.
-                                        </p>
-                                        <Link href="#" className="text-white text-sm font-bold border-b border-white/10 hover:border-white/40 transition-all pb-1">Learn more</Link>
-                                    </div>
-                                    <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/10 blur-[100px] rounded-full pointer-events-none" />
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* FEATURE 3: GO BEYOND RESUME EDITING (Analytics/Management) */}
-                        <div className="space-y-16">
-                            <div className="max-w-3xl">
-                                <h2 className="text-4xl sm:text-6xl font-medium tracking-tight text-white mb-6">
-                                    Go beyond editing
-                                </h2>
-                                <p className="text-zinc-500 text-lg leading-relaxed">
-                                    Manage your candidates pipeline in a simple and intuitive way. Straightforward analytics and reporting tools that will help you land jobs faster.
-                                </p>
-                            </div>
-
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                {/* Audience / Pipeline */}
-                                <div className="group rounded-[2.5rem] bg-[#0a0a0a] border border-white/5 p-12 hover:border-white/10 transition-all min-h-[450px] flex flex-col justify-between relative overflow-hidden">
-                                    <div className="relative z-10">
-                                        <div className="bg-black/40 rounded-3xl border border-white/5 p-8 mb-12">
-                                            <div className="flex items-center gap-4 mb-8">
-                                                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-emerald-500/5 border border-white/10 flex items-center justify-center">
-                                                    <Target className="h-6 w-6 text-emerald-500" />
+                                                <div className="flex-1">
+                                                    <div className="h-2 w-24 bg-white/20 rounded-full mb-2" />
+                                                    <div className="h-1.5 w-16 bg-white/10 rounded-full" />
                                                 </div>
-                                                <div>
-                                                    <div className="text-white font-bold text-lg">Active Applications</div>
-                                                    <div className="text-zinc-500 text-[11px] uppercase tracking-widest font-bold">24 Positions</div>
-                                                </div>
+                                                <div className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-bold tracking-widest uppercase animate-pulse">Syncing...</div>
                                             </div>
-                                            <div className="grid grid-cols-3 gap-8">
-                                                {[
-                                                    { label: "Interviews", value: "8" },
-                                                    { label: "Offers", value: "2" },
-                                                    { label: "Reach", value: "1.2k" }
-                                                ].map((stat, i) => (
-                                                    <div key={i}>
-                                                        <div className="text-zinc-600 text-[10px] uppercase font-bold tracking-widest mb-1">{stat.label}</div>
-                                                        <div className="text-white text-2xl font-black italic tracking-tighter">{stat.value}</div>
-                                                    </div>
+                                            <div className="space-y-3">
+                                                {[85, 95, 70].map((w, i) => (
+                                                    <motion.div key={i} className="h-2 bg-white/5 rounded-full overflow-hidden">
+                                                        <motion.div
+                                                            className="h-full bg-emerald-500/40"
+                                                            initial={{ width: 0 }}
+                                                            animate={{ width: `${w}%` }}
+                                                            transition={{ duration: 2, delay: i * 0.2, repeat: Infinity }}
+                                                        />
+                                                    </motion.div>
                                                 ))}
                                             </div>
+                                            {/* AI Nodes */}
+                                            <div className="absolute -right-4 -bottom-4 h-32 w-32 bg-emerald-500/20 blur-3xl rounded-full" />
                                         </div>
                                     </div>
-                                    <div className="relative z-10">
-                                        <h3 className="text-2xl font-bold text-white mb-4">Pipeline Manager</h3>
-                                        <p className="text-zinc-500 leading-relaxed max-w-sm mb-6">Manage all your applications from one place. Get full visibility of each interview stage.</p>
-                                        <Link href="#" className="text-white text-sm font-bold border-b border-white/10 hover:border-white/40 transition-all pb-1">Learn more</Link>
-                                    </div>
-                                </div>
-
-                                {/* Analytics / Engagement */}
-                                <div className="group rounded-[2.5rem] bg-[#0a0a0a] border border-white/5 p-12 hover:border-white/10 transition-all min-h-[450px] flex flex-col justify-between relative overflow-hidden">
-                                    <div className="relative z-10">
-                                        <div className="bg-black/40 rounded-3xl border border-white/5 p-8 mb-12">
-                                            <div className="text-white font-bold mb-6 flex justify-between items-center">
-                                                <span>Engagement Score</span>
-                                                <span className="text-emerald-400 text-3xl font-black italic uppercase tracking-tighter">98%</span>
-                                            </div>
-                                            <div className="h-24 flex items-end gap-2 group-hover:gap-3 transition-all">
-                                                {[30, 60, 45, 90, 100, 70, 85, 40].map((h, i) => (
-                                                    <div key={i} className="flex-1 bg-gradient-to-t from-emerald-500/20 to-emerald-500/40 rounded-t-lg transition-all duration-700" style={{ height: `${h}%` }} />
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="relative z-10">
-                                        <h3 className="text-2xl font-bold text-white mb-4">Deep Analytics</h3>
-                                        <p className="text-zinc-500 leading-relaxed max-w-sm mb-6">Unlock powerful insights and understand exactly how recruiters are interacting with your resume.</p>
-                                        <Link href="#" className="text-white text-sm font-bold border-b border-white/10 hover:border-white/40 transition-all pb-1">Learn more</Link>
+                                    <div className="mt-8">
+                                        <h3 className="text-3xl font-bold text-white mb-3">AI LinkedIn Sync</h3>
+                                        <p className="text-zinc-500 text-lg leading-relaxed max-w-md">
+                                            One click to pull your entire history. Our AI reconstructs your profile into a high-impact narrative optimized for recruiters.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
+
+                            {/* CARD 2: ATS SCORE (Medium) */}
+                            <div className="md:col-span-2 md:row-span-1 group relative rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden shadow-2xl transition-all hover:border-white/10">
+                                <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                <div className="p-8 flex flex-col items-center text-center justify-center h-full">
+                                    <div className="relative mb-6">
+                                        <div className="h-32 w-32 rounded-full border-[8px] border-zinc-900 flex items-center justify-center">
+                                            <span className="text-4xl font-black italic tracking-tighter text-emerald-500 animate-pulse">98</span>
+                                            <div className="absolute inset-0 rounded-full border-[8px] border-emerald-500/40 border-t-transparent animate-spin-slow" />
+                                        </div>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-2">ATS Matcher</h3>
+                                    <p className="text-zinc-500 text-sm leading-relaxed">Real-time scoring against Fortune 500 algorithm requirements.</p>
+                                </div>
+                            </div>
+
+                            {/* CARD 3: GLOBAL EXPORT (Small/Tall) */}
+                            <div className="md:col-span-2 md:row-span-1 group relative rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden shadow-2xl transition-all hover:border-white/10">
+                                <div className="p-8 flex items-center justify-between h-full bg-gradient-to-br from-transparent to-white/[0.02]">
+                                    <div className="space-y-4">
+                                        <h3 className="text-xl font-bold text-white">Export Everywhere</h3>
+                                        <div className="flex gap-2">
+                                            <div className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/5 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">PDF</div>
+                                            <div className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/5 text-[10px] font-bold text-zinc-400 uppercase tracking-widest">JSON</div>
+                                        </div>
+                                    </div>
+                                    <div className="h-16 w-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-500 shadow-xl">
+                                        <Target className="h-8 w-8 text-white" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* CARD 4: PITCH DECKS (Medium) */}
+                            <div className="md:col-span-3 md:row-span-1 group relative rounded-[2.5rem] bg-[#080808] border border-white/10 overflow-hidden shadow-2xl transition-all shadow-blue-500/5 lg:bg-gradient-to-tr lg:from-blue-500/10 lg:to-transparent">
+                                <div className="p-10 flex flex-col h-full">
+                                    <div className="flex items-center gap-4 mb-6">
+                                        <div className="h-10 w-10 rounded-xl bg-blue-500 flex items-center justify-center shadow-lg shadow-blue-500/20">
+                                            <Sparkles className="h-5 w-5 text-white" />
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-white">Smart Pitch Decks</h3>
+                                    </div>
+                                    <p className="text-zinc-500 leading-relaxed mb-auto">Generate professional presentation slides for your interviews automatically from your career data.</p>
+                                    <div className="flex -space-x-4 mt-8">
+                                        {[1, 2, 3].map(i => (
+                                            <div key={i} className="h-20 w-32 rounded-xl bg-[#111] border border-white/10 shadow-lg transform translate-y-0 group-hover:-translate-y-4 transition-transform duration-500" style={{ transitionDelay: `${i * 100}ms` }} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* CARD 5: GLOBAL ANALYTICS (Large/Wide) */}
+                            <div className="md:col-span-3 md:row-span-1 group relative rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden shadow-2xl transition-all hover:border-white/10">
+                                <div className="absolute inset-0 bg-gradient-to-bl from-emerald-500/5 via-transparent to-transparent" />
+                                <div className="p-10 flex flex-col h-full bg-gradient-to-t from-black/60 to-transparent">
+                                    <div className="flex justify-between items-start mb-10">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-white mb-2">Live Engagement</h3>
+                                            <p className="text-zinc-500 text-sm">Track how recruiters view your profile.</p>
+                                        </div>
+                                        <div className="text-4xl font-black italic italic-900 tracking-tighter text-white">12.4k</div>
+                                    </div>
+                                    <div className="h-24 flex items-end gap-1.5 group-hover:gap-2 transition-all">
+                                        {[40, 70, 45, 90, 65, 100, 80, 50, 75, 60, 85, 45, 95, 55].map((h, i) => (
+                                            <div key={i} className="flex-1 bg-white/10 rounded-t-sm group-hover:bg-emerald-500/40 transition-all duration-700" style={{ height: `${h}%` }} />
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
-                        {/* FEATURE 4: DEVELOP RESUMES USING AI (Templates Mockup) */}
-                        <div className="flex flex-col items-center text-center">
-                            <h2 className="text-4xl sm:text-7xl font-medium tracking-tight text-white mb-6">
-                                Build resumes <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-500">using AI</span>
+                        {/* FINAL FEATURES CALLOUT: THE "AI BRAIN" */}
+                        <div className="mt-48 flex flex-col items-center text-center">
+                            <div className="relative mb-20 group">
+                                <div className="absolute inset-0 bg-emerald-500/40 blur-[100px] rounded-full animate-pulse group-hover:bg-purple-500/40 transition-colors duration-1000" />
+                                <div className="relative h-64 w-64 rounded-full border border-white/20 flex flex-col items-center justify-center backdrop-blur-3xl shadow-2xl">
+                                    <div className="h-32 w-32 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center p-8 shadow-[0_0_50px_rgba(52,211,153,0.3)]">
+                                        <Zap className="h-full w-full text-black" />
+                                    </div>
+                                    <div className="mt-4 flex gap-2">
+                                        {[1, 2, 3].map(i => <div key={i} className="h-1.5 w-1.5 bg-white/40 rounded-full" />)}
+                                    </div>
+                                </div>
+                                {/* Orbital Icons */}
+                                <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute -inset-10 pointer-events-none">
+                                    <div className="absolute top-0 left-1/2 -translate-x-1/2 h-10 w-10 bg-black border border-white/10 rounded-xl flex items-center justify-center shadow-lg"><Sparkles className="h-5 w-5 text-emerald-500" /></div>
+                                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-10 w-10 bg-black border border-white/10 rounded-xl flex items-center justify-center shadow-lg"><Target className="h-5 w-5 text-purple-500" /></div>
+                                </motion.div>
+                            </div>
+                            <h2 className="text-4xl sm:text-6xl font-medium tracking-tight text-white mb-8">
+                                One core. <span className="italic font-serif">Infinite possibilities.</span>
                             </h2>
-                            <p className="text-zinc-500 text-lg sm:text-xl max-w-2xl mb-16 leading-relaxed">
-                                Create beautiful, high-converting templates without having to deal with formatting and alignment. Powered by Claude 3.5, our open-source template library.
+                            <p className="text-zinc-500 text-lg sm:text-xl max-w-2xl leading-relaxed">
+                                Our AI engine is constantly learning from millions of successful candidate journeys to give you the ultimate edge.
                             </p>
-
-                            <div className="flex flex-col sm:flex-row gap-6 mb-16">
-                                <Button size="lg" className="rounded-xl px-12 bg-white text-black font-black h-14 hover:scale-105 transition-all">Get Started Free <ArrowRight className="ml-2 h-4 w-4" /></Button>
-                                <Button variant="ghost" size="lg" className="text-white border border-white/10 rounded-xl px-12 h-14 hover:bg-white/5">Check the Templates</Button>
-                            </div>
-
-                            <div className="w-full max-w-6xl rounded-[3rem] border border-white/5 bg-[#0a0a0a] overflow-hidden shadow-2xl relative shadow-purple-500/5 group">
-                                <div className="absolute inset-0 bg-gradient-to-b from-white/[0.01] to-transparent pointer-events-none" />
-                                <div className="flex flex-col md:flex-row border-b border-white/5">
-                                    <div className="w-full md:w-64 border-r border-white/5 p-6 bg-black/40">
-                                        <div className="space-y-4">
-                                            {["senior-dev.tsx", "product-mnger.tsx", "designer.pdf", "marketing.docx"].map((file, i) => (
-                                                <div key={i} className={`flex items-center gap-3 text-[11px] font-bold tracking-widest uppercase ${i === 0 ? 'text-emerald-400' : 'text-zinc-600'}`}>
-                                                    <div className={`h-1.5 w-1.5 rounded-full ${i === 0 ? 'bg-emerald-400' : 'bg-zinc-800'}`} />
-                                                    {file}
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                    <div className="flex-1 p-8 text-left font-mono text-sm overflow-hidden hidden md:block">
-                                        <p className="text-purple-400 italic">const <span className="text-blue-400 font-bold">ResumeElite</span> = () =&gt; {"{"}</p>
-                                        <p className="pl-6 text-zinc-400 italic mt-2">// Perfectly formatted for Fortune 500 ATS bots</p>
-                                        <p className="pl-6 text-emerald-400 mt-2">return (</p>
-                                        <p className="pl-12 text-zinc-300">&lt;Header name="Alex Thompson" /&gt;</p>
-                                        <p className="pl-12 text-zinc-300">&lt;Experience data={`{AI_OPTIMIZED_HISTORY}`} /&gt;</p>
-                                        <p className="pl-12 text-zinc-300">&lt;Skills high_impact={`{true}`} /&gt;</p>
-                                        <p className="pl-6 text-emerald-400 mt-2">)</p>
-                                        <p className="text-purple-400 italic font-bold leading-none">{"}"}</p>
-                                    </div>
-                                    <div className="flex-1 bg-gradient-to-br from-[#0d0d0d] to-black p-8 flex items-center justify-center">
-                                        <div className="w-full h-80 rounded-2xl bg-white p-6 shadow-2xl scale-95 group-hover:scale-100 transition-transform duration-700">
-                                            <div className="h-8 w-1/2 bg-zinc-950/10 rounded mb-4" />
-                                            <div className="h-4 w-1/4 bg-emerald-500/20 rounded mb-8" />
-                                            <div className="space-y-4">
-                                                <div className="h-2 w-full bg-zinc-900/5 rounded" />
-                                                <div className="h-2 w-full bg-zinc-900/5 rounded" />
-                                                <div className="h-2 w-[80%] bg-zinc-900/5 rounded" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
-
                     </div>
                 </section>
 
