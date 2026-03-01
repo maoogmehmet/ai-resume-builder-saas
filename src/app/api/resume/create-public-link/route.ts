@@ -67,7 +67,7 @@ export async function POST(req: Request) {
         if (resumeRow.ai_generated_json) {
             fullName = resumeRow.ai_generated_json.personal_info?.full_name || fullName;
             if (resumeRow.ai_generated_json.experience && resumeRow.ai_generated_json.experience.length > 0) {
-                jobTitle = resumeRow.ai_generated_json.experience[0].title || jobTitle;
+                jobTitle = resumeRow.ai_generated_json.experience[0].position || resumeRow.ai_generated_json.experience[0].title || jobTitle;
             }
         }
 

@@ -137,7 +137,7 @@ export const ModernTemplate = ({ data }: { data: any }) => {
                         <Image src={personal_info.profile_image} style={styles.profileImage} />
                     )}
                     <Text style={styles.name}>{personal_info.full_name}</Text>
-                    <Text style={styles.headerSubtitle}>{experience?.[0]?.title || 'Professional'}</Text>
+                    <Text style={styles.headerSubtitle}>{experience?.[0]?.position || experience?.[0]?.title || 'Professional'}</Text>
 
                     <View>
                         <Text style={styles.sidebarTitle}>Contact</Text>
@@ -183,7 +183,7 @@ export const ModernTemplate = ({ data }: { data: any }) => {
                             {experience.map((exp: any, i: number) => (
                                 <View key={i} style={{ marginBottom: 20 }}>
                                     <View style={styles.jobHeader}>
-                                        <Text style={styles.jobTitle}>{exp.title}</Text>
+                                        <Text style={styles.jobTitle}>{exp.position || exp.title}</Text>
                                         <Text style={styles.dates}>{exp.start_date} - {exp.end_date}</Text>
                                     </View>
                                     <Text style={styles.company}>{exp.company} | {exp.location}</Text>

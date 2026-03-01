@@ -48,7 +48,7 @@ export const ClassicTemplate = ({ data }: { data: any }) => {
                         {experience.map((exp: any, i: number) => (
                             <View key={i} style={styles.experienceBlock}>
                                 <View style={styles.jobHeader}>
-                                    <Text style={styles.jobTitle}>{exp.title}</Text>
+                                    <Text style={styles.jobTitle}>{exp.position || exp.title}</Text>
                                     <Text style={styles.dates}>{exp.start_date} - {exp.end_date}</Text>
                                 </View>
                                 <Text style={styles.company}>{exp.company} - {exp.location}</Text>

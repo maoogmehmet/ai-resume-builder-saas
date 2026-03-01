@@ -117,7 +117,7 @@ export const ExecutiveTemplate = ({ data }: { data: any }) => {
                 <View style={styles.header}>
                     <View style={styles.headerLeft}>
                         <Text style={styles.name}>{personal_info.full_name}</Text>
-                        <Text style={styles.title}>{experience?.[0]?.title || 'Professional'}</Text>
+                        <Text style={styles.title}>{experience?.[0]?.position || experience?.[0]?.title || 'Professional'}</Text>
                     </View>
                     {personal_info.profile_image && (
                         <Image src={personal_info.profile_image} style={styles.profileImage} />
@@ -143,7 +143,7 @@ export const ExecutiveTemplate = ({ data }: { data: any }) => {
                             <View key={i} style={styles.experienceItem}>
                                 <View style={styles.jobHeader}>
                                     <View>
-                                        <Text style={styles.jobName}>{exp.title}</Text>
+                                        <Text style={styles.jobName}>{exp.position || exp.title}</Text>
                                         <Text style={styles.companyName}>{exp.company} | {exp.location}</Text>
                                     </View>
                                     <Text style={{ fontSize: 9, color: '#666' }}>{exp.start_date} — {exp.end_date}</Text>
