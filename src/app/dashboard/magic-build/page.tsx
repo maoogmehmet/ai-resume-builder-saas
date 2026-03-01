@@ -78,49 +78,45 @@ export default function MagicBuildPage() {
     }
 
     return (
-        <div className="min-h-screen bg-black text-white font-sans selection:bg-yellow-500/30 relative">
-            {/* Background elements - toned down for dashboard */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[10%] left-[20%] w-[30%] h-[30%] bg-yellow-500/5 rounded-full blur-[100px]" />
-                <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-blue-500/5 rounded-full blur-[100px]" />
-            </div>
+        <div className="min-h-screen bg-black text-white font-sans selection:bg-yellow-500/30 relative flex flex-col items-center justify-center">
+            {/* Pure black background, no glows for cleaner dashboard look */}
 
-            <main className="relative z-10 max-w-4xl mx-auto px-6 pt-12 pb-20">
+            <main className="relative z-10 w-full max-w-xl mx-auto px-6 py-12">
                 <AnimatePresence mode="wait">
                     {!isLoading ? (
                         <motion.div
                             key="form"
-                            initial={{ opacity: 0, y: 20 }}
+                            initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.95 }}
-                            className="space-y-12"
+                            exit={{ opacity: 0, scale: 0.98 }}
+                            className="space-y-8"
                         >
-                            {/* Hero Header */}
-                            <div className="text-center space-y-4">
+                            {/* Hero Header - More Compact */}
+                            <div className="text-center space-y-3">
                                 <motion.div
-                                    initial={{ scale: 0 }}
-                                    animate={{ scale: 1 }}
-                                    transition={{ type: "spring", damping: 12 }}
-                                    className="h-20 w-20 bg-gradient-to-br from-zinc-900 to-black border border-white/10 rounded-3xl flex items-center justify-center mx-auto shadow-2xl mb-8 group"
+                                    initial={{ scale: 0.8, opacity: 0 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ type: "spring", damping: 15 }}
+                                    className="h-16 w-16 bg-zinc-900 border border-white/10 rounded-2xl flex items-center justify-center mx-auto shadow-2xl mb-4 group"
                                 >
-                                    <Sparkles className="h-10 w-10 text-yellow-400 group-hover:scale-110 transition-transform" />
+                                    <Sparkles className="h-8 w-8 text-yellow-400 group-hover:scale-110 transition-transform" />
                                 </motion.div>
-                                <h1 className="text-5xl font-black tracking-tight bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-transparent">
+                                <h1 className="text-4xl font-black tracking-tight bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-transparent">
                                     AI Magic Lab
                                 </h1>
-                                <p className="text-zinc-500 text-lg font-medium max-w-xl mx-auto">
-                                    Our executive AI engine crafts a high-impact, ATS-optimized resume draft in seconds.
+                                <p className="text-zinc-500 text-sm font-medium max-w-sm mx-auto">
+                                    Our AI engine crafts a high-impact, ATS-optimized resume draft in seconds.
                                 </p>
                             </div>
 
-                            {/* Main Form */}
-                            <form onSubmit={handleMagicBuild} className="bg-zinc-900/40 border border-white/5 p-10 rounded-[3rem] shadow-2xl backdrop-blur-xl space-y-8 max-w-2xl mx-auto">
-                                <div className="grid gap-3">
-                                    <Label htmlFor="role" className="text-zinc-400 font-bold uppercase text-[10px] tracking-[0.2em] ml-1">Target Position *</Label>
+                            {/* Main Form - Reduced Padding and Width */}
+                            <form onSubmit={handleMagicBuild} className="bg-zinc-900/30 border border-white/5 p-8 rounded-[2.5rem] shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in duration-500 space-y-6">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="role" className="text-zinc-500 font-bold uppercase text-[9px] tracking-[0.2em] ml-1">Target Position *</Label>
                                     <Input
                                         id="role"
                                         placeholder="e.g. Senior Product Manager, Lead Engineer"
-                                        className="rounded-2xl h-14 border-white/5 bg-black/40 focus:bg-black/60 focus:ring-1 focus:ring-yellow-500/20 transition-all font-medium px-6 text-lg placeholder:text-zinc-700"
+                                        className="rounded-xl h-12 border-white/5 bg-black/40 focus:bg-black/60 focus:ring-1 focus:ring-yellow-500/20 transition-all font-medium px-5 text-base placeholder:text-zinc-700"
                                         value={role}
                                         onChange={(e) => setRole(e.target.value)}
                                         required
@@ -128,19 +124,19 @@ export default function MagicBuildPage() {
                                     />
                                 </div>
 
-                                <div className="grid gap-3">
-                                    <Label htmlFor="skills" className="text-zinc-400 font-bold uppercase text-[10px] tracking-[0.2em] ml-1">Key Expertise</Label>
+                                <div className="grid gap-2">
+                                    <Label htmlFor="skills" className="text-zinc-500 font-bold uppercase text-[9px] tracking-[0.2em] ml-1">Key Expertise</Label>
                                     <Input
                                         id="skills"
                                         placeholder="e.g. React, Leadership, AI, Cloud, Strategy"
-                                        className="rounded-2xl h-14 border-white/5 bg-black/40 focus:bg-black/60 focus:ring-1 focus:ring-yellow-500/20 transition-all font-medium px-6 text-lg placeholder:text-zinc-700"
+                                        className="rounded-xl h-12 border-white/5 bg-black/40 focus:bg-black/60 focus:ring-1 focus:ring-yellow-500/20 transition-all font-medium px-5 text-base placeholder:text-zinc-700"
                                         value={skills}
                                         onChange={(e) => setSkills(e.target.value)}
                                     />
                                 </div>
 
-                                <div className="grid gap-3">
-                                    <Label htmlFor="desc" className="flex justify-between text-zinc-400 font-bold uppercase text-[10px] tracking-[0.2em] ml-1">
+                                <div className="grid gap-2">
+                                    <Label htmlFor="desc" className="flex justify-between text-zinc-500 font-bold uppercase text-[9px] tracking-[0.2em] ml-1">
                                         Signature Achievement
                                         <span className="normal-case font-normal tracking-normal opacity-40">{accomplishments.length}/500</span>
                                     </Label>
@@ -148,13 +144,13 @@ export default function MagicBuildPage() {
                                         id="desc"
                                         maxLength={500}
                                         placeholder="Describe your most impactful achievement — include numbers, scale, and results..."
-                                        className="rounded-3xl min-h-[160px] border-white/5 bg-black/40 focus:bg-black/60 focus:ring-1 focus:ring-yellow-500/20 transition-all p-6 font-medium resize-none text-lg placeholder:text-zinc-700 leading-relaxed"
+                                        className="rounded-2xl min-h-[120px] border-white/5 bg-black/40 focus:bg-black/60 focus:ring-1 focus:ring-yellow-500/20 transition-all p-5 font-medium resize-none text-base placeholder:text-zinc-700 leading-relaxed"
                                         value={accomplishments}
                                         onChange={(e) => setAccomplishments(e.target.value)}
                                     />
                                 </div>
 
-                                <div className="pt-4">
+                                <div className="pt-2">
                                     <AnimatedGenerateButton
                                         type="submit"
                                         disabled={!role.trim()}
@@ -162,23 +158,23 @@ export default function MagicBuildPage() {
                                         labelIdle="Ignite AI Build"
                                         labelActive="Igniting..."
                                         highlightHueDeg={45}
-                                        size="xl"
-                                        className="w-full h-16 shadow-[0_20px_40px_rgba(251,191,36,0.1)] hover:scale-[1.01] active:scale-[0.98] transition-all"
+                                        size="lg"
+                                        className="w-full h-14 shadow-lg hover:scale-[1.01] active:scale-[0.98] transition-all"
                                     />
                                 </div>
 
-                                <div className="flex items-center justify-center gap-6 pt-4 text-zinc-600">
-                                    <div className="flex items-center gap-2">
-                                        <BrainCircuit className="h-4 w-4" />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest">Neural Logic</span>
+                                <div className="flex items-center justify-center gap-5 pt-2 text-zinc-700">
+                                    <div className="flex items-center gap-1.5">
+                                        <BrainCircuit className="h-3.5 w-3.5" />
+                                        <span className="text-[9px] font-bold uppercase tracking-widest">Neural Logic</span>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <Rocket className="h-4 w-4" />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest">ATS Optimized</span>
+                                    <div className="flex items-center gap-1.5">
+                                        <Rocket className="h-3.5 w-3.5" />
+                                        <span className="text-[9px] font-bold uppercase tracking-widest">ATS Optimized</span>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <Star className="h-4 w-4 text-yellow-500/50" />
-                                        <span className="text-[10px] font-bold uppercase tracking-widest">Executive Grade</span>
+                                    <div className="flex items-center gap-1.5">
+                                        <Star className="h-3.5 w-3.5 text-yellow-500/50" />
+                                        <span className="text-[9px] font-bold uppercase tracking-widest">Executive Grade</span>
                                     </div>
                                 </div>
                             </form>
