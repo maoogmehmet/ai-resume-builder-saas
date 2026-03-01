@@ -40,7 +40,8 @@ const EMPTY_RESUME = {
     experience: [],
     education: [],
     skills: { technical: [], soft: [] },
-    additional_explanations: ''
+    additional_explanations: '',
+    template: 'classic'
 }
 
 const SECTIONS = [
@@ -106,6 +107,9 @@ export function ResumeEditorPage() {
                 ...EMPTY_RESUME,
                 ...jsonData
             })
+            if (jsonData.template) {
+                setTemplate(jsonData.template as TemplateType)
+            }
             setIsLoading(false)
 
             if (!data.ai_generated_json && data.original_linkedin_json) {
@@ -191,7 +195,10 @@ export function ResumeEditorPage() {
     const handleVersionSelect = (version: any) => {
         setResumeData(version.optimized_json)
         setCurrentVersionId(version.id)
-        syncPdfToCloud(version.optimized_json, template, true).catch(e => console.error(e));
+        if (version.optimized_json?.template) {
+            setTemplate(version.optimized_json.template as TemplateType)
+        }
+        syncPdfToCloud(version.optimized_json, (version.optimized_json?.template || template) as TemplateType, true).catch(e => console.error(e));
         toast.info(`Switched to version: ${version.company_name || 'Saved Version'}`)
     }
 
@@ -295,7 +302,12 @@ export function ResumeEditorPage() {
                                 {TEMPLATES.map((t) => (
                                     <button
                                         key={t.id}
-                                        onClick={() => { setTemplate(t.id); setShowTemplates(false); }}
+                                        onClick={() => {
+                                            setTemplate(t.id);
+                                            handleUpdate('template', t.id);
+                                            setShowTemplates(false);
+                                            toast.success(`Template changed to ${t.label}`);
+                                        }}
                                         className={`w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-center justify-between group ${template === t.id ? 'bg-white text-black' : 'hover:bg-white/[0.06] text-zinc-400 hover:text-white'}`}
                                     >
                                         <div>
