@@ -37,6 +37,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { MagicBuilderDialog } from './magic-builder-dialog'
 
+import { cn } from '@/lib/utils'
+
 interface Resume {
     id: string;
     title: string;
@@ -111,107 +113,103 @@ export function ResumeCard({ resume, onRefresh }: { resume: Resume, onRefresh: (
     const isCompleted = !!resume.pdf_url;
 
     return (
-        <>
-            <div className="group flex items-center justify-between px-4 py-3 border-b border-white/5 hover:bg-white/5 transition-colors duration-200">
-                {/* Content Container simulating a 12-col grid implicitly through flex widths */}
-                <div className="flex items-center w-full gap-4">
-                    {/* Document Name (5/12) */}
-                    <div className="flex items-center gap-3 w-[41.666%] shrink-0">
-                        <div className={`h-8 w-8 rounded-md flex items-center justify-center shrink-0 ${isCompleted ? 'bg-emerald-500/10 border border-emerald-500/20' : 'bg-zinc-500/10 border border-zinc-500/20'}`}>
-                            <FileText className={`h-4 w-4 ${isCompleted ? 'text-emerald-500' : 'text-zinc-500'}`} />
-                        </div>
-                        <span className="font-medium text-zinc-200 truncate pr-4 text-[13px] cursor-pointer hover:underline" onClick={() => router.push(`/editor/${resume.id}`)}>
-                            {resume.title}
-                        </span>
-                    </div>
+        <div className="group relative flex flex-col space-y-4">
+            {/* Card Preview Area */}
+            <div
+                className="relative aspect-[1.5/1] w-full bg-[#111111] border border-white/5 rounded-2xl overflow-hidden cursor-pointer active:scale-[0.98] transition-all duration-200 shadow-lg group-hover:shadow-white/5 group-hover:border-white/10"
+                onClick={() => router.push(`/editor/${resume.id}`)}
+            >
+                {/* Background Pattern Simulating a Resume Preview */}
+                <div className="absolute inset-0 p-6 flex flex-col gap-3 opacity-20 pointer-events-none">
+                    <div className="h-4 w-1/2 bg-zinc-600 rounded" />
+                    <div className="h-2 w-full bg-zinc-800 rounded" />
+                    <div className="h-2 w-full bg-zinc-800 rounded" />
+                    <div className="h-2 w-3/4 bg-zinc-800 rounded" />
+                    <div className="mt-4 h-2 w-full bg-zinc-800 rounded" />
+                    <div className="h-2 w-full bg-zinc-800 rounded" />
+                </div>
 
-                    {/* Status (2/12) */}
-                    <div className="w-[16.666%] shrink-0 flex items-center">
-                        {isCompleted ? (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                                Completed
-                            </span>
-                        ) : (
-                            <span className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-zinc-500/10 text-zinc-400 border border-zinc-500/20">
-                                Draft
-                            </span>
-                        )}
-                    </div>
+                {/* Status Badge */}
+                <div className="absolute bottom-4 right-4 z-10">
+                    <span className={cn(
+                        "inline-flex items-center px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider backdrop-blur-md border",
+                        isCompleted
+                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
+                            : "bg-zinc-500/10 text-zinc-400 border-white/10"
+                    )}>
+                        {isCompleted ? 'Completed' : 'Draft'}
+                    </span>
+                </div>
 
-                    {/* Target Role (3/12) */}
-                    <div className="w-[25%] shrink-0 flex items-center">
-                        <span className="text-[13px] text-zinc-400 truncate pr-4">
-                            {resume.ai_generated_json?.personal_info?.title || 'General Application'}
-                        </span>
-                    </div>
-
-                    {/* Updated & Actions (2/12) */}
-                    <div className="w-[16.666%] shrink-0 flex items-center justify-end gap-4 text-[13px] text-zinc-500">
-                        <span className="whitespace-nowrap">
-                            {new Date(resume.updated_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                        </span>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon" className="h-6 w-6 text-zinc-500 hover:text-white hover:bg-white/10 rounded-md shrink-0">
-                                    <span className="text-xs">•••</span>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-48 bg-[#1e1e1e] border-white/10 text-zinc-200 shadow-xl">
-                                <DropdownMenuItem onClick={() => router.push(`/editor/${resume.id}`)} className="hover:bg-white/5 focus:bg-white/5 cursor-pointer text-sm">
-                                    <Pencil className="mr-2 h-4 w-4" /> Edit CV
-                                </DropdownMenuItem>
-                                {isCompleted && (
-                                    <DropdownMenuItem onClick={() => window.open(resume.pdf_url, '_blank')} className="hover:bg-white/5 focus:bg-white/5 cursor-pointer text-sm">
-                                        <DownloadCloud className="mr-2 h-4 w-4" /> Download PDF
-                                    </DropdownMenuItem>
-                                )}
-                                <DropdownMenuItem onClick={() => setIsRenameOpen(true)} className="hover:bg-white/5 focus:bg-white/5 cursor-pointer text-sm">
-                                    <Type className="mr-2 h-4 w-4" /> Rename
-                                </DropdownMenuItem>
-                                <DropdownMenuItem onClick={handleDuplicate} disabled={isLoading} className="hover:bg-white/5 focus:bg-white/5 cursor-pointer text-sm">
-                                    <Copy className="mr-2 h-4 w-4" /> Duplicate
-                                </DropdownMenuItem>
-                                <div className="my-1 h-px bg-white/10" />
-                                <DropdownMenuItem onClick={handleDelete} disabled={isLoading} className="text-red-400 hover:bg-red-400/10 focus:bg-red-400/10 cursor-pointer text-sm">
-                                    <Trash2 className="mr-2 h-4 w-4" /> Delete
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </div>
+                {/* Top-Right Menu Button */}
+                <div className="absolute top-3 right-3 z-20">
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-white hover:bg-white/10 rounded-full">
+                                <span className="text-lg">•••</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="w-56 bg-black border-white/10 text-zinc-300 shadow-2xl rounded-xl p-1 pb-2">
+                            <DropdownMenuItem onClick={() => router.push(`/editor/${resume.id}`)} className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 rounded-lg cursor-pointer text-[13px] group">
+                                <Eye className="h-4 w-4 text-zinc-500 group-hover:text-white" /> View details
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => router.push(`/editor/${resume.id}`)} className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 rounded-lg cursor-pointer text-[13px] group">
+                                <Pencil className="h-4 w-4 text-zinc-500 group-hover:text-white" /> Edit template
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setIsRenameOpen(true)} className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 rounded-lg cursor-pointer text-[13px] group">
+                                <Type className="h-4 w-4 text-zinc-500 group-hover:text-white" /> Rename template
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleDuplicate} disabled={isLoading} className="flex items-center gap-3 px-3 py-2.5 hover:bg-white/5 rounded-lg cursor-pointer text-[13px] group">
+                                <Copy className="h-4 w-4 text-zinc-500 group-hover:text-white" /> Duplicate template
+                            </DropdownMenuItem>
+                            <div className="my-1.5 h-px bg-white/5" />
+                            <DropdownMenuItem onClick={handleDelete} disabled={isLoading} className="flex items-center gap-3 px-3 py-2.5 text-red-400 hover:bg-red-400/10 rounded-lg cursor-pointer text-[13px] group">
+                                <Trash2 className="h-4 w-4 text-red-500/70" /> Remove template
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
 
+            {/* Metadata Below Card */}
+            <div className="flex flex-col gap-1 px-1">
+                <h4 className="font-bold text-white text-lg tracking-tight truncate group-hover:text-white transition-colors duration-200">
+                    {resume.title}
+                </h4>
+                <p className="text-zinc-500 text-sm font-mono tracking-tight truncate">
+                    {resume.title.toLowerCase().replace(/\s+/g, '-') || 'untitled-cv'}
+                </p>
+            </div>
+
             <Dialog open={isRenameOpen} onOpenChange={setIsRenameOpen}>
-                <DialogContent className="bg-[#1e1e1e] border-white/10 text-white sm:max-w-md">
+                <DialogContent className="bg-black border-white/10 text-white sm:max-w-md rounded-2xl">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-semibold">Rename Resume</DialogTitle>
+                        <DialogTitle className="text-xl font-bold">Rename CV</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="title" className="text-zinc-400">New Title</Label>
+                            <Label htmlFor="title" className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">New Title</Label>
                             <Input
                                 id="title"
                                 value={newTitle}
                                 onChange={(e) => setNewTitle(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleRename()}
-                                className="bg-black border-white/10 focus-visible:ring-1 focus-visible:ring-white/20 text-white"
+                                className="bg-[#111111] border-white/5 focus-visible:ring-1 focus-visible:ring-white/20 text-white h-11"
                             />
                         </div>
                     </div>
                     <DialogFooter>
-                        <Button variant="ghost" onClick={() => setIsRenameOpen(false)} className="hover:bg-white/10 text-white">Cancel</Button>
-                        <Button onClick={handleRename} disabled={isLoading} className="bg-white text-black hover:bg-zinc-200">Save Changes</Button>
+                        <Button variant="ghost" onClick={() => setIsRenameOpen(false)} className="hover:bg-white/5 text-zinc-400">Cancel</Button>
+                        <Button onClick={handleRename} disabled={isLoading} className="bg-white text-black hover:bg-zinc-200 font-bold px-6">Save</Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
-        </>
+        </div>
     )
 }
 
 export function ResumeList({ initialResumes }: { initialResumes: Resume[] }) {
-    const router = useRouter()
     const [resumes, setResumes] = useState<Resume[]>(initialResumes)
-    const [isCreating, setIsCreating] = useState(false)
 
     const refreshResumes = async () => {
         const res = await fetch('/api/resume/list')
@@ -219,28 +217,8 @@ export function ResumeList({ initialResumes }: { initialResumes: Resume[] }) {
         setResumes(data.resumes)
     }
 
-    const createBlank = async () => {
-        setIsCreating(true)
-        try {
-            const res = await fetch('/api/resume/manage', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ action: 'create_blank' })
-            })
-            const data = await res.json()
-            if (!res.ok) throw new Error(data.error)
-
-            router.push(`/editor/${data.resumeId}`)
-            toast.success('Created Blank Resume')
-        } catch (error: any) {
-            toast.error(error.message)
-        } finally {
-            setIsCreating(false)
-        }
-    }
-
     return (
-        <div className="flex flex-col w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
             {resumes.map((resume) => (
                 <ResumeCard key={resume.id} resume={resume} onRefresh={refreshResumes} />
             ))}

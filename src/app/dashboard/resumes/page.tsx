@@ -20,38 +20,44 @@ export default async function ResumesPage() {
         .order('updated_at', { ascending: false })
 
     return (
-        <div className="flex flex-col min-h-screen bg-white w-full font-sans">
-            <div className="max-w-7xl mx-auto w-full p-8 space-y-8">
-                {/* Header */}
-                <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-200 gap-4">
+        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white">
+            <div className="max-w-7xl mx-auto w-full p-8 pt-12 space-y-12">
+                {/* Header - Matching "Webhooks" Style */}
+                <header className="flex items-center justify-between">
                     <div>
-                        <h1 className="text-[28px] font-bold tracking-tight text-[#1E293B]">
+                        <h1 className="text-3xl font-bold tracking-tight text-white">
                             My CVs
                         </h1>
-                        <p className="text-[#64748B] text-base font-medium mt-1">
-                            A complete library of all your generated resumes and specific variations.
+                        <p className="text-zinc-500 text-sm font-medium mt-2">
+                            Manage your professional resume library and AI-generated variations.
                         </p>
                     </div>
-                    <Button asChild className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-6 h-11 rounded-xl shadow-sm">
-                        <Link href="/dashboard/builder">
-                            <Plus className="h-5 w-5 mr-2" /> New CV
-                        </Link>
-                    </Button>
+                    <div className="flex items-center gap-3">
+                        <Button asChild className="bg-white text-black hover:bg-zinc-200 font-bold px-5 h-10 rounded-lg shadow-sm">
+                            <Link href="/dashboard/builder">
+                                <Plus className="h-4 w-4 mr-2" /> New Resume
+                            </Link>
+                        </Button>
+                        <Button variant="outline" size="icon" className="h-10 w-10 border-white/10 bg-white/5 text-zinc-400 hover:text-white rounded-lg">
+                            <span className="text-[10px]">&lt;/&gt;</span>
+                        </Button>
+                    </div>
                 </header>
 
                 <main>
                     {(!resumes || resumes.length === 0) ? (
-                        <div className="bg-white border border-slate-200 rounded-2xl p-16 flex flex-col items-center justify-center text-center shadow-sm min-h-[400px]">
-                            <div className="h-20 w-20 bg-slate-50 text-slate-300 rounded-full flex items-center justify-center mb-6">
-                                <FileText className="h-10 w-10" />
-                            </div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-2">Your CV Library is Empty</h3>
-                            <p className="text-slate-500 text-base max-w-sm mb-8">
-                                Create your first AI-optimized resume to start building your professional portfolio.
+                        <div className="bg-[#0A0A0A] border border-white/[0.05] rounded-3xl p-20 flex flex-col items-center justify-center text-center min-h-[500px] shadow-2xl relative overflow-hidden">
+                            {/* Decorative background glow */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-500/5 blur-[100px] rounded-full pointer-events-none" />
+
+                            <h3 className="text-2xl font-bold text-white mb-3 relative z-10">No CVs yet</h3>
+                            <p className="text-zinc-500 text-base max-w-sm mb-10 relative z-10">
+                                Create your first AI-optimized resume to start building your professional career growth.
                             </p>
-                            <Button asChild className="bg-slate-900 hover:bg-black text-white px-8 h-12 text-base rounded-xl font-bold transition-all shadow-lg hover:shadow-xl">
+
+                            <Button asChild className="bg-white text-black hover:bg-zinc-200 px-10 h-12 text-base rounded-xl font-bold transition-all shadow-xl relative z-10">
                                 <Link href="/dashboard/builder">
-                                    <Plus className="h-5 w-5 mr-2" /> Create First CV
+                                    <Plus className="h-5 w-5 mr-2" /> Add Resume
                                 </Link>
                             </Button>
                         </div>
