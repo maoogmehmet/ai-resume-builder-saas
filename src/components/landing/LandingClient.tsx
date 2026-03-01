@@ -12,6 +12,7 @@ import { TestimonialsSection } from './TestimonialsSection'
 import { PricingPremium } from './PricingPremium'
 import { LogoCloud } from '@/components/ui/logo-cloud'
 import { Footer } from '@/components/ui/footer-section'
+import { FloatingPaths } from '@/components/ui/floating-paths'
 
 export function LandingClient({ user }: { user: any }) {
     // ... rest of imports/setup
@@ -107,9 +108,10 @@ export function LandingClient({ user }: { user: any }) {
                 {/* 1. HERO SECTION - CLEAN & PREMIUM */}
                 <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center pt-20">
                     <div className="absolute inset-0 z-0">
-                        <ShaderAnimation />
+                        <FloatingPaths position={1} />
+                        <FloatingPaths position={-1} />
                     </div>
-                    <div className="absolute inset-0 bg-black/40 z-[1] pointer-events-none" />
+                    <div className="absolute inset-0 bg-black/20 z-[1] pointer-events-none" />
 
                     <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center">
                         <motion.div
@@ -127,8 +129,9 @@ export function LandingClient({ user }: { user: any }) {
                             The Career <br /> <span className="italic font-serif">Operating System.</span>
                         </h1>
 
-                        <p className="text-xl sm:text-2xl text-zinc-500 font-medium max-w-2xl mb-16 leading-relaxed">
-                            A high-end platform for elite candidates. Stop applying, start being recruited with AI-powered narratives.
+                        <p className="text-xl sm:text-2xl text-zinc-400 font-medium max-w-2xl mb-16 leading-relaxed opacity-80">
+                            The ultimate ATS-optimized builder for elite professionals. <br className="hidden sm:block" />
+                            Stop applying, start being recruited with AI narratives.
                         </p>
 
                         <div className="flex flex-col sm:flex-row gap-8 items-center">
@@ -138,6 +141,18 @@ export function LandingClient({ user }: { user: any }) {
                             <Link href="#features" className="text-zinc-500 hover:text-white transition-all font-bold text-sm border-b border-transparent hover:border-white/20 pb-1">
                                 Explore Features
                             </Link>
+                        </div>
+
+                        {/* TESTIMONIAL QUOTE AT BOTTOM OF HERO */}
+                        <div className="mt-24 sm:mt-32 max-w-3xl border-l-2 border-white/5 pl-8 text-left animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+                            <blockquote className="space-y-4">
+                                <p className="text-2xl sm:text-3xl font-medium leading-relaxed text-white">
+                                    &ldquo;The ATS optimization completely transformed my job search. It&apos;s not just a builder, it&apos;s a career growth engine.&rdquo;
+                                </p>
+                                <footer className="font-mono text-sm font-semibold text-zinc-500 uppercase tracking-widest">
+                                    ~ Sofia Davis, Software Engineer
+                                </footer>
+                            </blockquote>
                         </div>
                     </div>
                 </section>

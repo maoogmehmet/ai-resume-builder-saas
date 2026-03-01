@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { useScroll } from '@/components/ui/use-scroll';
 import Link from 'next/link';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, Grid2x2Plus } from 'lucide-react';
 
 export function HeaderPremium({ user }: { user: any }) {
     const [open, setOpen] = React.useState(false);
@@ -57,11 +57,11 @@ export function HeaderPremium({ user }: { user: any }) {
                     },
                 )}
             >
-                <Link className="flex items-center gap-2.5 group" href="/">
-                    <div className="h-7 w-7 bg-white rounded flex items-center justify-center transform rotate-45 shadow-[0_0_15px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform">
-                        <Sparkles className="h-3.5 w-3.5 text-black -rotate-45" />
+                <Link className="flex items-center gap-2 group" href="/">
+                    <div className="h-8 w-8 bg-white/10 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105 border border-white/5">
+                        <Grid2x2Plus className="h-4 w-4 text-white" />
                     </div>
-                    <span className="font-bold text-lg tracking-tighter text-white uppercase italic">AI Resume</span>
+                    <span className="font-bold text-xl tracking-tight text-white uppercase">AI Resume.</span>
                 </Link>
 
                 <div className="hidden items-center gap-2 md:flex">
