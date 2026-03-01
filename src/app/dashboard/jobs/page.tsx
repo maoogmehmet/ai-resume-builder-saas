@@ -147,7 +147,15 @@ export default function JobsPage() {
                 setJobError(data.error || 'Search failed')
                 toast.error(data.error || 'Job search failed')
             } else if (data.jobs && data.jobs.length > 0) {
-                setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `search-${Date.now()}-${idx}` })))
+                // Filter out jobs with no valid URL, assign unique _uid
+                const validJobs = data.jobs
+                    .filter((j: any) => (j.jobUrl || j.url || '') !== '#' && (j.jobUrl || j.url || '') !== '')
+                    .map((j: any, idx: number) => ({ ...j, _uid: `search-${Date.now()}-${idx}` }))
+                if (validJobs.length > 0) {
+                    setJobs(validJobs)
+                } else {
+                    setJobError('No jobs found for this search. Try different keywords.')
+                }
             } else {
                 setJobError('No jobs found for this search. Try different keywords.')
             }
@@ -160,7 +168,16 @@ export default function JobsPage() {
     }
 
     const handleSaveJob = async (job: any) => {
-        setSavingJobUrls(prev => new Set(prev).add(job.jobUrl))
+        const url = job.jobUrl || job.job_url || ''
+        if (!url || url === '#') {
+            toast.error('This job has no valid URL and cannot be saved.')
+            return
+        }
+        if (isJobSaved(url)) {
+            toast.info('This job is already saved!')
+            return
+        }
+        setSavingJobUrls(prev => new Set(prev).add(url))
         try {
             const res = await fetch('/api/jobs/save', {
                 method: 'POST',
@@ -187,7 +204,7 @@ export default function JobsPage() {
         } finally {
             setSavingJobUrls(prev => {
                 const next = new Set(prev)
-                next.delete(job.jobUrl || job.job_url)
+                next.delete(url)
                 return next
             })
         }
@@ -358,7 +375,14 @@ export default function JobsPage() {
                                         if (!res.ok) {
                                             setJobError(data.error || 'Search failed')
                                         } else if (data.jobs && data.jobs.length > 0) {
-                                            setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `cat-${Date.now()}-${idx}` })))
+                                            const validJobs = data.jobs
+                                                .filter((j: any) => (j.jobUrl || j.url || '') !== '#' && (j.jobUrl || j.url || '') !== '')
+                                                .map((j: any, idx: number) => ({ ...j, _uid: `cat-${Date.now()}-${idx}` }))
+                                            if (validJobs.length > 0) {
+                                                setJobs(validJobs)
+                                            } else {
+                                                setJobError('No jobs found. Try a different category.')
+                                            }
                                         } else {
                                             setJobError('No jobs found. Try a different category.')
                                         }
@@ -416,7 +440,14 @@ export default function JobsPage() {
                                                 if (!res.ok) {
                                                     setJobError(data.error || 'Search failed')
                                                 } else if (data.jobs && data.jobs.length > 0) {
-                                                    setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `loc-${Date.now()}-${idx}` })))
+                                                    const validJobs = data.jobs
+                                                        .filter((j: any) => (j.jobUrl || j.url || '') !== '#' && (j.jobUrl || j.url || '') !== '')
+                                                        .map((j: any, idx: number) => ({ ...j, _uid: `loc-${Date.now()}-${idx}` }))
+                                                    if (validJobs.length > 0) {
+                                                        setJobs(validJobs)
+                                                    } else {
+                                                        setJobError(`No jobs found in ${country.name}. Try a different location.`)
+                                                    }
                                                 } else {
                                                     setJobError(`No jobs found in ${country.name}. Try a different location.`)
                                                 }
@@ -644,22 +675,23 @@ export default function JobsPage() {
 
                                                     <div className="flex items-center gap-2">
                                                         <button
-                                                            disabled={saving || saved}
                                                             onClick={(e) => { e.stopPropagation(); handleSaveJob(job) }}
-                                                            className={`h-12 w-12 rounded-[1.25rem] flex items-center justify-center transition-all active:scale-95 border ${saved ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/20' : 'bg-transparent text-zinc-500 border-white/5 hover:text-white hover:bg-white/5'}`}
+                                                            className={`h-12 w-12 rounded-[1.25rem] flex items-center justify-center transition-all active:scale-95 border ${saved ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/20' : saving ? 'bg-white/5 text-zinc-400 border-white/5' : 'bg-transparent text-zinc-500 border-white/5 hover:text-white hover:bg-white/5'}`}
                                                         >
                                                             {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
                                                         </button>
 
-                                                        <a
-                                                            href={jobLink}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            onClick={(e) => e.stopPropagation()}
-                                                            className="h-12 w-12 rounded-[1.25rem] flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/5 transition-all"
-                                                        >
-                                                            <ExternalLink className="h-4 w-4" />
-                                                        </a>
+                                                        {jobLink && jobLink !== '#' && (
+                                                            <a
+                                                                href={jobLink}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                onClick={(e) => e.stopPropagation()}
+                                                                className="h-12 w-12 rounded-[1.25rem] flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/5 transition-all"
+                                                            >
+                                                                <ExternalLink className="h-4 w-4" />
+                                                            </a>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
