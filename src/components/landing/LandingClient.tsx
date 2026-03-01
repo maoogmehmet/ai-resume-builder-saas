@@ -11,10 +11,11 @@ import { Announcement } from '@/components/ui/announcement'
 import { HeaderPremium } from './HeaderPremium'
 import { TestimonialsSection } from './TestimonialsSection'
 import { PricingPremium } from './PricingPremium'
-import { LogoCloud } from '@/components/ui/logo-cloud-3'
+import { LogoCloud } from '@/components/ui/logo-cloud'
 import { Footer } from '@/components/ui/footer-section'
 
 export function LandingClient({ user }: { user: any }) {
+    // ... rest of imports/setup
     const testimonials = [
         {
             author: {
@@ -107,7 +108,7 @@ export function LandingClient({ user }: { user: any }) {
             />
             <HeaderPremium user={user} />
 
-            <main className="flex-1 w-full pt-24">
+            <main className="flex-1 w-full">
                 {/* 1. HERO SECTION - CLEAN & PREMIUM */}
                 <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center pt-20">
                     <div className="absolute inset-0 z-0">
