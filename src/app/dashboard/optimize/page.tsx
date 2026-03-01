@@ -182,86 +182,86 @@ export default function OptimizePage() {
 
                     {/* Right Column - Results Empty State or Results */}
                     {results ? (
-                        <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-10 shadow-3xl space-y-12 animate-in fade-in zoom-in-95 duration-700 text-white overflow-hidden relative">
+                        <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-3xl space-y-10 animate-in fade-in zoom-in-95 duration-700 text-white overflow-hidden relative">
                             {/* Ambient Glow */}
                             <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
                             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
 
                             {results.is_predicted && (
-                                <div className="absolute top-0 right-0 bg-blue-500 text-[10px] font-black uppercase tracking-[0.2em] px-5 py-2 rounded-bl-2xl shadow-xl shadow-blue-500/20 flex items-center gap-2">
-                                    <Sparkles className="h-3.5 w-3.5" />
+                                <div className="absolute top-0 right-0 bg-blue-600 text-[9px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-bl-xl shadow-xl shadow-blue-500/10 flex items-center gap-2 z-20">
+                                    <Sparkles className="h-3 w-3" />
                                     AI Predicted Match
                                 </div>
                             )}
 
-                            <div className="flex flex-col md:flex-row items-center gap-10">
-                                <div className="relative h-32 w-32 flex items-center justify-center rounded-xl bg-black/40 border border-white/5 shadow-2xl group transition-all duration-500 hover:scale-105">
-                                    <svg className="absolute inset-0 w-full h-full -rotate-90 p-2">
-                                        <circle cx="56" cy="56" r="50" fill="none" strokeWidth="6" stroke="rgba(255,255,255,0.03)" className="translate-x-2 translate-y-2" />
+                            <div className="flex flex-col md:flex-row items-center gap-8">
+                                <div className="relative h-24 w-24 flex items-center justify-center rounded-2xl bg-black/40 border border-white/5 shadow-2xl group transition-all duration-500 hover:scale-105 shrink-0">
+                                    <svg className="absolute inset-0 w-full h-full -rotate-90 p-1.5">
+                                        <circle cx="44" cy="44" r="40" fill="none" strokeWidth="4" stroke="rgba(255,255,255,0.02)" className="translate-x-1 translate-y-1" />
                                         <circle
-                                            cx="56"
-                                            cy="56"
-                                            r="50"
+                                            cx="44"
+                                            cy="44"
+                                            r="40"
                                             fill="none"
-                                            strokeWidth="6"
+                                            strokeWidth="4"
                                             stroke={results.ats_score >= 80 ? '#22c55e' : results.ats_score >= 60 ? '#eab308' : '#ef4444'}
-                                            strokeDasharray="314"
-                                            strokeDashoffset={314 - (314 * (results.ats_score || 0)) / 100}
+                                            strokeDasharray="251"
+                                            strokeDashoffset={251 - (251 * (results.ats_score || 0)) / 100}
                                             strokeLinecap="round"
-                                            className="translate-x-2 translate-y-2 transition-all duration-1000 ease-out drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+                                            className="translate-x-1 translate-y-1 transition-all duration-1000 ease-out drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]"
                                         />
                                     </svg>
-                                    <span className="text-4xl font-black text-white z-10">{results.ats_score}<span className="text-xl text-zinc-500">%</span></span>
+                                    <span className="text-3xl font-black text-white z-10 tracking-tighter">{results.ats_score}<span className="text-sm text-zinc-500 font-bold ml-0.5">%</span></span>
                                 </div>
                                 <div className="text-center md:text-left">
-                                    <h2 className="text-3xl font-black italic tracking-tighter text-white uppercase mb-2">Match Analysis</h2>
-                                    <p className="text-zinc-400 font-medium text-lg leading-relaxed max-w-md">
-                                        {results.ats_score >= 80 ? 'Excellent match! You are highly qualified for this role.' : results.ats_score >= 60 ? 'Good match. A few targeted optimizations could boost your visibility.' : 'Low match. Significant updates are required to pass ATS filters.'}
+                                    <h2 className="text-2xl font-black italic tracking-tighter text-white uppercase mb-1">Match Analysis</h2>
+                                    <p className="text-zinc-400 font-medium text-sm leading-relaxed max-w-sm">
+                                        {results.ats_score >= 80 ? 'Excellent match for this role.' : results.ats_score >= 60 ? 'Good match. Some optimizations could boost your visibility.' : 'Minimal match. Significant updates are required.'}
                                     </p>
                                 </div>
                             </div>
 
                             {results.predicted_requirements && results.predicted_requirements.length > 0 && (
-                                <div className="space-y-6 p-8 bg-white/[0.02] border border-white/5 rounded-3xl backdrop-blur-md">
+                                <div className="space-y-4 p-6 bg-white/[0.01] border border-white/5 rounded-2xl backdrop-blur-md">
                                     <div className="flex items-center justify-between">
-                                        <h3 className="text-xs font-black text-blue-400 uppercase tracking-[0.3em] flex items-center gap-2">
-                                            <Target className="h-4 w-4" /> Predicted Requirements
+                                        <h3 className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] flex items-center gap-2">
+                                            <Target className="h-3.5 w-3.5" /> Predicted Requirements
                                         </h3>
-                                        <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Industry Standard</span>
+                                        <span className="text-[9px] font-bold text-zinc-600 uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded-full">Industry Standard</span>
                                     </div>
-                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                         {results.predicted_requirements.map((req: string, i: number) => (
-                                            <li key={i} className="text-[14px] text-zinc-300 flex items-center gap-3 font-medium bg-black/20 p-3 rounded-xl border border-white/[0.02]">
-                                                <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
-                                                {req}
+                                            <li key={i} className="text-[13px] text-zinc-300 flex items-center gap-3 font-medium bg-black/10 p-2.5 rounded-xl border border-white/[0.01] transition-all hover:bg-black/20">
+                                                <div className="h-1.5 w-1.5 rounded-full bg-blue-500/80 shadow-[0_0_8px_rgba(59,130,246,0.3)]" />
+                                                <span className="truncate">{req}</span>
                                             </li>
                                         ))}
                                     </ul>
                                 </div>
                             )}
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {results.keyword_analysis?.missing_keywords && results.keyword_analysis.missing_keywords.length > 0 && (
-                                    <div className="space-y-5 bg-red-500/[0.02] border border-red-500/10 p-6 rounded-3xl">
-                                        <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2 italic">
-                                            <AlertCircle className="h-4 w-4 text-red-500" /> Missing
+                                    <div className="space-y-4 bg-red-500/[0.01] border border-red-500/5 p-5 rounded-2xl">
+                                        <h3 className="text-[10px] font-black text-red-500 uppercase tracking-widest flex items-center gap-2 italic">
+                                            <AlertCircle className="h-3.5 w-3.5" /> Missing
                                         </h3>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-1.5">
                                             {results.keyword_analysis.missing_keywords.map((skill: string, i: number) => (
-                                                <span key={i} className="px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/20 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm hover:scale-105 transition-transform cursor-default">{skill}</span>
+                                                <span key={i} className="px-3 py-1 bg-red-500/5 text-red-500/80 border border-red-500/10 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm transition-all hover:bg-red-500/10 cursor-default">{skill}</span>
                                             ))}
                                         </div>
                                     </div>
                                 )}
 
                                 {results.keyword_analysis?.matched_keywords && results.keyword_analysis.matched_keywords.length > 0 && (
-                                    <div className="space-y-5 bg-emerald-500/[0.02] border border-emerald-500/10 p-6 rounded-3xl">
-                                        <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2 italic">
-                                            <CheckCircle className="h-4 w-4 text-emerald-500" /> Matched
+                                    <div className="space-y-4 bg-emerald-500/[0.01] border border-emerald-500/5 p-5 rounded-2xl">
+                                        <h3 className="text-[10px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-2 italic">
+                                            <CheckCircle className="h-3.5 w-3.5" /> Matched
                                         </h3>
-                                        <div className="flex flex-wrap gap-2">
+                                        <div className="flex flex-wrap gap-1.5">
                                             {results.keyword_analysis.matched_keywords.map((skill: string, i: number) => (
-                                                <span key={i} className="px-4 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm hover:scale-105 transition-transform cursor-default">{skill}</span>
+                                                <span key={i} className="px-3 py-1 bg-emerald-500/5 text-emerald-500/80 border border-emerald-500/10 rounded-full text-[10px] font-black uppercase tracking-wider shadow-sm transition-all hover:bg-emerald-500/10 cursor-default">{skill}</span>
                                             ))}
                                         </div>
                                     </div>
@@ -269,17 +269,16 @@ export default function OptimizePage() {
                             </div>
 
                             {results.suggestions && (
-                                <div className="space-y-6 pt-10 border-t border-white/5">
-                                    <h3 className="text-xl font-black italic tracking-tighter text-white uppercase">Expert Strategy</h3>
-                                    <div className="grid grid-cols-1 gap-4">
+                                <div className="space-y-5 pt-8 border-t border-white/5">
+                                    <h3 className="text-lg font-black italic tracking-tighter text-white uppercase sm:text-base">Expert Strategy</h3>
+                                    <div className="grid grid-cols-1 gap-3">
                                         {results.suggestions.map((rec: string, i: number) => (
-                                            <div key={i} className="flex items-start gap-5 bg-white/[0.03] p-6 rounded-3xl border border-white/5 hover:bg-white/[0.05] transition-all duration-300 group">
-                                                <div className="h-10 w-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                                                    <Sparkles className="h-5 w-5 text-blue-400" />
+                                            <div key={i} className="flex items-center gap-4 bg-white/[0.02] p-4 rounded-2xl border border-white/5 hover:bg-white/[0.04] transition-all duration-300 group">
+                                                <div className="h-8 w-8 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                                    <Sparkles className="h-4 w-4 text-blue-400" />
                                                 </div>
-                                                <div className="space-y-1">
-                                                    <p className="text-[15px] text-zinc-200 font-bold leading-relaxed">{rec}</p>
-                                                    <p className="text-[12px] text-zinc-500 font-medium">Strategic Improvement</p>
+                                                <div className="flex-1">
+                                                    <p className="text-[13px] text-zinc-200 font-bold leading-tight">{rec}</p>
                                                 </div>
                                             </div>
                                         ))}
