@@ -91,75 +91,78 @@ export default function OptimizePage() {
                 {/* Header */}
                 <header className="pb-4">
                     <div className="flex items-center gap-3">
-                        <Target className="h-8 w-8 text-white" />
-                        <h1 className="text-2xl font-bold tracking-tight text-white">
+                        <Target className="h-10 w-10 text-white" />
+                        <h1 className="text-4xl font-black italic tracking-tighter text-white uppercase">
                             CV Optimizer
                         </h1>
                     </div>
-                    <p className="text-zinc-400 text-sm font-medium mt-2">
-                        Paste a job description or use <b>Instant AI Analysis</b> by just entering the Job Title and Company.
+                    <p className="text-zinc-400 text-sm font-medium mt-3 max-w-2xl leading-relaxed">
+                        Paste a job description or use <span className="text-white font-bold italic">Instant AI Analysis</span> by just entering the Job Title and Company. Get professional insights in seconds.
                     </p>
                 </header>
 
                 <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
                     {/* Left Column - Form */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 shadow-sm">
-
-                        <div className="mb-6 space-y-2">
-                            <Label className="text-[13px] font-semibold text-zinc-300">Select Resume to Optimize *</Label>
+                    <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-2xl p-8 shadow-2xl">
+                        <div className="mb-8 space-y-3">
+                            <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Select Resume Context</Label>
                             {resumes.length === 0 ? (
-                                <div className="text-sm text-zinc-400 bg-white/5 p-3 rounded-lg border border-white/10">
+                                <div className="text-sm text-zinc-400 bg-white/5 p-4 rounded-xl border border-white/10">
                                     You don&apos;t have any resumes yet. Go to CV Builder to create one first.
                                 </div>
                             ) : (
                                 <Select value={selectedResumeUrl} onValueChange={setSelectedResumeUrl}>
-                                    <SelectTrigger className="w-full h-11 border-white/10 bg-black text-white font-medium text-sm focus:ring-white/20">
+                                    <SelectTrigger className="w-full h-12 border-white/10 bg-black text-white font-bold text-sm focus:ring-white/20 transition-all hover:border-white/20 rounded-xl">
                                         <SelectValue placeholder="Select a resume" />
                                     </SelectTrigger>
-                                    <SelectContent className="bg-[#1e1e1e] border-white/10 text-white">
+                                    <SelectContent className="bg-zinc-900 border-white/10 text-white rounded-xl">
                                         {resumes.map(r => (
-                                            <SelectItem key={r.id} value={r.id} className="hover:bg-white/5 focus:bg-white/5 focus:text-white cursor-pointer">{r.title || 'Untitled Resume'}</SelectItem>
+                                            <SelectItem key={r.id} value={r.id} className="hover:bg-white/5 focus:bg-white/5 focus:text-white cursor-pointer py-3">{r.title || 'Untitled Resume'}</SelectItem>
                                         ))}
                                     </SelectContent>
                                 </Select>
                             )}
                         </div>
 
-                        <div className="w-full h-px bg-white/10 my-8" />
+                        <div className="w-full h-px bg-white/5 my-10" />
 
-                        <h2 className="text-lg font-bold text-white mb-1">Job Details</h2>
-                        <p className="text-zinc-400 text-[13px] mb-6">Tell us about the role you&apos;re targeting.</p>
+                        <div className="mb-1">
+                            <h2 className="text-xl font-black italic tracking-tighter text-white uppercase">Job Details</h2>
+                            <p className="text-zinc-500 text-[13px] font-medium">Tell us about the role you&apos;re targeting.</p>
+                        </div>
 
-                        <div className="grid grid-cols-2 gap-6 mb-6">
-                            <div className="space-y-2">
-                                <Label className="text-[13px] font-semibold text-zinc-300">Job Title</Label>
+                        <div className="h-6" />
+
+                        <div className="grid grid-cols-2 gap-6 mb-8">
+                            <div className="space-y-3">
+                                <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Job Title</Label>
                                 <Input
                                     placeholder="e.g. Frontend Developer"
-                                    className="bg-black h-11 border-white/10 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
+                                    className="bg-black/40 h-12 border-white/5 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-700 rounded-xl transition-all hover:bg-black/60"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label className="text-[13px] font-semibold text-zinc-300">Company</Label>
+                            <div className="space-y-3">
+                                <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Company</Label>
                                 <Input
                                     placeholder="e.g. Google"
-                                    className="bg-black h-11 border-white/10 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
+                                    className="bg-black/40 h-12 border-white/5 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-700 rounded-xl transition-all hover:bg-black/60"
                                     value={company}
                                     onChange={(e) => setCompany(e.target.value)}
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-2 mb-8">
+                        <div className="space-y-3 mb-10">
                             <div className="flex items-center justify-between">
-                                <Label className="text-[13px] font-semibold text-zinc-300">Job Description</Label>
-                                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Optional for Instant Mode</span>
+                                <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Job Description</Label>
+                                <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest bg-white/5 px-2 py-0.5 rounded-full border border-white/5">Optional for Instant Mode</span>
                             </div>
                             <Textarea
                                 placeholder="Paste the full job description here..."
-                                className="min-h-[220px] bg-black resize-y border-white/10 p-4 leading-relaxed text-sm text-white focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
+                                className="min-h-[220px] bg-black/40 resize-y border-white/5 p-5 leading-relaxed text-sm text-zinc-200 focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-700 rounded-2xl transition-all hover:bg-black/60"
                                 value={desc}
                                 onChange={(e) => setDesc(e.target.value)}
                             />
@@ -179,39 +182,57 @@ export default function OptimizePage() {
 
                     {/* Right Column - Results Empty State or Results */}
                     {results ? (
-                        <div className="bg-[#1e1e1e] border border-white/10 rounded-2xl p-8 shadow-sm space-y-8 animate-in fade-in zoom-in-95 duration-500 text-white overflow-hidden relative">
+                        <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-10 shadow-3xl space-y-12 animate-in fade-in zoom-in-95 duration-700 text-white overflow-hidden relative">
+                            {/* Ambient Glow */}
+                            <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-[100px] pointer-events-none" />
+                            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
+
                             {results.is_predicted && (
-                                <div className="absolute top-0 right-0 bg-blue-500/20 text-blue-400 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-bl-xl border-l border-b border-blue-500/30 flex items-center gap-2">
-                                    <Sparkles className="h-3 w-3" />
+                                <div className="absolute top-0 right-0 bg-blue-500 text-[10px] font-black uppercase tracking-[0.2em] px-5 py-2 rounded-bl-2xl shadow-xl shadow-blue-500/20 flex items-center gap-2">
+                                    <Sparkles className="h-3.5 w-3.5" />
                                     AI Predicted Match
                                 </div>
                             )}
 
-                            <div className="flex items-center gap-6">
-                                <div className="relative h-24 w-24 flex items-center justify-center rounded-full border-4 border-white/5 shadow-inner">
-                                    <svg className="absolute inset-0 w-full h-full -rotate-90">
-                                        <circle cx="44" cy="44" r="44" fill="none" strokeWidth="8" stroke="rgba(255,255,255,0.05)" className="translate-x-1 translate-y-1" />
-                                        <circle cx="44" cy="44" r="44" fill="none" strokeWidth="8" stroke={results.ats_score >= 80 ? '#22c55e' : results.ats_score >= 60 ? '#eab308' : '#ef4444'} strokeDasharray="276" strokeDashoffset={276 - (276 * (results.ats_score || 0)) / 100} strokeLinecap="round" className="translate-x-1 translate-y-1 transition-all duration-1000" />
+                            <div className="flex flex-col md:flex-row items-center gap-10">
+                                <div className="relative h-32 w-32 flex items-center justify-center rounded-xl bg-black/40 border border-white/5 shadow-2xl group transition-all duration-500 hover:scale-105">
+                                    <svg className="absolute inset-0 w-full h-full -rotate-90 p-2">
+                                        <circle cx="56" cy="56" r="50" fill="none" strokeWidth="6" stroke="rgba(255,255,255,0.03)" className="translate-x-2 translate-y-2" />
+                                        <circle
+                                            cx="56"
+                                            cy="56"
+                                            r="50"
+                                            fill="none"
+                                            strokeWidth="6"
+                                            stroke={results.ats_score >= 80 ? '#22c55e' : results.ats_score >= 60 ? '#eab308' : '#ef4444'}
+                                            strokeDasharray="314"
+                                            strokeDashoffset={314 - (314 * (results.ats_score || 0)) / 100}
+                                            strokeLinecap="round"
+                                            className="translate-x-2 translate-y-2 transition-all duration-1000 ease-out drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+                                        />
                                     </svg>
-                                    <span className="text-3xl font-black text-white">{results.ats_score}<span className="text-lg text-zinc-500">%</span></span>
+                                    <span className="text-4xl font-black text-white z-10">{results.ats_score}<span className="text-xl text-zinc-500">%</span></span>
                                 </div>
-                                <div>
-                                    <h2 className="text-2xl font-bold text-white mb-1">Match Score</h2>
-                                    <p className="text-zinc-400 font-medium">
-                                        {results.ats_score >= 80 ? 'Excellent match! You are highly qualified.' : results.ats_score >= 60 ? 'Good match. Some optimizations needed.' : 'Low match. Significant updates required.'}
+                                <div className="text-center md:text-left">
+                                    <h2 className="text-3xl font-black italic tracking-tighter text-white uppercase mb-2">Match Analysis</h2>
+                                    <p className="text-zinc-400 font-medium text-lg leading-relaxed max-w-md">
+                                        {results.ats_score >= 80 ? 'Excellent match! You are highly qualified for this role.' : results.ats_score >= 60 ? 'Good match. A few targeted optimizations could boost your visibility.' : 'Low match. Significant updates are required to pass ATS filters.'}
                                     </p>
                                 </div>
                             </div>
 
                             {results.predicted_requirements && results.predicted_requirements.length > 0 && (
-                                <div className="space-y-4 p-4 bg-blue-500/[0.03] border border-blue-500/10 rounded-xl">
-                                    <h3 className="text-sm font-black text-blue-400 uppercase tracking-widest flex items-center gap-2">
-                                        <Target className="h-4 w-4" /> Predicted Key Requirements
-                                    </h3>
-                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                <div className="space-y-6 p-8 bg-white/[0.02] border border-white/5 rounded-3xl backdrop-blur-md">
+                                    <div className="flex items-center justify-between">
+                                        <h3 className="text-xs font-black text-blue-400 uppercase tracking-[0.3em] flex items-center gap-2">
+                                            <Target className="h-4 w-4" /> Predicted Requirements
+                                        </h3>
+                                        <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">Industry Standard</span>
+                                    </div>
+                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         {results.predicted_requirements.map((req: string, i: number) => (
-                                            <li key={i} className="text-[13px] text-zinc-400 flex items-center gap-2">
-                                                <div className="h-1.5 w-1.5 rounded-full bg-blue-500/40" />
+                                            <li key={i} className="text-[14px] text-zinc-300 flex items-center gap-3 font-medium bg-black/20 p-3 rounded-xl border border-white/[0.02]">
+                                                <div className="h-2 w-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]" />
                                                 {req}
                                             </li>
                                         ))}
@@ -219,50 +240,64 @@ export default function OptimizePage() {
                                 </div>
                             )}
 
-                            {results.keyword_analysis?.missing_keywords && results.keyword_analysis.missing_keywords.length > 0 && (
-                                <div className="space-y-4">
-                                    <h3 className="text-lg font-bold text-white flex items-center gap-2"><AlertCircle className="h-5 w-5 text-red-500" /> Missing Keywords</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {results.keyword_analysis.missing_keywords.map((skill: string, i: number) => (
-                                            <span key={i} className="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-sm font-bold">{skill}</span>
-                                        ))}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                {results.keyword_analysis?.missing_keywords && results.keyword_analysis.missing_keywords.length > 0 && (
+                                    <div className="space-y-5 bg-red-500/[0.02] border border-red-500/10 p-6 rounded-3xl">
+                                        <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2 italic">
+                                            <AlertCircle className="h-4 w-4 text-red-500" /> Missing
+                                        </h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            {results.keyword_analysis.missing_keywords.map((skill: string, i: number) => (
+                                                <span key={i} className="px-4 py-2 bg-red-500/10 text-red-500 border border-red-500/20 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm hover:scale-105 transition-transform cursor-default">{skill}</span>
+                                            ))}
+                                        </div>
                                     </div>
-                                    <p className="text-sm text-zinc-500 italic">Consider strategically adding these to your experience if applicable.</p>
-                                </div>
-                            )}
+                                )}
 
-                            {results.keyword_analysis?.matched_keywords && results.keyword_analysis.matched_keywords.length > 0 && (
-                                <div className="space-y-4">
-                                    <h3 className="text-lg font-bold text-white flex items-center gap-2"><CheckCircle className="h-5 w-5 text-emerald-500" /> Matched Keywords</h3>
-                                    <div className="flex flex-wrap gap-2">
-                                        {results.keyword_analysis.matched_keywords.map((skill: string, i: number) => (
-                                            <span key={i} className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg text-sm font-bold">{skill}</span>
-                                        ))}
+                                {results.keyword_analysis?.matched_keywords && results.keyword_analysis.matched_keywords.length > 0 && (
+                                    <div className="space-y-5 bg-emerald-500/[0.02] border border-emerald-500/10 p-6 rounded-3xl">
+                                        <h3 className="text-sm font-black text-white uppercase tracking-widest flex items-center gap-2 italic">
+                                            <CheckCircle className="h-4 w-4 text-emerald-500" /> Matched
+                                        </h3>
+                                        <div className="flex flex-wrap gap-2">
+                                            {results.keyword_analysis.matched_keywords.map((skill: string, i: number) => (
+                                                <span key={i} className="px-4 py-2 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-full text-[11px] font-black uppercase tracking-wider shadow-sm hover:scale-105 transition-transform cursor-default">{skill}</span>
+                                            ))}
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
 
                             {results.suggestions && (
-                                <div className="space-y-4 pt-4 border-t border-white/10">
-                                    <h3 className="text-lg font-bold text-white">Expert Recommendations</h3>
-                                    <ul className="space-y-3">
+                                <div className="space-y-6 pt-10 border-t border-white/5">
+                                    <h3 className="text-xl font-black italic tracking-tighter text-white uppercase">Expert Strategy</h3>
+                                    <div className="grid grid-cols-1 gap-4">
                                         {results.suggestions.map((rec: string, i: number) => (
-                                            <li key={i} className="flex items-start gap-3 bg-white/5 p-4 rounded-xl border border-white/5">
-                                                <Target className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
-                                                <span className="text-sm text-zinc-300 font-medium leading-relaxed">{rec}</span>
-                                            </li>
+                                            <div key={i} className="flex items-start gap-5 bg-white/[0.03] p-6 rounded-3xl border border-white/5 hover:bg-white/[0.05] transition-all duration-300 group">
+                                                <div className="h-10 w-10 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                                                    <Sparkles className="h-5 w-5 text-blue-400" />
+                                                </div>
+                                                <div className="space-y-1">
+                                                    <p className="text-[15px] text-zinc-200 font-bold leading-relaxed">{rec}</p>
+                                                    <p className="text-[12px] text-zinc-500 font-medium">Strategic Improvement</p>
+                                                </div>
+                                            </div>
                                         ))}
-                                    </ul>
+                                    </div>
                                 </div>
                             )}
                         </div>
                     ) : (
-                        <div className="bg-black border border-white/10 rounded-2xl min-h-[550px] flex flex-col items-center justify-center p-8 text-center shadow-inner">
-                            <div className="h-20 w-20 flex items-center justify-center rounded-full bg-white/5 border border-white/10 shadow-sm mb-6">
-                                <Target className="h-8 w-8 text-zinc-500" />
+                        <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-3xl min-h-[550px] flex flex-col items-center justify-center p-12 text-center shadow-2xl relative overflow-hidden group">
+                            {/* Animated circle in background */}
+                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white/[0.02] rounded-full blur-3xl group-hover:bg-white/[0.05] transition-all duration-700" />
+
+                            <div className="h-24 w-24 flex items-center justify-center rounded-3xl bg-white/5 border border-white/10 shadow-xl mb-8 group-hover:scale-110 transition-transform duration-500">
+                                <Target className="h-10 w-10 text-zinc-400" />
                             </div>
-                            <p className="text-zinc-500 font-medium max-w-[250px]">
-                                {isAnalyzing ? 'Analyzing your CV against the job description...' : 'Enter a job description and select a resume to see your match score'}
+                            <h3 className="text-xl font-black italic tracking-tighter text-white uppercase mb-3">Ready for Analysis</h3>
+                            <p className="text-zinc-500 font-medium max-w-[280px] leading-relaxed">
+                                {isAnalyzing ? 'Our AI is dissecting your CV against the role requirements...' : 'Paste a job description and select a resume to unlock your professional match score and strategic insights.'}
                             </p>
                         </div>
                     )}

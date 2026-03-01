@@ -225,18 +225,18 @@ export default function LettersPage() {
         <div className="flex flex-col min-h-screen bg-black w-full font-sans text-zinc-100">
             <div className="max-w-6xl mx-auto w-full p-8 space-y-8">
                 {/* Header */}
-                <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-2 gap-4">
+                <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight text-white">
-                            My Motivation Letters
+                        <h1 className="text-4xl font-black italic tracking-tighter text-white uppercase mb-2">
+                            Motivation Letters
                         </h1>
-                        <p className="text-zinc-400 text-sm font-medium mt-1">
-                            Generate and manage AI-crafted, targeted cover letters in elegant PDFs.
+                        <p className="text-zinc-400 text-sm font-medium leading-relaxed max-w-2xl">
+                            Generate and manage <span className="text-white font-bold italic">AI-crafted</span>, targeted cover letters with elegant PDF exports.
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="bg-white/5 border text-center border-white/10 px-4 py-2 rounded-lg text-sm font-semibold text-zinc-300 h-11 flex items-center shadow-sm">
-                            <span className="text-white mr-2 text-base">{lettersHistory.length}</span> Letters Archived
+                        <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 px-6 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-zinc-400 h-12 flex items-center shadow-xl">
+                            <span className="text-white mr-2 text-base">{lettersHistory.length}</span> Archived
                         </div>
                     </div>
                 </header>
@@ -244,14 +244,16 @@ export default function LettersPage() {
                 <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
 
                     {/* Left Column - Generation Form */}
-                    <div className="bg-white/5 border border-white/10 rounded-2xl p-8 shadow-sm">
-                        <h2 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                            <Sparkles className="h-5 w-5 text-purple-400" />
+                    <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                        <div className="absolute -top-12 -right-12 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
+
+                        <h2 className="text-xl font-black italic tracking-tighter text-white mb-8 flex items-center gap-3 uppercase">
+                            <Sparkles className="h-6 w-6 text-purple-400" />
                             Target a New Role
                         </h2>
 
-                        <div className="mb-6 space-y-2">
-                            <Label className="text-[13px] font-semibold text-zinc-300">Select Resume Context *</Label>
+                        <div className="mb-8 space-y-3">
+                            <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Select Resume Context</Label>
                             {resumes.length === 0 ? (
                                 <div className="text-sm text-zinc-400 bg-white/5 p-3 rounded-lg border border-white/10">
                                     You don&apos;t have any resumes yet. Go to <Link href="/dashboard/builder" className="text-purple-400 hover:text-purple-300 underline">Builder</Link> first.
@@ -270,32 +272,32 @@ export default function LettersPage() {
                             )}
                         </div>
 
-                        <div className="grid grid-cols-2 gap-6 mb-6">
-                            <div className="space-y-2">
-                                <Label className="text-[13px] font-semibold text-zinc-300">Target Role *</Label>
+                        <div className="grid grid-cols-2 gap-4 mb-8">
+                            <div className="space-y-3">
+                                <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Target Role</Label>
                                 <Input
                                     placeholder="e.g. Marketing Manager"
-                                    className="bg-black h-11 border-white/10 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
+                                    className="bg-black/40 h-12 border-white/5 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-700 rounded-xl transition-all hover:bg-black/60"
                                     value={jobTitle}
                                     onChange={(e) => setJobTitle(e.target.value)}
                                 />
                             </div>
-                            <div className="space-y-2">
-                                <Label className="text-[13px] font-semibold text-zinc-300">Company</Label>
+                            <div className="space-y-3">
+                                <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Company</Label>
                                 <Input
                                     placeholder="e.g. Apple"
-                                    className="bg-black h-11 border-white/10 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
+                                    className="bg-black/40 h-12 border-white/5 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-700 rounded-xl transition-all hover:bg-black/60"
                                     value={companyName}
                                     onChange={(e) => setCompanyName(e.target.value)}
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-2 mb-8">
-                            <Label className="text-[13px] font-semibold text-zinc-300">Target Job Description *</Label>
+                        <div className="space-y-3 mb-10">
+                            <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Target Job Description</Label>
                             <Textarea
                                 placeholder="Paste the exact job description here..."
-                                className="min-h-[160px] bg-black resize-y border-white/10 p-4 leading-relaxed text-sm text-white focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
+                                className="min-h-[180px] bg-black/40 resize-y border-white/5 p-5 leading-relaxed text-sm text-zinc-300 focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-700 rounded-2xl transition-all hover:bg-black/60"
                                 value={jobDescription}
                                 onChange={(e) => setJobDescription(e.target.value)}
                             />
@@ -317,54 +319,61 @@ export default function LettersPage() {
 
                         {/* Currently Selected/Generated Result */}
                         {previewLetter && (
-                            <div className="bg-[#1e1e1e] border border-white/10 rounded-2xl p-8 shadow-sm text-white animate-in slide-in-from-right-4 duration-500">
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 border-b border-white/10 pb-5 gap-4">
-                                    <div>
-                                        <h3 className="text-lg font-bold flex items-center gap-2 mb-1">
-                                            <FileText className="h-5 w-5 text-purple-400" />
-                                            Letter Template Builder
+                            <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-10 shadow-3xl text-white animate-in slide-in-from-right-8 duration-700 relative overflow-hidden group">
+                                <div className="absolute -top-32 -left-32 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
+
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 border-b border-white/5 pb-8 gap-6">
+                                    <div className="relative z-10">
+                                        <h3 className="text-2xl font-black italic tracking-tighter uppercase flex items-center gap-3 mb-2">
+                                            <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
+                                                <Sparkles className="h-6 w-6 text-purple-400" />
+                                            </div>
+                                            Template Editor
                                         </h3>
-                                        <p className="text-[13px] text-zinc-400 font-medium">For: {previewLetter.job_title} at <strong className="text-white">{previewLetter.company_name}</strong></p>
+                                        <div className="flex items-center gap-2 text-zinc-400">
+                                            <span className="text-[11px] font-black uppercase tracking-widest text-zinc-500">For</span>
+                                            <p className="text-[13px] font-bold text-zinc-300">{previewLetter.job_title} @ <span className="text-white italic">{previewLetter.company_name}</span></p>
+                                        </div>
                                     </div>
-                                    <div className="flex gap-3">
+                                    <div className="flex gap-3 relative z-10">
                                         <Button
-                                            size="sm"
-                                            className={`${isSavingChanges ? 'bg-slate-700' : 'bg-emerald-600 hover:bg-emerald-700'} text-white shadow-lg`}
+                                            size="lg"
+                                            className={`${isSavingChanges ? 'bg-zinc-800' : 'bg-emerald-600 hover:bg-emerald-500'} text-white shadow-xl shadow-emerald-500/10 transition-all font-black uppercase tracking-widest text-[11px] h-12 px-6 rounded-xl`}
                                             onClick={handleSaveChanges}
                                             disabled={isSavingChanges}
                                         >
                                             {isSavingChanges ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-                                            {isSavingChanges ? 'Saving...' : 'Save Edits'}
+                                            {isSavingChanges ? 'Saving' : 'Save Edits'}
                                         </Button>
                                     </div>
                                 </div>
 
                                 {/* Builder form: Slides */}
-                                <div className="space-y-6 max-h-[550px] overflow-y-auto pr-2 custom-scrollbar">
+                                <div className="space-y-8 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar relative z-10">
                                     {slides.map((slide, idx) => (
-                                        <div key={idx} className="bg-black/50 border border-white/10 rounded-xl p-5 shadow-inner">
-                                            <div className="flex items-center gap-3 mb-4 border-b border-white/10 pb-3">
-                                                <div className="bg-white/10 text-white font-bold h-8 w-8 rounded-full flex items-center justify-center text-sm shrink-0">
+                                        <div key={idx} className="bg-black/30 border border-white/5 rounded-3xl p-8 shadow-2xl transition-all hover:bg-black/50 hover:border-white/10">
+                                            <div className="flex items-center gap-5 mb-8 border-b border-white/5 pb-6">
+                                                <div className="bg-white/5 text-white font-black h-12 w-12 rounded-2xl flex items-center justify-center text-lg shrink-0 border border-white/10 shadow-xl italic tracking-tighter">
                                                     {idx + 1}
                                                 </div>
                                                 <div className="w-full flex-1 space-y-2">
                                                     <Input
                                                         value={slide.title}
                                                         onChange={(e) => handleSlideChange(idx, 'title', e.target.value)}
-                                                        className="h-8 bg-transparent border-0 text-white font-bold px-0 focus-visible:ring-0 text-base"
+                                                        className="h-9 bg-transparent border-0 text-white font-black italic tracking-tighter uppercase px-0 focus-visible:ring-0 text-xl"
                                                         placeholder="Slide Title"
                                                     />
                                                     <Input
                                                         value={slide.subtitle}
                                                         onChange={(e) => handleSlideChange(idx, 'subtitle', e.target.value)}
-                                                        className="h-6 bg-transparent border-0 text-zinc-400 font-medium px-0 focus-visible:ring-0 text-xs"
+                                                        className="h-6 bg-transparent border-0 text-zinc-500 font-black uppercase tracking-[0.2em] px-0 focus-visible:ring-0 text-[10px]"
                                                         placeholder="Slide Subtitle"
                                                     />
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
                                                 <Textarea
-                                                    className="min-h-[140px] bg-black border-white/10 text-zinc-300 text-[13.5px] leading-relaxed p-4 rounded-lg focus-visible:ring-1 focus-visible:ring-white/20"
+                                                    className="min-h-[160px] bg-black/40 border-white/5 text-zinc-300 text-[14.5px] leading-relaxed p-6 rounded-2xl focus-visible:ring-1 focus-visible:ring-white/20 transition-all hover:bg-black/60 shadow-inner"
                                                     value={slide.content}
                                                     onChange={(e) => handleSlideChange(idx, 'content', e.target.value)}
                                                     placeholder="Slide content (use bullets or paragraphs)"
@@ -374,43 +383,45 @@ export default function LettersPage() {
                                     ))}
                                 </div>
 
-                                <div className="mt-8 pt-6 border-t border-white/10 w-full flex justify-end gap-3">
+                                <div className="mt-10 pt-8 border-t border-white/5 w-full flex justify-end gap-3 relative z-10">
                                     <CoverLetterDownloadButton
                                         letterData={previewLetter}
                                         profileData={getProfileDetails(previewLetter)}
                                         variant="default"
-                                        className="bg-purple-600 hover:bg-purple-700 w-full sm:w-auto h-11 px-8 shadow-xl shadow-purple-600/20"
+                                        className="bg-purple-600 hover:bg-purple-500 w-full sm:w-auto h-14 px-10 shadow-2xl shadow-purple-600/20 text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-2xl transition-all active:scale-95"
                                     />
                                 </div>
                             </div>
                         )}
 
                         {/* History */}
-                        <div className="bg-white/5 border border-white/10 rounded-2xl p-8 shadow-sm">
-                            <h2 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                                <Briefcase className="h-5 w-5 text-zinc-400" />
-                                Your Letter Archive
+                        <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-3xl p-10 shadow-2xl relative overflow-hidden">
+                            <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-zinc-500/5 rounded-full blur-3xl pointer-events-none" />
+
+                            <h2 className="text-xl font-black italic tracking-tighter text-white uppercase mb-8 flex items-center gap-3">
+                                <Briefcase className="h-6 w-6 text-zinc-500" />
+                                Archive
                             </h2>
 
                             {isLoadingHistory ? (
-                                <div className="py-12 flex justify-center"><Loader2 className="h-6 w-6 animate-spin text-zinc-600" /></div>
+                                <div className="py-20 flex justify-center"><Loader2 className="h-8 w-8 animate-spin text-zinc-700" /></div>
                             ) : lettersHistory.length === 0 ? (
-                                <div className="text-center py-10 border border-dashed border-white/10 rounded-xl bg-white/5">
-                                    <FileText className="h-8 w-8 text-zinc-600 mx-auto mb-3" />
-                                    <p className="text-sm font-medium text-zinc-400">No cover letters in your archive.</p>
+                                <div className="text-center py-16 border-2 border-dashed border-white/5 rounded-3xl bg-black/20 group hover:border-white/10 transition-all">
+                                    <FileText className="h-12 w-12 text-zinc-700 mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                                    <p className="text-sm font-black uppercase tracking-widest text-zinc-500">No letters archived.</p>
                                 </div>
                             ) : (
-                                <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                                <div className="space-y-6 max-h-[700px] overflow-y-auto pr-4 custom-scrollbar relative z-10">
                                     {lettersHistory.map((letter) => (
-                                        <div key={letter.id} className={`border rounded-xl p-5 transition-all group ${previewLetter?.id === letter.id ? 'border-white/30 bg-white/10 shadow-sm' : 'border-white/10 hover:border-white/20'}`}>
-                                            <div className="flex justify-between items-start mb-2">
-                                                <h4 className="font-bold text-white leading-tight flex-1">{letter.job_title}</h4>
-                                                <span className="text-xs font-semibold text-zinc-300 whitespace-nowrap bg-white/10 px-2.5 py-1 rounded-md shrink-0 ml-4">
-                                                    {new Date(letter.created_at).toLocaleDateString()}
+                                        <div key={letter.id} className={`border rounded-2xl p-6 transition-all group relative overflow-hidden ${previewLetter?.id === letter.id ? 'border-purple-500/30 bg-purple-500/5 shadow-2xl' : 'border-white/5 bg-black/20 hover:border-white/10 hover:bg-black/40 shadow-sm'}`}>
+                                            <div className="flex justify-between items-start mb-4">
+                                                <h4 className="font-black italic tracking-tighter text-white text-lg leading-tight flex-1 uppercase">{letter.job_title}</h4>
+                                                <span className="text-[10px] font-black text-zinc-500 whitespace-nowrap bg-white/5 border border-white/5 px-3 py-1.5 rounded-full shrink-0 ml-4 uppercase tracking-widest">
+                                                    {new Date(letter.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                                                 </span>
                                             </div>
-                                            <p className="text-sm font-semibold text-zinc-400 flex items-center gap-1.5 mb-4">
-                                                <Building2 className="h-3.5 w-3.5" />
+                                            <p className="text-xs font-black text-zinc-500 flex items-center gap-2 mb-6 uppercase tracking-widest">
+                                                <Building2 className="h-3.5 w-3.5 text-zinc-600" />
                                                 {letter.company_name}
                                             </p>
 
@@ -419,23 +430,23 @@ export default function LettersPage() {
                                                     variant="secondary"
                                                     size="sm"
                                                     onClick={() => handleSelectPreview(letter)}
-                                                    className={`flex-1 h-9 font-semibold text-xs ${previewLetter?.id === letter.id ? 'bg-white text-black hover:bg-zinc-200' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                                                    className={`flex-1 h-10 font-black uppercase tracking-[0.2em] text-[10px] rounded-xl transition-all active:scale-95 ${previewLetter?.id === letter.id ? 'bg-white text-black hover:bg-zinc-200' : 'bg-white/5 text-white border border-white/5 hover:bg-white/10'}`}
                                                 >
-                                                    View Preview
+                                                    Edit Template
                                                 </Button>
 
                                                 <CoverLetterDownloadButton
                                                     letterData={letter}
                                                     profileData={getProfileDetails(letter)}
                                                     variant="outline"
-                                                    className="flex-1 h-9 font-semibold text-[11px] border-white/10 bg-black text-white hover:bg-white/10 hover:text-white"
+                                                    className="flex-1 h-10 font-black uppercase tracking-[0.2em] text-[10px] border-white/5 bg-black/40 text-white hover:bg-white/5 rounded-xl transition-all active:scale-95"
                                                 />
                                                 <Button
                                                     variant="ghost"
                                                     size="sm"
                                                     onClick={(e) => handleDeleteLetter(letter.id, e)}
                                                     disabled={deletingLetterIds.has(letter.id)}
-                                                    className="h-9 w-9 p-0 text-zinc-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg flex-shrink-0 border border-white/10"
+                                                    className="h-10 w-10 p-0 text-zinc-600 hover:text-red-500 hover:bg-red-500/10 rounded-xl flex-shrink-0 border border-white/5 transition-all active:scale-95"
                                                 >
                                                     {deletingLetterIds.has(letter.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
                                                 </Button>
