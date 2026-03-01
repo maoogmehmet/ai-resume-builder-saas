@@ -463,11 +463,12 @@ export default function JobsPage() {
                                         const saved = isJobSaved(job.jobUrl)
                                         const saving = savingJobUrls.has(job.jobUrl)
                                         const selected = isJobSelected(job)
+                                        const jobLink = job.jobUrl?.startsWith('http') ? job.jobUrl : `https://www.linkedin.com${job.jobUrl}`
 
                                         return (
-                                            <div key={i}
+                                            <div key={job.jobUrl || i}
                                                 onClick={() => toggleJobSelection(job)}
-                                                className={`flex flex-col border rounded-[2.5rem] bg-[#0a0a0a] transition-all cursor-pointer group relative ${selected ? 'border-zinc-700 ring-1 ring-white/5 shadow-2xl shadow-white/5' : 'border-white/5 hover:border-white/10'}`}>
+                                                className={`flex flex-col border rounded-[2.5rem] bg-[#0a0a0a] transition-all cursor-pointer group relative overflow-hidden ${selected ? 'border-zinc-700 ring-1 ring-white/5 shadow-2xl shadow-white/5' : 'border-white/5 hover:border-white/10'}`}>
 
                                                 <div className="p-8 pb-4">
                                                     <div className="flex justify-between items-start mb-6">
@@ -519,7 +520,7 @@ export default function JobsPage() {
                                                         className="h-12 w-12 p-0 text-zinc-500 hover:text-white hover:bg-white/5 rounded-[1.25rem] transition-all"
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
-                                                        <a href={job.jobUrl?.startsWith('http') ? job.jobUrl : `https://www.linkedin.com${job.jobUrl}`} target="_blank" rel="noopener noreferrer">
+                                                        <a href={jobLink} target="_blank" rel="noopener noreferrer">
                                                             <ExternalLink className="h-4 w-4" />
                                                         </a>
                                                     </Button>

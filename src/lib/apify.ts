@@ -49,7 +49,7 @@ export async function scrapeLinkedInProfile(profileUrl: string) {
 // ─────────────────────────────────────────────────────────────────
 // LinkedIn Jobs Search
 // ─────────────────────────────────────────────────────────────────
-export async function searchLinkedInJobs(keyword: string, location: string = '', limit: number = 10): Promise<any[]> {
+export async function searchLinkedInJobs(keyword: string, location: string = ''): Promise<any[]> {
     console.log(`[Apify] Searching jobs: "${keyword}" in "${location}"`);
 
     const searchUrl = new URL('https://www.linkedin.com/jobs/search/');
@@ -61,7 +61,7 @@ export async function searchLinkedInJobs(keyword: string, location: string = '',
     const input = {
         urls: [searchUrl.toString()],
         publishedAt: "anyTime",
-        count: Math.max(100, limit), // Actor requires min 100
+        count: 100, // Actor requires min 100, returns all available
         scrapeCompany: false         // Crucial to avoid extreme timeouts
     };
 
@@ -69,18 +69,24 @@ export async function searchLinkedInJobs(keyword: string, location: string = '',
 
     console.log(`[Apify] Raw jobs count: ${items.length}`);
 
-    // Clean and normalize
-    return items.slice(0, limit).map((item: any) => ({
-        title: item.title || item.jobTitle || item.position || 'Unknown Position',
-        companyName: item.companyName || item.company || item.employer || 'Unknown Company',
-        location: item.location || item.jobLocation || '',
-        jobUrl: item.jobUrl || item.url || item.applyUrl || '#',
-        salary: item.salary || item.salaryRange || null,
-        postedAt: item.postedAt || item.datePosted || item.publishedAt || null,
-        type: item.employmentType || item.jobType || null,
-        companyLogo: item.companyLogo || item.logo || null,
-        description: item.description ? item.description.slice(0, 200) + '...' : null,
-    }));
+    return items.map((item: any) => {
+        let rawUrl = item.jobUrl || item.url || item.applyUrl || '#';
+        // Ensure absolute URL
+        if (rawUrl !== '#' && !rawUrl.startsWith('http')) {
+            rawUrl = `https://www.linkedin.com${rawUrl.startsWith('/') ? '' : '/'}${rawUrl}`;
+        }
+        return {
+            title: item.title || item.jobTitle || item.position || 'Unknown Position',
+            companyName: item.companyName || item.company || item.employer || 'Unknown Company',
+            location: item.location || item.jobLocation || '',
+            jobUrl: rawUrl,
+            salary: item.salary || item.salaryRange || null,
+            postedAt: item.postedAt || item.datePosted || item.publishedAt || null,
+            type: item.employmentType || item.jobType || null,
+            companyLogo: item.companyLogo || item.logo || null,
+            description: item.description ? item.description.slice(0, 200) + '...' : null,
+        };
+    });
 }
 
 // ─────────────────────────────────────────────────────────────────

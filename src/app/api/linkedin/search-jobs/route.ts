@@ -13,13 +13,13 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { query, location, limit = 10 } = await req.json();
+        const { query, location } = await req.json();
 
         if (!query) {
             return NextResponse.json({ error: 'Search query is required' }, { status: 400 });
         }
 
-        const jobs = await searchLinkedInJobs(query, location || '', limit);
+        const jobs = await searchLinkedInJobs(query, location || '');
 
         return NextResponse.json({ success: true, jobs });
 
