@@ -195,23 +195,42 @@ export default function OptimizePage() {
                             )}
 
                             <div className="flex flex-col md:flex-row items-center gap-8">
-                                <div className="relative h-24 w-24 flex items-center justify-center rounded-2xl bg-black/40 border border-white/5 shadow-2xl group transition-all duration-500 hover:scale-105 shrink-0">
-                                    <svg className="absolute inset-0 w-full h-full -rotate-90 p-1.5">
-                                        <circle cx="44" cy="44" r="40" fill="none" strokeWidth="4" stroke="rgba(255,255,255,0.02)" className="translate-x-1 translate-y-1" />
+                                <div className="relative h-24 w-24 flex items-center justify-center rounded-[2rem] bg-black/60 border border-white/5 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group transition-all duration-500 hover:scale-105 shrink-0 overflow-hidden">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
+                                    <svg className="absolute inset-0 w-full h-full -rotate-90 p-2">
+                                        <defs>
+                                            <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                <stop offset="0%" stopColor={results.ats_score >= 80 ? '#10b981' : results.ats_score >= 60 ? '#f59e0b' : '#ef4444'} />
+                                                <stop offset="100%" stopColor={results.ats_score >= 80 ? '#34d399' : results.ats_score >= 60 ? '#fbbf24' : '#f87171'} />
+                                            </linearGradient>
+                                            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                            </filter>
+                                        </defs>
+                                        {/* Background Track */}
+                                        <circle cx="44" cy="44" r="36" fill="none" strokeWidth="7" stroke="rgba(255,255,255,0.03)" className="translate-x-1 translate-y-1" />
+                                        {/* Active Gauge */}
                                         <circle
                                             cx="44"
                                             cy="44"
-                                            r="40"
+                                            r="36"
                                             fill="none"
-                                            strokeWidth="4"
-                                            stroke={results.ats_score >= 80 ? '#22c55e' : results.ats_score >= 60 ? '#eab308' : '#ef4444'}
-                                            strokeDasharray="251"
-                                            strokeDashoffset={251 - (251 * (results.ats_score || 0)) / 100}
+                                            strokeWidth="7"
+                                            stroke="url(#scoreGradient)"
+                                            strokeDasharray="226.2"
+                                            strokeDashoffset={226.2 - (226.2 * (results.ats_score || 0)) / 100}
                                             strokeLinecap="round"
-                                            className="translate-x-1 translate-y-1 transition-all duration-1000 ease-out drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]"
+                                            filter="url(#glow)"
+                                            className="translate-x-1 translate-y-1 transition-all duration-1000 ease-out"
                                         />
                                     </svg>
-                                    <span className="text-3xl font-black text-white z-10 tracking-tighter">{results.ats_score}<span className="text-sm text-zinc-500 font-bold ml-0.5">%</span></span>
+                                    <div className="relative z-10 flex flex-col items-center justify-center">
+                                        <span className="text-3xl font-black text-white tracking-tighter drop-shadow-2xl">
+                                            {results.ats_score}
+                                        </span>
+                                        <span className="text-[9px] font-black text-zinc-500 uppercase tracking-[0.2em] -mt-1 opacity-60">Percent</span>
+                                    </div>
                                 </div>
                                 <div className="text-center md:text-left">
                                     <h2 className="text-2xl font-black italic tracking-tighter text-white uppercase mb-1">Match Analysis</h2>
