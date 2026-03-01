@@ -55,7 +55,7 @@ export default async function DashboardPage({
             <div className="max-w-7xl mx-auto w-full p-8 pt-16 space-y-12">
                 {/* Header */}
                 <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 gap-4">
-                    <h1 className="text-3xl font-bold tracking-tight text-white focus:outline-none">
+                    <h1 className="text-4xl font-black tracking-tighter text-white italic focus:outline-none">
                         Overview
                     </h1>
                 </header>

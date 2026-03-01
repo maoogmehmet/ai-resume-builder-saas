@@ -110,9 +110,8 @@ export function ResumeMagicCard({
                     </div>
                 </div>
 
-                {/* Info Area */}
                 <div className="p-6 pt-5">
-                    <h3 className="text-lg font-bold text-white tracking-tight truncate mb-1">
+                    <h3 className="text-xl font-black text-white tracking-tighter truncate mb-1 italic">
                         {resume.title}
                     </h3>
                     <div className="flex items-center justify-between">
