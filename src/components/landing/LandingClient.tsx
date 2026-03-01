@@ -5,14 +5,14 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Sparkles, Zap, Target, ArrowRight, ChevronRight } from 'lucide-react'
+import { Sparkles, Zap, Target, ArrowRight, ChevronRight, Link2 } from 'lucide-react'
 import { ShaderAnimation } from '@/components/ui/shader-animation'
 import { Announcement } from '@/components/ui/announcement'
 import { HeaderPremium } from './HeaderPremium'
-import { LogoCloudPremium } from './LogoCloudPremium'
 import { TestimonialsSection } from './TestimonialsSection'
 import { PricingPremium } from './PricingPremium'
-import { FooterPremium } from './FooterPremium'
+import { LogoCloud } from '@/components/ui/logo-cloud-3'
+import { Footer } from '@/components/ui/footer-section'
 
 export function LandingClient({ user }: { user: any }) {
     const testimonials = [
@@ -51,13 +51,13 @@ export function LandingClient({ user }: { user: any }) {
     ]
 
     const logos = [
-        { alt: "Google", label: "Google", src: "" },
-        { alt: "Microsoft", label: "Microsoft", src: "" },
-        { alt: "Amazon", label: "Amazon", src: "" },
-        { alt: "Netflix", label: "Netflix", src: "" },
-        { alt: "Meta", label: "Meta", src: "" },
-        { alt: "Stripe", label: "Stripe", src: "" },
-        { alt: "Apple", label: "Apple", src: "" },
+        { alt: "Google", src: "", width: 100, height: 20 },
+        { alt: "Microsoft", src: "", width: 100, height: 20 },
+        { alt: "Amazon", src: "", width: 100, height: 20 },
+        { alt: "Netflix", src: "", width: 100, height: 20 },
+        { alt: "Meta", src: "", width: 100, height: 20 },
+        { alt: "Stripe", src: "", width: 100, height: 20 },
+        { alt: "Apple", src: "", width: 100, height: 20 },
     ]
 
     const pricingPlans = [
@@ -97,7 +97,6 @@ export function LandingClient({ user }: { user: any }) {
             ]
         }
     ];
-
 
     return (
         <div className="flex flex-col min-h-screen bg-black font-sans selection:bg-white selection:text-black overflow-hidden text-zinc-400">
@@ -148,11 +147,15 @@ export function LandingClient({ user }: { user: any }) {
                 </section>
 
                 {/* 2. LOGO CLOUD */}
-                <LogoCloudPremium logos={logos} />
+                <div className="py-20 border-y border-white/5 bg-white/[0.01]">
+                    <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
+                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Trusted by candidates from world-class companies</p>
+                    </div>
+                    <LogoCloud logos={logos} />
+                </div>
 
                 {/* 3. HYPER-PREMIUM BENTO FEATURES SECTION */}
                 <section id="features" className="py-32 bg-black overflow-hidden relative">
-                    {/* Background Ambient Glows */}
                     <div className="absolute top-1/4 -left-1/4 w-[50%] h-[50%] bg-emerald-500/10 blur-[120px] rounded-full pointer-events-none" />
                     <div className="absolute bottom-1/4 -right-1/4 w-[50%] h-[50%] bg-purple-500/10 blur-[120px] rounded-full pointer-events-none" />
 
@@ -166,15 +169,11 @@ export function LandingClient({ user }: { user: any }) {
                             </p>
                         </div>
 
-                        {/* BENTO GRID */}
                         <div className="grid grid-cols-1 md:grid-cols-6 gap-4 auto-rows-[300px] sm:auto-rows-[350px]">
-
-                            {/* CARD 1: AI SYNC (Large) */}
                             <div className="md:col-span-4 md:row-span-2 group relative rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden shadow-2xl transition-all hover:border-white/10">
                                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                                 <div className="p-10 flex flex-col h-full">
                                     <div className="flex-1 flex items-center justify-center relative">
-                                        {/* Mock LinkedIn Sync Animation */}
                                         <div className="w-full max-w-md bg-black/40 rounded-3xl border border-white/5 p-6 backdrop-blur-xl relative overflow-hidden group-hover:scale-[1.02] transition-transform duration-700">
                                             <div className="flex items-center gap-4 mb-6">
                                                 <div className="h-12 w-12 rounded-xl bg-blue-600/20 flex items-center justify-center border border-blue-500/30">
@@ -198,7 +197,6 @@ export function LandingClient({ user }: { user: any }) {
                                                     </motion.div>
                                                 ))}
                                             </div>
-                                            {/* AI Nodes */}
                                             <div className="absolute -right-4 -bottom-4 h-32 w-32 bg-emerald-500/20 blur-3xl rounded-full" />
                                         </div>
                                     </div>
@@ -211,7 +209,6 @@ export function LandingClient({ user }: { user: any }) {
                                 </div>
                             </div>
 
-                            {/* CARD 2: ATS SCORE (Medium) */}
                             <div className="md:col-span-2 md:row-span-1 group relative rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden shadow-2xl transition-all hover:border-white/10">
                                 <div className="absolute inset-0 bg-gradient-to-tr from-purple-500/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                                 <div className="p-8 flex flex-col items-center text-center justify-center h-full">
@@ -226,7 +223,6 @@ export function LandingClient({ user }: { user: any }) {
                                 </div>
                             </div>
 
-                            {/* CARD 3: GLOBAL EXPORT (Small/Tall) */}
                             <div className="md:col-span-2 md:row-span-1 group relative rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden shadow-2xl transition-all hover:border-white/10">
                                 <div className="p-8 flex items-center justify-between h-full bg-gradient-to-br from-transparent to-white/[0.02]">
                                     <div className="space-y-4">
@@ -242,7 +238,6 @@ export function LandingClient({ user }: { user: any }) {
                                 </div>
                             </div>
 
-                            {/* CARD 4: PITCH DECKS (Medium) */}
                             <div className="md:col-span-3 md:row-span-1 group relative rounded-[2.5rem] bg-[#080808] border border-white/10 overflow-hidden shadow-2xl transition-all shadow-blue-500/5 lg:bg-gradient-to-tr lg:from-blue-500/10 lg:to-transparent">
                                 <div className="p-10 flex flex-col h-full">
                                     <div className="flex items-center gap-4 mb-6">
@@ -260,7 +255,6 @@ export function LandingClient({ user }: { user: any }) {
                                 </div>
                             </div>
 
-                            {/* CARD 5: GLOBAL ANALYTICS (Large/Wide) */}
                             <div className="md:col-span-3 md:row-span-1 group relative rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden shadow-2xl transition-all hover:border-white/10">
                                 <div className="absolute inset-0 bg-gradient-to-bl from-emerald-500/5 via-transparent to-transparent" />
                                 <div className="p-10 flex flex-col h-full bg-gradient-to-t from-black/60 to-transparent">
@@ -269,7 +263,7 @@ export function LandingClient({ user }: { user: any }) {
                                             <h3 className="text-2xl font-bold text-white mb-2">Live Engagement</h3>
                                             <p className="text-zinc-500 text-sm">Track how recruiters view your profile.</p>
                                         </div>
-                                        <div className="text-4xl font-black italic italic-900 tracking-tighter text-white">12.4k</div>
+                                        <div className="text-4xl font-black italic tracking-tighter text-white">12.4k</div>
                                     </div>
                                     <div className="h-24 flex items-end gap-1.5 group-hover:gap-2 transition-all">
                                         {[40, 70, 45, 90, 65, 100, 80, 50, 75, 60, 85, 45, 95, 55].map((h, i) => (
@@ -278,10 +272,8 @@ export function LandingClient({ user }: { user: any }) {
                                     </div>
                                 </div>
                             </div>
-
                         </div>
 
-                        {/* FINAL FEATURES CALLOUT: THE "AI BRAIN" */}
                         <div className="mt-48 flex flex-col items-center text-center">
                             <div className="relative mb-20 group">
                                 <div className="absolute inset-0 bg-emerald-500/40 blur-[100px] rounded-full animate-pulse group-hover:bg-purple-500/40 transition-colors duration-1000" />
@@ -293,7 +285,6 @@ export function LandingClient({ user }: { user: any }) {
                                         {[1, 2, 3].map(i => <div key={i} className="h-1.5 w-1.5 bg-white/40 rounded-full" />)}
                                     </div>
                                 </div>
-                                {/* Orbital Icons */}
                                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute -inset-10 pointer-events-none">
                                     <div className="absolute top-0 left-1/2 -translate-x-1/2 h-10 w-10 bg-black border border-white/10 rounded-xl flex items-center justify-center shadow-lg"><Sparkles className="h-5 w-5 text-emerald-500" /></div>
                                     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-10 w-10 bg-black border border-white/10 rounded-xl flex items-center justify-center shadow-lg"><Target className="h-5 w-5 text-purple-500" /></div>
@@ -336,7 +327,7 @@ export function LandingClient({ user }: { user: any }) {
                 </section>
             </main>
 
-            <FooterPremium />
+            <Footer />
         </div>
     )
 }
