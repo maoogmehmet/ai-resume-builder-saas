@@ -182,6 +182,13 @@ export const ExecutiveTemplate = ({ data }: { data: any }) => {
                         </View>
                     </View>
                 </View>
+
+                {data.additional_explanations && (
+                    <View style={{ marginTop: 25 }}>
+                        <Text style={styles.sectionTitle}>Strategic Projects & Additional Info</Text>
+                        <Text style={{ fontSize: 9.5, color: '#222', textAlign: 'justify' }}>{data.additional_explanations}</Text>
+                    </View>
+                )}
             </Page>
         </Document>
     );

@@ -197,6 +197,13 @@ export const ModernTemplate = ({ data }: { data: any }) => {
                             ))}
                         </View>
                     )}
+
+                    {data.additional_explanations && (
+                        <View style={styles.section}>
+                            <Text style={styles.mainTitle}>Additional Information</Text>
+                            <Text style={{ color: '#334155', lineHeight: 1.5 }}>{data.additional_explanations}</Text>
+                        </View>
+                    )}
                 </View>
             </Page>
         </Document>

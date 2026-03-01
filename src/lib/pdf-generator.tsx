@@ -83,6 +83,12 @@ export const ClassicTemplate = ({ data }: { data: any }) => {
                         <Text><Text style={{ fontFamily: 'Helvetica-Bold' }}>Soft: </Text>{skills.soft?.join(', ')}</Text>
                     </View>
                 )}
+                {data.additional_explanations && (
+                    <View>
+                        <Text style={styles.sectionTitle}>Additional Information</Text>
+                        <Text>{data.additional_explanations}</Text>
+                    </View>
+                )}
             </Page>
         </Document>
     );

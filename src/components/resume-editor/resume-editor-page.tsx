@@ -5,8 +5,13 @@ import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
-import { Loader2, ArrowLeft, CheckCircle2, Sparkles, Layout, CloudUpload, ChevronDown, User, Briefcase, GraduationCap, Wrench, FileText } from 'lucide-react'
+import {
+    Loader2, ArrowLeft, CheckCircle2, Sparkles, Layout, CloudUpload, ChevronDown,
+    User, Briefcase, GraduationCap, Wrench, FileText, MoreVertical, Printer,
+    Check, MessageSquarePlus
+} from 'lucide-react'
 import Link from 'next/link'
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { pdf } from '@react-pdf/renderer'
@@ -34,7 +39,8 @@ const EMPTY_RESUME = {
     summary: '',
     experience: [],
     education: [],
-    skills: { technical: [], soft: [] }
+    skills: { technical: [], soft: [] },
+    additional_explanations: ''
 }
 
 const SECTIONS = [
@@ -43,6 +49,7 @@ const SECTIONS = [
     { id: 'experience', label: 'Work Experience', icon: Briefcase, num: '03' },
     { id: 'education', label: 'Education', icon: GraduationCap, num: '04' },
     { id: 'skills', label: 'Skills', icon: Wrench, num: '05' },
+    { id: 'additional_explanations', label: 'Additional Explanations', icon: MessageSquarePlus, num: '06' },
 ]
 
 export function ResumeEditorPage() {
@@ -57,6 +64,8 @@ export function ResumeEditorPage() {
     const [currentVersionId, setCurrentVersionId] = useState<string | undefined>()
     const [template, setTemplate] = useState<TemplateType>('classic')
     const [showTemplates, setShowTemplates] = useState(false)
+    const [showMoreMenu, setShowMoreMenu] = useState(false)
+    const [isTwoPageView, setIsTwoPageView] = useState(false)
     const [isUploadingPdf, setIsUploadingPdf] = useState(false)
     const [openSections, setOpenSections] = useState<Set<string>>(new Set(['personal_info']))
 
@@ -93,10 +102,12 @@ export function ResumeEditorPage() {
             }
 
             const jsonData = data.ai_generated_json || data.original_linkedin_json || EMPTY_RESUME
-            setResumeData(jsonData)
+            setResumeData({
+                ...EMPTY_RESUME,
+                ...jsonData
+            })
             setIsLoading(false)
 
-            // If we have raw LinkedIn data but no AI version, generate it
             if (!data.ai_generated_json && data.original_linkedin_json) {
                 requestAIGeneration()
             }
@@ -120,9 +131,11 @@ export function ResumeEditorPage() {
 
             if (!response.ok) throw new Error(result.error || 'AI generation failed')
 
-            setResumeData(result.aiGenerated)
+            setResumeData((prev: any) => ({
+                ...prev,
+                ...result.aiGenerated
+            }))
 
-            // Auto-generate a generic Pitch Deck in the background
             const jobTitle = result.aiGenerated?.personal_info?.title || result.aiGenerated?.experience?.[0]?.position || 'Professional';
             fetch('/api/ai/generate-letter', {
                 method: 'POST',
@@ -135,7 +148,6 @@ export function ResumeEditorPage() {
                 })
             }).catch(e => console.error("Pitch deck auto-gen failed", e));
 
-            // Auto-upload the PDF to Supabase Storage without showing a toast
             syncPdfToCloud(result.aiGenerated, template, true).catch(e => console.error("Auto PDF sync failed", e));
 
             toast.success('AI Resume Generated!', { description: 'Your resume has been optimized.' })
@@ -188,11 +200,9 @@ export function ResumeEditorPage() {
         if (!silenceToast) toast.loading('Generating & Uploading PDF...', { id: 'pdf-upload' });
 
         try {
-            // 1. Generate PDF Blob client-side
             const doc = <ResumePDFDocument data={data} template={currentTemplate} />
             const blob = await pdf(doc).toBlob();
 
-            // 2. Upload to API
             const formData = new FormData();
             formData.append('file', blob, 'resume.pdf');
             formData.append('resumeId', resumeId);
@@ -274,19 +284,25 @@ export function ResumeEditorPage() {
                             onClick={() => setShowTemplates(!showTemplates)}
                         >
                             <Layout className="h-3.5 w-3.5" />
-                            <span className="hidden sm:inline capitalize">{template}</span>
+                            <span className="hidden sm:inline capitalize font-bold">{template}</span>
                             <ChevronDown className={`h-3 w-3 transition-transform ${showTemplates ? 'rotate-180' : ''}`} />
                         </button>
                         {showTemplates && (
-                            <div className="absolute right-0 top-11 z-50 bg-[#141414] rounded-2xl shadow-2xl border border-white/[0.08] p-2 w-56">
+                            <div className="absolute right-0 top-11 z-50 bg-[#141414] rounded-2xl shadow-2xl border border-white/[0.08] p-2 w-64 overflow-hidden">
+                                <div className="px-3 py-2 border-b border-white/[0.05] mb-1">
+                                    <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">Select Template</span>
+                                </div>
                                 {TEMPLATES.map((t) => (
                                     <button
                                         key={t.id}
                                         onClick={() => { setTemplate(t.id); setShowTemplates(false); }}
-                                        className={`w-full text-left px-4 py-3 rounded-xl transition-all ${template === t.id ? 'bg-white text-black' : 'hover:bg-white/[0.06] text-zinc-400 hover:text-white'}`}
+                                        className={`w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-center justify-between group ${template === t.id ? 'bg-white text-black' : 'hover:bg-white/[0.06] text-zinc-400 hover:text-white'}`}
                                     >
-                                        <div className="font-bold text-sm">{t.label}</div>
-                                        <div className={`text-[10px] mt-0.5 ${template === t.id ? 'text-zinc-600' : 'text-zinc-600'}`}>{t.description}</div>
+                                        <div>
+                                            <div className="font-bold text-sm tracking-tight">{t.label}</div>
+                                            <div className={`text-[10px] mt-0.5 leading-tight ${template === t.id ? 'text-zinc-600' : 'text-zinc-500'}`}>{t.description}</div>
+                                        </div>
+                                        {template === t.id && <Check className="h-4 w-4 text-emerald-600" />}
                                     </button>
                                 ))}
                             </div>
@@ -314,17 +330,18 @@ export function ResumeEditorPage() {
 
             <main className="flex-1 flex w-full relative">
                 {/* LEFT PANE - Editor */}
-                <div className="w-full lg:w-[45%] overflow-y-auto border-r border-white/[0.06] p-4 sm:p-6 bg-[#0a0a0a] pb-32 h-[calc(100vh-65px)] custom-scrollbar">
+                <div className={`overflow-y-auto border-r border-white/[0.06] p-4 sm:p-6 bg-[#0a0a0a] pb-32 h-[calc(100vh-65px)] custom-scrollbar transition-all duration-300 ${isTwoPageView ? 'hidden lg:block lg:w-[30%]' : 'w-full lg:w-[45%]'}`}>
                     <div className="space-y-3">
                         {SECTIONS.map((section) => {
                             const isOpen = openSections.has(section.id)
                             const Icon = section.icon
                             const count = section.id === 'experience' ? resumeData.experience?.length
                                 : section.id === 'education' ? resumeData.education?.length
-                                    : null
+                                    : section.id === 'skills' ? (resumeData.skills?.technical?.length + resumeData.skills?.soft?.length)
+                                        : null
 
                             return (
-                                <div key={section.id} className="border border-white/[0.06] rounded-2xl bg-[#111111] overflow-hidden transition-all">
+                                <div key={section.id} className="border border-white/[0.06] rounded-2xl bg-[#111111] overflow-hidden transition-all shadow-sm">
                                     <button
                                         onClick={() => toggleSection(section.id)}
                                         className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/[0.02] transition-colors"
@@ -336,7 +353,7 @@ export function ResumeEditorPage() {
                                             <span className="font-semibold text-white text-sm">{section.label}</span>
                                             {count !== null && count > 0 && (
                                                 <span className="text-[10px] font-bold text-zinc-500 bg-white/[0.04] border border-white/[0.06] px-2 py-0.5 rounded-md">
-                                                    {count} {count === 1 ? 'entry' : 'entries'}
+                                                    {count}
                                                 </span>
                                             )}
                                         </div>
@@ -389,6 +406,17 @@ export function ResumeEditorPage() {
                                                     onChange={(data) => handleUpdate('skills', data)}
                                                 />
                                             )}
+                                            {section.id === 'additional_explanations' && (
+                                                <div className="space-y-3">
+                                                    <Label className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider mb-1.5 block">Custom Content Section</Label>
+                                                    <textarea
+                                                        className="w-full min-h-[140px] p-4 rounded-xl border border-white/[0.08] bg-white/[0.03] focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30 outline-none transition-all text-sm leading-relaxed resize-none text-zinc-300 placeholder:text-zinc-600 font-mono"
+                                                        value={resumeData.additional_explanations || ''}
+                                                        onChange={(e) => handleUpdate('additional_explanations', e.target.value)}
+                                                        placeholder="Add certifications, projects, workshops, or any extra information you'd like to appear at the end of your resume."
+                                                    />
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -406,21 +434,52 @@ export function ResumeEditorPage() {
                 </div>
 
                 {/* RIGHT PANE - Live PDF Preview */}
-                <div className="hidden lg:flex flex-col w-[55%] bg-[#080808] h-[calc(100vh-65px)] overflow-y-auto">
+                <div className={`hidden lg:flex flex-col bg-[#080808] h-[calc(100vh-65px)] overflow-y-auto transition-all duration-300 ${isTwoPageView ? 'w-[70%]' : 'w-[55%]'}`}>
                     <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-3 bg-[#0a0a0a] border-b border-white/[0.06]">
-                        <span className="text-xs font-black text-zinc-500 uppercase tracking-[0.2em]">Live PDF Preview</span>
-                        <span className="text-xs font-bold text-zinc-600 capitalize">{template} Template</span>
+                        <div className="flex items-center gap-4">
+                            <span className="text-xs font-black text-zinc-500 uppercase tracking-[0.2em]">Live PDF Preview</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <button className="h-8 w-8 rounded-lg flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/[0.06] transition-all">
+                                <Printer className="h-4 w-4" />
+                            </button>
+                            <div className="relative">
+                                <button
+                                    onClick={() => setShowMoreMenu(!showMoreMenu)}
+                                    className={`h-8 w-8 rounded-lg flex items-center justify-center transition-all ${showMoreMenu ? 'bg-white/10 text-white' : 'text-zinc-500 hover:text-white hover:bg-white/[0.06]'}`}
+                                >
+                                    <MoreVertical className="h-4 w-4" />
+                                </button>
+                                {showMoreMenu && (
+                                    <div className="absolute right-0 top-10 z-50 bg-[#141414] rounded-xl shadow-2xl border border-white/[0.08] p-1.5 w-56 overflow-hidden">
+                                        <button
+                                            onClick={() => { setIsTwoPageView(!isTwoPageView); setShowMoreMenu(false); }}
+                                            className="w-full text-left px-3 py-2 rounded-lg transition-all flex items-center justify-between hover:bg-white/[0.06] text-zinc-400 hover:text-white"
+                                        >
+                                            <span className="text-xs font-semibold">İki sayfalı görünüm</span>
+                                            {isTwoPageView && <Check className="h-3.5 w-3.5 text-emerald-500" />}
+                                        </button>
+                                        <button
+                                            onClick={() => { toggleSection('additional_explanations'); setShowMoreMenu(false); }}
+                                            className="w-full text-left px-3 py-2 rounded-lg transition-all flex items-center justify-between hover:bg-white/[0.06] text-zinc-400 hover:text-white"
+                                        >
+                                            <span className="text-xs font-semibold">Ek Açıklamalar</span>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
                     </div>
                     <div className="flex-1 p-6 flex items-start justify-center">
-                        <div className="w-full max-w-[800px] shadow-2xl shadow-black/50 rounded-2xl overflow-hidden border border-white/[0.06]" style={{ aspectRatio: '1/1.414', minHeight: '600px' }}>
-                            <ResumePreview data={resumeData} isLoading={isLoading} template={template} />
+                        <div className={`transition-all duration-500 w-full max-w-[1200px] shadow-2xl shadow-black/50 rounded-2xl overflow-hidden border border-white/[0.06] ${isTwoPageView ? 'aspect-[1.414/1]' : 'aspect-[1/1.414]'}`} style={{ minHeight: '600px' }}>
+                            <ResumePreview data={resumeData} isLoading={isLoading} template={template} isTwoPage={isTwoPageView} />
                         </div>
                     </div>
                 </div>
             </main>
 
-            {showTemplates && (
-                <div className="fixed inset-0 z-40" onClick={() => setShowTemplates(false)} />
+            {(showTemplates || showMoreMenu) && (
+                <div className="fixed inset-0 z-40" onClick={() => { setShowTemplates(false); setShowMoreMenu(false); }} />
             )}
 
             <style jsx global>{`

@@ -7,9 +7,10 @@ interface ResumePreviewProps {
     data: any;
     isLoading: boolean;
     template?: 'classic' | 'modern' | 'executive';
+    isTwoPage?: boolean;
 }
 
-export function ResumePreview({ data, isLoading, template = 'classic' }: ResumePreviewProps) {
+export function ResumePreview({ data, isLoading, template = 'classic', isTwoPage = false }: ResumePreviewProps) {
     const [isClient, setIsClient] = useState(false)
     const [pdfUrl, setPdfUrl] = useState<string | null>(null)
     const [isGenerating, setIsGenerating] = useState(false)
@@ -80,7 +81,7 @@ export function ResumePreview({ data, isLoading, template = 'classic' }: ResumeP
     }
 
     return (
-        <div className="h-full w-full bg-white rounded-lg overflow-hidden flex flex-col relative">
+        <div className={`h-full w-full bg-white rounded-lg overflow-hidden flex flex-col relative transition-all duration-500`}>
             {isGenerating && (
                 <div className="absolute inset-0 bg-black/60 backdrop-blur-sm z-10 flex items-center justify-center">
                     <div className="bg-[#141414] shadow-2xl border border-white/[0.08] rounded-xl px-4 py-3 flex items-center gap-3">
@@ -90,7 +91,11 @@ export function ResumePreview({ data, isLoading, template = 'classic' }: ResumeP
                 </div>
             )}
             {pdfUrl ? (
-                <iframe src={pdfUrl} className="w-full h-full border-none" title="Resume Preview" />
+                <iframe
+                    src={`${pdfUrl}#view=Fit${isTwoPage ? 'H' : ''}&pagemode=none`}
+                    className="w-full h-full border-none"
+                    title="Resume Preview"
+                />
             ) : null}
         </div>
     )
