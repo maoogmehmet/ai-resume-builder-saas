@@ -58,26 +58,26 @@ export const MultipleSelect = ({
 
   return (
     <AnimatePresence mode={'popLayout'}>
-      <div className={'flex w-[450px] flex-col gap-2'}>
-        <strong>TAGS</strong>
+      <div className={'flex w-full flex-col gap-2'}>
+        <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Selected</span>
         <motion.div
           layout
           ref={containerRef}
-          className='selected no-scrollbar flex h-12 w-full items-center overflow-x-scroll scroll-smooth rounded-md border border-solid border-gray-200 bg-gray-50 p-2'
+          className='selected no-scrollbar flex min-h-[40px] w-full items-center overflow-x-scroll scroll-smooth rounded-lg border border-white/[0.06] bg-white/[0.02] p-2'
         >
-          <motion.div layout className='flex items-center gap-2'>
+          <motion.div layout className='flex items-center gap-1.5 flex-wrap'>
             {selected?.map((item) => (
               <Tag
                 name={item?.key}
                 key={item?.key}
-                className={'bg-white shadow'}
+                className={'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'}
               >
-                <div className='flex items-center gap-2'>
-                  <motion.span layout className={'text-nowrap'}>
+                <div className='flex items-center gap-1.5'>
+                  <motion.span layout className={'text-nowrap text-[12px]'}>
                     {item?.name}
                   </motion.span>
-                  <button className={''} onClick={() => onDeselect(item)}>
-                    <X size={14} />
+                  <button className={'hover:text-red-400 transition-colors'} onClick={() => onDeselect(item)}>
+                    <X size={12} />
                   </button>
                 </div>
               </Tag>
@@ -85,7 +85,7 @@ export const MultipleSelect = ({
           </motion.div>
         </motion.div>
         {tags?.length > selected?.length && (
-          <div className='flex w-full flex-wrap gap-2 rounded-md border border-solid border-gray-200 p-2'>
+          <div className='flex w-full flex-wrap gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] p-2'>
             {tags
               ?.filter((item) => !selected?.some((i) => i.key === item.key))
               .map((item) => (
@@ -97,7 +97,7 @@ export const MultipleSelect = ({
                   {customTag ? (
                     customTag(item)
                   ) : (
-                    <motion.span layout className={'text-nowrap'}>
+                    <motion.span layout className={'text-nowrap text-[12px]'}>
                       {item?.name}
                     </motion.span>
                   )}
@@ -122,9 +122,9 @@ export const Tag = ({ children, className, name, onClick }: TagProps) => {
       layout
       layoutId={name}
       onClick={onClick}
-      className={(
-        `cursor-pointer rounded-md bg-gray-200 px-2 py-1 text-sm ${className}`
-      )}
+      className={
+        `cursor-pointer rounded-md bg-white/[0.06] border border-white/[0.08] px-2 py-1 text-[12px] text-zinc-400 hover:text-white hover:bg-white/[0.1] transition-colors ${className || ''}`
+      }
     >
       {children}
     </motion.div>

@@ -173,8 +173,8 @@ export function JobOptimizerDialog({ resumeId, resumeData, onOptimizationApplied
                 <AnimatedGenerateButton
                     labelIdle="ATS Analyze"
                     highlightHueDeg={200}
-                    size="lg"
-                    className="hover:scale-[1.02] transition-all"
+                    size="sm"
+                    className="h-9"
                 />
             </DialogTrigger>
 
