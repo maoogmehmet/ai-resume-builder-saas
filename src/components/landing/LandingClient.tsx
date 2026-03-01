@@ -141,19 +141,11 @@ export function LandingClient({ user }: { user: any }) {
                             </Link>
                         </div>
 
-                        {/* TESTIMONIAL QUOTE AT BOTTOM OF HERO */}
-                        <div className="mt-20 sm:mt-24 max-w-3xl border-l-2 border-white/5 pl-8 text-left animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
-                            <blockquote className="space-y-4">
-                                <p className="text-xl sm:text-2xl font-medium leading-relaxed text-zinc-300">
-                                    &ldquo;The ATS optimization completely transformed my job search. It&apos;s not just a builder, it&apos;s a career growth engine.&rdquo;
-                                </p>
-                            </blockquote>
-                        </div>
                     </div>
                 </section>
 
-                {/* 2. LOGO CLOUD - MOVED LOWER & COMPACT */}
-                <div className="mt-24 sm:mt-32 py-10 sm:py-14 border-y border-white/5 bg-white/[0.01]">
+                {/* 2. LOGO CLOUD - SEAMLESS TRANSITION */}
+                <div className="mt-12 sm:mt-20 py-10 sm:py-14 bg-black">
                     <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Trusted by candidates from world-class companies</p>
                     </div>
