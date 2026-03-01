@@ -51,13 +51,14 @@ export function LandingClient({ user }: { user: any }) {
     ]
 
     const logos = [
-        { alt: "Google", src: "https://cdn.simpleicons.org/google", width: 100, height: 24 },
-        { alt: "Microsoft", src: "https://cdn.simpleicons.org/microsoft", width: 100, height: 24 },
-        { alt: "Amazon", src: "https://cdn.simpleicons.org/amazon", width: 100, height: 24 },
-        { alt: "Netflix", src: "https://cdn.simpleicons.org/netflix", width: 100, height: 24 },
-        { alt: "Meta", src: "https://cdn.simpleicons.org/meta", width: 100, height: 24 },
-        { alt: "Stripe", src: "https://cdn.simpleicons.org/stripe", width: 100, height: 24 },
-        { alt: "Apple", src: "https://cdn.simpleicons.org/apple", width: 100, height: 24 },
+        { src: "https://storage.efferd.com/logo/nvidia-wordmark.svg", alt: "Nvidia Logo" },
+        { src: "https://storage.efferd.com/logo/supabase-wordmark.svg", alt: "Supabase Logo" },
+        { src: "https://storage.efferd.com/logo/openai-wordmark.svg", alt: "OpenAI Logo" },
+        { src: "https://storage.efferd.com/logo/turso-wordmark.svg", alt: "Turso Logo" },
+        { src: "https://storage.efferd.com/logo/vercel-wordmark.svg", alt: "Vercel Logo" },
+        { src: "https://storage.efferd.com/logo/github-wordmark.svg", alt: "GitHub Logo" },
+        { src: "https://storage.efferd.com/logo/claude-wordmark.svg", alt: "Claude AI Logo" },
+        { src: "https://storage.efferd.com/logo/clerk-wordmark.svg", alt: "Clerk Logo" },
     ]
 
     const pricingPlans = [
