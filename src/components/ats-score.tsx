@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress"
 import { Sparkles, Trophy, AlertTriangle, Lightbulb, Loader2, CheckCircle2, XCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 interface AtsScoreDisplayProps {
     scoreData: any;
@@ -113,14 +114,15 @@ export function AtsScoreDisplay({ scoreData, isLoading, onRecalculate, onOptimiz
                         ))}
                     </ul>
 
-                    <Button
-                        className="w-full gap-2 bg-white text-zinc-900 hover:bg-zinc-100 font-black h-14 rounded-2xl shadow-xl shadow-black/50 transition-all active:scale-95"
+                    <AnimatedGenerateButton
+                        className="w-full h-14"
                         onClick={() => onApplyOptimization(scoreData.optimized_bullets)}
                         disabled={isLoading}
-                    >
-                        {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5 fill-zinc-900" />}
-                        Rewrite & Optimize My Resume
-                    </Button>
+                        generating={isLoading}
+                        labelIdle="Rewrite & Optimize My Resume"
+                        labelActive="Optimizing..."
+                        highlightHueDeg={140}
+                    />
                     <p className="text-[10px] text-zinc-500 text-center mt-3 font-medium uppercase tracking-widest">
                         Creates a new optimized version of your resume
                     </p>

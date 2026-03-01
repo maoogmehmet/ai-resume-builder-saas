@@ -140,8 +140,9 @@ export function LandingClient({ user }: { user: any }) {
                                 Explore Features
                             </Link>
                         </div>
-
                     </div>
+                    {/* Seamless fade to Logo Cloud */}
+                    <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-black to-transparent z-[2] pointer-events-none" />
                 </section>
 
                 {/* 2. LOGO CLOUD - SEAMLESS TRANSITION */}

@@ -9,6 +9,7 @@ import { Target, Sparkles, Loader2, CheckCircle, AlertCircle } from 'lucide-reac
 import { toast } from 'sonner'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createClient } from '@/lib/supabase/client'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 export default function OptimizePage() {
     const [title, setTitle] = useState('')
@@ -160,14 +161,15 @@ export default function OptimizePage() {
                             />
                         </div>
 
-                        <Button
+                        <AnimatedGenerateButton
                             onClick={handleAnalyze}
                             disabled={!isValid || isAnalyzing}
-                            className={`w-full h-12 text-base font-semibold rounded-xl flex items-center gap-2 ${(isValid && !isAnalyzing) ? 'bg-white text-black hover:bg-zinc-200 shadow-xl' : 'bg-white/10 text-zinc-500 cursor-not-allowed'}`}
-                        >
-                            {isAnalyzing ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
-                            {isAnalyzing ? 'Analyzing...' : 'Analyze My CV'}
-                        </Button>
+                            generating={isAnalyzing}
+                            labelIdle="Analyze My CV"
+                            labelActive="Analyzing..."
+                            highlightHueDeg={200}
+                            className="w-full h-12"
+                        />
                     </div>
 
                     {/* Right Column - Results Empty State or Results */}

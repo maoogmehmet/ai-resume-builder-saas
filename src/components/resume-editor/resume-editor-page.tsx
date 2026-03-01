@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { Loader2, ArrowLeft, CheckCircle2, Sparkles, Layout, CloudUpload } from 'lucide-react'
 import Link from 'next/link'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { pdf } from '@react-pdf/renderer'
 import { ResumePDFDocument } from '@/lib/pdf-generator'
 import {
@@ -337,10 +338,15 @@ export function ResumeEditorPage() {
                                     placeholder="Write a compelling professional summary highlighting your top achievements and career goals (2-4 sentences)."
                                 />
                                 <div className="flex items-center justify-between mt-2">
-                                    <Button size="sm" variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50 hover:text-blue-700 font-semibold shadow-sm transition-colors group">
-                                        <Sparkles className="w-4 h-4 mr-2 text-blue-500 group-hover:animate-pulse" />
-                                        Generate with AI
-                                    </Button>
+                                    <AnimatedGenerateButton
+                                        onClick={requestAIGeneration}
+                                        disabled={isLoading}
+                                        generating={isLoading}
+                                        labelIdle="Generate with AI"
+                                        labelActive="Writing Summary..."
+                                        highlightHueDeg={210}
+                                        className="h-10"
+                                    />
                                     <div className="text-[10px] font-bold text-zinc-300 uppercase tracking-widest">
                                         {(resumeData.summary || '').length} / 1000
                                     </div>

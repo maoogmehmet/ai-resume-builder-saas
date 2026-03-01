@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { CoverLetterDownloadButton } from '@/components/cover-letter-download-button'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 export default function LettersPage() {
     const [resumes, setResumes] = useState<any[]>([])
@@ -300,14 +301,15 @@ export default function LettersPage() {
                             />
                         </div>
 
-                        <Button
+                        <AnimatedGenerateButton
                             onClick={handleGenerate}
                             disabled={!isValid || isGenerating || resumes.length === 0}
-                            className={`w-full h-12 text-base font-semibold rounded-xl flex items-center gap-2 transition-all ${(isValid && !isGenerating && resumes.length > 0) ? 'bg-purple-600 hover:bg-purple-700 text-white shadow-xl shadow-purple-600/20' : 'bg-slate-200 text-slate-500 cursor-not-allowed border-0'}`}
-                        >
-                            {isGenerating ? <Loader2 className="h-5 w-5 animate-spin" /> : <Sparkles className="h-5 w-5" />}
-                            <span>{isGenerating ? 'AI is gathering company intel & writing...' : 'Generate Perfect Letter'}</span>
-                        </Button>
+                            generating={isGenerating}
+                            labelIdle="Generate Perfect Letter"
+                            labelActive="AI is gathering company intel & writing..."
+                            highlightHueDeg={270}
+                            className="w-full h-12"
+                        />
                     </div>
 
                     <div className="space-y-6">

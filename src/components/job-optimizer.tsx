@@ -18,6 +18,7 @@ import { toast } from 'sonner'
 import { Target, Loader2 } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AtsScoreDisplay } from '@/components/ats-score'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 interface JobOptimizerProps {
     resumeId: string;
@@ -169,9 +170,11 @@ export function JobOptimizerDialog({ resumeId, resumeData, onOptimizationApplied
             if (!val) setTimeout(resetState, 300); // clear on close
         }}>
             <DialogTrigger asChild>
-                <Button className="font-medium bg-zinc-900 shadow-sm gap-2">
-                    <Target className="w-4 h-4" /> ATS Analyze
-                </Button>
+                <AnimatedGenerateButton
+                    labelIdle="ATS Analyze"
+                    highlightHueDeg={200}
+                    className="hover:scale-[1.02] transition-all"
+                />
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-[600px] bg-white border-zinc-200">
@@ -227,10 +230,15 @@ export function JobOptimizerDialog({ resumeId, resumeData, onOptimizationApplied
                                     <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. Google" />
                                 </div>
                             </div>
-                            <Button onClick={handleAnalyze} disabled={isLoading || !jobDescription.trim()} type="button">
-                                {isLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-                                Analyze Resume
-                            </Button>
+                            <AnimatedGenerateButton
+                                onClick={handleAnalyze}
+                                disabled={isLoading || !jobDescription.trim()}
+                                generating={isLoading}
+                                labelIdle="Analyze Resume"
+                                labelActive="Analyzing Match..."
+                                highlightHueDeg={200}
+                                className="w-full h-12"
+                            />
                         </TabsContent>
                     </Tabs>
                 ) : (

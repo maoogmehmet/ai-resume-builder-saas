@@ -7,6 +7,7 @@ import { MapPin, Search, Briefcase, ExternalLink, Loader2, Bookmark, BookmarkChe
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 export default function JobsPage() {
     const [jobQuery, setJobQuery] = useState('')
@@ -310,10 +311,7 @@ export default function JobsPage() {
                                                 </div>
 
                                                 <div className="p-5 flex items-center justify-between gap-3 border-t border-white/5 bg-zinc-900/10">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        className="flex-1 h-12 bg-white/5 hover:bg-white/10 text-white font-bold text-sm rounded-[1.25rem] gap-2.5 transition-all active:scale-[0.98]"
+                                                    <AnimatedGenerateButton
                                                         onClick={(e) => {
                                                             e.stopPropagation()
                                                             sessionStorage.setItem('optimizeJob', JSON.stringify({
@@ -324,9 +322,10 @@ export default function JobsPage() {
                                                             }))
                                                             window.location.href = '/dashboard/optimize'
                                                         }}
-                                                    >
-                                                        <Sparkles className="h-4 w-4 text-emerald-500" /> Optimize
-                                                    </Button>
+                                                        labelIdle="Optimize"
+                                                        highlightHueDeg={140}
+                                                        className="flex-1 h-12"
+                                                    />
 
                                                     <div className="flex items-center gap-2">
                                                         <Button
@@ -526,14 +525,15 @@ export default function JobsPage() {
                                         </div>
 
                                         {!isGeneratingLetter ? (
-                                            <Button
+                                            <AnimatedGenerateButton
                                                 onClick={handleBatchLetters}
-                                                disabled={resumes.length === 0}
-                                                className="w-full h-16 bg-white text-black hover:bg-zinc-200 font-bold rounded-[1.25rem] gap-3 shadow-[0_20px_40px_rgba(255,255,255,0.05)] text-base transition-all active:scale-[0.98]"
-                                            >
-                                                <Sparkles className="h-5 w-5" />
-                                                Generate Now
-                                            </Button>
+                                                disabled={resumes.length === 0 || isGeneratingLetter}
+                                                generating={isGeneratingLetter}
+                                                labelIdle="Generate Now"
+                                                labelActive="Generating Magic..."
+                                                highlightHueDeg={140}
+                                                className="w-full h-16"
+                                            />
                                         ) : (
                                             <div className="bg-white/5 border border-white/5 rounded-[2.5rem] p-10 text-center relative overflow-hidden">
                                                 <div className="relative z-10">
@@ -608,12 +608,12 @@ export default function JobsPage() {
                                 >
                                     Cancel
                                 </button>
-                                <Button
-                                    className="h-12 px-8 gap-3 bg-white hover:bg-zinc-200 text-black font-black rounded-[0.9rem] shadow-2xl shadow-white/5 transition-all active:scale-[0.97] text-xs"
+                                <AnimatedGenerateButton
+                                    className="h-12 px-8"
                                     onClick={() => setLetterJobTargets(selectedJobs)}
-                                >
-                                    <Sparkles className="h-4 w-4 text-emerald-500" /> Magic Letters
-                                </Button>
+                                    labelIdle="Magic Letters"
+                                    highlightHueDeg={140}
+                                />
                             </div>
                         </div>
                     </div>

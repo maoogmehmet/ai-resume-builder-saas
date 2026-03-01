@@ -16,7 +16,8 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { toast } from 'sonner'
-import { Sparkles, Loader2, Wand2, CheckCircle2 } from 'lucide-react'
+import { Wand2, CheckCircle2, Sparkles, Loader2 } from 'lucide-react'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 const LOADING_STEPS = [
     { label: 'Analyzing target role requirements...', duration: 4000 },
@@ -89,10 +90,11 @@ export function MagicBuilderDialog() {
     return (
         <Dialog open={open} onOpenChange={(v) => { if (!isLoading) setOpen(v) }}>
             <DialogTrigger asChild>
-                <Button className="gap-2 bg-zinc-900 border-zinc-700 shadow-xl hover:scale-[1.02] transition-all h-9 px-4 rounded-xl font-bold text-sm">
-                    <Wand2 className="h-4 w-4 text-yellow-400" />
-                    New AI Resume
-                </Button>
+                <AnimatedGenerateButton
+                    labelIdle="New AI Resume"
+                    highlightHueDeg={45}
+                    className="hover:scale-[1.02] transition-all"
+                />
             </DialogTrigger>
 
             <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden border-none shadow-[0_30px_90px_rgba(0,0,0,0.3)] rounded-[2.5rem] bg-zinc-950">
@@ -197,14 +199,15 @@ export function MagicBuilderDialog() {
                             >
                                 Cancel
                             </Button>
-                            <Button
+                            <AnimatedGenerateButton
                                 type="submit"
                                 disabled={!role.trim()}
-                                className="flex-[2] h-12 bg-zinc-900 rounded-2xl font-black shadow-lg hover:bg-black hover:scale-[1.02] transition-all group gap-2"
-                            >
-                                <Sparkles className="h-4 w-4 text-yellow-400 group-hover:rotate-12 transition-all" />
-                                Ignite AI Build
-                            </Button>
+                                generating={isLoading}
+                                labelIdle="Ignite AI Build"
+                                labelActive="Igniting..."
+                                highlightHueDeg={45}
+                                className="flex-[2] h-12"
+                            />
                         </div>
                     </form>
                 )}
