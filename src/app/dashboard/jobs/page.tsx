@@ -9,6 +9,54 @@ import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
+const REGIONS: { label: string; icon: string; countries: { name: string; code: string }[] }[] = [
+    {
+        label: 'Europe', icon: '🇪🇺', countries: [
+            { name: 'United Kingdom', code: 'UK' }, { name: 'Germany', code: 'DE' }, { name: 'France', code: 'FR' },
+            { name: 'Netherlands', code: 'NL' }, { name: 'Spain', code: 'ES' }, { name: 'Italy', code: 'IT' },
+            { name: 'Sweden', code: 'SE' }, { name: 'Switzerland', code: 'CH' }, { name: 'Ireland', code: 'IE' },
+            { name: 'Poland', code: 'PL' }, { name: 'Portugal', code: 'PT' }, { name: 'Belgium', code: 'BE' },
+            { name: 'Austria', code: 'AT' }, { name: 'Denmark', code: 'DK' }, { name: 'Finland', code: 'FI' },
+            { name: 'Norway', code: 'NO' }, { name: 'Czech Republic', code: 'CZ' }, { name: 'Romania', code: 'RO' },
+        ]
+    },
+    {
+        label: 'Türkiye', icon: '🇹🇷', countries: [
+            { name: 'Istanbul', code: 'IST' }, { name: 'Ankara', code: 'ANK' }, { name: 'Izmir', code: 'IZM' },
+            { name: 'Antalya', code: 'ANT' }, { name: 'Bursa', code: 'BRS' },
+        ]
+    },
+    {
+        label: 'North America', icon: '🇺🇸', countries: [
+            { name: 'United States', code: 'US' }, { name: 'Canada', code: 'CA' }, { name: 'Mexico', code: 'MX' },
+        ]
+    },
+    {
+        label: 'South America', icon: '🇧🇷', countries: [
+            { name: 'Brazil', code: 'BR' }, { name: 'Argentina', code: 'AR' }, { name: 'Colombia', code: 'CO' },
+            { name: 'Chile', code: 'CL' }, { name: 'Peru', code: 'PE' },
+        ]
+    },
+    {
+        label: 'Asia', icon: '🌏', countries: [
+            { name: 'Japan', code: 'JP' }, { name: 'South Korea', code: 'KR' }, { name: 'India', code: 'IN' },
+            { name: 'Singapore', code: 'SG' }, { name: 'China', code: 'CN' }, { name: 'UAE', code: 'AE' },
+            { name: 'Israel', code: 'IL' }, { name: 'Saudi Arabia', code: 'SA' }, { name: 'Indonesia', code: 'ID' },
+        ]
+    },
+    {
+        label: 'Africa', icon: '🌍', countries: [
+            { name: 'South Africa', code: 'ZA' }, { name: 'Nigeria', code: 'NG' }, { name: 'Kenya', code: 'KE' },
+            { name: 'Egypt', code: 'EG' }, { name: 'Morocco', code: 'MA' },
+        ]
+    },
+    {
+        label: 'Oceania', icon: '🌊', countries: [
+            { name: 'Australia', code: 'AU' }, { name: 'New Zealand', code: 'NZ' },
+        ]
+    },
+]
+
 export default function JobsPage() {
     const [jobQuery, setJobQuery] = useState('')
     const [location, setLocation] = useState('')
@@ -16,6 +64,7 @@ export default function JobsPage() {
     const [isJobsLoading, setIsJobsLoading] = useState(false)
     const [jobError, setJobError] = useState<string | null>(null)
     const [hasSearched, setHasSearched] = useState(false)
+    const [expandedRegion, setExpandedRegion] = useState<string | null>(null)
 
     // Saved jobs state
     const [savedJobs, setSavedJobs] = useState<any[]>([])
@@ -33,20 +82,25 @@ export default function JobsPage() {
     // Multi-select state
     const [selectedJobs, setSelectedJobs] = useState<any[]>([])
 
-    // Handlers for Selection
-    const getJobUrl = (j: any) => j.jobUrl || j.job_url || '';
+    // Handlers for Selection - use _uid for unique identification
+    const getJobId = (j: any) => j._uid || j.id || j.jobUrl || j.job_url || '';
     const toggleJobSelection = (job: any, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
-        const jobId = getJobUrl(job);
+        const uid = getJobId(job);
+        if (!uid) return;
         setSelectedJobs(prev => {
-            const exists = prev.find(j => getJobUrl(j) === jobId)
+            const exists = prev.find(j => getJobId(j) === uid)
             if (exists) {
-                return prev.filter(j => getJobUrl(j) !== jobId)
+                return prev.filter(j => getJobId(j) !== uid)
             }
             return [...prev, job]
         })
     }
-    const isJobSelected = (job: any) => selectedJobs.some(j => getJobUrl(j) === getJobUrl(job))
+    const isJobSelected = (job: any) => {
+        const uid = getJobId(job);
+        if (!uid) return false;
+        return selectedJobs.some(j => getJobId(j) === uid);
+    }
 
     useEffect(() => {
         const fetchSavedJobs = async () => {
@@ -93,7 +147,7 @@ export default function JobsPage() {
                 setJobError(data.error || 'Search failed')
                 toast.error(data.error || 'Job search failed')
             } else if (data.jobs && data.jobs.length > 0) {
-                setJobs(data.jobs)
+                setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `search-${Date.now()}-${idx}` })))
             } else {
                 setJobError('No jobs found for this search. Try different keywords.')
             }
@@ -169,7 +223,15 @@ export default function JobsPage() {
         }
     }
 
-    const isJobSaved = (url: string) => savedJobs.some(j => j.job_url === url)
+    const isJobSaved = (url: string) => {
+        if (!url) return false;
+        return savedJobs.some(j => j.job_url === url)
+    }
+    const getAbsoluteJobUrl = (url: string) => {
+        if (!url || url === '#') return '#';
+        if (url.startsWith('http')) return url;
+        return `https://www.linkedin.com${url.startsWith('/') ? '' : '/'}${url}`;
+    }
 
     const handleBatchLetters = async () => {
         if (letterJobTargets.length === 0 || !selectedResumeForLetter) return
@@ -296,7 +358,7 @@ export default function JobsPage() {
                                         if (!res.ok) {
                                             setJobError(data.error || 'Search failed')
                                         } else if (data.jobs && data.jobs.length > 0) {
-                                            setJobs(data.jobs)
+                                            setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `cat-${Date.now()}-${idx}` })))
                                         } else {
                                             setJobError('No jobs found. Try a different category.')
                                         }
@@ -312,6 +374,65 @@ export default function JobsPage() {
                                 {cat.label}
                             </button>
                         ))}
+                    </div>
+
+                    {/* Location / Region Filters */}
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1">
+                            {REGIONS.map((region) => (
+                                <button
+                                    key={region.label}
+                                    onClick={() => setExpandedRegion(prev => prev === region.label ? null : region.label)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all text-[12px] font-semibold whitespace-nowrap shrink-0 active:scale-95 ${expandedRegion === region.label ? 'bg-white/10 border-white/20 text-white' : 'bg-white/[0.04] border-white/[0.06] text-zinc-400 hover:text-white hover:bg-white/[0.08] hover:border-white/10'}`}
+                                >
+                                    <span className="text-sm">{region.icon}</span>
+                                    {region.label}
+                                    <ChevronDown className={`h-3 w-3 transition-transform ${expandedRegion === region.label ? 'rotate-180' : ''}`} />
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* Expanded Country List */}
+                        {expandedRegion && (
+                            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1 pl-2">
+                                {REGIONS.find(r => r.label === expandedRegion)?.countries.map((country) => (
+                                    <button
+                                        key={country.code}
+                                        onClick={async () => {
+                                            const query = jobQuery.trim() || 'Jobs'
+                                            setLocation(country.name)
+                                            setJobQuery(query)
+                                            setIsJobsLoading(true)
+                                            setJobs([])
+                                            setJobError(null)
+                                            setHasSearched(true)
+                                            try {
+                                                const res = await fetch('/api/linkedin/search-jobs', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ query, location: country.name })
+                                                })
+                                                const data = await res.json()
+                                                if (!res.ok) {
+                                                    setJobError(data.error || 'Search failed')
+                                                } else if (data.jobs && data.jobs.length > 0) {
+                                                    setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `loc-${Date.now()}-${idx}` })))
+                                                } else {
+                                                    setJobError(`No jobs found in ${country.name}. Try a different location.`)
+                                                }
+                                            } catch {
+                                                setJobError('Failed to connect to job search service.')
+                                            } finally {
+                                                setIsJobsLoading(false)
+                                            }
+                                        }}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.05] text-zinc-500 hover:text-white hover:bg-white/[0.06] hover:border-white/10 transition-all text-[11px] font-medium whitespace-nowrap shrink-0 active:scale-95"
+                                    >
+                                        {country.name}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 </header>
 
@@ -393,7 +514,7 @@ export default function JobsPage() {
                                                             className="h-12 w-12 p-0 text-zinc-500 hover:text-white hover:bg-white/5 rounded-[1.25rem] transition-all"
                                                             onClick={(e) => e.stopPropagation()}
                                                         >
-                                                            <a href={savedJob.job_url?.startsWith('http') ? savedJob.job_url : `https://www.linkedin.com${savedJob.job_url}`} target="_blank" rel="noopener noreferrer">
+                                                            <a href={getAbsoluteJobUrl(savedJob.job_url)} target="_blank" rel="noopener noreferrer">
                                                                 <ExternalLink className="h-4 w-4" />
                                                             </a>
                                                         </Button>
@@ -465,7 +586,7 @@ export default function JobsPage() {
                                         const saved = isJobSaved(job.jobUrl)
                                         const saving = savingJobUrls.has(job.jobUrl)
                                         const selected = isJobSelected(job)
-                                        const jobLink = job.jobUrl?.startsWith('http') ? job.jobUrl : `https://www.linkedin.com${job.jobUrl}`
+                                        const jobLink = getAbsoluteJobUrl(job.jobUrl)
 
                                         return (
                                             <div key={`search-${i}-${job.jobUrl}`}
