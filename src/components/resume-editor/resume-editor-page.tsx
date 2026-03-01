@@ -311,10 +311,13 @@ export function ResumeEditorPage() {
                                         className={`w-full text-left px-3 py-2.5 rounded-xl transition-all flex items-center justify-between group ${template === t.id ? 'bg-white text-black' : 'hover:bg-white/[0.06] text-zinc-400 hover:text-white'}`}
                                     >
                                         <div>
-                                            <div className="font-bold text-sm tracking-tight">{t.label}</div>
-                                            <div className={`text-[10px] mt-0.5 leading-tight ${template === t.id ? 'text-zinc-600' : 'text-zinc-500'}`}>{t.description}</div>
+                                            <div className="flex items-center gap-1.5 font-bold text-sm tracking-tight text-white group-hover:text-white transition-colors">
+                                                {t.label}
+                                                {(t.id === 'modern' || t.id === 'executive') && <Sparkles className="h-3 w-3 text-emerald-400 group-hover:animate-pulse" />}
+                                            </div>
+                                            <div className={`text-[10px] mt-0.5 leading-tight ${template === t.id ? 'text-zinc-500' : 'text-zinc-600 group-hover:text-zinc-400'}`}>{t.description}</div>
                                         </div>
-                                        {template === t.id && <Check className="h-4 w-4 text-emerald-600" />}
+                                        {template === t.id && <Check className="h-4 w-4 text-emerald-500" />}
                                     </button>
                                 ))}
                             </div>
