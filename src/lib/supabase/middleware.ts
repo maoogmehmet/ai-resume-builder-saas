@@ -39,9 +39,10 @@ export async function updateSession(request: NextRequest) {
         return NextResponse.redirect(url)
     }
 
-    // Redirect to dashboard if logged in and trying to access auth pages
+    // Redirect to dashboard if logged in and trying to access auth pages (but not callback)
     const isAuthRoute = request.nextUrl.pathname.startsWith('/auth')
-    if (user && isAuthRoute) {
+    const isCallbackRoute = request.nextUrl.pathname.startsWith('/auth/callback')
+    if (user && isAuthRoute && !isCallbackRoute) {
         const url = request.nextUrl.clone()
         url.pathname = '/dashboard'
         return NextResponse.redirect(url)

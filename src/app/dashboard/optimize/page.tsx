@@ -168,7 +168,8 @@ export default function OptimizePage() {
                             labelIdle="Analyze My CV"
                             labelActive="Analyzing..."
                             highlightHueDeg={200}
-                            className="w-full h-12"
+                            size="lg"
+                            className="w-full h-14"
                         />
                     </div>
 

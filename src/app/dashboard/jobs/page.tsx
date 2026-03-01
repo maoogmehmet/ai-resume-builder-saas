@@ -11,7 +11,7 @@ import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 export default function JobsPage() {
     const [jobQuery, setJobQuery] = useState('')
-    const [location, setLocation] = useState('Remote')
+    const [location, setLocation] = useState('')
     const [jobs, setJobs] = useState<any[]>([])
     const [isJobsLoading, setIsJobsLoading] = useState(false)
     const [jobError, setJobError] = useState<string | null>(null)
@@ -34,17 +34,19 @@ export default function JobsPage() {
     const [selectedJobs, setSelectedJobs] = useState<any[]>([])
 
     // Handlers for Selection
+    const getJobUrl = (j: any) => j.jobUrl || j.job_url || '';
     const toggleJobSelection = (job: any, e?: React.MouseEvent) => {
         if (e) e.stopPropagation();
+        const jobId = getJobUrl(job);
         setSelectedJobs(prev => {
-            const exists = prev.find(j => (j.jobUrl || j.job_url) === (job.jobUrl || j.job_url))
+            const exists = prev.find(j => getJobUrl(j) === jobId)
             if (exists) {
-                return prev.filter(j => (j.jobUrl || j.job_url) !== (job.jobUrl || j.job_url))
+                return prev.filter(j => getJobUrl(j) !== jobId)
             }
             return [...prev, job]
         })
     }
-    const isJobSelected = (job: any) => selectedJobs.some(j => (j.jobUrl || j.job_url) === (job.jobUrl || j.job_url))
+    const isJobSelected = (job: any) => selectedJobs.some(j => getJobUrl(j) === getJobUrl(job))
 
     useEffect(() => {
         const fetchSavedJobs = async () => {
@@ -324,6 +326,7 @@ export default function JobsPage() {
                                                         }}
                                                         labelIdle="Optimize"
                                                         highlightHueDeg={140}
+                                                        size="md"
                                                         className="flex-1 h-12"
                                                     />
 
@@ -335,7 +338,7 @@ export default function JobsPage() {
                                                             className="h-12 w-12 p-0 text-zinc-500 hover:text-white hover:bg-white/5 rounded-[1.25rem] transition-all"
                                                             onClick={(e) => e.stopPropagation()}
                                                         >
-                                                            <a href={savedJob.job_url} target="_blank" rel="noopener noreferrer">
+                                                            <a href={savedJob.job_url?.startsWith('http') ? savedJob.job_url : `https://www.linkedin.com${savedJob.job_url}`} target="_blank" rel="noopener noreferrer">
                                                                 <ExternalLink className="h-4 w-4" />
                                                             </a>
                                                         </Button>
@@ -463,7 +466,7 @@ export default function JobsPage() {
                                                         className="h-12 w-12 p-0 text-zinc-500 hover:text-white hover:bg-white/5 rounded-[1.25rem] transition-all"
                                                         onClick={(e) => e.stopPropagation()}
                                                     >
-                                                        <a href={job.jobUrl} target="_blank" rel="noopener noreferrer">
+                                                        <a href={job.jobUrl?.startsWith('http') ? job.jobUrl : `https://www.linkedin.com${job.jobUrl}`} target="_blank" rel="noopener noreferrer">
                                                             <ExternalLink className="h-4 w-4" />
                                                         </a>
                                                     </Button>
@@ -532,6 +535,7 @@ export default function JobsPage() {
                                                 labelIdle="Generate Now"
                                                 labelActive="Generating Magic..."
                                                 highlightHueDeg={140}
+                                                size="lg"
                                                 className="w-full h-16"
                                             />
                                         ) : (
@@ -609,10 +613,11 @@ export default function JobsPage() {
                                     Cancel
                                 </button>
                                 <AnimatedGenerateButton
-                                    className="h-12 px-8"
+                                    className="h-14 px-8 min-w-[180px]"
                                     onClick={() => setLetterJobTargets(selectedJobs)}
                                     labelIdle="Magic Letters"
                                     highlightHueDeg={140}
+                                    size="lg"
                                 />
                             </div>
                         </div>

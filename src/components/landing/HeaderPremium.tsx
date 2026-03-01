@@ -42,7 +42,7 @@ export function HeaderPremium({ user }: { user: any }) {
             className={cn(
                 'fixed top-0 z-[100] mx-auto w-full border-b border-transparent transition-all duration-300 ease-out',
                 {
-                    'bg-black/80 backdrop-blur-xl border-white/5 md:top-4 md:max-w-5xl md:rounded-2xl md:shadow-[0_0_50px_rgba(0,0,0,1)]':
+                    'bg-black/80 backdrop-blur-xl border-white/5 md:top-4 md:max-w-7xl md:rounded-2xl md:shadow-[0_0_50px_rgba(0,0,0,1)]':
                         scrolled && !open,
                     'bg-black': open,
                     'left-1/2 -translate-x-1/2': scrolled && !open

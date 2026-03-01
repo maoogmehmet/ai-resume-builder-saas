@@ -27,7 +27,7 @@ export function TestimonialsSection({
         )}>
             <div className="mx-auto flex max-w-7xl flex-col items-center gap-12 text-center sm:gap-20">
                 <div className="flex flex-col items-center gap-6 px-4">
-                    <h2 className="max-w-[800px] text-4xl font-black tracking-tighter sm:text-7xl leading-[1.1] italic">
+                    <h2 className="max-w-[800px] text-4xl font-medium tracking-tighter sm:text-7xl leading-[1.1]">
                         {title}
                     </h2>
                     <p className="text-lg max-w-[600px] font-medium text-zinc-500 sm:text-xl">

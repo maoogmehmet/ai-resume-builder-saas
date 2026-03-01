@@ -93,6 +93,7 @@ export function MagicBuilderDialog() {
                 <AnimatedGenerateButton
                     labelIdle="New AI Resume"
                     highlightHueDeg={45}
+                    size="lg"
                     className="hover:scale-[1.02] transition-all"
                 />
             </DialogTrigger>
@@ -206,6 +207,7 @@ export function MagicBuilderDialog() {
                                 labelIdle="Ignite AI Build"
                                 labelActive="Igniting..."
                                 highlightHueDeg={45}
+                                size="lg"
                                 className="flex-[2] h-12"
                             />
                         </div>

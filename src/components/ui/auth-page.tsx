@@ -82,15 +82,44 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 						</p>
 					</div>
 
-					<div className="space-y-4">
-						{/* 
-					    <Button type="button" size="lg" className="w-full bg-white border border-zinc-200 text-zinc-900 hover:bg-zinc-50 shadow-sm">
-						    <GoogleIcon className='size-4 me-2' />
-						    {isSignIn ? 'Sign in with Google' : 'Sign up with Google'}
-					    </Button>
-                        <AuthSeparator />
-                        */}
+					<div className="space-y-3">
+						<button
+							type="button"
+							onClick={async () => {
+								const { createClient } = await import('@/lib/supabase/client');
+								const supabase = createClient();
+								await supabase.auth.signInWithOAuth({
+									provider: 'google',
+									options: {
+										redirectTo: `${window.location.origin}/auth/callback`,
+									},
+								});
+							}}
+							className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm transition-colors hover:bg-zinc-50 active:scale-[0.98]"
+						>
+							<GoogleIcon className="size-5" />
+							Continue with Google
+						</button>
+						<button
+							type="button"
+							onClick={async () => {
+								const { createClient } = await import('@/lib/supabase/client');
+								const supabase = createClient();
+								await supabase.auth.signInWithOAuth({
+									provider: 'apple',
+									options: {
+										redirectTo: `${window.location.origin}/auth/callback`,
+									},
+								});
+							}}
+							className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm transition-colors hover:bg-zinc-50 active:scale-[0.98]"
+						>
+							<AppleIcon className="size-5" />
+							Continue with Apple
+						</button>
 					</div>
+
+					<AuthSeparator />
 
 					<form action={action} className="space-y-4 pt-4">
 						{!isSignIn && (

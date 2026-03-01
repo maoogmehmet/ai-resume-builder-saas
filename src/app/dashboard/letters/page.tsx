@@ -308,7 +308,8 @@ export default function LettersPage() {
                             labelIdle="Generate Perfect Letter"
                             labelActive="AI is gathering company intel & writing..."
                             highlightHueDeg={270}
-                            className="w-full h-12"
+                            size="lg"
+                            className="w-full h-14"
                         />
                     </div>
 

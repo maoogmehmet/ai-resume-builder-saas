@@ -122,6 +122,7 @@ export function AtsScoreDisplay({ scoreData, isLoading, onRecalculate, onOptimiz
                         labelIdle="Rewrite & Optimize My Resume"
                         labelActive="Optimizing..."
                         highlightHueDeg={140}
+                        size="lg"
                     />
                     <p className="text-[10px] text-zinc-500 text-center mt-3 font-medium uppercase tracking-widest">
                         Creates a new optimized version of your resume

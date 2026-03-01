@@ -345,6 +345,7 @@ export function ResumeEditorPage() {
                                         labelIdle="Generate with AI"
                                         labelActive="Writing Summary..."
                                         highlightHueDeg={210}
+                                        size="sm"
                                         className="h-10"
                                     />
                                     <div className="text-[10px] font-bold text-zinc-300 uppercase tracking-widest">

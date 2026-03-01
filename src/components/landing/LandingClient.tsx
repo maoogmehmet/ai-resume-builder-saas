@@ -148,7 +148,7 @@ export function LandingClient({ user }: { user: any }) {
                 {/* 2. LOGO CLOUD - SEAMLESS TRANSITION */}
                 <div className="mt-12 sm:mt-20 py-10 sm:py-14 bg-black">
                     <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Trusted by candidates from world-class companies</p>
+                        <p className="text-[10px] font-bold text-zinc-600">Companies of all sizes trust us to deliver their most important CVs.</p>
                     </div>
                     <LogoCloud logos={logos} />
                 </div>
@@ -301,8 +301,8 @@ export function LandingClient({ user }: { user: any }) {
 
                 {/* 4. WALL OF LOVE (Testimonials) */}
                 <TestimonialsSection
-                    title="Wall of Love"
-                    description="Join 10,000+ candidates landing roles at Stripe, Vercel, and Linear."
+                    title="Beyond expectations"
+                    description="AI Resume Builder is driving remarkable candidate experiences that enable success stories, empower professionals, and fuel growth across industries and individuals."
                     testimonials={testimonials}
                 />
 
