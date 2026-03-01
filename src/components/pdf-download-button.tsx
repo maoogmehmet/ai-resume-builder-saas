@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { Download, Loader2 } from 'lucide-react'
 import { pdf } from '@react-pdf/renderer'
 import { ResumePDFDocument } from '@/lib/pdf-generator'
@@ -59,14 +58,13 @@ export function PdfDownloadButton({ resumeData, disabled, template = 'classic' }
     }
 
     return (
-        <Button
-            variant="outline"
+        <button
             onClick={handleDownload}
             disabled={isDownloading || disabled || !resumeData}
-            className="gap-2 text-zinc-600 font-medium h-9"
+            className="h-9 px-3 gap-2 font-bold text-xs rounded-xl border border-white/[0.08] bg-white/[0.04] text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-all flex items-center disabled:opacity-50"
         >
-            {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-            Download PDF
-        </Button>
+            {isDownloading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
+            <span className="hidden sm:inline">Download PDF</span>
+        </button>
     )
 }

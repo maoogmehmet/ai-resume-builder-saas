@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Button } from '@/components/ui/button'
-import { Plus } from 'lucide-react'
+import { Plus, X } from 'lucide-react'
 import { MultipleSelect, TTag } from '@/components/ui/multiple-select'
 
 interface SkillsProps {
@@ -86,54 +84,70 @@ export function SkillsSection({ data, onChange }: SkillsProps) {
         .filter(tag => tag.name.toLowerCase().includes(softInput.toLowerCase()));
 
     return (
-        <Card>
-            <CardContent className="pt-6 grid gap-8">
-                <div className="grid gap-4">
-                    <Label className="text-base font-semibold">Technical Skills</Label>
-                    <p className="text-sm text-zinc-500">Select standard skills or type a custom one to add.</p>
-
-                    <div className="flex gap-2 mb-2">
-                        <Input
-                            placeholder="Type to search or add custom technical skill..."
-                            value={techInput}
-                            onChange={(e) => setTechInput(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && addCustomTech()}
-                        />
-                        <Button type="button" onClick={addCustomTech} variant="secondary"><Plus className="h-4 w-4" /></Button>
-                    </div>
-
-                    <div className="w-full relative overflow-hidden bg-white rounded-xl shadow-sm border border-zinc-200/60 p-2">
-                        <MultipleSelect
-                            tags={availableTechTags}
-                            defaultValue={techTags}
-                            onChange={handleTechChange}
-                        />
-                    </div>
+        <div className="space-y-6">
+            {/* Technical Skills */}
+            <div className="space-y-3">
+                <div>
+                    <Label className="text-sm font-semibold text-zinc-300">Technical Skills</Label>
+                    <p className="text-[11px] text-zinc-600 mt-0.5">Select standard skills or type a custom one to add.</p>
                 </div>
 
-                <div className="grid gap-4">
-                    <Label className="text-base font-semibold">Soft Skills</Label>
-                    <p className="text-sm text-zinc-500">Select standard skills or type a custom one to add.</p>
-
-                    <div className="flex gap-2 mb-2">
-                        <Input
-                            placeholder="Type to search or add custom soft skill..."
-                            value={softInput}
-                            onChange={(e) => setSoftInput(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && addCustomSoft()}
-                        />
-                        <Button type="button" onClick={addCustomSoft} variant="secondary"><Plus className="h-4 w-4" /></Button>
-                    </div>
-
-                    <div className="w-full relative overflow-hidden bg-white rounded-xl shadow-sm border border-zinc-200/60 p-2">
-                        <MultipleSelect
-                            tags={availableSoftTags}
-                            defaultValue={softTags}
-                            onChange={handleSoftChange}
-                        />
-                    </div>
+                <div className="flex gap-2">
+                    <Input
+                        placeholder="Type to search or add custom skill..."
+                        value={techInput}
+                        onChange={(e) => setTechInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && addCustomTech()}
+                        className="h-8 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30"
+                    />
+                    <button
+                        onClick={addCustomTech}
+                        className="h-8 w-8 shrink-0 rounded-lg border border-white/[0.08] bg-white/[0.04] text-zinc-500 hover:text-white hover:bg-white/[0.08] transition-all flex items-center justify-center"
+                    >
+                        <Plus className="h-3.5 w-3.5" />
+                    </button>
                 </div>
-            </CardContent>
-        </Card>
+
+                <div className="w-full relative overflow-hidden bg-white/[0.02] rounded-xl border border-white/[0.06] p-2">
+                    <MultipleSelect
+                        tags={availableTechTags}
+                        defaultValue={techTags}
+                        onChange={handleTechChange}
+                    />
+                </div>
+            </div>
+
+            {/* Soft Skills */}
+            <div className="space-y-3">
+                <div>
+                    <Label className="text-sm font-semibold text-zinc-300">Soft Skills</Label>
+                    <p className="text-[11px] text-zinc-600 mt-0.5">Select standard skills or type a custom one to add.</p>
+                </div>
+
+                <div className="flex gap-2">
+                    <Input
+                        placeholder="Type to search or add custom skill..."
+                        value={softInput}
+                        onChange={(e) => setSoftInput(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && addCustomSoft()}
+                        className="h-8 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30"
+                    />
+                    <button
+                        onClick={addCustomSoft}
+                        className="h-8 w-8 shrink-0 rounded-lg border border-white/[0.08] bg-white/[0.04] text-zinc-500 hover:text-white hover:bg-white/[0.08] transition-all flex items-center justify-center"
+                    >
+                        <Plus className="h-3.5 w-3.5" />
+                    </button>
+                </div>
+
+                <div className="w-full relative overflow-hidden bg-white/[0.02] rounded-xl border border-white/[0.06] p-2">
+                    <MultipleSelect
+                        tags={availableSoftTags}
+                        defaultValue={softTags}
+                        onChange={handleSoftChange}
+                    />
+                </div>
+            </div>
+        </div>
     )
 }

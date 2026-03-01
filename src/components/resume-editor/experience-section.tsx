@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
-import { Card, CardContent } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
-import { Trash2, Plus, GripVertical } from 'lucide-react'
+import { Trash2, Plus, GripVertical, X } from 'lucide-react'
 import {
     DndContext,
     closestCenter,
@@ -46,72 +44,104 @@ function SortableExperienceItem({ exp, expIdx, onUpdate, onRemove, onAddBullet, 
 
     return (
         <div ref={setNodeRef} style={style}>
-            <Card className="relative mb-6 border-zinc-200 shadow-sm">
+            <div className="relative border border-white/[0.06] rounded-xl bg-white/[0.02] p-5 pl-10 mb-3 group">
                 <div
                     {...attributes}
                     {...listeners}
-                    className="absolute left-2 top-1/2 -translate-y-1/2 cursor-grab text-zinc-300 hover:text-zinc-900 transition-colors p-1"
+                    className="absolute left-2.5 top-1/2 -translate-y-1/2 cursor-grab text-zinc-700 hover:text-zinc-400 transition-colors p-1"
                 >
-                    <GripVertical className="h-5 w-5" />
+                    <GripVertical className="h-4 w-4" />
                 </div>
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="absolute top-2 right-2 text-zinc-400 hover:text-red-500 h-8 w-8"
+                <button
+                    className="absolute top-3 right-3 h-7 w-7 rounded-lg flex items-center justify-center text-zinc-700 hover:text-red-400 hover:bg-red-500/10 transition-all opacity-0 group-hover:opacity-100"
                     onClick={() => onRemove(expIdx)}
                 >
-                    <Trash2 className="h-4 w-4" />
-                </Button>
-                <CardContent className="pt-6 pl-12 grid gap-4">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="grid gap-2">
-                            <Label className="flex justify-between">Job Title <span className="text-zinc-400 text-[10px] uppercase">{exp.title?.length || 0}/100</span></Label>
-                            <Input maxLength={100} value={exp.title} onChange={(e) => onUpdate(expIdx, 'title', e.target.value)} />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label className="flex justify-between">Company <span className="text-zinc-400 text-[10px] uppercase">{exp.company?.length || 0}/100</span></Label>
-                            <Input maxLength={100} value={exp.company} onChange={(e) => onUpdate(expIdx, 'company', e.target.value)} />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label className="flex justify-between">Location <span className="text-zinc-400 text-[10px] uppercase">{exp.location?.length || 0}/100</span></Label>
-                            <Input maxLength={100} value={exp.location} onChange={(e) => onUpdate(expIdx, 'location', e.target.value)} />
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="grid gap-2">
-                                <Label>Start Date</Label>
-                                <Input maxLength={20} placeholder="MM/YYYY" value={exp.start_date} onChange={(e) => onUpdate(expIdx, 'start_date', e.target.value)} />
-                            </div>
-                            <div className="grid gap-2">
-                                <Label>End Date</Label>
-                                <Input maxLength={20} placeholder="MM/YYYY or Present" value={exp.end_date} onChange={(e) => onUpdate(expIdx, 'end_date', e.target.value)} />
-                            </div>
-                        </div>
+                    <Trash2 className="h-3.5 w-3.5" />
+                </button>
 
-                        <div className="col-span-2 mt-4 space-y-3">
-                            <Label className="text-sm font-semibold">Bullet Points</Label>
-                            {exp.bullets.map((bullet: string, bIdx: number) => (
-                                <div key={bIdx} className="flex flex-col gap-1">
-                                    <div className="flex gap-2">
-                                        <Textarea
-                                            value={bullet}
-                                            maxLength={300}
-                                            onChange={(e) => onBulletUpdate(expIdx, bIdx, e.target.value)}
-                                            className="min-h-[60px] text-sm"
-                                        />
-                                        <Button variant="ghost" size="icon" onClick={() => onRemoveBullet(expIdx, bIdx)} className="text-zinc-400 mt-2">
-                                            <Trash2 className="h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                    <span className="text-zinc-400 text-[9px] text-right font-medium tracking-widest">{bullet?.length || 0}/300</span>
-                                </div>
-                            ))}
-                            <Button variant="outline" size="sm" onClick={() => onAddBullet(expIdx)} className="w-full gap-2 border-dashed">
-                                <Plus className="h-4 w-4" /> Add Bullet
-                            </Button>
+                <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div className="space-y-1">
+                        <Label className="text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">Position</Label>
+                        <Input
+                            maxLength={100}
+                            value={exp.position || ''}
+                            onChange={(e) => onUpdate(expIdx, 'position', e.target.value)}
+                            placeholder="Software Engineer"
+                            className="h-8 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">Company</Label>
+                        <Input
+                            maxLength={100}
+                            value={exp.company || ''}
+                            onChange={(e) => onUpdate(expIdx, 'company', e.target.value)}
+                            placeholder="Google"
+                            className="h-8 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30"
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">Location</Label>
+                        <Input
+                            maxLength={50}
+                            value={exp.location || ''}
+                            onChange={(e) => onUpdate(expIdx, 'location', e.target.value)}
+                            placeholder="San Francisco, CA"
+                            className="h-8 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30"
+                        />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                        <div className="space-y-1">
+                            <Label className="text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">Start Date</Label>
+                            <Input
+                                maxLength={20}
+                                value={exp.start_date || ''}
+                                onChange={(e) => onUpdate(expIdx, 'start_date', e.target.value)}
+                                placeholder="MM/YYYY"
+                                className="h-8 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30"
+                            />
+                        </div>
+                        <div className="space-y-1">
+                            <Label className="text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">End Date</Label>
+                            <Input
+                                maxLength={20}
+                                value={exp.end_date || ''}
+                                onChange={(e) => onUpdate(expIdx, 'end_date', e.target.value)}
+                                placeholder="Present"
+                                className="h-8 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30"
+                            />
                         </div>
                     </div>
-                </CardContent>
-            </Card>
+                </div>
+
+                {/* Bullet Points */}
+                <div className="space-y-2 mt-3">
+                    <Label className="text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">Key Achievements</Label>
+                    {(exp.bullets || []).map((bullet: string, bIdx: number) => (
+                        <div key={bIdx} className="flex items-start gap-2">
+                            <span className="text-emerald-500/60 mt-2 text-xs">•</span>
+                            <Textarea
+                                value={bullet}
+                                onChange={(e) => onBulletUpdate(expIdx, bIdx, e.target.value)}
+                                className="flex-1 min-h-[36px] h-9 py-2 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm resize-none focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30"
+                                placeholder="Led a team of..."
+                            />
+                            <button
+                                onClick={() => onRemoveBullet(expIdx, bIdx)}
+                                className="mt-1.5 h-6 w-6 rounded flex items-center justify-center text-zinc-700 hover:text-red-400 hover:bg-red-500/10 transition-all shrink-0"
+                            >
+                                <X className="h-3 w-3" />
+                            </button>
+                        </div>
+                    ))}
+                    <button
+                        onClick={() => onAddBullet(expIdx)}
+                        className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 hover:text-zinc-400 transition-colors"
+                    >
+                        <Plus className="h-3 w-3" /> Add bullet point
+                    </button>
+                </div>
+            </div>
         </div>
     )
 }
@@ -144,7 +174,7 @@ export function ExperienceSection({ data, onChange }: ExperienceProps) {
     const handleAdd = () => {
         const newExps = [...experiences, {
             id: `exp-${Date.now()}`,
-            title: '',
+            position: '',
             company: '',
             location: '',
             start_date: '',
@@ -178,7 +208,7 @@ export function ExperienceSection({ data, onChange }: ExperienceProps) {
 
     const handleAddBullet = (expIndex: number) => {
         const newExps = [...experiences]
-        newExps[expIndex].bullets.push('')
+        newExps[expIndex].bullets = [...(newExps[expIndex].bullets || []), '']
         setExperiences(newExps)
         onChange(newExps)
     }
@@ -204,7 +234,7 @@ export function ExperienceSection({ data, onChange }: ExperienceProps) {
     };
 
     return (
-        <div className="grid gap-2">
+        <div className="space-y-3">
             <DndContext
                 sensors={sensors}
                 collisionDetection={closestCenter}
@@ -229,9 +259,12 @@ export function ExperienceSection({ data, onChange }: ExperienceProps) {
                 </SortableContext>
             </DndContext>
 
-            <Button variant="secondary" onClick={handleAdd} className="w-full gap-2 py-6 border-zinc-200 bg-white hover:bg-zinc-50 border-2 border-dashed">
-                <Plus className="h-4 w-4" /> Add Professional Experience
-            </Button>
+            <button
+                onClick={handleAdd}
+                className="w-full py-4 rounded-xl border-2 border-dashed border-white/[0.06] text-zinc-600 hover:text-zinc-400 hover:border-white/[0.1] transition-all flex items-center justify-center gap-2 text-sm font-semibold"
+            >
+                <Plus className="h-4 w-4" /> Add Work Experience
+            </button>
         </div>
     )
 }
