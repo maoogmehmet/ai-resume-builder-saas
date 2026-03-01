@@ -103,9 +103,9 @@ export function LandingClient({ user }: { user: any }) {
         <div className="flex flex-col min-h-screen bg-black font-sans selection:bg-white selection:text-black overflow-hidden text-zinc-400">
 
             <HeaderPremium user={user} />
-            <main className="flex-1 w-full pt-16">
+            <main className="flex-1 w-full pt-4 sm:pt-10">
                 {/* 1. HERO SECTION - CLEAN & PREMIUM */}
-                <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center pt-20">
+                <section className="relative w-full min-h-[80vh] flex flex-col items-center justify-center pt-10 sm:pt-20">
                     <div className="absolute inset-0 z-0">
                         <ShaderAnimation />
                     </div>
@@ -142,21 +142,18 @@ export function LandingClient({ user }: { user: any }) {
                         </div>
 
                         {/* TESTIMONIAL QUOTE AT BOTTOM OF HERO */}
-                        <div className="mt-24 sm:mt-32 max-w-3xl border-l-2 border-white/5 pl-8 text-left animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+                        <div className="mt-20 sm:mt-24 max-w-3xl border-l-2 border-white/5 pl-8 text-left animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                             <blockquote className="space-y-4">
-                                <p className="text-2xl sm:text-3xl font-medium leading-relaxed text-white">
+                                <p className="text-xl sm:text-2xl font-medium leading-relaxed text-zinc-300">
                                     &ldquo;The ATS optimization completely transformed my job search. It&apos;s not just a builder, it&apos;s a career growth engine.&rdquo;
                                 </p>
-                                <footer className="font-mono text-sm font-semibold text-zinc-500 uppercase tracking-widest">
-                                    ~ Sofia Davis, Software Engineer
-                                </footer>
                             </blockquote>
                         </div>
                     </div>
                 </section>
 
-                {/* 2. LOGO CLOUD */}
-                <div className="pt-32 pb-20 border-y border-white/5 bg-white/[0.01]">
+                {/* 2. LOGO CLOUD - MOVED LOWER & COMPACT */}
+                <div className="mt-24 sm:mt-32 py-10 sm:py-14 border-y border-white/5 bg-white/[0.01]">
                     <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
                         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Trusted by candidates from world-class companies</p>
                     </div>
