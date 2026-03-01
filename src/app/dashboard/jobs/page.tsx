@@ -651,15 +651,15 @@ export default function JobsPage() {
                                                         className="flex-1 h-12"
                                                     />
 
-                                                    {jobLink && jobLink !== '#' && (
-                                                        <div className="flex items-center gap-2">
-                                                            <button
-                                                                onClick={(e) => { e.stopPropagation(); handleSaveJob(job) }}
-                                                                className={`h-12 w-12 rounded-[1.25rem] flex items-center justify-center transition-all active:scale-95 border ${saved ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/20' : saving ? 'bg-white/5 text-zinc-400 border-white/5' : 'bg-transparent text-zinc-500 border-white/5 hover:text-white hover:bg-white/5'}`}
-                                                            >
-                                                                {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
-                                                            </button>
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            onClick={(e) => { e.stopPropagation(); handleSaveJob(job) }}
+                                                            className={`h-12 w-12 rounded-[1.25rem] flex items-center justify-center transition-all active:scale-95 border ${saved ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/20' : saving ? 'bg-white/5 text-zinc-400 border-white/5' : 'bg-transparent text-zinc-500 border-white/5 hover:text-white hover:bg-white/5'}`}
+                                                        >
+                                                            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
+                                                        </button>
 
+                                                        {jobLink && jobLink !== '#' && (
                                                             <a
                                                                 href={jobLink}
                                                                 target="_blank"
@@ -669,8 +669,8 @@ export default function JobsPage() {
                                                             >
                                                                 <ExternalLink className="h-4 w-4" />
                                                             </a>
-                                                        </div>
-                                                    )}
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         )
