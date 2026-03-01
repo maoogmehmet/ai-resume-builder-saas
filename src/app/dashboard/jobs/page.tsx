@@ -279,30 +279,32 @@ export default function JobsPage() {
                         ].map((cat) => (
                             <button
                                 key={cat.query}
-                                onClick={() => {
+                                onClick={async () => {
                                     setJobQuery(cat.query)
                                     setLocation('')
-                                    setTimeout(() => {
-                                        setIsJobsLoading(true)
-                                        setJobs([])
-                                        setJobError(null)
-                                        setHasSearched(true)
-                                        fetch('/api/linkedin/search-jobs', {
+                                    setIsJobsLoading(true)
+                                    setJobs([])
+                                    setJobError(null)
+                                    setHasSearched(true)
+                                    try {
+                                        const res = await fetch('/api/linkedin/search-jobs', {
                                             method: 'POST',
                                             headers: { 'Content-Type': 'application/json' },
                                             body: JSON.stringify({ query: cat.query, location: '' })
                                         })
-                                            .then(res => res.json())
-                                            .then(data => {
-                                                if (data.jobs && data.jobs.length > 0) {
-                                                    setJobs(data.jobs)
-                                                } else {
-                                                    setJobError('No jobs found. Try a different category.')
-                                                }
-                                            })
-                                            .catch(() => setJobError('Failed to connect to job search service.'))
-                                            .finally(() => setIsJobsLoading(false))
-                                    }, 0)
+                                        const data = await res.json()
+                                        if (!res.ok) {
+                                            setJobError(data.error || 'Search failed')
+                                        } else if (data.jobs && data.jobs.length > 0) {
+                                            setJobs(data.jobs)
+                                        } else {
+                                            setJobError('No jobs found. Try a different category.')
+                                        }
+                                    } catch {
+                                        setJobError('Failed to connect to job search service.')
+                                    } finally {
+                                        setIsJobsLoading(false)
+                                    }
                                 }}
                                 className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-zinc-400 hover:text-white hover:bg-white/[0.08] hover:border-white/10 transition-all text-[12px] font-semibold whitespace-nowrap shrink-0 active:scale-95"
                             >
