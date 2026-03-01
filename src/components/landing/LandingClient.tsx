@@ -12,7 +12,6 @@ import { TestimonialsSection } from './TestimonialsSection'
 import { PricingPremium } from './PricingPremium'
 import { LogoCloud } from '@/components/ui/logo-cloud'
 import { Footer } from '@/components/ui/footer-section'
-import { FloatingPaths } from '@/components/ui/floating-paths'
 
 export function LandingClient({ user }: { user: any }) {
     // ... rest of imports/setup
@@ -108,8 +107,7 @@ export function LandingClient({ user }: { user: any }) {
                 {/* 1. HERO SECTION - CLEAN & PREMIUM */}
                 <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center pt-20">
                     <div className="absolute inset-0 z-0">
-                        <FloatingPaths position={1} />
-                        <FloatingPaths position={-1} />
+                        <ShaderAnimation />
                     </div>
                     <div className="absolute inset-0 bg-black/20 z-[1] pointer-events-none" />
 

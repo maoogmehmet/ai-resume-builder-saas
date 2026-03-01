@@ -15,6 +15,7 @@ import {
 import { Input } from './input';
 import { cn } from '@/lib/utils';
 import { Label } from './label';
+import { ShaderAnimation } from './shader-animation';
 
 interface AuthPageProps {
 	type: 'signin' | 'signup';
@@ -47,8 +48,7 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 					</blockquote>
 				</div>
 				<div className="absolute inset-0">
-					<FloatingPaths position={1} />
-					<FloatingPaths position={-1} />
+					<ShaderAnimation />
 				</div>
 			</div>
 			<div className="relative flex min-h-screen flex-col justify-center p-4">
