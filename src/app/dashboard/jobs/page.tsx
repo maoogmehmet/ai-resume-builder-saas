@@ -216,47 +216,100 @@ export default function JobsPage() {
         <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white">
             <div className="max-w-7xl mx-auto w-full p-8 px-12 space-y-12">
 
-                <header className="flex flex-col xl:flex-row items-start xl:items-center justify-between pb-4 gap-8">
-                    <div className="flex items-center gap-3">
-                        <h1 className="text-3xl font-bold tracking-tight text-white">
-                            Job Finder
-                        </h1>
-                        {!hasSearched && savedJobs.length > 0 && (
-                            <Badge variant="outline" className="h-5 bg-white/5 border-white/10 text-zinc-500 font-bold uppercase tracking-widest text-[10px]">
-                                {savedJobs.length} Saved
-                            </Badge>
-                        )}
+                <header className="flex flex-col gap-6 pb-4">
+                    <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-6">
+                        <div className="flex items-center gap-3">
+                            <h1 className="text-3xl font-bold tracking-tight text-white">
+                                Job Finder
+                            </h1>
+                            {!hasSearched && savedJobs.length > 0 && (
+                                <Badge variant="outline" className="h-5 bg-white/5 border-white/10 text-zinc-500 font-bold uppercase tracking-widest text-[10px]">
+                                    {savedJobs.length} Saved
+                                </Badge>
+                            )}
+                        </div>
+
+                        <div className="flex w-full xl:w-auto items-center gap-2 bg-[#0a0a0a] p-1.5 rounded-2xl border border-white/10">
+                            <div className="relative flex-1 xl:w-[300px]">
+                                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600" />
+                                <Input
+                                    placeholder="Search Jobs..."
+                                    className="h-10 pl-10 bg-transparent border-none focus-visible:ring-0 text-white text-sm placeholder:text-zinc-600"
+                                    value={jobQuery}
+                                    onChange={(e) => setJobQuery(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleJobSearch()}
+                                />
+                            </div>
+                            <div className="h-4 w-px bg-white/5" />
+                            <div className="relative w-full xl:w-[150px]">
+                                <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600" />
+                                <Input
+                                    placeholder="Location"
+                                    className="h-10 pl-10 bg-transparent border-none focus-visible:ring-0 text-white text-sm placeholder:text-zinc-600"
+                                    value={location}
+                                    onChange={(e) => setLocation(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleJobSearch()}
+                                />
+                            </div>
+                            <Button
+                                onClick={handleJobSearch}
+                                disabled={isJobsLoading}
+                                className="h-9 px-6 bg-white text-black hover:bg-zinc-200 font-bold rounded-xl text-xs"
+                            >
+                                {isJobsLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Search'}
+                            </Button>
+                        </div>
                     </div>
 
-                    <div className="flex w-full xl:w-auto items-center gap-2 bg-[#0a0a0a] p-1.5 rounded-2xl border border-white/10">
-                        <div className="relative flex-1 xl:w-[300px]">
-                            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600" />
-                            <Input
-                                placeholder="Search Jobs..."
-                                className="h-10 pl-10 bg-transparent border-none focus-visible:ring-0 text-white text-sm placeholder:text-zinc-600"
-                                value={jobQuery}
-                                onChange={(e) => setJobQuery(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleJobSearch()}
-                            />
-                        </div>
-                        <div className="h-4 w-px bg-white/5" />
-                        <div className="relative w-full xl:w-[150px]">
-                            <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-zinc-600" />
-                            <Input
-                                placeholder="Location"
-                                className="h-10 pl-10 bg-transparent border-none focus-visible:ring-0 text-white text-sm placeholder:text-zinc-600"
-                                value={location}
-                                onChange={(e) => setLocation(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleJobSearch()}
-                            />
-                        </div>
-                        <Button
-                            onClick={handleJobSearch}
-                            disabled={isJobsLoading}
-                            className="h-9 px-6 bg-white text-black hover:bg-zinc-200 font-bold rounded-xl text-xs"
-                        >
-                            {isJobsLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'Search'}
-                        </Button>
+                    {/* Quick Category Filters */}
+                    <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide pb-1">
+                        {[
+                            { label: 'All Jobs', icon: '🌐', query: 'Jobs' },
+                            { label: 'Software Engineering', icon: '💻', query: 'Software Engineer' },
+                            { label: 'Frontend Developer', icon: '🎨', query: 'Frontend Developer' },
+                            { label: 'Backend Developer', icon: '⚙️', query: 'Backend Developer' },
+                            { label: 'Data Science', icon: '📊', query: 'Data Scientist' },
+                            { label: 'AI / Machine Learning', icon: '🤖', query: 'Machine Learning Engineer' },
+                            { label: '3D & Graphics', icon: '🎮', query: '3D Artist' },
+                            { label: 'Product Design', icon: '✏️', query: 'Product Designer' },
+                            { label: 'Marketing', icon: '📈', query: 'Marketing Manager' },
+                            { label: 'Product Manager', icon: '📋', query: 'Product Manager' },
+                            { label: 'DevOps', icon: '☁️', query: 'DevOps Engineer' },
+                            { label: 'Cybersecurity', icon: '🔒', query: 'Cybersecurity Analyst' },
+                        ].map((cat) => (
+                            <button
+                                key={cat.query}
+                                onClick={() => {
+                                    setJobQuery(cat.query)
+                                    setLocation('')
+                                    setTimeout(() => {
+                                        setIsJobsLoading(true)
+                                        setJobs([])
+                                        setJobError(null)
+                                        setHasSearched(true)
+                                        fetch('/api/linkedin/search-jobs', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify({ query: cat.query, location: '' })
+                                        })
+                                            .then(res => res.json())
+                                            .then(data => {
+                                                if (data.jobs && data.jobs.length > 0) {
+                                                    setJobs(data.jobs)
+                                                } else {
+                                                    setJobError('No jobs found. Try a different category.')
+                                                }
+                                            })
+                                            .catch(() => setJobError('Failed to connect to job search service.'))
+                                            .finally(() => setIsJobsLoading(false))
+                                    }, 0)
+                                }}
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/[0.04] border border-white/[0.06] text-zinc-400 hover:text-white hover:bg-white/[0.08] hover:border-white/10 transition-all text-[12px] font-semibold whitespace-nowrap shrink-0 active:scale-95"
+                            >
+                                <span className="text-sm">{cat.icon}</span>
+                                {cat.label}
+                            </button>
+                        ))}
                     </div>
                 </header>
 

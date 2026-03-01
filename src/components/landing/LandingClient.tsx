@@ -110,6 +110,8 @@ export function LandingClient({ user }: { user: any }) {
                         <ShaderAnimation />
                     </div>
                     <div className="absolute inset-0 bg-black/20 z-[1] pointer-events-none" />
+                    {/* Seamless fade from header */}
+                    <div className="absolute top-0 left-0 right-0 h-48 bg-gradient-to-b from-black via-black/60 to-transparent z-[2] pointer-events-none" />
 
                     <div className="relative z-10 max-w-5xl mx-auto px-6 text-center flex flex-col items-center">
                         <motion.div
