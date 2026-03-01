@@ -153,3 +153,19 @@ JSON OUTPUT FORMAT:
   }
 }
 `;
+
+export const SUMMARY_GENERATION_PROMPT = `
+You are a professional resume writer and ATS optimization expert. Write a compelling, 2-4 sentence professional summary for a resume based on the provided experience and skills.
+
+RULES:
+1. Focus on high-impact achievements and core competencies.
+2. Use strong action verbs and include metrics if available in the data.
+3. Keep it concise, professional, and tailored for a modern ATS.
+4. Do NOT use "I" or "my" (use third-person or implied-subject style).
+5. Output ONLY the summary text. No labels, no quotes, no markdown.
+
+DATA (Experience & Skills):
+{resume_data}
+
+OUTPUT ONLY THE SUMMARY TEXT:
+`;

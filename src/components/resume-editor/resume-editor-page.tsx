@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import {
     Loader2, ArrowLeft, CheckCircle2, Sparkles, Layout, CloudUpload, ChevronDown,
-    User, Briefcase, GraduationCap, Wrench, FileText, MoreVertical, Printer,
+    User, Briefcase, GraduationCap, Wrench, FileText,
     Check, MessageSquarePlus
 } from 'lucide-react'
 import Link from 'next/link'
@@ -65,9 +65,9 @@ export function ResumeEditorPage() {
     const [currentVersionId, setCurrentVersionId] = useState<string | undefined>()
     const [template, setTemplate] = useState<TemplateType>('classic')
     const [showTemplates, setShowTemplates] = useState(false)
-    const [showMoreMenu, setShowMoreMenu] = useState(false)
     const [isTwoPageView, setIsTwoPageView] = useState(false)
     const [isUploadingPdf, setIsUploadingPdf] = useState(false)
+    const [isGeneratingSummary, setIsGeneratingSummary] = useState(false)
     const [openSections, setOpenSections] = useState<Set<string>>(new Set(['personal_info']))
 
     const resumeId = params?.id as string
@@ -159,6 +159,30 @@ export function ResumeEditorPage() {
             toast.error('AI Generation Failed', { description: error.message })
         } finally {
             setIsLoading(false)
+        }
+    }
+
+    const handleGenerateSummary = async () => {
+        if (!resumeData) return;
+        setIsGeneratingSummary(true);
+        toast.info('Generating Professional Summary...', { description: 'Analyzing your experience and skills...' });
+
+        try {
+            const response = await fetch('/api/ai/generate-summary', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ resumeData })
+            });
+
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'Summary generation failed');
+
+            handleUpdate('summary', result.summary);
+            toast.success('Summary Generated!', { description: 'Your professional summary has been drafted.' });
+        } catch (error: any) {
+            toast.error('Generation Failed', { description: error.message });
+        } finally {
+            setIsGeneratingSummary(false);
         }
     }
 
@@ -394,9 +418,9 @@ export function ResumeEditorPage() {
                                                     />
                                                     <div className="flex items-center justify-between">
                                                         <AnimatedGenerateButton
-                                                            onClick={requestAIGeneration}
-                                                            disabled={isLoading}
-                                                            generating={isLoading}
+                                                            onClick={handleGenerateSummary}
+                                                            disabled={isGeneratingSummary}
+                                                            generating={isGeneratingSummary}
                                                             labelIdle="Generate with AI"
                                                             labelActive="Writing Summary..."
                                                             highlightHueDeg={140}
@@ -455,34 +479,10 @@ export function ResumeEditorPage() {
                             <span className="text-xs font-black text-zinc-500 uppercase tracking-[0.2em]">Live PDF Preview</span>
                         </div>
                         <div className="flex items-center gap-3">
-                            <button className="h-8 w-8 rounded-lg flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/[0.06] transition-all">
-                                <Printer className="h-4 w-4" />
-                            </button>
-                            <div className="relative">
-                                <button
-                                    onClick={() => setShowMoreMenu(!showMoreMenu)}
-                                    className={`h-8 w-8 rounded-lg flex items-center justify-center transition-all ${showMoreMenu ? 'bg-white/10 text-white' : 'text-zinc-500 hover:text-white hover:bg-white/[0.06]'}`}
-                                >
-                                    <MoreVertical className="h-4 w-4" />
-                                </button>
-                                {showMoreMenu && (
-                                    <div className="absolute right-0 top-10 z-50 bg-[#141414] rounded-xl shadow-2xl border border-white/[0.08] p-1.5 w-56 overflow-hidden">
-                                        <button
-                                            onClick={() => { setIsTwoPageView(!isTwoPageView); setShowMoreMenu(false); }}
-                                            className="w-full text-left px-3 py-2 rounded-lg transition-all flex items-center justify-between hover:bg-white/[0.06] text-zinc-400 hover:text-white"
-                                        >
-                                            <span className="text-xs font-semibold">İki sayfalı görünüm</span>
-                                            {isTwoPageView && <Check className="h-3.5 w-3.5 text-emerald-500" />}
-                                        </button>
-                                        <button
-                                            onClick={() => { toggleSection('additional_explanations'); setShowMoreMenu(false); }}
-                                            className="w-full text-left px-3 py-2 rounded-lg transition-all flex items-center justify-between hover:bg-white/[0.06] text-zinc-400 hover:text-white"
-                                        >
-                                            <span className="text-xs font-semibold">Ek Açıklamalar</span>
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                            <PdfDownloadButton
+                                resumeData={resumeData}
+                                template={template}
+                            />
                         </div>
                     </div>
                     <div className="flex-1 p-6 flex items-start justify-center">
@@ -493,8 +493,8 @@ export function ResumeEditorPage() {
                 </div>
             </main>
 
-            {(showTemplates || showMoreMenu) && (
-                <div className="fixed inset-0 z-40" onClick={() => { setShowTemplates(false); setShowMoreMenu(false); }} />
+            {showTemplates && (
+                <div className="fixed inset-0 z-40" onClick={() => { setShowTemplates(false); }} />
             )}
 
             <style jsx global>{`

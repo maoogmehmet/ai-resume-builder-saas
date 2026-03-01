@@ -91,7 +91,7 @@ export async function POST(req: Request) {
                 slug: finalSlug,
                 is_active: isLinkActive,
                 template: template || 'classic',
-                version_id: versionId || null,
+                version_id: (versionId && versionId.length > 0) ? versionId : null,
                 link_name: linkName || null
             })
             .select()
