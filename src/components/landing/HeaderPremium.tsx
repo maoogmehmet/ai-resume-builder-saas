@@ -40,7 +40,7 @@ export function HeaderPremium({ user }: { user: any }) {
     return (
         <header
             className={cn(
-                'sticky top-0 z-[100] mx-auto w-full border-b border-transparent transition-all duration-300 ease-out',
+                'fixed top-0 z-[100] mx-auto w-full border-b border-transparent transition-all duration-300 ease-out',
                 {
                     'bg-black/80 backdrop-blur-xl border-white/5 md:top-4 md:max-w-5xl md:rounded-2xl md:shadow-[0_0_50px_rgba(0,0,0,1)]':
                         scrolled && !open,

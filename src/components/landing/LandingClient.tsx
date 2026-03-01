@@ -5,9 +5,8 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Sparkles, Zap, Target, ArrowRight, ChevronRight, Link2 } from 'lucide-react'
+import { Zap, Target, ArrowRight, Sparkles } from 'lucide-react'
 import { ShaderAnimation } from '@/components/ui/shader-animation'
-import { Announcement } from '@/components/ui/announcement'
 import { HeaderPremium } from './HeaderPremium'
 import { TestimonialsSection } from './TestimonialsSection'
 import { PricingPremium } from './PricingPremium'
@@ -52,13 +51,13 @@ export function LandingClient({ user }: { user: any }) {
     ]
 
     const logos = [
-        { alt: "Google", src: "", width: 100, height: 20 },
-        { alt: "Microsoft", src: "", width: 100, height: 20 },
-        { alt: "Amazon", src: "", width: 100, height: 20 },
-        { alt: "Netflix", src: "", width: 100, height: 20 },
-        { alt: "Meta", src: "", width: 100, height: 20 },
-        { alt: "Stripe", src: "", width: 100, height: 20 },
-        { alt: "Apple", src: "", width: 100, height: 20 },
+        { alt: "Google", src: "https://api.iconify.design/logos:google.svg", width: 100, height: 24 },
+        { alt: "Microsoft", src: "https://api.iconify.design/logos:microsoft.svg", width: 100, height: 24 },
+        { alt: "Amazon", src: "https://api.iconify.design/logos:amazon.svg", width: 100, height: 24 },
+        { alt: "Netflix", src: "https://api.iconify.design/logos:netflix.svg", width: 100, height: 24 },
+        { alt: "Meta", src: "https://api.iconify.design/logos:meta.svg", width: 100, height: 24 },
+        { alt: "Stripe", src: "https://api.iconify.design/logos:stripe.svg", width: 100, height: 24 },
+        { alt: "Apple", src: "https://api.iconify.design/logos:apple.svg", width: 100, height: 24 },
     ]
 
     const pricingPlans = [
@@ -102,13 +101,8 @@ export function LandingClient({ user }: { user: any }) {
     return (
         <div className="flex flex-col min-h-screen bg-black font-sans selection:bg-white selection:text-black overflow-hidden text-zinc-400">
 
-            <Announcement
-                title="Grand Launch"
-                description="CV Builder 2.0 is now live with Claude 3.5 AI. Experience the future of career growth."
-            />
             <HeaderPremium user={user} />
-
-            <main className="flex-1 w-full">
+            <main className="flex-1 w-full pt-16">
                 {/* 1. HERO SECTION - CLEAN & PREMIUM */}
                 <section className="relative w-full min-h-[85vh] flex flex-col items-center justify-center pt-20">
                     <div className="absolute inset-0 z-0">

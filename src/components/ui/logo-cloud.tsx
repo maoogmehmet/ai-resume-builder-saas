@@ -21,14 +21,17 @@ export function LogoCloud({ className, logos, ...props }: LogoCloudProps) {
                 className
             )}
         >
-            <InfiniteSlider gap={42} reverse duration={40} durationOnHover={20}>
+            <InfiniteSlider gap={42} reverse speed={80} speedOnHover={25}>
                 {logos.map((logo) => (
-                    <div key={`logo-${logo.alt}`} className="flex items-center gap-2 group px-8">
-                        <div className="h-5 w-5 rounded bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-colors">
-                            <div className="h-2 w-2 rounded-full bg-white/40 group-hover:bg-emerald-400 transition-colors" />
-                        </div>
-                        <span className="text-sm font-bold tracking-tighter text-zinc-600 group-hover:text-zinc-400 transition-colors uppercase italic">{logo.alt}</span>
-                    </div>
+                    <img
+                        alt={logo.alt}
+                        className="pointer-events-none h-4 select-none md:h-5 dark:brightness-0 dark:invert"
+                        height={logo.height || "auto"}
+                        key={`logo-${logo.alt}`}
+                        loading="lazy"
+                        src={logo.src}
+                        width={logo.width || "auto"}
+                    />
                 ))}
             </InfiniteSlider>
         </div>
