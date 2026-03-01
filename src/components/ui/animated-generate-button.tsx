@@ -70,10 +70,10 @@ export default function AnimatedGenerateButton({
           } as React.CSSProperties
         }
       >
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center gap-2">
           <svg
             className={clsx(
-              "ui-anim-btn-svg mr-2 flex-grow-0",
+              "ui-anim-btn-svg flex-grow-0",
               svgSizeClasses[size],
               "fill-[color:var(--ui-anim-svg-fill)]",
               "transition-[fill,filter,opacity] duration-400"
@@ -89,35 +89,32 @@ export default function AnimatedGenerateButton({
             ></path>
           </svg>
           <div className="ui-anim-txt-wrapper relative flex items-center font-bold tracking-tight">
-            {/* Ghost text to drive container width */}
-            <span className="opacity-0 pointer-events-none whitespace-nowrap">
-              {labelIdle.length > labelActive.length ? labelIdle : labelActive}
-            </span>
-
-            <div
-              className={clsx(
-                "ui-anim-txt-1 absolute inset-0 flex items-center justify-start whitespace-nowrap",
-                generating ? "opacity-0" : "animate-[ui-appear_1s_ease-in-out_forwards]"
-              )}
-            >
-              {Array.from(labelIdle).map((ch, i) => (
-                <span key={i} className="ui-anim-letter inline-block">
-                  {ch === " " ? "\u00A0" : ch}
-                </span>
-              ))}
-            </div>
-            <div
-              className={clsx(
-                "ui-anim-txt-2 absolute inset-0 flex items-center justify-start whitespace-nowrap",
-                generating ? "opacity-100" : "opacity-0"
-              )}
-            >
-              {Array.from(labelActive).map((ch, i) => (
-                <span key={i} className="ui-anim-letter inline-block">
-                  {ch === " " ? "\u00A0" : ch}
-                </span>
-              ))}
-            </div>
+            {!generating ? (
+              <div
+                className={clsx(
+                  "ui-anim-txt-1 flex items-center whitespace-nowrap",
+                  "animate-[ui-appear_1s_ease-in-out_forwards]"
+                )}
+              >
+                {Array.from(labelIdle).map((ch, i) => (
+                  <span key={i} className="ui-anim-letter inline-block">
+                    {ch === " " ? "\u00A0" : ch}
+                  </span>
+                ))}
+              </div>
+            ) : (
+              <div
+                className={clsx(
+                  "ui-anim-txt-2 flex items-center whitespace-nowrap"
+                )}
+              >
+                {Array.from(labelActive).map((ch, i) => (
+                  <span key={i} className="ui-anim-letter inline-block text-white">
+                    {ch === " " ? "\u00A0" : ch}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </button>
