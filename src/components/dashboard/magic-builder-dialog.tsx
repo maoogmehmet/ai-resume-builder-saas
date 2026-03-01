@@ -8,7 +8,7 @@ export function MagicBuilderDialog() {
     const router = useRouter()
 
     const handleMagicBuild = () => {
-        router.push('/magic-build')
+        router.push('/dashboard/magic-build')
     }
 
     return (

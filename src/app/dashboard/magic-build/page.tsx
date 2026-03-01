@@ -78,33 +78,14 @@ export default function MagicBuildPage() {
     }
 
     return (
-        <div className="min-h-screen bg-black text-white font-sans selection:bg-yellow-500/30 overflow-hidden relative">
-            {/* Background elements */}
+        <div className="min-h-screen bg-black text-white font-sans selection:bg-yellow-500/30 relative">
+            {/* Background elements - toned down for dashboard */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-yellow-500/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500/5 rounded-full blur-[120px]" />
+                <div className="absolute top-[10%] left-[20%] w-[30%] h-[30%] bg-yellow-500/5 rounded-full blur-[100px]" />
+                <div className="absolute bottom-[20%] right-[10%] w-[30%] h-[30%] bg-blue-500/5 rounded-full blur-[100px]" />
             </div>
 
-            {/* Navigation Header */}
-            <header className="relative z-50 p-6 flex justify-between items-center max-w-7xl mx-auto w-full">
-                <Button
-                    variant="ghost"
-                    className="text-zinc-500 hover:text-white hover:bg-white/5 gap-2 rounded-xl transition-all"
-                    onClick={() => router.push('/dashboard/builder')}
-                    disabled={isLoading}
-                >
-                    <ArrowLeft className="h-4 w-4" />
-                    Back to Dashboard
-                </Button>
-
-                <div className="flex items-center gap-2">
-                    <Badge className="bg-yellow-400/10 text-yellow-500 border-yellow-500/20 px-3 py-1 font-bold text-[10px] uppercase tracking-widest">
-                        Elite AI Access
-                    </Badge>
-                </div>
-            </header>
-
-            <main className="relative z-10 max-w-4xl mx-auto px-6 pt-8 pb-20">
+            <main className="relative z-10 max-w-4xl mx-auto px-6 pt-12 pb-20">
                 <AnimatePresence mode="wait">
                     {!isLoading ? (
                         <motion.div
