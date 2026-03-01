@@ -466,7 +466,7 @@ export default function JobsPage() {
                                         const jobLink = job.jobUrl?.startsWith('http') ? job.jobUrl : `https://www.linkedin.com${job.jobUrl}`
 
                                         return (
-                                            <div key={job.jobUrl || i}
+                                            <div key={`search-${i}-${job.jobUrl}`}
                                                 onClick={() => toggleJobSelection(job)}
                                                 className={`flex flex-col border rounded-[2.5rem] bg-[#0a0a0a] transition-all cursor-pointer group relative overflow-hidden ${selected ? 'border-zinc-700 ring-1 ring-white/5 shadow-2xl shadow-white/5' : 'border-white/5 hover:border-white/10'}`}>
 
@@ -502,28 +502,42 @@ export default function JobsPage() {
                                                 </div>
 
                                                 <div className="p-5 flex items-center justify-between gap-3 border-t border-white/5 bg-zinc-900/10">
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        disabled={saving || saved}
-                                                        onClick={(e) => { e.stopPropagation(); handleSaveJob(job) }}
-                                                        className={`flex-1 h-12 font-bold text-sm rounded-[1.25rem] gap-2.5 transition-all active:scale-[0.98] border ${saved ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/20' : 'bg-white/5 text-white border-white/5 hover:bg-white/10'}`}
-                                                    >
-                                                        {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4 opacity-40" />}
-                                                        {saved ? 'Saved' : 'Save'}
-                                                    </Button>
+                                                    <AnimatedGenerateButton
+                                                        onClick={(e) => {
+                                                            e.stopPropagation()
+                                                            sessionStorage.setItem('optimizeJob', JSON.stringify({
+                                                                title: job.title,
+                                                                companyName: job.companyName,
+                                                                description: job.description,
+                                                                url: job.jobUrl
+                                                            }))
+                                                            window.location.href = '/dashboard/optimize'
+                                                        }}
+                                                        labelIdle="Optimize"
+                                                        highlightHueDeg={140}
+                                                        size="md"
+                                                        className="flex-1 h-12"
+                                                    />
 
-                                                    <Button
-                                                        variant="ghost"
-                                                        size="sm"
-                                                        asChild
-                                                        className="h-12 w-12 p-0 text-zinc-500 hover:text-white hover:bg-white/5 rounded-[1.25rem] transition-all"
-                                                        onClick={(e) => e.stopPropagation()}
-                                                    >
-                                                        <a href={jobLink} target="_blank" rel="noopener noreferrer">
+                                                    <div className="flex items-center gap-2">
+                                                        <button
+                                                            disabled={saving || saved}
+                                                            onClick={(e) => { e.stopPropagation(); handleSaveJob(job) }}
+                                                            className={`h-12 w-12 rounded-[1.25rem] flex items-center justify-center transition-all active:scale-95 border ${saved ? 'bg-emerald-500/5 text-emerald-500 border-emerald-500/20' : 'bg-transparent text-zinc-500 border-white/5 hover:text-white hover:bg-white/5'}`}
+                                                        >
+                                                            {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : saved ? <BookmarkCheck className="h-4 w-4" /> : <Bookmark className="h-4 w-4" />}
+                                                        </button>
+
+                                                        <a
+                                                            href={jobLink}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                            className="h-12 w-12 rounded-[1.25rem] flex items-center justify-center text-zinc-500 hover:text-white hover:bg-white/5 transition-all"
+                                                        >
                                                             <ExternalLink className="h-4 w-4" />
                                                         </a>
-                                                    </Button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         )
