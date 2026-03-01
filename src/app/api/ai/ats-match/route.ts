@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 export const dynamic = 'force-dynamic';
 
 import Anthropic from '@anthropic-ai/sdk';
-import { ATS_MATCHING_PROMPT } from '@/lib/ai-prompts';
+import { ATS_MATCHING_PROMPT, ATS_PREDICTED_MATCH_PROMPT } from '@/lib/ai-prompts';
 
 const anthropic = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY || 'sk-ant-placeholder',
@@ -19,10 +19,14 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { resumeId, jobDescription, jobTitle, companyName, jobUrl } = await req.json();
+        const { resumeId, jobDescription, jobTitle, companyName } = await req.json();
 
-        if (!resumeId || !jobDescription) {
-            return NextResponse.json({ error: 'Resume ID and Job Description are required' }, { status: 400 });
+        if (!resumeId) {
+            return NextResponse.json({ error: 'Resume ID is required' }, { status: 400 });
+        }
+
+        if (!jobDescription && (!jobTitle || !companyName)) {
+            return NextResponse.json({ error: 'Job Description or both Job Title and Company Name are required' }, { status: 400 });
         }
 
         // Get current AI Generated Resume Data
@@ -40,6 +44,15 @@ export async function POST(req: Request) {
         const resumeJson = JSON.stringify(resumeRow.ai_generated_json);
 
         // AI Request to Score Match
+        const prompt = jobDescription
+            ? ATS_MATCHING_PROMPT
+                .replace('{resume_json}', resumeJson)
+                .replace('{job_description}', jobDescription)
+            : ATS_PREDICTED_MATCH_PROMPT
+                .replace('{resume_json}', resumeJson)
+                .replace(/{job_title}/g, jobTitle || 'Target Role')
+                .replace(/{company_name}/g, companyName || 'Target Company');
+
         const response = await anthropic.messages.create({
             model: "claude-3-haiku-20240307",
             max_tokens: 3500,
@@ -48,9 +61,7 @@ export async function POST(req: Request) {
             messages: [
                 {
                     role: "user",
-                    content: ATS_MATCHING_PROMPT
-                        .replace('{resume_json}', resumeJson)
-                        .replace('{job_description}', jobDescription)
+                    content: prompt
                 }
             ]
         });

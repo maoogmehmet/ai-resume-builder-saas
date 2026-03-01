@@ -48,7 +48,8 @@ export default function OptimizePage() {
         }
     }, [])
 
-    const isValid = title.trim() && desc.trim() && selectedResumeUrl
+    const isInstantMode = title.trim() && company.trim() && !desc.trim();
+    const isValid = (title.trim() && desc.trim() && selectedResumeUrl) || (isInstantMode && selectedResumeUrl);
 
     const handleAnalyze = async () => {
         if (!isValid) return
@@ -96,7 +97,7 @@ export default function OptimizePage() {
                         </h1>
                     </div>
                     <p className="text-zinc-400 text-sm font-medium mt-2">
-                        Paste a job description to see how well your CV matches and get improvement suggestions.
+                        Paste a job description or use <b>Instant AI Analysis</b> by just entering the Job Title and Company.
                     </p>
                 </header>
 
@@ -152,7 +153,10 @@ export default function OptimizePage() {
                         </div>
 
                         <div className="space-y-2 mb-8">
-                            <Label className="text-[13px] font-semibold text-zinc-300">Job Description *</Label>
+                            <div className="flex items-center justify-between">
+                                <Label className="text-[13px] font-semibold text-zinc-300">Job Description</Label>
+                                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-wider">Optional for Instant Mode</span>
+                            </div>
                             <Textarea
                                 placeholder="Paste the full job description here..."
                                 className="min-h-[220px] bg-black resize-y border-white/10 p-4 leading-relaxed text-sm text-white focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-600"
@@ -165,7 +169,7 @@ export default function OptimizePage() {
                             onClick={handleAnalyze}
                             disabled={!isValid || isAnalyzing}
                             generating={isAnalyzing}
-                            labelIdle="Analyze My CV"
+                            labelIdle={isInstantMode ? "🚀 Instant AI Analysis" : "Analyze My CV"}
                             labelActive="Analyzing..."
                             highlightHueDeg={200}
                             size="lg"
@@ -175,26 +179,51 @@ export default function OptimizePage() {
 
                     {/* Right Column - Results Empty State or Results */}
                     {results ? (
-                        <div className="bg-[#1e1e1e] border border-white/10 rounded-2xl p-8 shadow-sm space-y-8 animate-in fade-in zoom-in-95 duration-500 text-white">
+                        <div className="bg-[#1e1e1e] border border-white/10 rounded-2xl p-8 shadow-sm space-y-8 animate-in fade-in zoom-in-95 duration-500 text-white overflow-hidden relative">
+                            {results.is_predicted && (
+                                <div className="absolute top-0 right-0 bg-blue-500/20 text-blue-400 px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] rounded-bl-xl border-l border-b border-blue-500/30 flex items-center gap-2">
+                                    <Sparkles className="h-3 w-3" />
+                                    AI Predicted Match
+                                </div>
+                            )}
+
                             <div className="flex items-center gap-6">
                                 <div className="relative h-24 w-24 flex items-center justify-center rounded-full border-4 border-white/5 shadow-inner">
                                     <svg className="absolute inset-0 w-full h-full -rotate-90">
                                         <circle cx="44" cy="44" r="44" fill="none" strokeWidth="8" stroke="rgba(255,255,255,0.05)" className="translate-x-1 translate-y-1" />
-                                        <circle cx="44" cy="44" r="44" fill="none" strokeWidth="8" stroke={results.match_score >= 80 ? '#22c55e' : results.match_score >= 60 ? '#eab308' : '#ef4444'} strokeDasharray="276" strokeDashoffset={276 - (276 * results.match_score) / 100} strokeLinecap="round" className="translate-x-1 translate-y-1 transition-all duration-1000" />
+                                        <circle cx="44" cy="44" r="44" fill="none" strokeWidth="8" stroke={results.ats_score >= 80 ? '#22c55e' : results.ats_score >= 60 ? '#eab308' : '#ef4444'} strokeDasharray="276" strokeDashoffset={276 - (276 * (results.ats_score || 0)) / 100} strokeLinecap="round" className="translate-x-1 translate-y-1 transition-all duration-1000" />
                                     </svg>
-                                    <span className="text-3xl font-black text-white">{results.match_score}<span className="text-lg text-zinc-500">%</span></span>
+                                    <span className="text-3xl font-black text-white">{results.ats_score}<span className="text-lg text-zinc-500">%</span></span>
                                 </div>
                                 <div>
                                     <h2 className="text-2xl font-bold text-white mb-1">Match Score</h2>
-                                    <p className="text-zinc-400 font-medium">{results.match_score >= 80 ? 'Excellent match! You are highly qualified.' : results.match_score >= 60 ? 'Good match. Some optimizations needed.' : 'Low match. Significant updates required.'}</p>
+                                    <p className="text-zinc-400 font-medium">
+                                        {results.ats_score >= 80 ? 'Excellent match! You are highly qualified.' : results.ats_score >= 60 ? 'Good match. Some optimizations needed.' : 'Low match. Significant updates required.'}
+                                    </p>
                                 </div>
                             </div>
 
-                            {results.missing_skills && results.missing_skills.length > 0 && (
+                            {results.predicted_requirements && results.predicted_requirements.length > 0 && (
+                                <div className="space-y-4 p-4 bg-blue-500/[0.03] border border-blue-500/10 rounded-xl">
+                                    <h3 className="text-sm font-black text-blue-400 uppercase tracking-widest flex items-center gap-2">
+                                        <Target className="h-4 w-4" /> Predicted Key Requirements
+                                    </h3>
+                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                        {results.predicted_requirements.map((req: string, i: number) => (
+                                            <li key={i} className="text-[13px] text-zinc-400 flex items-center gap-2">
+                                                <div className="h-1.5 w-1.5 rounded-full bg-blue-500/40" />
+                                                {req}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {results.keyword_analysis?.missing_keywords && results.keyword_analysis.missing_keywords.length > 0 && (
                                 <div className="space-y-4">
                                     <h3 className="text-lg font-bold text-white flex items-center gap-2"><AlertCircle className="h-5 w-5 text-red-500" /> Missing Keywords</h3>
                                     <div className="flex flex-wrap gap-2">
-                                        {results.missing_skills.map((skill: string, i: number) => (
+                                        {results.keyword_analysis.missing_keywords.map((skill: string, i: number) => (
                                             <span key={i} className="px-3 py-1.5 bg-red-500/10 text-red-400 border border-red-500/20 rounded-lg text-sm font-bold">{skill}</span>
                                         ))}
                                     </div>
@@ -202,22 +231,22 @@ export default function OptimizePage() {
                                 </div>
                             )}
 
-                            {results.matching_skills && results.matching_skills.length > 0 && (
+                            {results.keyword_analysis?.matched_keywords && results.keyword_analysis.matched_keywords.length > 0 && (
                                 <div className="space-y-4">
                                     <h3 className="text-lg font-bold text-white flex items-center gap-2"><CheckCircle className="h-5 w-5 text-emerald-500" /> Matched Keywords</h3>
                                     <div className="flex flex-wrap gap-2">
-                                        {results.matching_skills.map((skill: string, i: number) => (
+                                        {results.keyword_analysis.matched_keywords.map((skill: string, i: number) => (
                                             <span key={i} className="px-3 py-1.5 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-lg text-sm font-bold">{skill}</span>
                                         ))}
                                     </div>
                                 </div>
                             )}
 
-                            {results.recommendations && (
+                            {results.suggestions && (
                                 <div className="space-y-4 pt-4 border-t border-white/10">
                                     <h3 className="text-lg font-bold text-white">Expert Recommendations</h3>
                                     <ul className="space-y-3">
-                                        {results.recommendations.map((rec: string, i: number) => (
+                                        {results.suggestions.map((rec: string, i: number) => (
                                             <li key={i} className="flex items-start gap-3 bg-white/5 p-4 rounded-xl border border-white/5">
                                                 <Target className="h-5 w-5 text-blue-400 shrink-0 mt-0.5" />
                                                 <span className="text-sm text-zinc-300 font-medium leading-relaxed">{rec}</span>

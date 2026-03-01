@@ -109,3 +109,47 @@ JSON OUTPUT FORMAT:
 
 NOTE: The 'optimized_bullets' object should contain rewritten versions of existing resume bullet points or summary that better incorporate the missing keywords. Follow the key format 'experience_INDEX_bullet_INDEX'.
 `;
+
+export const ATS_PREDICTED_MATCH_PROMPT = `
+You are an expert Technical Recruiter and ATS Optimization engine.
+
+  CONTEXT: The user has NOT provided a job description.You must PREDICT the typical requirements for this role at this specific company and then analyze their resume.
+
+JOB TITLE: { job_title }
+COMPANY: { company_name }
+
+RESUME:
+{ resume_json }
+
+TASK:
+1. PREDICT / INFER the core responsibilities, required technical skills, and industry keywords for a { job_title } role at { company_name }.
+2. Compare the resume against these predicted requirements.
+3. Calculate an ATS score and provide analysis.
+
+OUTPUT REQUIREMENTS:
+- Your analysis must reflect the specific standards of { company_name } if possible.
+- Include a field "is_predicted": true.
+- Output ONLY valid JSON.
+
+JSON OUTPUT FORMAT:
+{
+  "ats_score": 75,
+    "is_predicted": true,
+      "predicted_requirements": ["Requirement 1", "Requirement 2"],
+        "keyword_analysis": {
+    "required_keywords": ["Python", "AWS", "Docker"],
+      "matched_keywords": ["Python", "AWS"],
+        "missing_keywords": ["Docker"],
+          "match_percentage": 66
+  },
+  "skill_gaps": ["Docker", "Kubernetes"],
+    "suggestions": [
+      "Add Docker experience in DevOps project",
+      "Mention Kubernetes in container orchestration context"
+    ],
+      "optimized_bullets": {
+    "experience_0_bullet_1": "Optimized Python microservices deployed on AWS using Docker containers",
+      "summary": "Updated summary incorporating keywords..."
+  }
+}
+`;
