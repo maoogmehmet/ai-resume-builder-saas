@@ -51,13 +51,13 @@ export function LandingClient({ user }: { user: any }) {
     ]
 
     const logos = [
-        { alt: "Google", src: "https://api.iconify.design/logos:google.svg", width: 100, height: 24 },
-        { alt: "Microsoft", src: "https://api.iconify.design/logos:microsoft.svg", width: 100, height: 24 },
-        { alt: "Amazon", src: "https://api.iconify.design/logos:amazon.svg", width: 100, height: 24 },
-        { alt: "Netflix", src: "https://api.iconify.design/logos:netflix.svg", width: 100, height: 24 },
-        { alt: "Meta", src: "https://api.iconify.design/logos:meta.svg", width: 100, height: 24 },
-        { alt: "Stripe", src: "https://api.iconify.design/logos:stripe.svg", width: 100, height: 24 },
-        { alt: "Apple", src: "https://api.iconify.design/logos:apple.svg", width: 100, height: 24 },
+        { alt: "Google", src: "https://cdn.simpleicons.org/google", width: 100, height: 24 },
+        { alt: "Microsoft", src: "https://cdn.simpleicons.org/microsoft", width: 100, height: 24 },
+        { alt: "Amazon", src: "https://cdn.simpleicons.org/amazon", width: 100, height: 24 },
+        { alt: "Netflix", src: "https://cdn.simpleicons.org/netflix", width: 100, height: 24 },
+        { alt: "Meta", src: "https://cdn.simpleicons.org/meta", width: 100, height: 24 },
+        { alt: "Stripe", src: "https://cdn.simpleicons.org/stripe", width: 100, height: 24 },
+        { alt: "Apple", src: "https://cdn.simpleicons.org/apple", width: 100, height: 24 },
     ]
 
     const pricingPlans = [
