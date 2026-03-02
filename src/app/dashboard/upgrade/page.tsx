@@ -1,22 +1,19 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
+import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { TimelineContent } from "@/components/ui/timeline-animation"
+import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal"
 import { Button } from '@/components/ui/button'
-import { CheckIcon, XIcon, Shield, Zap, Globe, Loader2 } from 'lucide-react'
+import { CheckCheck, Sparkles, Loader2, Shield, Zap, Globe } from 'lucide-react'
 import { toast } from 'sonner'
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import NumberFlow from "@number-flow/react"
 import { cn } from "@/lib/utils"
 
-type Plan = "monthly" | "annually"
-
 export default function UpgradePage() {
     const [isLoading, setIsLoading] = useState(false)
-    const [billPlan, setBillPlan] = useState<Plan>("annually")
-
-    const handleSwitch = () => {
-        setBillPlan((prev) => (prev === "monthly" ? "annually" : "monthly"));
-    };
+    const pricingRef = useRef<HTMLDivElement>(null)
 
     const handleUpgrade = async () => {
         setIsLoading(true)
@@ -38,204 +35,235 @@ export default function UpgradePage() {
         }
     }
 
-    const freeFeatures = [
-        { text: "2 CVs (Resets every 14 days)", included: true },
-        { text: "2 Cover Letters (Resets every 14 days)", included: true },
-        { text: "2 Daily Job Searches", included: true },
-        { text: "PDF Export (Watermarked)", included: true },
-        { text: "No Watermark", included: false },
-        { text: "Advanced AI Optimization", included: false },
-        { text: "LinkedIn Analysis & Integration", included: false },
-    ]
+    const revealVariants = {
+        visible: (i: number) => ({
+            y: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            transition: {
+                delay: i * 0.2,
+                duration: 0.5,
+            },
+        }),
+        hidden: {
+            filter: "blur(10px)",
+            y: -20,
+            opacity: 0,
+        },
+    }
 
-    const proFeatures = [
-        { text: "Unlimited CVs & Cover Letters", included: true },
-        { text: "Unlimited Job Searches", included: true },
-        { text: "No Watermark", included: true },
-        { text: "Access to All History (No Locking)", included: true },
-        { text: "Advanced AI Optimization", included: true },
-        { text: "LinkedIn Analysis & Integration", included: true },
-        { text: "PDF & Word Export", included: true },
+    const plans = [
+        {
+            id: "starter",
+            name: "Current Plan",
+            description: "Essential foundations for building your first professional resumes.",
+            price: 0,
+            buttonText: "Starter Active",
+            buttonVariant: "outline" as const,
+            popular: false,
+            features: [
+                "2 CVs (Resets every 14 days)",
+                "2 Cover Letters (Resets every 14 days)",
+                "2 Daily Job Searches",
+                "PDF Export (Watermarked)",
+            ],
+            locked: [
+                "No Watermark",
+                "Advanced AI Optimization",
+                "LinkedIn Integration",
+            ],
+        },
+        {
+            id: "pro",
+            name: "Pro Elite",
+            description: "Unlimited power and AI-driven intelligence for serious career growth.",
+            price: 99,
+            popular: true,
+            buttonText: "Upgrade Now",
+            buttonVariant: "default" as const,
+            features: [
+                "Unlimited CVs & Letters",
+                "Unlimited Job Searches",
+                "No Watermark (Clean PDF)",
+                "Advanced AI Optimization",
+                "LinkedIn Analysis & Integration",
+                "Access to All History",
+                "Priority Support",
+            ],
+        },
     ]
 
     return (
-        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white p-6 sm:p-12 overflow-x-hidden">
-            <div className="max-w-6xl mx-auto w-full space-y-20 pb-24">
+        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white p-6 sm:p-12 overflow-x-hidden" ref={pricingRef}>
+            <div className="max-w-6xl mx-auto w-full space-y-20 pb-24 relative">
 
-                {/* Header Section (Ruixen Style) */}
-                <div className="flex flex-col items-center justify-center max-w-2xl mx-auto text-center">
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="text-4xl md:text-7xl font-black tracking-tighter text-white italic"
-                    >
-                        Scale Your Career.
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-lg md:text-xl text-zinc-500 font-medium mt-6"
-                    >
-                        Get full access to AI optimization and professional branding.
-                    </motion.p>
+                {/* Background Glows */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] bg-emerald-500/5 rounded-full blur-[150px] pointer-events-none" />
 
-                    <div className="flex items-center justify-center space-x-4 mt-10">
-                        <span className={cn("text-[10px] font-black uppercase tracking-widest transition-colors", billPlan === 'monthly' ? "text-white" : "text-zinc-600")}>Monthly</span>
-                        <button onClick={handleSwitch} className="relative rounded-full focus:outline-none group">
-                            <div className="w-12 h-6 transition rounded-full shadow-md outline-none bg-emerald-500/10 border border-emerald-500/20 group-hover:border-emerald-500/40 transition-all"></div>
-                            <div
-                                className={cn(
-                                    "absolute inline-flex items-center justify-center w-4 h-4 transition-all duration-500 ease-in-out top-1 left-1 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]",
-                                    billPlan === "annually" ? "translate-x-6" : "translate-x-0"
-                                )}
-                            />
-                        </button>
-                        <span className={cn("text-[10px] font-black uppercase tracking-widest transition-colors", billPlan === 'annually' ? "text-white" : "text-zinc-600")}>Annually</span>
+                {/* Header Section (uilayout Style) */}
+                <article className="flex flex-col items-center justify-center text-center relative z-10">
+                    <div className="max-w-3xl">
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 text-[10px] font-black uppercase tracking-[0.2em] mb-6"
+                        >
+                            <Sparkles className="h-3 w-3" />
+                            Premium Access
+                        </motion.div>
+
+                        <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white italic mb-6">
+                            <VerticalCutReveal
+                                splitBy="words"
+                                staggerDuration={0.15}
+                                staggerFrom="first"
+                                reverse={true}
+                                containerClassName="justify-center"
+                            >
+                                Scale Your Career.
+                            </VerticalCutReveal>
+                        </h1>
+
+                        <TimelineContent
+                            as="p"
+                            animationNum={0}
+                            timelineRef={pricingRef}
+                            customVariants={revealVariants}
+                            className="text-zinc-500 text-lg md:text-xl font-medium"
+                        >
+                            Get full access to AI optimization and professional branding.
+                            Locked features unlock immediately after upgrade.
+                        </TimelineContent>
                     </div>
-                </div>
+                </article>
 
-                {/* Pricing Grid (Ruixen Style) */}
-                <div className="grid w-full grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto items-stretch">
-
-                    {/* Free Plan */}
-                    <motion.div
-                        initial={{ opacity: 0, x: -30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="flex flex-col relative rounded-[2rem] lg:rounded-[3rem] transition-all bg-[#050505] items-start w-full border border-white/[0.04] overflow-hidden group hover:border-white/[0.08]"
-                    >
-                        <div className="p-8 md:p-12 flex flex-col items-start w-full relative">
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 mb-10">
-                                Starter Plan
-                            </span>
-                            <h3 className="mt-3 text-7xl font-black md:text-8xl italic tracking-tighter text-white opacity-20">
-                                FREE
-                            </h3>
-                            <p className="text-sm md:text-base text-zinc-500 font-medium mt-6 leading-relaxed min-h-[48px]">
-                                Essential foundations for building your first professional resumes.
-                            </p>
-                        </div>
-
-                        <div className="flex flex-col items-start w-full px-8 md:px-12 mb-8">
-                            <Button
-                                variant="ghost"
-                                disabled
-                                className="w-full h-16 rounded-2xl bg-white/5 border border-white/5 text-zinc-700 font-black text-base cursor-not-allowed uppercase tracking-widest"
+                {/* Pricing Grid (uilayout Style) */}
+                <TimelineContent
+                    as="div"
+                    animationNum={2}
+                    timelineRef={pricingRef}
+                    customVariants={revealVariants}
+                    className="grid md:grid-cols-2 gap-8 lg:gap-12 max-w-5xl mx-auto relative z-10 p-4 sm:p-8 rounded-[3rem] bg-zinc-950/50 border border-white/[0.04] backdrop-blur-sm"
+                >
+                    {plans.map((plan, index) => (
+                        <div key={plan.id} className="h-full">
+                            <Card
+                                className={cn(
+                                    "relative flex-col flex justify-between h-full border-none shadow-none rounded-[2.5rem] transition-all duration-500 overflow-hidden",
+                                    plan.popular
+                                        ? "bg-gradient-to-b from-emerald-500/10 to-transparent border border-emerald-500/20 shadow-[0_40px_100px_rgba(16,185,129,0.1)]"
+                                        : "bg-black/50 border border-white/[0.04] hover:border-white/[0.08]"
+                                )}
                             >
-                                Active Plan
-                            </Button>
-                        </div>
+                                {plan.popular && (
+                                    <div className="absolute top-1/2 inset-x-0 mx-auto h-24 -rotate-45 w-full bg-emerald-500/20 rounded-full blur-[6rem] -z-10 opacity-30 pointer-events-none" />
+                                )}
 
-                        <div className="h-px w-full bg-white/[0.04] mb-8" />
+                                <CardContent className="p-8 md:p-12 pb-0">
+                                    <div className="space-y-4 pb-8">
+                                        {plan.popular && (
+                                            <div className="mb-4">
+                                                <span className="bg-emerald-500 text-black px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-xl">
+                                                    Elite Member
+                                                </span>
+                                            </div>
+                                        )}
 
-                        <div className="flex flex-col items-start w-full p-8 md:p-12 pt-0 gap-y-5 flex-1">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2">
-                                Current Features:
-                            </span>
-                            {freeFeatures.map((f, i) => (
-                                <div key={i} className="flex items-center justify-start gap-4">
-                                    <div className={cn(
-                                        "h-5 w-5 rounded-full flex items-center justify-center shrink-0",
-                                        f.included ? "bg-white/5 text-emerald-500" : "bg-white/5 text-zinc-800"
-                                    )}>
-                                        {f.included ? <CheckIcon className="size-3" /> : <XIcon className="size-3" />}
+                                        <div className="flex items-baseline gap-2">
+                                            <span className="text-6xl md:text-8xl font-black italic tracking-tighter text-white">
+                                                $
+                                                <NumberFlow
+                                                    format={{
+                                                        currency: "USD",
+                                                        currencySign: "standard",
+                                                        minimumFractionDigits: 0,
+                                                        maximumFractionDigits: 0,
+                                                        currencyDisplay: "narrowSymbol"
+                                                    }}
+                                                    value={plan.price === 0 ? 0 : 99}
+                                                    className="text-6xl md:text-8xl font-black"
+                                                />
+                                            </span>
+                                            <span className="text-zinc-600 font-bold uppercase tracking-widest text-xs">/ year</span>
+                                        </div>
+
+                                        <h3 className="text-3xl font-black italic tracking-tight text-white">{plan.name}</h3>
+                                        <p className="text-sm font-medium text-zinc-500 leading-relaxed min-h-[48px]">
+                                            {plan.description}
+                                        </p>
                                     </div>
-                                    <span className={cn("text-sm font-bold", f.included ? "text-zinc-500" : "text-zinc-800")}>
-                                        {f.text}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
 
-                    {/* Pro Plan */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                        className="flex flex-col relative rounded-[2rem] lg:rounded-[3rem] transition-all bg-[#050505] items-start w-full border border-emerald-500/20 ring-1 ring-emerald-500/10 shadow-[0_40px_100px_rgba(16,185,129,0.08)] overflow-hidden group hover:border-emerald-500/40"
-                    >
-                        <div className="absolute top-1/2 inset-x-0 mx-auto h-12 -rotate-45 w-full bg-emerald-600 rounded-full blur-[8rem] -z-10 opacity-20 group-hover:opacity-30 transition-opacity"></div>
+                                    <div className="space-y-6 pt-8 border-t border-white/[0.04]">
+                                        <h4 className="font-black text-[10px] uppercase tracking-[0.2em] text-zinc-600 mb-4">
+                                            Plan Details:
+                                        </h4>
+                                        <ul className="space-y-5">
+                                            {plan.features.map((feature, featureIndex) => (
+                                                <li key={featureIndex} className="flex items-center group">
+                                                    <span
+                                                        className={cn(
+                                                            "h-6 w-6 rounded-full flex items-center justify-center shrink-0 mr-4 transition-all duration-300",
+                                                            plan.popular
+                                                                ? "bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                                                                : "bg-white/5 text-emerald-500 border border-white/5"
+                                                        )}
+                                                    >
+                                                        <CheckCheck className="h-3.5 w-3.5" />
+                                                    </span>
+                                                    <span className={cn(
+                                                        "text-sm font-bold transition-colors",
+                                                        plan.popular ? "text-zinc-100" : "text-zinc-500"
+                                                    )}>
+                                                        {feature}
+                                                    </span>
+                                                </li>
+                                            ))}
 
-                        <div className="p-8 md:p-12 flex flex-col items-start w-full relative">
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-emerald-500 mb-10">
-                                Pro Elite
-                            </span>
-                            <h3 className="mt-3 text-7xl font-black md:text-8xl italic tracking-tighter text-white">
-                                <NumberFlow
-                                    value={billPlan === 'monthly' ? 99 : 99} // Based on user request $99 senelik
-                                    suffix={billPlan === 'monthly' ? "/mo" : "/yr"}
-                                    format={{
-                                        currency: "USD",
-                                        style: "currency",
-                                        minimumFractionDigits: 0,
-                                        maximumFractionDigits: 0,
-                                        currencyDisplay: "narrowSymbol"
-                                    }}
-                                />
-                            </h3>
-                            <p className="text-sm md:text-base text-zinc-500 font-medium mt-6 leading-relaxed min-h-[48px]">
-                                Unlimited power and AI-driven intelligence for serious career growth.
-                            </p>
-                        </div>
+                                            {!plan.popular && plan.locked?.map((lock, i) => (
+                                                <li key={i} className="flex items-center opacity-20 grayscale">
+                                                    <span className="h-6 w-6 rounded-full flex items-center justify-center shrink-0 mr-4 bg-white/5 text-zinc-800 border border-white/5">
+                                                        <CheckCheck className="h-3.5 w-3.5" />
+                                                    </span>
+                                                    <span className="text-sm font-bold text-zinc-800 line-through">
+                                                        {lock}
+                                                    </span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </CardContent>
 
-                        <div className="flex flex-col items-start w-full px-8 md:px-12 mb-8">
-                            <Button
-                                onClick={handleUpgrade}
-                                disabled={isLoading}
-                                className="w-full h-16 rounded-2xl bg-white text-black hover:bg-zinc-200 font-black shadow-[0_20px_50px_rgba(255,255,255,0.1)] transition-all text-base active:scale-[0.98]"
-                            >
-                                {isLoading ? <Loader2 className="h-6 w-6 animate-spin" /> : 'Upgrade to Pro'}
-                            </Button>
-                            <div className="h-8 overflow-hidden w-full mx-auto">
-                                <AnimatePresence mode="wait">
-                                    <motion.span
-                                        key={billPlan}
-                                        initial={{ y: 20, opacity: 0 }}
-                                        animate={{ y: 0, opacity: 1 }}
-                                        exit={{ y: -20, opacity: 0 }}
-                                        transition={{ duration: 0.2, ease: "easeOut" }}
-                                        className="text-[10px] font-black uppercase tracking-widest text-center text-zinc-700 mt-4 mx-auto block"
+                                <CardFooter className="p-8 md:p-12">
+                                    <Button
+                                        disabled={isLoading || !plan.popular}
+                                        onClick={plan.popular ? handleUpgrade : undefined}
+                                        className={cn(
+                                            "w-full h-16 rounded-[1.25rem] text-base font-black transition-all active:scale-[0.98] shadow-2xl uppercase tracking-widest",
+                                            plan.popular
+                                                ? "bg-white text-black hover:bg-zinc-200"
+                                                : "bg-white/5 text-zinc-700 cursor-not-allowed border border-white/5"
+                                        )}
                                     >
-                                        Billed in one annual payment
-                                    </motion.span>
-                                </AnimatePresence>
-                            </div>
+                                        {isLoading && plan.popular ? <Loader2 className="h-6 w-6 animate-spin" /> : plan.buttonText}
+                                    </Button>
+                                </CardFooter>
+                            </Card>
                         </div>
+                    ))}
+                </TimelineContent>
 
-                        <div className="h-px w-full bg-white/[0.04] mb-8" />
-
-                        <div className="flex flex-col items-start w-full p-8 md:p-12 pt-0 gap-y-5 flex-1">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2">
-                                Premium Features Included:
-                            </span>
-                            {proFeatures.map((f, i) => (
-                                <div key={i} className="flex items-center justify-start gap-4">
-                                    <div className="h-5 w-5 rounded-full flex items-center justify-center shrink-0 bg-emerald-500/20 text-emerald-500">
-                                        <CheckIcon className="size-3" />
-                                    </div>
-                                    <span className="text-sm font-bold text-zinc-200">
-                                        {f.text}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </motion.div>
-                </div>
-
-                {/* Features Footer (Consistent Icons) */}
-                <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-16 max-w-5xl mx-auto border-t border-white/[0.04] pt-20">
+                {/* Features Footer Section */}
+                <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-16 max-w-5xl mx-auto border-t border-white/[0.04] pt-20 relative z-10">
                     {[
-                        { icon: Shield, title: "Secure Payments", desc: "Processing via Stripe ensures your payment data is fully encrypted and protected." },
-                        { icon: Zap, title: "Instant Access", desc: "Get immediate access to all premium filters, templates, and AI features after upgrade." },
-                        { icon: Globe, title: "Public Branding", desc: "Publish your CV to a custom domain or a permanent public link that never expires." }
+                        { icon: Shield, title: "Secure Checkout", desc: "Enterprise-grade encryption via Stripe for all transactions." },
+                        { icon: Zap, title: "Instant Power", desc: "Unlock all AI templates and filters immediately upon upgrade." },
+                        { icon: Globe, title: "Professional URL", desc: "Share your success with a permanent, professional public presence." }
                     ].map((item, i) => (
                         <div key={i} className="space-y-4">
                             <div className="h-12 w-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center hover:scale-110 transition-transform group">
                                 <item.icon className="h-6 w-6 text-emerald-500" />
                             </div>
-                            <h3 className="text-sm font-black text-white uppercase tracking-widest">{item.title}</h3>
+                            <h3 className="text-xs font-black text-white uppercase tracking-[0.2em]">{item.title}</h3>
                             <p className="text-zinc-500 text-[13px] leading-relaxed font-medium">{item.desc}</p>
                         </div>
                     ))}
