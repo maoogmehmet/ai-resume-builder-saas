@@ -34,11 +34,11 @@ const plans = [
     },
     {
         id: "pro",
-        name: "Pro Elite",
+        name: "Pro",
         description: "Unlimited power and AI-driven intelligence for serious leaders.",
         price: 99,
         popular: true,
-        buttonText: "Upgrade to Elite",
+        buttonText: "Upgrade to Pro",
         link: "/dashboard/upgrade",
         includes: [
             "Unlimited Resume Building",
@@ -75,7 +75,7 @@ export function PricingPremium() {
     return (
         <section
             id="pricing"
-            className="px-4 py-32 min-h-screen max-w-full mx-auto relative bg-black overflow-hidden"
+            className="px-4 pt-16 pb-32 min-h-screen max-w-full mx-auto relative bg-black overflow-hidden"
             ref={pricingRef}
         >
             {/* Background Subtle Gradient */}
@@ -181,15 +181,15 @@ export function PricingPremium() {
                                     <PricingCard.Separator className="text-zinc-800 text-[8px] font-black uppercase tracking-[0.2em]">Included Features</PricingCard.Separator>
                                     <PricingCard.List className="space-y-2.5">
                                         {plan.includes.map((feature, i) => (
-                                            <PricingCard.ListItem key={i} className="text-zinc-400 font-bold text-[11px] group/item flex items-center gap-2">
+                                            <PricingCard.ListItem key={i} className="text-zinc-400 font-bold text-[13px] group/item flex items-center gap-2">
                                                 <CheckCheck className={cn("size-3.5 shrink-0 transition-all duration-300", plan.popular ? "text-emerald-500" : "text-white/40")} />
                                                 {feature}
                                             </PricingCard.ListItem>
                                         ))}
 
                                         {!plan.popular && plan.locked?.map((lock, i) => (
-                                            <PricingCard.ListItem key={i} className="text-zinc-800 line-through opacity-20 font-medium italic text-[11px] flex items-center gap-2">
-                                                <CheckCheck className="size-3.5 shrink-0 text-zinc-900" />
+                                            <PricingCard.ListItem key={i} className="text-zinc-600 line-through font-medium italic text-[13px] flex items-center gap-2">
+                                                <CheckCheck className="size-3.5 shrink-0 text-zinc-800" />
                                                 {lock}
                                             </PricingCard.ListItem>
                                         ))}

@@ -75,7 +75,7 @@ export default function UpgradePage() {
         },
         {
             id: "pro",
-            name: "Pro Elite",
+            name: "Pro",
             description: "Unlimited power and AI-driven intelligence for serious career growth.",
             price: 99,
             popular: true,
@@ -152,7 +152,7 @@ export default function UpgradePage() {
                                             <Zap className={cn("size-3.5 text-zinc-500", plan.popular && "text-emerald-500")} />
                                             {plan.name}
                                         </PricingCard.PlanName>
-                                        {plan.popular && <PricingCard.Badge className="text-[8px] px-2 py-0.5">ELITE RANK</PricingCard.Badge>}
+                                        {plan.popular && <PricingCard.Badge className="text-[8px] px-2 py-0.5">MOST POPULAR</PricingCard.Badge>}
                                     </PricingCard.Plan>
 
                                     <PricingCard.Price className="mb-2">
@@ -183,15 +183,15 @@ export default function UpgradePage() {
                                         <PricingCard.Separator className="text-zinc-800 text-[8px] font-black uppercase tracking-[0.2em]">Tier Features</PricingCard.Separator>
                                         <PricingCard.List className="space-y-2.5">
                                             {plan.includes.map((feature, i) => (
-                                                <PricingCard.ListItem key={i} className="text-zinc-400 font-bold group/item text-[11px] flex items-center gap-2">
+                                                <PricingCard.ListItem key={i} className="text-zinc-400 font-bold group/item text-[13px] flex items-center gap-2">
                                                     <CheckCheck className={cn("size-3.5 shrink-0 transition-all duration-300", plan.popular ? "text-emerald-500" : "text-white/40")} />
                                                     {feature}
                                                 </PricingCard.ListItem>
                                             ))}
 
                                             {!plan.popular && plan.locked?.map((lock, i) => (
-                                                <PricingCard.ListItem key={i} className="text-zinc-800 line-through opacity-20 font-medium text-[11px] flex items-center gap-2">
-                                                    <CheckCheck className="size-3.5 shrink-0 text-zinc-900" />
+                                                <PricingCard.ListItem key={i} className="text-zinc-600 line-through font-medium text-[13px] flex items-center gap-2">
+                                                    <CheckCheck className="size-3.5 shrink-0 text-zinc-800" />
                                                     {lock}
                                                 </PricingCard.ListItem>
                                             ))}
@@ -218,22 +218,7 @@ export default function UpgradePage() {
                     ))}
                 </div>
 
-                {/* Footer Trust Section (Tightened V7) */}
-                <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto border-t border-white/[0.1] pt-12 relative z-10 text-center md:text-left">
-                    {[
-                        { icon: Shield, title: "Vault Privacy", desc: "Your data is encrypted. Payments via Stripe." },
-                        { icon: ZapIcon, title: "Velocity Boost", desc: "Instant AI features unlock upon upgrade." },
-                        { icon: Globe, title: "Universal Brand", desc: "Built for global ATS performance standards." }
-                    ].map((item, i) => (
-                        <div key={i} className="space-y-2 px-4 text-center md:text-left">
-                            <div className="h-9 w-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center group shadow-md mx-auto md:mx-0">
-                                <item.icon className="h-4 w-4 text-white group-hover:text-emerald-400 transition-colors" />
-                            </div>
-                            <h3 className="text-[9px] font-black text-white uppercase tracking-[0.2em]">{item.title}</h3>
-                            <p className="text-zinc-600 text-[11px] leading-relaxed font-medium">{item.desc}</p>
-                        </div>
-                    ))}
-                </div>
+                {/* Footer Section Removed */}
             </div>
         </div>
     )
