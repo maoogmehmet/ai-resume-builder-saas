@@ -75,10 +75,10 @@ export function SettingsClient({ email, resumeCount, isSubscribed, initialName }
 
     return (
         <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white">
-            <section className="relative w-full px-4 sm:px-8 py-10 lg:pl-12 lg:pr-8 text-white overflow-x-hidden">
+            <section className="relative w-full px-4 sm:px-8 py-4 lg:pl-12 lg:pr-8 text-white overflow-x-hidden">
                 {/* Pure Black Theme - Gradients Removed per request */}
 
-                <div className="mx-auto w-full max-w-4xl space-y-8 relative z-10 pt-[2vh]">
+                <div className="mx-auto w-full max-w-4xl space-y-8 relative z-10 pt-2">
                     <div className="flex flex-col">
                         <h2 className="text-3xl font-bold tracking-tight text-white mb-2">Account Settings</h2>
                         <p className="text-zinc-500 text-sm font-medium">
