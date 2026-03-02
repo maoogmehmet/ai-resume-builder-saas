@@ -314,11 +314,7 @@ export function LandingClient({ user }: { user: any }) {
                     testimonials={testimonials}
                 />
 
-                <PricingPremium
-                    plans={pricingPlans}
-                    title="Professional Plans"
-                    description="Invest in your future. ROI is one interview away."
-                />
+                <PricingPremium />
 
                 {/* CTA BANNER */}
                 <section className="py-32 px-6 lg:px-12 bg-black">
