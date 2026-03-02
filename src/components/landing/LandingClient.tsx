@@ -2,16 +2,22 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Zap, Target, ArrowRight, Sparkles } from 'lucide-react'
-import { ShaderAnimation } from '@/components/ui/shader-animation'
 import { HeaderPremium } from './HeaderPremium'
 import { TestimonialsSection } from './TestimonialsSection'
 import { PricingPremium } from './PricingPremium'
 import { LogoCloud } from '@/components/ui/logo-cloud'
 import { Footer } from '@/components/ui/footer-section'
+
+const ShaderAnimation = dynamic(
+    () => import('@/components/ui/shader-animation').then(mod => mod.ShaderAnimation),
+    { ssr: false, loading: () => <div className="w-full h-full min-h-[400px] bg-black" /> }
+)
+
 
 export function LandingClient({ user }: { user: any }) {
     // ... rest of imports/setup
