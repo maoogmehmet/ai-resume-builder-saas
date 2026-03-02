@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
+import AnimatedText from '@/components/ui/animated-text'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
@@ -94,12 +95,10 @@ export default function OptimizePage() {
                 <header className="pb-4">
                     <div className="flex items-center gap-3">
                         <Target className="h-10 w-10 text-white" />
-                        <h1 className="text-4xl font-black italic tracking-tighter text-white uppercase">
-                            CV Optimizer
-                        </h1>
+                        <AnimatedText text="CV Optimizer" className="text-4xl font-black tracking-tighter text-white uppercase" animationType="letters" />
                     </div>
                     <p className="text-zinc-400 text-sm font-medium mt-3 max-w-2xl leading-relaxed">
-                        Paste a job description or use <span className="text-white font-bold italic">Instant AI Analysis</span> by just entering the Job Title and Company. Get professional insights in seconds.
+                        Paste a job description or use <span className="text-white font-bold">Instant AI Analysis</span> by just entering the Job Title and Company. Get professional insights in seconds.
                     </p>
                 </header>
 
@@ -130,7 +129,7 @@ export default function OptimizePage() {
                         <div className="w-full h-px bg-white/5 my-10" />
 
                         <div className="mb-1">
-                            <h2 className="text-xl font-black italic tracking-tighter text-white uppercase">Job Details</h2>
+                            <h2 className="text-xl font-black tracking-tighter text-white uppercase">Job Details</h2>
                             <p className="text-zinc-500 text-[13px] font-medium">Tell us about the role you&apos;re targeting.</p>
                         </div>
 
@@ -241,7 +240,7 @@ export default function OptimizePage() {
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 {results.keyword_analysis?.missing_keywords && results.keyword_analysis.missing_keywords.length > 0 && (
                                     <div className="space-y-4 bg-red-500/[0.01] border border-red-500/5 p-5 rounded-2xl">
-                                        <h3 className="text-[10px] font-black text-red-500 uppercase tracking-widest flex items-center gap-2 italic">
+                                        <h3 className="text-[10px] font-black text-red-500 uppercase tracking-widest flex items-center gap-2">
                                             <AlertCircle className="h-3.5 w-3.5" /> Missing
                                         </h3>
                                         <div className="flex flex-wrap gap-1.5">
@@ -254,7 +253,7 @@ export default function OptimizePage() {
 
                                 {results.keyword_analysis?.matched_keywords && results.keyword_analysis.matched_keywords.length > 0 && (
                                     <div className="space-y-4 bg-emerald-500/[0.01] border border-emerald-500/5 p-5 rounded-2xl">
-                                        <h3 className="text-[10px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-2 italic">
+                                        <h3 className="text-[10px] font-black text-emerald-500 uppercase tracking-widest flex items-center gap-2">
                                             <CheckCircle className="h-3.5 w-3.5" /> Matched
                                         </h3>
                                         <div className="flex flex-wrap gap-1.5">
@@ -268,7 +267,7 @@ export default function OptimizePage() {
 
                             {results.suggestions && (
                                 <div className="space-y-5 pt-8 border-t border-white/5">
-                                    <h3 className="text-lg font-black italic tracking-tighter text-white uppercase sm:text-base">Expert Strategy</h3>
+                                    <h3 className="text-lg font-black tracking-tighter text-white uppercase sm:text-base">Expert Strategy</h3>
                                     <div className="grid grid-cols-1 gap-3">
                                         {results.suggestions.map((rec: string, i: number) => (
                                             <div key={i} className="flex items-center gap-4 bg-white/[0.02] p-4 rounded-2xl border border-white/5 hover:bg-white/[0.04] transition-all duration-300 group">
@@ -292,7 +291,7 @@ export default function OptimizePage() {
                             <div className="h-24 w-24 flex items-center justify-center rounded-3xl bg-white/5 border border-white/10 shadow-xl mb-8 group-hover:scale-110 transition-transform duration-500">
                                 <Target className="h-10 w-10 text-zinc-400" />
                             </div>
-                            <h3 className="text-xl font-black italic tracking-tighter text-white uppercase mb-3">Ready for Analysis</h3>
+                            <h3 className="text-xl font-black tracking-tighter text-white uppercase mb-3">Ready for Analysis</h3>
                             <p className="text-zinc-500 font-medium max-w-[280px] leading-relaxed">
                                 {isAnalyzing ? 'Our AI is dissecting your CV against the role requirements...' : 'Paste a job description and select a resume to unlock your professional match score and strategic insights.'}
                             </p>

@@ -55,7 +55,7 @@ export default async function DashboardPage({
             <div className="max-w-7xl mx-auto w-full p-8 pt-16 space-y-12">
                 {/* Header */}
                 <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 gap-4">
-                    <h1 className="text-4xl font-black tracking-tighter text-white italic focus:outline-none">
+                    <h1 className="text-4xl font-black tracking-tighter text-white focus:outline-none">
                         Overview
                     </h1>
                 </header>
@@ -115,7 +115,7 @@ export default async function DashboardPage({
                     {/* Recent Documents */}
                     <div className="w-full pt-4">
                         <div className="flex items-center justify-between mb-8 px-2">
-                            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-zinc-500 italic">
+                            <h2 className="text-xs font-black uppercase tracking-[0.3em] text-zinc-500">
                                 Recent Documents
                             </h2>
                             <div className="h-px flex-1 bg-white/5 mx-8" />

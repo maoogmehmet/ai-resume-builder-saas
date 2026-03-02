@@ -89,26 +89,31 @@
   --color-ds-red-800: var(----ds-red-800);
   --ds-shadow-menu: var(----ds-shadow-menu);
   --color-ds-contrast-fg: var(----ds-contrast-fg);
+
   @keyframes fade-spin {
-  0% {
-    opacity: 0.15;
+    0% {
+      opacity: 0.15;
     }
-  100% {
-    opacity: 1;
+
+    100% {
+      opacity: 1;
     }
   }
+
   --color-destructive-foreground: oklch(1 0 0);
   --color-color-destructive-foreground: var(----color-destructive-foreground);
   --animate-marquee: marquee var(--duration) linear infinite;
   --color-brand-foreground: var(----brand-foreground);
   --color-brand: var(----brand);
   --color-color-color-destructive-foreground: var(----color-color-destructive-foreground);
+
   @keyframes marquee {
-  from {
-    transform: translateX(0);
+    from {
+      transform: translateX(0);
     }
-  to {
-    transform: translateX(calc(-100% - var(--gap)));
+
+    to {
+      transform: translateX(calc(-100% - var(--gap)));
     }
   }
 }
@@ -242,7 +247,20 @@
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-semibold tracking-tighter;
+  }
+
+  h4,
+  h5,
+  h6 {
+    @apply font-medium tracking-tight;
   }
 }

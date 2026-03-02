@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import { toast } from 'sonner'
 import { Button } from '@/components/ui/button'
+import AnimatedText from '@/components/ui/animated-text'
 import {
     LineChart,
     Line,
@@ -189,7 +190,7 @@ export default function AnalyticsPage() {
                     transition={{ duration: 0.6 }}
                     className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
                 >
-                    <h1 className="text-4xl font-black tracking-tightest">Metrics</h1>
+                    <AnimatedText text="Metrics" className="text-4xl font-black tracking-tightest" animationType="letters" />
 
                     <div className="flex items-center gap-3">
                         {/* Time Period Dropdown */}
@@ -214,8 +215,8 @@ export default function AnalyticsPage() {
                                                 key={key}
                                                 onClick={() => { setTimePeriod(key); setShowTimeDropdown(false) }}
                                                 className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${timePeriod === key
-                                                        ? 'text-emerald-500 bg-emerald-500/5'
-                                                        : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                                                    ? 'text-emerald-500 bg-emerald-500/5'
+                                                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
                                                     }`}
                                             >
                                                 {timePeriodLabels[key]}
@@ -345,7 +346,7 @@ export default function AnalyticsPage() {
                                                 <Link2 className="h-7 w-7 text-zinc-700 group-hover:text-emerald-500 transition-colors" />
                                             </div>
                                             <div>
-                                                <h4 className="text-xl font-black text-white italic tracking-tight">{link.link_name || link.resumes?.title || 'Untitled Portfolio'}</h4>
+                                                <h4 className="text-xl font-black text-white tracking-tight">{link.link_name || link.resumes?.title || 'Untitled Portfolio'}</h4>
                                                 <div className="flex items-center gap-3 mt-1.5">
                                                     <span className="text-[10px] font-bold text-emerald-500/80 uppercase tracking-widest">r/{link.slug}</span>
                                                     <div className="h-1 w-1 rounded-full bg-zinc-800" />

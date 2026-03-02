@@ -12,6 +12,8 @@ import { TestimonialsSection } from './TestimonialsSection'
 import { PricingPremium } from './PricingPremium'
 import { LogoCloud } from '@/components/ui/logo-cloud'
 import { Footer } from '@/components/ui/footer-section'
+import { BlurTextEffect } from '@/components/ui/blur-text-effect'
+import SectionWithMockup from '@/components/ui/section-with-mockup'
 
 const ShaderAnimation = dynamic(
     () => import('@/components/ui/shader-animation').then(mod => mod.ShaderAnimation),
@@ -132,7 +134,9 @@ export function LandingClient({ user }: { user: any }) {
                         </motion.div>
 
                         <h1 className="text-6xl sm:text-8xl lg:text-9xl font-medium tracking-tighter text-white mb-10 leading-[0.85] drop-shadow-2xl">
-                            The Career <br /> <span className="italic font-serif">Operating System.</span>
+                            The Career <br /> <span className="text-zinc-300">
+                                <BlurTextEffect delay={0.5}>Operating System.</BlurTextEffect>
+                            </span>
                         </h1>
 
                         <p className="text-xl sm:text-2xl text-zinc-400 font-medium max-w-2xl mb-16 leading-relaxed opacity-80">
@@ -169,7 +173,7 @@ export function LandingClient({ user }: { user: any }) {
                     <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
                         <div className="text-center mb-24 space-y-4">
                             <h2 className="text-4xl sm:text-7xl font-medium tracking-tight text-white">
-                                Everything you need to <br /> <span className="italic font-serif">conquer the market.</span>
+                                Everything you need to <br /> <span className="text-zinc-300">conquer the market.</span>
                             </h2>
                             <p className="text-zinc-500 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
                                 We've built the ultimate toolset for elite candidates. Stop guessing, start winning with data-backed narratives.
@@ -298,7 +302,7 @@ export function LandingClient({ user }: { user: any }) {
                                 </motion.div>
                             </div>
                             <h2 className="text-4xl sm:text-6xl font-medium tracking-tight text-white mb-8">
-                                One core. <span className="italic font-serif">Infinite possibilities.</span>
+                                One core. <span className="text-zinc-300">Infinite possibilities.</span>
                             </h2>
                             <p className="text-zinc-500 text-lg sm:text-xl max-w-2xl leading-relaxed">
                                 Our AI engine is constantly learning from millions of successful candidate journeys to give you the ultimate edge.
@@ -306,6 +310,20 @@ export function LandingClient({ user }: { user: any }) {
                         </div>
                     </div>
                 </section>
+
+                {/* 3.5 CV BUILDER SUB-FEATURES */}
+                <SectionWithMockup
+                    title={
+                        <>
+                            <span className="text-zinc-500">Intelligent</span> <br />
+                            CV Builder
+                        </>
+                    }
+                    description="Craft the perfect resume with AI-driven content generation, real-time ATS scoring, and beautifully designed executive templates. Stop worrying about formatting and start focusing on your career narrative."
+                    primaryImageSrc="https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=3000&auto=format&fit=crop"
+                    secondaryImageSrc="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=3000&auto=format&fit=crop"
+                    reverseLayout={false}
+                />
 
                 {/* 4. WALL OF LOVE (Testimonials) */}
                 <TestimonialsSection

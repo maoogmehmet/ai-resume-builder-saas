@@ -25,7 +25,7 @@ export default async function ResumesPage() {
                 {/* Header - Matching "Webhooks" Style */}
                 <header className="flex items-center justify-between pb-4">
                     <div>
-                        <h1 className="text-4xl font-black text-white italic tracking-tighter">
+                        <h1 className="text-4xl font-black text-white tracking-tighter">
                             My CVs
                         </h1>
                         <p className="text-zinc-500 text-sm font-medium mt-3 tracking-wide">

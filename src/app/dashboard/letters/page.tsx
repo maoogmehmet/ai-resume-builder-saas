@@ -12,6 +12,7 @@ import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 import { CoverLetterDownloadButton } from '@/components/cover-letter-download-button'
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
+import AnimatedText from '@/components/ui/animated-text'
 
 export default function LettersPage() {
     const [resumes, setResumes] = useState<any[]>([])
@@ -227,11 +228,9 @@ export default function LettersPage() {
                 {/* Header */}
                 <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 gap-4">
                     <div>
-                        <h1 className="text-4xl font-black italic tracking-tighter text-white uppercase mb-2">
-                            Motivation Letters
-                        </h1>
+                        <AnimatedText text="Motivation Letters" className="text-4xl font-black tracking-tighter text-white uppercase mb-2" animationType="letters" />
                         <p className="text-zinc-400 text-sm font-medium leading-relaxed max-w-2xl">
-                            Generate and manage <span className="text-white font-bold italic">AI-crafted</span>, targeted cover letters with elegant PDF exports.
+                            Generate and manage <span className="text-white font-bold">AI-crafted</span>, targeted cover letters with elegant PDF exports.
                         </p>
                     </div>
                     <div className="flex items-center gap-2">
@@ -247,7 +246,7 @@ export default function LettersPage() {
                     <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
                         <div className="absolute -top-12 -right-12 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
 
-                        <h2 className="text-xl font-black italic tracking-tighter text-white mb-8 flex items-center gap-3 uppercase">
+                        <h2 className="text-xl font-black tracking-tighter text-white mb-8 flex items-center gap-3 uppercase">
                             <Sparkles className="h-6 w-6 text-purple-400" />
                             Target a New Role
                         </h2>
@@ -324,7 +323,7 @@ export default function LettersPage() {
 
                                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 border-b border-white/5 pb-8 gap-6">
                                     <div className="relative z-10">
-                                        <h3 className="text-2xl font-black italic tracking-tighter uppercase flex items-center gap-3 mb-2">
+                                        <h3 className="text-2xl font-black tracking-tighter uppercase flex items-center gap-3 mb-2">
                                             <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
                                                 <Sparkles className="h-6 w-6 text-purple-400" />
                                             </div>
@@ -332,7 +331,7 @@ export default function LettersPage() {
                                         </h3>
                                         <div className="flex items-center gap-2 text-zinc-400">
                                             <span className="text-[11px] font-black uppercase tracking-widest text-zinc-500">For</span>
-                                            <p className="text-[13px] font-bold text-zinc-300">{previewLetter.job_title} @ <span className="text-white italic">{previewLetter.company_name}</span></p>
+                                            <p className="text-[13px] font-bold text-zinc-300">{previewLetter.job_title} @ <span className="text-white">{previewLetter.company_name}</span></p>
                                         </div>
                                     </div>
                                     <div className="flex gap-3 relative z-10">
@@ -353,14 +352,14 @@ export default function LettersPage() {
                                     {slides.map((slide, idx) => (
                                         <div key={idx} className="bg-black/30 border border-white/5 rounded-3xl p-8 shadow-2xl transition-all hover:bg-black/50 hover:border-white/10">
                                             <div className="flex items-center gap-5 mb-8 border-b border-white/5 pb-6">
-                                                <div className="bg-white/5 text-white font-black h-12 w-12 rounded-2xl flex items-center justify-center text-lg shrink-0 border border-white/10 shadow-xl italic tracking-tighter">
+                                                <div className="bg-white/5 text-white font-black h-12 w-12 rounded-2xl flex items-center justify-center text-lg shrink-0 border border-white/10 shadow-xl tracking-tighter">
                                                     {idx + 1}
                                                 </div>
                                                 <div className="w-full flex-1 space-y-2">
                                                     <Input
                                                         value={slide.title}
                                                         onChange={(e) => handleSlideChange(idx, 'title', e.target.value)}
-                                                        className="h-9 bg-transparent border-0 text-white font-black italic tracking-tighter uppercase px-0 focus-visible:ring-0 text-xl"
+                                                        className="h-9 bg-transparent border-0 text-white font-black tracking-tighter uppercase px-0 focus-visible:ring-0 text-xl"
                                                         placeholder="Slide Title"
                                                     />
                                                     <Input
@@ -398,7 +397,7 @@ export default function LettersPage() {
                         <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-3xl p-10 shadow-2xl relative overflow-hidden">
                             <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-zinc-500/5 rounded-full blur-3xl pointer-events-none" />
 
-                            <h2 className="text-xl font-black italic tracking-tighter text-white uppercase mb-8 flex items-center gap-3">
+                            <h2 className="text-xl font-black tracking-tighter text-white uppercase mb-8 flex items-center gap-3">
                                 <Briefcase className="h-6 w-6 text-zinc-500" />
                                 Archive
                             </h2>
@@ -415,7 +414,7 @@ export default function LettersPage() {
                                     {lettersHistory.map((letter) => (
                                         <div key={letter.id} className={`border rounded-2xl p-6 transition-all group relative overflow-hidden ${previewLetter?.id === letter.id ? 'border-purple-500/30 bg-purple-500/5 shadow-2xl' : 'border-white/5 bg-black/20 hover:border-white/10 hover:bg-black/40 shadow-sm'}`}>
                                             <div className="flex justify-between items-start mb-4">
-                                                <h4 className="font-black italic tracking-tighter text-white text-lg leading-tight flex-1 uppercase">{letter.job_title}</h4>
+                                                <h4 className="font-black tracking-tighter text-white text-lg leading-tight flex-1 uppercase">{letter.job_title}</h4>
                                                 <span className="text-[10px] font-black text-zinc-500 whitespace-nowrap bg-white/5 border border-white/5 px-3 py-1.5 rounded-full shrink-0 ml-4 uppercase tracking-widest">
                                                     {new Date(letter.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                                                 </span>

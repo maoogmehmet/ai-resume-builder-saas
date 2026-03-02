@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react'
 import { TimelineContent } from "@/components/ui/timeline-animation"
 import { VerticalCutReveal } from "@/components/ui/vertical-cut-reveal"
+import AnimatedText from '@/components/ui/animated-text'
 import * as PricingCard from "@/components/ui/pricing-card"
 import { Button } from '@/components/ui/button'
 import { CheckCheck, Sparkles, Loader2, Shield, Zap as ZapIcon, Globe, Zap } from 'lucide-react'
@@ -101,17 +102,7 @@ export default function UpgradePage() {
 
                 {/* Header Section (Compact V7) */}
                 <article className="flex flex-col items-center text-center pb-8 relative z-10">
-                    <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter text-white mb-4">
-                        <VerticalCutReveal
-                            splitBy="words"
-                            staggerDuration={0.1}
-                            staggerFrom="first"
-                            reverse={true}
-                            containerClassName="justify-center"
-                        >
-                            Scale Your Career.
-                        </VerticalCutReveal>
-                    </h1>
+                    <AnimatedText text="Scale Your Career." className="text-4xl md:text-6xl font-black tracking-tighter text-white mb-4" animationType="words" />
 
                     <TimelineContent
                         as="p"
@@ -156,7 +147,7 @@ export default function UpgradePage() {
                                     </PricingCard.Plan>
 
                                     <PricingCard.Price className="mb-2">
-                                        <PricingCard.MainPrice className="text-white italic text-4xl md:text-5xl">
+                                        <PricingCard.MainPrice className="text-white text-4xl md:text-5xl">
                                             $
                                             <NumberFlow
                                                 format={{
@@ -173,7 +164,7 @@ export default function UpgradePage() {
                                         <PricingCard.Period className="text-zinc-600 font-bold tracking-widest uppercase text-[10px]">/Year</PricingCard.Period>
                                     </PricingCard.Price>
 
-                                    <PricingCard.Description className="text-zinc-500 font-medium italic text-[11px] leading-tight">
+                                    <PricingCard.Description className="text-zinc-500 font-medium text-[11px] leading-tight">
                                         {plan.description}
                                     </PricingCard.Description>
                                 </PricingCard.Header>
