@@ -40,13 +40,13 @@ export default function UpgradePage() {
             opacity: 1,
             filter: "blur(0px)",
             transition: {
-                delay: i * 0.3,
-                duration: 0.5,
+                delay: i * 0.2,
+                duration: 0.4,
             },
         }),
         hidden: {
-            filter: "blur(10px)",
-            y: -20,
+            filter: "blur(8px)",
+            y: -10,
             opacity: 0,
         },
     }
@@ -57,19 +57,20 @@ export default function UpgradePage() {
             name: "Starter Rank",
             description: "Essential foundations for building your first professional resumes.",
             price: 0,
-            buttonText: "Active Rank",
+            buttonText: "Active Plan",
             popular: false,
             includes: [
-                "Active foundations:",
                 "2 CVs (Refreshes every 14 days)",
                 "2 Letters (Refreshes every 14 days)",
                 "Watermarked PDF Export",
                 "Standard AI suggestions",
+                "Draft Storage Access",
             ],
             locked: [
                 "Unlimited Resume Building",
                 "Clean Export (No Watermarks)",
                 "Advanced Growth AI",
+                "Priority AI Analysis",
             ]
         },
         {
@@ -80,29 +81,30 @@ export default function UpgradePage() {
             popular: true,
             buttonText: "Upgrade Now",
             includes: [
-                "Elite Rank features:",
                 "Unlimited Resume Building",
                 "No Watermarks (Premium Export)",
                 "Advanced AI Optimization",
                 "LinkedIn & Profile Analysis",
                 "Priority AI Support",
+                "Custom Public URL",
+                "Early Access to Features",
             ],
         },
     ]
 
     return (
-        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white p-6 sm:p-12 overflow-x-hidden relative" ref={pricingRef}>
-            {/* Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 rounded-full blur-[120px] pointer-events-none opacity-30" />
+        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white p-4 sm:p-8 overflow-x-hidden relative" ref={pricingRef}>
+            {/* Background Subtle Gradient */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-[100px] pointer-events-none opacity-20" />
 
-            <div className="max-w-6xl mx-auto w-full space-y-16 pb-24 relative z-10">
+            <div className="max-w-6xl mx-auto w-full space-y-12 pb-24 relative z-10">
 
-                {/* Header Section (Compact V6) */}
+                {/* Header Section (Compact V7) */}
                 <article className="flex flex-col items-center text-center pb-12 relative z-10">
-                    <h1 className="text-4xl md:text-7xl font-black italic tracking-tighter text-white mb-6">
+                    <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter text-white mb-4">
                         <VerticalCutReveal
                             splitBy="words"
-                            staggerDuration={0.15}
+                            staggerDuration={0.1}
                             staggerFrom="first"
                             reverse={true}
                             containerClassName="justify-center"
@@ -116,10 +118,10 @@ export default function UpgradePage() {
                         animationNum={0}
                         timelineRef={pricingRef}
                         customVariants={revealVariants}
-                        className="text-zinc-500 text-base md:text-lg font-medium max-w-2xl px-4"
+                        className="text-zinc-500 text-sm md:text-base font-medium max-w-xl px-4"
                     >
                         Locked filters and AI optimization unlock immediately upon upgrade.
-                        The professional tools you need, all in one yearly plan.
+                        Join the elite tier for high-performance job seeking.
                     </TimelineContent>
 
                     <TimelineContent
@@ -127,40 +129,34 @@ export default function UpgradePage() {
                         animationNum={1}
                         timelineRef={pricingRef}
                         customVariants={revealVariants}
-                        className="mt-8"
+                        className="mt-6"
                     >
-                        <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white text-[9px] font-black uppercase tracking-[0.2em] shadow-[0_0_20px_rgba(255,255,255,0.05)]">
-                            <Sparkles className="h-3 w-3 text-emerald-500" />
+                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white text-[8px] font-black uppercase tracking-[0.2em] shadow-lg">
+                            <Sparkles className="h-2.5 w-2.5 text-emerald-500" />
                             Elite Access
                         </div>
                     </TimelineContent>
                 </article>
 
-                {/* Grid: Forced Grid-Cols-2 for side-by-side */}
-                <TimelineContent
-                    as="div"
-                    animationNum={2}
-                    timelineRef={pricingRef}
-                    customVariants={revealVariants}
-                    className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto relative z-10"
-                >
+                {/* Grid: Forced flex-row for side-by-side display */}
+                <div className="flex flex-col md:flex-row items-stretch justify-center gap-4 lg:gap-6 max-w-5xl mx-auto px-2 relative z-10">
                     {plans.map((plan, index) => (
-                        <div key={plan.id} className="h-full">
+                        <div key={plan.id} className="flex-1 flex flex-col max-w-[420px] w-full mx-auto md:mx-0">
                             <PricingCard.Card className={cn(
-                                "h-full flex flex-col border border-white/[0.08] hover:border-white/[0.15] transition-all duration-500 bg-zinc-950/20 backdrop-blur-3xl rounded-[2.5rem]",
-                                plan.popular && "ring-1 ring-white/20 shadow-[0_20px_60px_rgba(255,255,255,0.05)] bg-gradient-to-t from-black via-zinc-950/40 to-white/5 scale-[1.02]"
+                                "h-full flex flex-col border border-white/[0.08] hover:border-white/[0.15] transition-all duration-500 bg-zinc-950/20 backdrop-blur-3xl rounded-[2rem]",
+                                plan.popular && "ring-1 ring-white/20 shadow-[0_20px_60px_rgba(255,255,255,0.05)] bg-gradient-to-t from-black via-zinc-950/40 to-white/5 md:scale-[1.01]"
                             )}>
-                                <PricingCard.Header className="p-6 md:p-8 border-white/[0.05] rounded-[2rem]">
+                                <PricingCard.Header className="p-5 md:p-6 border-white/[0.05] rounded-[1.8rem]">
                                     <PricingCard.Plan>
-                                        <PricingCard.PlanName className="text-white">
+                                        <PricingCard.PlanName className="text-white text-[11px]">
                                             <Zap className={cn("size-3.5 text-zinc-500", plan.popular && "text-emerald-500")} />
                                             {plan.name}
                                         </PricingCard.PlanName>
-                                        {plan.popular && <PricingCard.Badge className="text-[9px]">Elite Tier</PricingCard.Badge>}
+                                        {plan.popular && <PricingCard.Badge className="text-[8px] px-2 py-0.5">ELITE RANK</PricingCard.Badge>}
                                     </PricingCard.Plan>
 
-                                    <PricingCard.Price>
-                                        <PricingCard.MainPrice className="text-white italic">
+                                    <PricingCard.Price className="mb-2">
+                                        <PricingCard.MainPrice className="text-white italic text-4xl md:text-5xl">
                                             $
                                             <NumberFlow
                                                 format={{
@@ -171,43 +167,43 @@ export default function UpgradePage() {
                                                     currencyDisplay: "narrowSymbol"
                                                 }}
                                                 value={plan.price}
-                                                className="text-5xl md:text-6xl font-black"
+                                                className="font-black"
                                             />
                                         </PricingCard.MainPrice>
-                                        <PricingCard.Period className="text-zinc-600 font-bold tracking-widest uppercase text-xs">/Year</PricingCard.Period>
+                                        <PricingCard.Period className="text-zinc-600 font-bold tracking-widest uppercase text-[10px]">/Year</PricingCard.Period>
                                     </PricingCard.Price>
 
-                                    <PricingCard.Description className="text-zinc-500 font-medium italic text-xs">
+                                    <PricingCard.Description className="text-zinc-500 font-medium italic text-[11px] leading-tight">
                                         {plan.description}
                                     </PricingCard.Description>
                                 </PricingCard.Header>
 
-                                <PricingCard.Body className="p-6 md:p-8 pt-0 flex-1 flex flex-col justify-between">
+                                <PricingCard.Body className="p-5 md:p-6 pt-0 flex-1 flex flex-col justify-between">
                                     <div className="space-y-4">
-                                        <PricingCard.Separator className="text-zinc-700 text-[9px]">{plan.includes[0]}</PricingCard.Separator>
-                                        <PricingCard.List className="space-y-3">
-                                            {plan.includes.slice(1).map((feature, i) => (
-                                                <PricingCard.ListItem key={i} className="text-zinc-400 font-bold group/item text-xs">
-                                                    <CheckCheck className={cn("size-3.5 shrink-0 mt-0.5 transition-all duration-300", plan.popular ? "text-emerald-500" : "text-white/40")} />
+                                        <PricingCard.Separator className="text-zinc-800 text-[8px] font-black uppercase tracking-[0.2em]">Tier Features</PricingCard.Separator>
+                                        <PricingCard.List className="space-y-2.5">
+                                            {plan.includes.map((feature, i) => (
+                                                <PricingCard.ListItem key={i} className="text-zinc-400 font-bold group/item text-[11px] flex items-center gap-2">
+                                                    <CheckCheck className={cn("size-3.5 shrink-0 transition-all duration-300", plan.popular ? "text-emerald-500" : "text-white/40")} />
                                                     {feature}
                                                 </PricingCard.ListItem>
                                             ))}
 
                                             {!plan.popular && plan.locked?.map((lock, i) => (
-                                                <PricingCard.ListItem key={i} className="text-zinc-800 line-through opacity-30 font-medium text-xs">
-                                                    <CheckCheck className="size-3.5 shrink-0 mt-0.5 text-zinc-900" />
+                                                <PricingCard.ListItem key={i} className="text-zinc-800 line-through opacity-20 font-medium text-[11px] flex items-center gap-2">
+                                                    <CheckCheck className="size-3.5 shrink-0 text-zinc-900" />
                                                     {lock}
                                                 </PricingCard.ListItem>
                                             ))}
                                         </PricingCard.List>
                                     </div>
 
-                                    <div className="mt-8 pt-6 border-t border-white/[0.05]">
+                                    <div className="mt-8 pt-5 border-t border-white/[0.05]">
                                         <Button
                                             disabled={isLoading || !plan.popular}
                                             onClick={plan.popular ? handleUpgrade : undefined}
                                             className={cn(
-                                                "w-full h-14 rounded-xl text-sm font-black transition-all active:scale-[0.98] shadow-2xl uppercase tracking-widest",
+                                                "w-full h-12 rounded-xl text-xs font-black transition-all active:scale-[0.98] shadow-2xl uppercase tracking-widest",
                                                 plan.popular
                                                     ? "bg-white text-black hover:bg-zinc-200 shadow-white/10"
                                                     : "bg-white/5 text-zinc-700 cursor-not-allowed border border-white/5 shadow-none"
@@ -220,21 +216,21 @@ export default function UpgradePage() {
                             </PricingCard.Card>
                         </div>
                     ))}
-                </TimelineContent>
+                </div>
 
-                {/* Footer Section (Consistent V6) */}
-                <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-12 max-w-4xl mx-auto border-t border-white/[0.08] pt-16 relative z-10 text-center md:text-left">
+                {/* Footer Trust Section (Tightened V7) */}
+                <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto border-t border-white/[0.1] pt-12 relative z-10 text-center md:text-left">
                     {[
-                        { icon: Shield, title: "Vault Privacy", desc: "Your data is encrypted at rest and in transit. Payments via Stripe." },
-                        { icon: ZapIcon, title: "Velocity Boost", desc: "Unlimited AI optimization and premium template access instantly." },
-                        { icon: Globe, title: "Universal Brand", desc: "Optimized for the global ATS standards. Built for high performance." }
+                        { icon: Shield, title: "Vault Privacy", desc: "Your data is encrypted. Payments via Stripe." },
+                        { icon: ZapIcon, title: "Velocity Boost", desc: "Instant AI features unlock upon upgrade." },
+                        { icon: Globe, title: "Universal Brand", desc: "Built for global ATS performance standards." }
                     ].map((item, i) => (
-                        <div key={i} className="space-y-3">
-                            <div className="h-10 w-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:scale-110 transition-transform group shadow-[0_0_20px_rgba(255,255,255,0.05)] mx-auto md:mx-0">
-                                <item.icon className="h-5 w-5 text-white group-hover:text-emerald-400 transition-colors" />
+                        <div key={i} className="space-y-2 px-4 text-center md:text-left">
+                            <div className="h-9 w-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center group shadow-md mx-auto md:mx-0">
+                                <item.icon className="h-4 w-4 text-white group-hover:text-emerald-400 transition-colors" />
                             </div>
-                            <h3 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{item.title}</h3>
-                            <p className="text-zinc-500 text-[12px] leading-relaxed font-medium">{item.desc}</p>
+                            <h3 className="text-[9px] font-black text-white uppercase tracking-[0.2em]">{item.title}</h3>
+                            <p className="text-zinc-600 text-[11px] leading-relaxed font-medium">{item.desc}</p>
                         </div>
                     ))}
                 </div>

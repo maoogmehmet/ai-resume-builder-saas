@@ -13,20 +13,21 @@ const plans = [
     {
         id: "starter",
         name: "Starter Rank",
-        description: "The essential toolkit for a clean, standout professional resume.",
+        description: "The essential foundations for building your first professional resumes.",
         price: 0,
         buttonText: "Start for Free",
         link: "/auth/signup",
         popular: false,
         includes: [
-            "2 CVs (Refreshed every 14 days)",
-            "2 Cover Letters (Refreshed every 14 days)",
+            "2 CVs (Refreshes every 14 days)",
+            "2 Letters (Refreshes every 14 days)",
             "2 Daily Job Match Searches",
-            "Draft Storage",
+            "Draft Storage Access",
+            "Standard Template Access",
         ],
         locked: [
             "Unlimited Generative Builds",
-            "Clean Export (No Watermark)",
+            "Clean Export (No Watermarks)",
             "Advanced AI Analysis",
             "LinkedIn Growth Integration",
         ]
@@ -34,7 +35,7 @@ const plans = [
     {
         id: "pro",
         name: "Pro Elite",
-        description: "Full AI intelligence for serious leaders and career climbers.",
+        description: "Unlimited power and AI-driven intelligence for serious leaders.",
         price: 99,
         popular: true,
         buttonText: "Upgrade to Elite",
@@ -46,6 +47,7 @@ const plans = [
             "LinkedIn & Profile Analysis",
             "Custom Public URL",
             "Priority AI Support",
+            "Beta Feature Access",
         ],
     },
 ];
@@ -59,13 +61,13 @@ export function PricingPremium() {
             opacity: 1,
             filter: "blur(0px)",
             transition: {
-                delay: i * 0.3,
-                duration: 0.5,
+                delay: i * 0.2,
+                duration: 0.4,
             },
         }),
         hidden: {
-            filter: "blur(10px)",
-            y: -20,
+            filter: "blur(8px)",
+            y: -10,
             opacity: 0,
         },
     };
@@ -73,17 +75,17 @@ export function PricingPremium() {
     return (
         <section
             id="pricing"
-            className="px-4 py-32 min-h-screen max-w-7xl mx-auto relative bg-black overflow-hidden"
+            className="px-4 py-32 min-h-screen max-w-full mx-auto relative bg-black overflow-hidden"
             ref={pricingRef}
         >
-            {/* Subtle Background Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 rounded-full blur-[120px] pointer-events-none opacity-30" />
+            {/* Background Subtle Gradient */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-[100px] pointer-events-none opacity-20" />
 
-            <article className="flex flex-col items-center text-center pb-20 relative z-10">
-                <h2 className="text-4xl md:text-7xl font-black italic tracking-tighter text-white mb-6">
+            <article className="flex flex-col items-center text-center pb-16 relative z-10">
+                <h2 className="text-4xl md:text-6xl font-black italic tracking-tighter text-white mb-4">
                     <VerticalCutReveal
                         splitBy="words"
-                        staggerDuration={0.15}
+                        staggerDuration={0.1}
                         staggerFrom="first"
                         reverse={true}
                         containerClassName="justify-center"
@@ -103,10 +105,10 @@ export function PricingPremium() {
                     animationNum={0}
                     timelineRef={pricingRef}
                     customVariants={revealVariants}
-                    className="text-zinc-500 text-base md:text-lg font-medium max-w-2xl"
+                    className="text-zinc-500 text-sm md:text-base font-medium max-w-xl"
                 >
                     Built for those who refuse to stay in the same place.
-                    No monthly renewals. One yearly investment in your future.
+                    No monthly fees. One yearly investment in your future.
                 </TimelineContent>
 
                 <TimelineContent
@@ -114,23 +116,17 @@ export function PricingPremium() {
                     animationNum={1}
                     timelineRef={pricingRef}
                     customVariants={revealVariants}
-                    className="mt-8"
+                    className="mt-6"
                 >
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-white text-[9px] font-black uppercase tracking-[0.2em]">
-                        <Sparkles className="h-3 w-3 text-emerald-500" />
+                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-white text-[8px] font-black uppercase tracking-[0.2em] shadow-lg">
+                        <Sparkles className="h-2.5 w-2.5 text-emerald-500" />
                         Vibrant Access
                     </div>
                 </TimelineContent>
             </article>
 
-            {/* Grid: Shrink max-w and force grid-cols-2 */}
-            <TimelineContent
-                as="div"
-                animationNum={2}
-                timelineRef={pricingRef}
-                customVariants={revealVariants}
-                className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-4xl mx-auto relative z-10"
-            >
+            {/* CORE FIX: flex-row with tight max-w to ENSURE side-by-side */}
+            <div className="relative z-10 flex flex-col md:flex-row items-stretch justify-center gap-4 lg:gap-6 max-w-5xl mx-auto px-2">
                 {plans.map((plan, index) => (
                     <TimelineContent
                         as="div"
@@ -138,23 +134,23 @@ export function PricingPremium() {
                         animationNum={index + 2}
                         timelineRef={pricingRef}
                         customVariants={revealVariants}
-                        className="h-full flex flex-col"
+                        className="flex-1 flex flex-col max-w-[420px] w-full mx-auto md:mx-0"
                     >
                         <PricingCard.Card className={cn(
-                            "h-full flex flex-col border border-white/[0.08] hover:border-white/[0.15] transition-all duration-500 bg-zinc-950/20 backdrop-blur-3xl",
-                            plan.popular && "ring-1 ring-white/20 shadow-[0_20px_60px_rgba(255,255,255,0.05)] bg-gradient-to-t from-black via-zinc-950/40 to-white/5 scale-[1.02]"
+                            "h-full flex flex-col border border-white/[0.08] hover:border-white/[0.15] transition-all duration-500 bg-zinc-950/20 backdrop-blur-3xl rounded-[2rem]",
+                            plan.popular && "ring-1 ring-white/20 shadow-[0_20px_60px_rgba(255,255,255,0.05)] bg-gradient-to-t from-black via-zinc-950/40 to-white/5 md:scale-[1.01]"
                         )}>
-                            <PricingCard.Header className="p-6 md:p-8 border-white/[0.05]">
+                            <PricingCard.Header className="p-5 md:p-6 border-white/[0.05] rounded-[1.8rem]">
                                 <PricingCard.Plan>
-                                    <PricingCard.PlanName className="text-white">
+                                    <PricingCard.PlanName className="text-white text-[11px]">
                                         <Zap className={cn("size-3.5 text-zinc-500", plan.popular && "text-emerald-500")} />
                                         {plan.name}
                                     </PricingCard.PlanName>
-                                    {plan.popular && <PricingCard.Badge className="text-[9px]">Elite Rank</PricingCard.Badge>}
+                                    {plan.popular && <PricingCard.Badge className="text-[8px] px-2 py-0.5">Most Popular</PricingCard.Badge>}
                                 </PricingCard.Plan>
 
-                                <PricingCard.Price>
-                                    <PricingCard.MainPrice className="text-white italic">
+                                <PricingCard.Price className="mb-2">
+                                    <PricingCard.MainPrice className="text-white italic text-4xl md:text-5xl">
                                         $
                                         <NumberFlow
                                             format={{
@@ -165,42 +161,46 @@ export function PricingPremium() {
                                                 currencyDisplay: "narrowSymbol"
                                             }}
                                             value={plan.price}
-                                            className="text-5xl md:text-6xl font-black"
+                                            className="font-black"
                                         />
                                     </PricingCard.MainPrice>
-                                    <PricingCard.Period className="text-zinc-600 font-bold">/Year</PricingCard.Period>
+                                    <PricingCard.Period className="text-zinc-600 font-bold text-[10px]">/Year</PricingCard.Period>
                                 </PricingCard.Price>
 
-                                <PricingCard.Description className="text-zinc-500 font-medium">
+                                <PricingCard.Description className="text-zinc-500 font-medium text-[11px] leading-tight">
                                     {plan.description}
                                 </PricingCard.Description>
+
+                                {!plan.popular && (
+                                    <p className="mt-4 text-[10px] text-zinc-700 font-bold uppercase tracking-widest italic opacity-50">Locked features below</p>
+                                )}
                             </PricingCard.Header>
 
-                            <PricingCard.Body className="p-6 md:p-8 pt-0 flex-1 flex flex-col justify-between">
+                            <PricingCard.Body className="p-5 md:p-6 pt-0 flex-1 flex flex-col justify-between">
                                 <div className="space-y-4">
-                                    <PricingCard.Separator className="text-zinc-700 text-[9px]">{plan.includes[0]}</PricingCard.Separator>
-                                    <PricingCard.List className="space-y-3">
-                                        {plan.includes.slice(1).map((feature, i) => (
-                                            <PricingCard.ListItem key={i} className="text-zinc-400 font-bold group/item text-xs">
-                                                <CheckCheck className={cn("size-3.5 shrink-0 mt-0.5 transition-all duration-300", plan.popular ? "text-emerald-500" : "text-white/40")} />
+                                    <PricingCard.Separator className="text-zinc-800 text-[8px] font-black uppercase tracking-[0.2em]">Included Features</PricingCard.Separator>
+                                    <PricingCard.List className="space-y-2.5">
+                                        {plan.includes.map((feature, i) => (
+                                            <PricingCard.ListItem key={i} className="text-zinc-400 font-bold text-[11px] group/item flex items-center gap-2">
+                                                <CheckCheck className={cn("size-3.5 shrink-0 transition-all duration-300", plan.popular ? "text-emerald-500" : "text-white/40")} />
                                                 {feature}
                                             </PricingCard.ListItem>
                                         ))}
 
                                         {!plan.popular && plan.locked?.map((lock, i) => (
-                                            <PricingCard.ListItem key={i} className="text-zinc-800 line-through opacity-30 font-medium italic text-xs">
-                                                <CheckCheck className="size-3.5 shrink-0 mt-0.5 text-zinc-900" />
+                                            <PricingCard.ListItem key={i} className="text-zinc-800 line-through opacity-20 font-medium italic text-[11px] flex items-center gap-2">
+                                                <CheckCheck className="size-3.5 shrink-0 text-zinc-900" />
                                                 {lock}
                                             </PricingCard.ListItem>
                                         ))}
                                     </PricingCard.List>
                                 </div>
 
-                                <div className="mt-8 pt-6 border-t border-white/[0.05]">
+                                <div className="mt-8 pt-5 border-t border-white/[0.05]">
                                     <Button
                                         asChild
                                         className={cn(
-                                            "w-full h-14 rounded-xl text-sm font-black transition-all active:scale-[0.98] shadow-2xl uppercase tracking-widest",
+                                            "w-full h-12 rounded-xl text-xs font-black transition-all active:scale-[0.98] shadow-2xl uppercase tracking-widest",
                                             plan.popular
                                                 ? "bg-white text-black hover:bg-zinc-200 shadow-white/10"
                                                 : "bg-white/5 text-white hover:bg-white/10 border border-white/10"
@@ -213,21 +213,21 @@ export function PricingPremium() {
                         </PricingCard.Card>
                     </TimelineContent>
                 ))}
-            </TimelineContent>
+            </div>
 
-            {/* Trust Badges - Optimized spacing */}
-            <div className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-12 max-w-4xl mx-auto border-t border-white/[0.08] pt-16 relative z-10">
+            {/* Trust Badges - Smaller & Tighter */}
+            <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto border-t border-white/[0.1] pt-12 relative z-10">
                 {[
                     { icon: Shield, title: "Pure Encryption", desc: "No data leakage. Direct, secure Stripe transactions." },
-                    { icon: ZapIcon, title: "Velocity Boost", desc: "Unlock premium AI features and high-fidelity templates instantly." },
-                    { icon: Globe, title: "Global Presence", desc: "Your branding is permanent and optimized for the global market." }
+                    { icon: ZapIcon, title: "Velocity Boost", desc: "Unlock premium AI features instantly." },
+                    { icon: Globe, title: "Global Presence", desc: "Optimized for the global market standards." }
                 ].map((item, i) => (
-                    <div key={i} className="space-y-3 text-center md:text-left">
-                        <div className="h-10 w-10 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:scale-110 transition-transform group mx-auto md:mx-0">
-                            <item.icon className="h-5 w-5 text-white group-hover:text-emerald-400 transition-colors" />
+                    <div key={i} className="space-y-2 text-center md:text-left px-4">
+                        <div className="h-9 w-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center group mx-auto md:mx-0 shadow-md">
+                            <item.icon className="h-4 w-4 text-white group-hover:text-emerald-400 transition-colors" />
                         </div>
-                        <h3 className="text-[10px] font-black text-white uppercase tracking-[0.2em]">{item.title}</h3>
-                        <p className="text-zinc-500 text-[12px] leading-relaxed font-medium">{item.desc}</p>
+                        <h3 className="text-[9px] font-black text-white uppercase tracking-[0.2em]">{item.title}</h3>
+                        <p className="text-zinc-600 text-[11px] leading-relaxed font-medium">{item.desc}</p>
                     </div>
                 ))}
             </div>
