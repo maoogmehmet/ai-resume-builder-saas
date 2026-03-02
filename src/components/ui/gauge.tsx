@@ -26,34 +26,14 @@ const gapPercent = {
     large: 5
 };
 
-const rotate = {
+const rotateStyles = {
     primary: {
-        default: {
-            tiny: `-rotate-90`,
-            small: `-rotate-90`,
-            medium: `-rotate-90`,
-            large: `-rotate-90`
-        },
-        equal: {
-            tiny: `rotate-[calc(-90deg_+_(0.5*9*3.6deg))]`,
-            small: `rotate-[calc(-90deg_+_(0.5*6*3.6deg))]`,
-            medium: `rotate-[calc(-90deg_+_(0.5*5*3.6deg))]`,
-            large: `rotate-[calc(-90deg_+_(0.5*5*3.6deg))]`
-        }
+        default: (size: keyof typeof sizes, value: number) => ({ transform: 'rotate(-90deg)' }),
+        equal: (size: keyof typeof sizes, value: number) => ({ transform: `rotate(calc(-90deg + (0.5 * ${gapPercent[size]} * 3.6deg)))` })
     },
     secondary: {
-        default: {
-            tiny: `rotate-[calc(1turn_-_90deg_-_(9*3.6deg))]`,
-            small: `rotate-[calc(1turn_-_90deg_-_(6*3.6deg))]`,
-            medium: `rotate-[calc(1turn_-_90deg_-_(5*3.6deg))]`,
-            large: `rotate-[calc(1turn_-_90deg_-_(5*3.6deg))]`
-        },
-        equal: {
-            tiny: `rotate-[calc(1turn_-_90deg_-_(0.5*9*3.6deg))]`,
-            small: `rotate-[calc(1turn_-_90deg_-_(0.5*6*3.6deg))]`,
-            medium: `rotate-[calc(1turn_-_90deg_-_(0.5*5*3.6deg))]`,
-            large: `rotate-[calc(1turn_-_90deg_-_(0.5*5*3.6deg))]`
-        }
+        default: (size: keyof typeof sizes, value: number) => ({ transform: `rotate(calc(1turn - 90deg - (${gapPercent[size]} * 3.6deg)))` }),
+        equal: (size: keyof typeof sizes, value: number) => ({ transform: `rotate(calc(1turn - 90deg - (0.5 * ${gapPercent[size]} * 3.6deg)))` })
     }
 };
 
@@ -104,7 +84,8 @@ export const Gauge = ({
                     strokeDashoffset="0"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`${rotate.secondary[arcPriority][size]} scale-y-[-1] origin-center${!colors?.secondary ? " stroke-zinc-800" : ""}`}
+                    style={rotateStyles.secondary[arcPriority](size, value)}
+                    className={`scale-y-[-1] origin-center${!colors?.secondary ? " stroke-zinc-800" : ""}`}
                     stroke={colors.secondary}
                     strokeDasharray={`${indeterminate ? circumference : arcPriority === "default" ? (circumference * (100 - (value === 0 ? 0 : (2 * gapPercent[size])) - value) / 100) : ((circumference * (100 - 2 * gapPercent[size]) / 100) / 2)} ${circumference}`}
                 />
@@ -117,7 +98,8 @@ export const Gauge = ({
                         strokeDashoffset="0"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        className={`${rotate.primary[arcPriority][size]} origin-center transition-all duration-1000 ease-out`}
+                        style={rotateStyles.primary[arcPriority](size, value)}
+                        className="origin-center transition-all duration-1000 ease-out"
                         stroke={primary}
                         strokeDasharray={`${arcPriority === "default" ? (circumference * value / 100) : ((circumference * (100 - 2 * gapPercent[size]) / 100) / 2)} ${circumference}`}
                     />
