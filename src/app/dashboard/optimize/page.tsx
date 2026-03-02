@@ -196,12 +196,12 @@ export default function OptimizePage() {
                             )}
 
                             <div className="flex flex-col md:flex-row items-center gap-12">
-                                <div className="shrink-0 scale-125 md:scale-150 py-4">
+                                <div className="shrink-0 flex items-center justify-center">
                                     <Gauge
                                         value={results.ats_score}
                                         size="large"
                                         showValue={true}
-                                        className="drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]"
+                                        className="drop-shadow-[0_0_30px_rgba(16,185,129,0.15)]"
                                     />
                                 </div>
                                 <div className="text-center md:text-left flex-1">
