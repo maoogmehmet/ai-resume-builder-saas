@@ -144,7 +144,7 @@ export default function UpgradePage() {
                         <div key={plan.id} className="flex-1 flex flex-col max-w-[420px] w-full mx-auto md:mx-0">
                             <PricingCard.Card className={cn(
                                 "h-full flex flex-col border border-white/[0.08] hover:border-white/[0.15] transition-all duration-500 bg-zinc-950/20 backdrop-blur-3xl rounded-[2rem]",
-                                plan.popular && "ring-1 ring-white/20 shadow-[0_20px_60px_rgba(255,255,255,0.05)] bg-gradient-to-t from-black via-zinc-950/40 to-white/5 md:scale-[1.01]"
+                                plan.popular && "ring-1 ring-white/20 shadow-[0_20px_60px_rgba(255,255,255,0.05)] bg-gradient-to-t from-black via-zinc-950/40 to-white/5"
                             )}>
                                 <PricingCard.Header className="p-5 md:p-6 border-white/[0.05] rounded-[1.8rem]">
                                     <PricingCard.Plan>

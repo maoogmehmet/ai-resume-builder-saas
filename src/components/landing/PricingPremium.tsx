@@ -9,6 +9,8 @@ import { CheckCheck, Sparkles, Zap, Shield, Zap as ZapIcon, Globe } from "lucide
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 
+import { motion } from "framer-motion";
+
 const plans = [
     {
         id: "starter",
@@ -128,17 +130,18 @@ export function PricingPremium() {
             {/* CORE FIX: flex-row with tight max-w to ENSURE side-by-side */}
             <div className="relative z-10 flex flex-col md:flex-row items-stretch justify-center gap-4 lg:gap-6 max-w-5xl mx-auto px-2">
                 {plans.map((plan, index) => (
-                    <TimelineContent
-                        as="div"
+                    <motion.div
                         key={plan.name}
-                        animationNum={index + 2}
-                        timelineRef={pricingRef}
-                        customVariants={revealVariants}
+                        custom={index + 2}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                        variants={revealVariants}
                         className="flex-1 flex flex-col max-w-[420px] w-full mx-auto md:mx-0"
                     >
                         <PricingCard.Card className={cn(
                             "h-full flex flex-col border border-white/[0.08] hover:border-white/[0.15] transition-all duration-500 bg-zinc-950/20 backdrop-blur-3xl rounded-[2rem]",
-                            plan.popular && "ring-1 ring-white/20 shadow-[0_20px_60px_rgba(255,255,255,0.05)] bg-gradient-to-t from-black via-zinc-950/40 to-white/5 md:scale-[1.01]"
+                            plan.popular && "ring-1 ring-white/20 shadow-[0_20px_60px_rgba(255,255,255,0.05)] bg-gradient-to-t from-black via-zinc-950/40 to-white/5"
                         )}>
                             <PricingCard.Header className="p-5 md:p-6 border-white/[0.05] rounded-[1.8rem]">
                                 <PricingCard.Plan>
@@ -211,7 +214,7 @@ export function PricingPremium() {
                                 </div>
                             </PricingCard.Body>
                         </PricingCard.Card>
-                    </TimelineContent>
+                    </motion.div>
                 ))}
             </div>
 
