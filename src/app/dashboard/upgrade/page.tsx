@@ -97,10 +97,10 @@ export default function UpgradePage() {
             {/* Background Subtle Gradient */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-[100px] pointer-events-none opacity-20" />
 
-            <div className="max-w-6xl mx-auto w-full space-y-12 pb-24 relative z-10">
+            <div className="max-w-6xl mx-auto w-full space-y-8 pb-24 relative z-10">
 
                 {/* Header Section (Compact V7) */}
-                <article className="flex flex-col items-center text-center pb-12 relative z-10">
+                <article className="flex flex-col items-center text-center pb-8 relative z-10">
                     <h1 className="text-4xl md:text-6xl font-black italic tracking-tighter text-white mb-4">
                         <VerticalCutReveal
                             splitBy="words"

@@ -215,22 +215,7 @@ export function PricingPremium() {
                 ))}
             </div>
 
-            {/* Trust Badges - Smaller & Tighter */}
-            <div className="mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto border-t border-white/[0.1] pt-12 relative z-10">
-                {[
-                    { icon: Shield, title: "Pure Encryption", desc: "No data leakage. Direct, secure Stripe transactions." },
-                    { icon: ZapIcon, title: "Velocity Boost", desc: "Unlock premium AI features instantly." },
-                    { icon: Globe, title: "Global Presence", desc: "Optimized for the global market standards." }
-                ].map((item, i) => (
-                    <div key={i} className="space-y-2 text-center md:text-left px-4">
-                        <div className="h-9 w-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center group mx-auto md:mx-0 shadow-md">
-                            <item.icon className="h-4 w-4 text-white group-hover:text-emerald-400 transition-colors" />
-                        </div>
-                        <h3 className="text-[9px] font-black text-white uppercase tracking-[0.2em]">{item.title}</h3>
-                        <p className="text-zinc-600 text-[11px] leading-relaxed font-medium">{item.desc}</p>
-                    </div>
-                ))}
-            </div>
+            {/* Footer Section Removed */}
         </section>
     );
 }
