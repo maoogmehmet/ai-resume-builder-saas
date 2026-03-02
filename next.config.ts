@@ -12,10 +12,6 @@ const nextConfig: NextConfig = {
         hostname: 'html.tailus.io',
       },
     ]
-  },
-  experimental: {
-    // @ts-ignore - Turbopack might be forced in some versions, but we try to disable it for stability
-    turbopack: false
   }
 };
 

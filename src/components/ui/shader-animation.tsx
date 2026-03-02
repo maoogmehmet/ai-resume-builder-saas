@@ -71,18 +71,26 @@ export function ShaderAnimation() {
     const mesh = new THREE.Mesh(geometry, material)
     scene.add(mesh)
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setPixelRatio(window.devicePixelRatio)
-
-    container.appendChild(renderer.domElement)
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+      renderer.setPixelRatio(window.devicePixelRatio || 1)
+      container.appendChild(renderer.domElement)
+    } catch (e) {
+      console.warn("WebGL not supported, shader animation disabled", e)
+      return
+    }
 
     // Handle window resize
     const onWindowResize = () => {
+      if (!container || !renderer) return
       const width = container.clientWidth
       const height = container.clientHeight
       renderer.setSize(width, height)
-      uniforms.resolution.value.x = renderer.domElement.width
-      uniforms.resolution.value.y = renderer.domElement.height
+      if (uniforms.resolution.value) {
+        uniforms.resolution.value.x = renderer.domElement.width
+        uniforms.resolution.value.y = renderer.domElement.height
+      }
     }
 
     // Initial resize
@@ -120,7 +128,9 @@ export function ShaderAnimation() {
         cancelAnimationFrame(sceneRef.current.animationId)
 
         if (container && sceneRef.current.renderer.domElement) {
-          container.removeChild(sceneRef.current.renderer.domElement)
+          try {
+            container.removeChild(sceneRef.current.renderer.domElement)
+          } catch (e) { }
         }
 
         sceneRef.current.renderer.dispose()
