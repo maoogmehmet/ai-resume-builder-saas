@@ -1,14 +1,27 @@
 'use client'
 
-import { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import {
-    Loader2, ChevronDown, Monitor, Share2,
-    ArrowUpRight, Mail, CheckCircle2, Globe,
-    ChevronRight, ExternalLink, Link2, Copy, Check
+    Loader2, ChevronDown,
+    Link2, Copy, Check, ExternalLink
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import {
+    LineChart,
+    Line,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    ResponsiveContainer,
+    Tooltip,
+} from 'recharts'
+import {
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+    type ChartConfig,
+} from '@/components/ui/chart'
 
 interface PublicLink {
     id: string
@@ -22,20 +35,21 @@ interface PublicLink {
 
 interface DataPoint {
     date: string
-    value: number
-    label: string
+    views: number
 }
+
+const chartConfig = {
+    views: {
+        label: "Views",
+        color: "#10b981",
+    },
+} satisfies ChartConfig
 
 export default function AnalyticsPage() {
     const [links, setLinks] = useState<PublicLink[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [copiedSlug, setCopiedSlug] = useState<string | null>(null)
     const [data, setData] = useState<DataPoint[]>([])
-    const svgRef = useRef<SVGSVGElement>(null)
-
-    const width = 1000
-    const height = 450
-    const padding = { top: 60, right: 80, bottom: 60, left: 40 }
 
     useEffect(() => {
         const fetchLinks = async () => {
@@ -53,7 +67,7 @@ export default function AnalyticsPage() {
         }
         fetchLinks()
 
-        // Generate mockup data for the last 15 days to match the screenshot
+        // Generate mockup data for the last 15 days
         const mockup: DataPoint[] = []
         const months = ["Jan", "Feb", "Mar", "Apr"]
         const now = new Date()
@@ -62,36 +76,21 @@ export default function AnalyticsPage() {
             d.setDate(now.getDate() - i)
             const dateStr = `${months[d.getMonth()]}, ${d.getDate().toString().padStart(2, '0')}`
 
-            // Generate a spike around "Feb 27" to match the user's image
+            // Spike on Feb 27
             let val = 0
-            if (i === 4) val = 1.0 // This is Feb 27 roughly
-            else if (i === 3 || i === 5) val = 0.5
+            if (i === 4) val = 150
+            else if (i === 3 || i === 5) val = 45 + Math.random() * 20
+            else val = 10 + Math.random() * 30
 
             mockup.push({
                 date: dateStr,
-                value: val,
-                label: i % 1 === 0 ? dateStr : ""
+                views: Math.floor(val),
             })
         }
         setData(mockup)
     }, [])
 
-    const getX = (index: number) => {
-        return padding.left + (index / (data.length - 1)) * (width - padding.left - padding.right)
-    }
-
-    const getY = (value: number) => {
-        return padding.top + (1 - value) * (height - padding.top - padding.bottom)
-    }
-
-    const getLinePath = useMemo(() => {
-        if (data.length < 2) return ""
-        return data.map((point, i) => `${i === 0 ? 'M' : 'L'} ${getX(i)},${getY(point.value)}`).join(' ')
-    }, [data])
-
     const totalViews = links.reduce((sum, l) => sum + (l.view_count || 0), 0)
-
-    // In our simplified "Metrics" logic, deliverability is engagement
     const deliverabilityRate = links.length > 0 ? 100 : 0
 
     const copyLink = (slug: string) => {
@@ -127,92 +126,63 @@ export default function AnalyticsPage() {
                         {/* Summary Stats (Left) */}
                         <div className="lg:col-span-1 space-y-12">
                             <div>
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2">Emails</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2">EMAILS</p>
                                 <h2 className="text-6xl font-black italic tracking-tighter text-white">{totalViews || 1}</h2>
                             </div>
                             <div>
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2">Deliverability Rate</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2">DELIVERABILITY RATE</p>
                                 <h2 className="text-6xl font-black italic tracking-tighter text-white">{deliverabilityRate}%</h2>
                             </div>
                         </div>
 
                         {/* Chart Area (Right) */}
-                        <div className="lg:col-span-3 relative min-h-[400px]">
+                        <div className="lg:col-span-3 relative h-[400px]">
                             <div className="absolute top-0 right-0 z-20">
                                 <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#121212]/50 border border-white/5 text-xs font-bold text-zinc-400">
                                     All Events <ChevronDown className="h-3 w-3" />
                                 </button>
                             </div>
 
-                            <svg
-                                ref={svgRef}
-                                className="w-full h-full overflow-visible"
-                                viewBox={`0 0 ${width} ${height}`}
-                                preserveAspectRatio="xMidYMid meet"
-                            >
-                                <defs>
-                                    <filter id="neon-glow" x="-20%" y="-20%" width="140%" height="140%">
-                                        <feGaussianBlur stdDeviation="6" result="blur" />
-                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                                    </filter>
-                                </defs>
-
-                                {/* Grid Lines (Horizontal) */}
-                                {[0, 0.25, 0.5, 0.75, 1].map((lvl) => (
-                                    <g key={lvl}>
-                                        <line
-                                            x1={padding.left}
-                                            y1={getY(lvl)}
-                                            x2={width - padding.right}
-                                            y2={getY(lvl)}
-                                            stroke="white"
-                                            strokeOpacity="0.05"
-                                            strokeDasharray="4 4"
-                                        />
-                                        <text
-                                            x={width - padding.right + 15}
-                                            y={getY(lvl)}
-                                            fill="white"
-                                            fillOpacity="0.4"
-                                            fontSize="12"
-                                            fontWeight="bold"
-                                            dominantBaseline="middle"
-                                        >
-                                            {lvl === 0 ? "0" : lvl}
-                                        </text>
-                                    </g>
-                                ))}
-
-                                {/* The Line */}
-                                <path
-                                    d={getLinePath}
-                                    fill="none"
-                                    stroke="#10b981"
-                                    strokeWidth="3"
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    filter="url(#neon-glow)"
-                                    className="drop-shadow-[0_0_10px_rgba(16,185,129,0.5)]"
-                                />
-
-                                {/* X-Axis Labels */}
-                                {data.map((p, i) => (
-                                    i % 1 === 0 && (
-                                        <text
-                                            key={i}
-                                            x={getX(i)}
-                                            y={height - 20}
-                                            fill="white"
-                                            fillOpacity="0.3"
-                                            fontSize="11"
-                                            fontWeight="600"
-                                            textAnchor="middle"
-                                        >
-                                            {p.date}
-                                        </text>
-                                    )
-                                ))}
-                            </svg>
+                            <ChartContainer config={chartConfig} className="h-full w-full">
+                                <LineChart
+                                    data={data}
+                                    margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
+                                >
+                                    <CartesianGrid
+                                        vertical={false}
+                                        stroke="white"
+                                        strokeOpacity={0.05}
+                                        strokeDasharray="4 4"
+                                    />
+                                    <XAxis
+                                        dataKey="date"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fill: "white", fillOpacity: 0.3, fontSize: 11, fontWeight: 600 }}
+                                        dy={20}
+                                    />
+                                    <YAxis
+                                        orientation="right"
+                                        axisLine={false}
+                                        tickLine={false}
+                                        tick={{ fill: "white", fillOpacity: 0.4, fontSize: 12, fontWeight: "bold" }}
+                                        tickFormatter={(val) => val > 0 ? val.toString() : "0"}
+                                    />
+                                    <ChartTooltip
+                                        cursor={{ stroke: "white", strokeOpacity: 0.1, strokeWidth: 1 }}
+                                        content={<ChartTooltipContent hideLabel />}
+                                    />
+                                    <Line
+                                        type="monotone"
+                                        dataKey="views"
+                                        stroke="var(--color-views)"
+                                        strokeWidth={3}
+                                        dot={false}
+                                        activeDot={{ r: 6, fill: "#10b981", stroke: "#050505", strokeWidth: 2 }}
+                                        animationDuration={1500}
+                                    />
+                                </LineChart>
+                            </ChartContainer>
                         </div>
                     </div>
                 </div>
