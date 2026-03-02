@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -195,21 +196,27 @@ export default function OptimizePage() {
                                 </div>
                             )}
 
-                            <div className="flex flex-col md:flex-row items-center gap-12">
-                                <div className="shrink-0 flex items-center justify-center">
+                            <div className="flex flex-col items-center justify-center py-10 relative">
+                                {/* Background glow for integration */}
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-500/10 rounded-full blur-[80px] pointer-events-none" />
+
+                                <div className="shrink-0 flex items-center justify-center relative z-10">
                                     <Gauge
                                         value={results.ats_score}
                                         size="large"
                                         showValue={true}
-                                        className="drop-shadow-[0_0_30px_rgba(16,185,129,0.15)]"
+                                        label="ATS MATCH"
+                                        className="drop-shadow-[0_0_50px_rgba(16,185,129,0.1)]"
                                     />
                                 </div>
-                                <div className="text-center md:text-left flex-1">
-                                    <h2 className="text-2xl font-black italic tracking-tighter text-white uppercase mb-1">Match Analysis</h2>
-                                    <p className="text-zinc-400 font-medium text-sm leading-relaxed max-w-sm">
-                                        {results.ats_score >= 80 ? 'Excellent match for this role.' : results.ats_score >= 60 ? 'Good match. Some optimizations could boost your visibility.' : 'Minimal match. Significant updates are required.'}
-                                    </p>
-                                </div>
+                                <motion.p
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 1.5, duration: 0.8 }}
+                                    className="text-zinc-400 font-medium text-sm leading-relaxed max-w-sm text-center mt-8 relative z-10"
+                                >
+                                    {results.ats_score >= 80 ? 'Excellent match for this role.' : results.ats_score >= 60 ? 'Good match. Some optimizations could boost your visibility.' : 'Minimal match. Significant updates are required.'}
+                                </motion.p>
                             </div>
 
                             {results.predicted_requirements && results.predicted_requirements.length > 0 && (

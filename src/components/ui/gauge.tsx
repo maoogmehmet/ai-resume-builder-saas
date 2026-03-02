@@ -6,7 +6,7 @@ const sizes = {
     tiny: 20,
     small: 32,
     medium: 64,
-    large: 160
+    large: 180 // Increased slightly for impact
 };
 
 type TArcPriority = "default" | "equal";
@@ -20,6 +20,7 @@ interface GaugeProps {
     indeterminate?: boolean;
     className?: string;
     animated?: boolean;
+    label?: string; // Optinal label like "Score"
 }
 
 const gapPercent = {
@@ -44,6 +45,7 @@ export const Gauge = ({
     indeterminate = false,
     className = "",
     animated = true,
+    label = "ATS SCORE"
 }: GaugeProps) => {
     const r = size === "tiny" ? 42.5 : 45;
     const circumference = 2 * r * Math.PI;
@@ -59,14 +61,14 @@ export const Gauge = ({
             return
         }
 
-        const duration = 1500
+        const duration = 2000 // Slower for premium feel
         const startTime = Date.now()
         const startVal = 0
 
         const timer = setInterval(() => {
             const elapsed = Date.now() - startTime
             const progress = Math.min(elapsed / duration, 1)
-            // easeOutExpo
+            // cubic-bezier(.16,1,.3,1) / easeOutExpo equivalent
             const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress)
             const current = Math.floor(startVal + (value - startVal) * eased)
             setDisplayValue(current)
@@ -97,7 +99,7 @@ export const Gauge = ({
             aria-valuemax={100}
             aria-valuemin={0}
             aria-valuenow={value}
-            className={`relative ${className}`}
+            className={`relative flex items-center justify-center ${className}`}
             role="progressbar"
         >
             <svg
@@ -106,25 +108,37 @@ export const Gauge = ({
                 height={sizes[size]}
                 width={sizes[size]}
                 viewBox="0 0 100 100"
-                strokeWidth="2"
+                className="overflow-visible"
             >
                 {/* Glow filter */}
                 <defs>
-                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
-                        <feMerge>
-                            <feMergeNode in="coloredBlur" />
-                            <feMergeNode in="SourceGraphic" />
-                        </feMerge>
+                    <filter id="premium-glow" x="-100%" y="-100%" width="300%" height="300%">
+                        <feGaussianBlur stdDeviation="4" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
                     </filter>
+                    <linearGradient id="primary-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor={primary} stopOpacity="1" />
+                        <stop offset="100%" stopColor={primary} stopOpacity="0.6" />
+                    </linearGradient>
                 </defs>
 
-                {/* Background circle */}
+                {/* Inner glass shadow circle */}
+                <circle
+                    cx="50"
+                    cy="50"
+                    r={r - 4}
+                    fill="url(#primary-grad)"
+                    fillOpacity="0.03"
+                    className="animate-pulse"
+                    style={{ animationDuration: '4s' }}
+                />
+
+                {/* Background (Ghost) Track */}
                 <circle
                     cx="50"
                     cy="50"
                     r={r}
-                    strokeWidth="10"
+                    strokeWidth="8"
                     strokeDashoffset="0"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -134,18 +148,17 @@ export const Gauge = ({
                             : `scaleY(-1) rotate(calc(1turn - 90deg - (${gapPercent[size]} * 3.6deg)))`,
                         transformOrigin: 'center',
                     }}
-                    className={!colors?.secondary ? "stroke-zinc-800" : ""}
-                    stroke={colors.secondary}
+                    className="stroke-white/[0.03]"
                     strokeDasharray={`${secondaryDash} ${circumference}`}
                 />
 
-                {/* Primary arc with glow */}
+                {/* Active Progression Track */}
                 {(animatedStroke > 0 || arcPriority === "equal") && !indeterminate && (
                     <circle
                         cx="50"
                         cy="50"
                         r={r}
-                        strokeWidth="10"
+                        strokeWidth="8"
                         strokeDashoffset="0"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -153,41 +166,37 @@ export const Gauge = ({
                             transform: 'rotate(-90deg)',
                             transformOrigin: 'center',
                         }}
-                        stroke={primary}
+                        stroke={`url(#primary-grad)`}
                         strokeDasharray={`${primaryDash} ${circumference}`}
-                        filter="url(#glow)"
+                        filter="url(#premium-glow)"
                     />
                 )}
             </svg>
 
-            {/* Value with animated counter */}
+            {/* Central Value Display */}
             {showValue && size !== "tiny" && !indeterminate && (
-                <div aria-hidden="true" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <p className={`text-white font-sans tabular-nums ${{
-                        small: "text-[11px] font-medium",
-                        medium: "text-[18px] font-medium",
-                        large: "text-[42px] font-bold"
-                    }[size]}`}>
-                        {displayValue}
-                    </p>
-                </div>
-            )}
-            {indeterminate && (
-                <div aria-hidden="true" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <svg
-                        height={sizes[size] / 2}
-                        width={sizes[size] / 2}
-                        viewBox="0 0 16 16"
-                        strokeLinejoin="round"
-                        className="animate-pulse"
-                    >
-                        <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M5.51324 3.62367L3.76375 8.34731C3.61845 8.7396 3.24433 8.99999 2.826 8.99999H0.75H0V7.49999H0.75H2.47799L4.56666 1.86057C4.88684 0.996097 6.10683 0.988493 6.43776 1.84891L10.5137 12.4463L12.2408 8.1286C12.3926 7.74894 12.7604 7.49999 13.1693 7.49999H15.25H16V8.99999H15.25H13.5078L11.433 14.1868C11.0954 15.031 9.8976 15.023 9.57122 14.1744L5.51324 3.62367Z"
-                            fill="#71717a"
-                        />
-                    </svg>
+                <div aria-hidden="true" className="absolute inset-0 flex flex-col items-center justify-center select-none pointer-events-none">
+                    <div className="flex items-baseline gap-0.5">
+                        <span className={`text-white font-black tracking-tight tabular-nums ${{
+                            small: "text-lg",
+                            medium: "text-3xl",
+                            large: "text-6xl"
+                        }[size]}`}>
+                            {displayValue}
+                        </span>
+                        <span className={`text-white/40 font-bold ${{
+                            small: "text-[8px]",
+                            medium: "text-xs",
+                            large: "text-xl"
+                        }[size]}`}>
+                            %
+                        </span>
+                    </div>
+                    {size === "large" && (
+                        <span className="text-[9px] font-black text-white/20 tracking-[0.3em] uppercase mt-[-4px]">
+                            {label}
+                        </span>
+                    )}
                 </div>
             )}
         </div>
