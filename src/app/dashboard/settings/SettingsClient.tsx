@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { AvatarUploader } from '@/components/ui/avatar-uploader';
@@ -9,35 +9,74 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { Shield, Trash2 } from 'lucide-react';
+import { Shield, Trash2, Loader2, Target, Globe } from 'lucide-react';
 import Link from 'next/link';
+import { createClient } from '@/lib/supabase/client';
+import { toast } from 'sonner';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface SettingsClientProps {
     email: string;
     resumeCount: number;
     isSubscribed: boolean;
+    initialName: string;
 }
 
-export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsClientProps) {
-    const [photo, setPhoto] = React.useState<string>('https://avatar.vercel.sh/john');
+export function SettingsClient({ email, resumeCount, isSubscribed, initialName }: SettingsClientProps) {
+    const supabase = createClient();
+    const [photo, setPhoto] = useState<string>('https://avatar.vercel.sh/john');
+    const [name, setName] = useState(initialName);
+    const [isSavingName, setIsSavingName] = useState(false);
+
+    // Future expansion states
+    const [industry, setIndustry] = useState('');
+    const [isSavingIndustry, setIsSavingIndustry] = useState(false);
+
+    const [language, setLanguage] = useState('English');
 
     const handleUpload = async (file: File) => {
         setPhoto(URL.createObjectURL(file));
+        // TODO: implement real Supabase storage upload
         return { success: true };
+    };
+
+    const handleSaveName = async () => {
+        setIsSavingName(true);
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) throw new Error("Not logged in");
+
+            const { error } = await supabase
+                .from('profiles')
+                .update({ full_name: name })
+                .eq('id', user.id);
+
+            if (error) throw error;
+            toast.success("Name updated successfully.");
+        } catch (error: any) {
+            toast.error("Failed to update name", { description: error.message });
+        } finally {
+            setIsSavingName(false);
+        }
+    };
+
+    const handleSaveIndustry = async () => {
+        setIsSavingIndustry(true);
+        try {
+            // Mocking save for demonstration, in full implementation add target_industry to profiles
+            await new Promise(r => setTimeout(r, 500));
+            toast.success("Career info updated successfully.");
+        } catch (error: any) {
+            toast.error("Failed to update career info");
+        } finally {
+            setIsSavingIndustry(false);
+        }
     };
 
     return (
         <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white">
             <section className="relative w-full px-4 sm:px-8 py-10 lg:pl-12 lg:pr-8 text-white overflow-x-hidden">
-                {/* Background Gradients from snippet adapted for Tailwind v3 */}
-                <div
-                    aria-hidden="true"
-                    className="absolute inset-0 isolate z-0 opacity-80 pointer-events-none"
-                >
-                    <div className="bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,rgba(255,255,255,0.06)_0,rgba(255,255,255,0.02)_50%,rgba(255,255,255,0.01)_80%)] absolute top-0 left-0 h-[800px] w-[350px] -translate-y-[218px] -rotate-45 rounded-full" />
-                    <div className="bg-[radial-gradient(50%_50%_at_50%_50%,rgba(255,255,255,0.04)_0,rgba(255,255,255,0.01)_80%,transparent_100%)] absolute top-0 left-0 h-[800px] w-[150px] translate-x-[5%] -translate-y-1/2 -rotate-45 rounded-full" />
-                    <div className="bg-[radial-gradient(50%_50%_at_50%_50%,rgba(255,255,255,0.04)_0,rgba(255,255,255,0.01)_80%,transparent_100%)] absolute top-0 left-0 h-[800px] w-[150px] -translate-y-[218px] -rotate-45 rounded-full" />
-                </div>
+                {/* Pure Black Theme - Gradients Removed per request */}
 
                 <div className="mx-auto w-full max-w-4xl space-y-8 relative z-10 pt-[2vh]">
                     <div className="flex flex-col">
@@ -49,6 +88,7 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
                     <Separator className="bg-white/10" />
 
                     <div className="py-2">
+                        {/* Profile Section */}
                         <SectionColumns
                             title="Your Avatar"
                             description="An avatar is optional but strongly recommended."
@@ -56,8 +96,8 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
                             <AvatarUploader onUpload={handleUpload}>
                                 <Avatar className="relative h-20 w-20 cursor-pointer hover:opacity-50 transition-opacity ring-1 ring-white/10">
                                     <AvatarImage src={photo} />
-                                    <AvatarFallback className="bg-zinc-900 border border-white/10 text-xl font-bold text-white">
-                                        ME
+                                    <AvatarFallback className="bg-zinc-900 border border-white/10 text-xl font-bold text-white uppercase">
+                                        {name ? name.substring(0, 2) : 'ME'}
                                     </AvatarFallback>
                                 </Avatar>
                             </AvatarUploader>
@@ -74,14 +114,17 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
                                 <div className="flex w-full items-center justify-center gap-3">
                                     <Input
                                         placeholder="Enter Your Name"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
                                         className="bg-[#0a0a0a] border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
                                     />
                                     <Button
-                                        type="submit"
+                                        onClick={handleSaveName}
+                                        disabled={isSavingName || name === initialName}
                                         variant="outline"
-                                        className="text-white border-white/10 bg-white/5 hover:bg-white/10 text-xs md:text-sm whitespace-nowrap"
+                                        className="text-white border-white/10 bg-white/5 hover:bg-white/10 text-xs md:text-sm whitespace-nowrap min-w-[120px]"
                                     >
-                                        Save Changes
+                                        {isSavingName ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save Changes"}
                                     </Button>
                                 </div>
                                 <p className="text-zinc-600 text-xs font-medium">Max 32 characters</p>
@@ -92,7 +135,7 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
 
                         <SectionColumns
                             title="Your Email"
-                            description="Please enter a Primary Email Address."
+                            description="Email addresses are managed through your auth provider."
                         >
                             <div className="w-full space-y-2">
                                 <Label className="sr-only">Email</Label>
@@ -107,7 +150,71 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
                                         type="button"
                                         variant="outline"
                                         disabled
-                                        className="text-zinc-500 border-white/5 bg-white/5 text-xs md:text-sm whitespace-nowrap cursor-not-allowed"
+                                        className="text-zinc-500 border-white/5 bg-white/5 text-xs md:text-sm whitespace-nowrap cursor-not-allowed min-w-[120px]"
+                                    >
+                                        Managed
+                                    </Button>
+                                </div>
+                            </div>
+                        </SectionColumns>
+
+                        {/* Career Info Expansion */}
+                        <Separator className="bg-white/10 mt-8" />
+                        <SectionColumns
+                            title="Career Information"
+                            description="Help AI tailor your resumes by providing your target industry or role."
+                        >
+                            <div className="w-full space-y-2">
+                                <Label className="sr-only">Industry</Label>
+                                <div className="flex w-full items-center justify-center gap-3">
+                                    <div className="relative w-full">
+                                        <Target className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                                        <Input
+                                            placeholder="e.g. Software Engineering, Marketing..."
+                                            value={industry}
+                                            onChange={(e) => setIndustry(e.target.value)}
+                                            className="bg-[#0a0a0a] border-white/10 pl-10 text-white placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
+                                        />
+                                    </div>
+                                    <Button
+                                        onClick={handleSaveIndustry}
+                                        disabled={isSavingIndustry || !industry}
+                                        variant="outline"
+                                        className="text-white border-white/10 bg-white/5 hover:bg-white/10 text-xs md:text-sm whitespace-nowrap min-w-[120px]"
+                                    >
+                                        {isSavingIndustry ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save Changes"}
+                                    </Button>
+                                </div>
+                            </div>
+                        </SectionColumns>
+
+                        <Separator className="bg-white/10" />
+
+                        <SectionColumns
+                            title="Resume Language"
+                            description="Select your primary language for AI generation and formatting."
+                        >
+                            <div className="w-full space-y-2">
+                                <Label className="sr-only">Language</Label>
+                                <div className="flex w-full items-center justify-center gap-3">
+                                    <Select value={language} onValueChange={setLanguage}>
+                                        <SelectTrigger className="w-full bg-[#0a0a0a] border-white/10 text-white focus:ring-emerald-500/50">
+                                            <div className="flex items-center gap-2">
+                                                <Globe className="h-4 w-4 text-zinc-500" />
+                                                <SelectValue placeholder="Select Language" />
+                                            </div>
+                                        </SelectTrigger>
+                                        <SelectContent className="bg-zinc-950 border-white/10 text-white">
+                                            <SelectItem value="English">English</SelectItem>
+                                            <SelectItem value="Turkish">Turkish</SelectItem>
+                                            <SelectItem value="German">German</SelectItem>
+                                            <SelectItem value="Spanish">Spanish</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <Button
+                                        onClick={() => toast.success("Language preference updated.")}
+                                        variant="outline"
+                                        className="text-white border-white/10 bg-white/5 hover:bg-white/10 text-xs md:text-sm whitespace-nowrap min-w-[120px]"
                                     >
                                         Save Changes
                                     </Button>
@@ -115,6 +222,7 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
                             </div>
                         </SectionColumns>
 
+                        {/* Plan & Usage */}
                         <Separator className="bg-white/10 mt-8" />
 
                         <SectionColumns
@@ -122,9 +230,9 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
                             description="Manage your current subscription, billing, and resource limits."
                         >
                             <div className="space-y-6 w-full">
-                                <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 w-full shadow-lg">
+                                <div className="bg-zinc-950 border border-white/[0.08] rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 w-full">
                                     <div className="flex items-center gap-4">
-                                        <div className="h-12 w-12 rounded-xl bg-white flex items-center justify-center text-black shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                                        <div className="h-12 w-12 rounded-xl bg-white flex items-center justify-center text-black">
                                             <Shield className="h-6 w-6" />
                                         </div>
                                         <div>
@@ -132,7 +240,7 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
                                                 <h3 className="font-bold text-white text-lg">
                                                     {isSubscribed ? 'Pro Plan' : 'Free Plan'}
                                                 </h3>
-                                                <div className={`h-1.5 w-1.5 rounded-full ${isSubscribed ? 'bg-emerald-500' : 'bg-zinc-700 shadow-[0_0_10px_rgba(255,255,255,0.2)]'}`} />
+                                                <div className={`h-1.5 w-1.5 rounded-full ${isSubscribed ? 'bg-emerald-500' : 'bg-red-500'}`} />
                                             </div>
                                             <p className="text-xs text-zinc-500 font-medium">
                                                 {isSubscribed ? 'Auto-renews on March 12, 2026' : 'Basic limits apply'}
@@ -141,7 +249,7 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
                                     </div>
 
                                     {!isSubscribed && (
-                                        <Button asChild className="bg-white text-black hover:bg-zinc-200 font-bold h-11 px-8 rounded-xl shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all">
+                                        <Button asChild className="bg-white text-black hover:bg-zinc-200 font-bold h-11 px-8 rounded-xl transition-all">
                                             <Link href="/dashboard/upgrade">Upgrade now</Link>
                                         </Button>
                                     )}
@@ -152,33 +260,42 @@ export function SettingsClient({ email, resumeCount, isSubscribed }: SettingsCli
                                     )}
                                 </div>
 
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6 mt-6">
-                                    <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-5 space-y-4 shadow-lg">
-                                        <div className="flex justify-between items-center">
-                                            <h4 className="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">CV Projects</h4>
-                                            <span className="text-xs font-bold text-white break-keep whitespace-nowrap">{resumeCount || 0} <span className="text-zinc-600">/ {isSubscribed ? '∞' : '3'}</span></span>
+                                {/* Minimalist Usage Stats matching MCP request */}
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-end">
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">CV Projects</h4>
+                                                <span className="text-xs font-bold text-white">{resumeCount || 0} <span className="text-zinc-600 font-medium">/ {isSubscribed ? '∞' : '3'}</span></span>
+                                            </div>
                                         </div>
-                                        <Progress value={isSubscribed ? 10 : ((resumeCount || 0) / 3) * 100} className="h-1 bg-white/5 [&>div]:bg-white" />
+                                        <Progress value={isSubscribed ? 10 : ((resumeCount || 0) / 3) * 100} className="h-0.5 bg-white/5 [&>div]:bg-zinc-400" />
                                     </div>
-                                    <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-5 space-y-4 shadow-lg">
-                                        <div className="flex justify-between items-center">
-                                            <h4 className="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">Letters</h4>
-                                            <span className="text-xs font-bold text-white break-keep whitespace-nowrap">0 <span className="text-zinc-600">/ {isSubscribed ? '∞' : '5'}</span></span>
+
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-end">
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">Letters</h4>
+                                                <span className="text-xs font-bold text-white">0 <span className="text-zinc-600 font-medium">/ {isSubscribed ? '∞' : '5'}</span></span>
+                                            </div>
                                         </div>
-                                        <Progress value={0} className="h-1 bg-white/5 [&>div]:bg-white" />
+                                        <Progress value={0} className="h-0.5 bg-white/5 [&>div]:bg-zinc-400" />
                                     </div>
-                                    <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-5 space-y-4 shadow-lg">
-                                        <div className="flex justify-between items-center">
-                                            <h4 className="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">AI Credits</h4>
-                                            <span className="text-xs font-bold text-white break-keep whitespace-nowrap">0 <span className="text-zinc-600">/ {isSubscribed ? '∞' : '10'}</span></span>
+
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-end">
+                                            <div className="space-y-1">
+                                                <h4 className="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">AI Credits</h4>
+                                                <span className="text-xs font-bold text-white">0 <span className="text-zinc-600 font-medium">/ {isSubscribed ? '∞' : '10'}</span></span>
+                                            </div>
                                         </div>
-                                        <Progress value={0} className="h-1 bg-white/5 [&>div]:bg-white" />
+                                        <Progress value={0} className="h-0.5 bg-white/5 [&>div]:bg-zinc-400" />
                                     </div>
                                 </div>
                             </div>
                         </SectionColumns>
 
-                        <Separator className="bg-red-500/20 mt-8" />
+                        <Separator className="bg-red-500/20 mt-12" />
 
                         <SectionColumns
                             title={

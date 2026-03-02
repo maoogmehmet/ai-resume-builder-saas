@@ -28,6 +28,7 @@ export default async function SettingsPage() {
             email={user.email || ''}
             resumeCount={resumeCount || 0}
             isSubscribed={isSubscribed}
+            initialName={profile?.full_name || ''}
         />
     )
 }
