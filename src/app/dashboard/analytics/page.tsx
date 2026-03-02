@@ -50,8 +50,10 @@ export default function AnalyticsPage() {
     const [isLoading, setIsLoading] = useState(true)
     const [copiedSlug, setCopiedSlug] = useState<string | null>(null)
     const [data, setData] = useState<DataPoint[]>([])
+    const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
+        setMounted(true)
         const fetchLinks = async () => {
             try {
                 const res = await fetch('/api/analytics/list-links')
@@ -143,46 +145,48 @@ export default function AnalyticsPage() {
                                 </button>
                             </div>
 
-                            <ChartContainer config={chartConfig} className="h-full w-full">
-                                <LineChart
-                                    data={data}
-                                    margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
-                                >
-                                    <CartesianGrid
-                                        vertical={false}
-                                        stroke="white"
-                                        strokeOpacity={0.05}
-                                        strokeDasharray="4 4"
-                                    />
-                                    <XAxis
-                                        dataKey="date"
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: "white", fillOpacity: 0.3, fontSize: 11, fontWeight: 600 }}
-                                        dy={20}
-                                    />
-                                    <YAxis
-                                        orientation="right"
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: "white", fillOpacity: 0.4, fontSize: 12, fontWeight: "bold" }}
-                                        tickFormatter={(val) => val > 0 ? val.toString() : "0"}
-                                    />
-                                    <ChartTooltip
-                                        cursor={{ stroke: "white", strokeOpacity: 0.1, strokeWidth: 1 }}
-                                        content={<ChartTooltipContent hideLabel />}
-                                    />
-                                    <Line
-                                        type="monotone"
-                                        dataKey="views"
-                                        stroke="var(--color-views)"
-                                        strokeWidth={3}
-                                        dot={false}
-                                        activeDot={{ r: 6, fill: "#10b981", stroke: "#050505", strokeWidth: 2 }}
-                                        animationDuration={1500}
-                                    />
-                                </LineChart>
-                            </ChartContainer>
+                            {mounted && (
+                                <ChartContainer config={chartConfig} className="h-full w-full">
+                                    <LineChart
+                                        data={data}
+                                        margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
+                                    >
+                                        <CartesianGrid
+                                            vertical={false}
+                                            stroke="white"
+                                            strokeOpacity={0.05}
+                                            strokeDasharray="4 4"
+                                        />
+                                        <XAxis
+                                            dataKey="date"
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fill: "white", fillOpacity: 0.3, fontSize: 11, fontWeight: 600 }}
+                                            dy={20}
+                                        />
+                                        <YAxis
+                                            orientation="right"
+                                            axisLine={false}
+                                            tickLine={false}
+                                            tick={{ fill: "white", fillOpacity: 0.4, fontSize: 12, fontWeight: "bold" }}
+                                            tickFormatter={(val) => val > 0 ? val.toString() : "0"}
+                                        />
+                                        <ChartTooltip
+                                            cursor={{ stroke: "white", strokeOpacity: 0.1, strokeWidth: 1 }}
+                                            content={<ChartTooltipContent hideLabel />}
+                                        />
+                                        <Line
+                                            type="monotone"
+                                            dataKey="views"
+                                            stroke="var(--color-views)"
+                                            strokeWidth={3}
+                                            dot={false}
+                                            activeDot={{ r: 6, fill: "#10b981", stroke: "#050505", strokeWidth: 2 }}
+                                            animationDuration={1500}
+                                        />
+                                    </LineChart>
+                                </ChartContainer>
+                            )}
                         </div>
                     </div>
                 </div>
