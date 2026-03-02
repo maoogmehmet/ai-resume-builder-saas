@@ -148,9 +148,9 @@ export function LandingClient({ user }: { user: any }) {
                 </section>
 
                 {/* 2. LOGO CLOUD - SEAMLESS TRANSITION */}
-                <div className="mt-12 sm:mt-20 py-10 sm:py-14 bg-black">
-                    <div className="max-w-7xl mx-auto px-6 mb-10 text-center">
-                        <p className="text-[10px] font-bold text-zinc-600">Companies of all sizes trust us to deliver their most important CVs.</p>
+                <div className="mt-16 sm:mt-24 py-16 sm:py-20 bg-black">
+                    <div className="max-w-7xl mx-auto px-6 mb-16 text-center">
+                        <p className="text-xs font-black text-zinc-600 uppercase tracking-[0.3em]">Companies of all sizes trust us to deliver their most important CVs.</p>
                     </div>
                     <LogoCloud logos={logos} />
                 </div>
