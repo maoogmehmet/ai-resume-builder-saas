@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useMemo } from 'react'
+import { motion } from 'framer-motion'
 import {
     Loader2, ChevronDown,
     Link2, Copy, Check, ExternalLink
@@ -45,6 +46,25 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
+// Animated counter hook
+function useAnimatedCounter(target: number, duration: number = 1200) {
+    const [count, setCount] = useState(0)
+    useEffect(() => {
+        let start = 0
+        const startTime = Date.now()
+        const timer = setInterval(() => {
+            const elapsed = Date.now() - startTime
+            const progress = Math.min(elapsed / duration, 1)
+            // easeOutExpo
+            const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress)
+            setCount(Math.floor(eased * target))
+            if (progress >= 1) clearInterval(timer)
+        }, 16)
+        return () => clearInterval(timer)
+    }, [target, duration])
+    return count
+}
+
 export default function AnalyticsPage() {
     const [links, setLinks] = useState<PublicLink[]>([])
     const [isLoading, setIsLoading] = useState(true)
@@ -71,12 +91,11 @@ export default function AnalyticsPage() {
 
         // Generate mockup data for the last 15 days
         const mockup: DataPoint[] = []
-        const months = ["Jan", "Feb", "Mar", "Apr"]
         const now = new Date()
         for (let i = 14; i >= 0; i--) {
             const d = new Date()
             d.setDate(now.getDate() - i)
-            const dateStr = `${months[d.getMonth()]}, ${d.getDate().toString().padStart(2, '0')}`
+            const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: '2-digit' })
 
             // Spike on Feb 27
             let val = 0
@@ -94,6 +113,8 @@ export default function AnalyticsPage() {
 
     const totalViews = links.reduce((sum, l) => sum + (l.view_count || 0), 0)
     const deliverabilityRate = links.length > 0 ? 100 : 0
+    const animatedViews = useAnimatedCounter(totalViews || 1)
+    const animatedRate = useAnimatedCounter(deliverabilityRate)
 
     const copyLink = (slug: string) => {
         const url = `${window.location.origin}/r/${slug}`
@@ -103,12 +124,44 @@ export default function AnalyticsPage() {
         setTimeout(() => setCopiedSlug(null), 2000)
     }
 
+    // Animation variants
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.2 }
+        }
+    }
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 30 },
+        visible: {
+            opacity: 1,
+            y: 0,
+            transition: { duration: 0.7, ease: "easeOut" as const }
+        }
+    }
+
+    const numberVariants = {
+        hidden: { opacity: 0, scale: 0.5 },
+        visible: {
+            opacity: 1,
+            scale: 1,
+            transition: { duration: 0.8, ease: "easeOut" as const, delay: 0.3 }
+        }
+    }
+
     return (
         <div className="flex flex-col min-h-screen bg-[#020202] w-full font-sans text-white p-6 sm:p-12 overflow-x-hidden">
             <div className="max-w-7xl mx-auto w-full space-y-12">
 
                 {/* 1. HEADER SECTION */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
+                >
                     <h1 className="text-4xl font-black tracking-tightest">Metrics</h1>
 
                     <div className="flex items-center gap-3">
@@ -119,26 +172,65 @@ export default function AnalyticsPage() {
                             Last 15 days <ChevronDown className="h-4 w-4" />
                         </button>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* 2. CHIEF METRICS CARD */}
-                <div className="bg-[#050505] border border-white/[0.04] rounded-[3rem] p-8 sm:p-12 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden">
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+                    className="bg-[#050505] border border-white/[0.04] rounded-[3rem] p-8 sm:p-12 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden"
+                >
                     <div className="grid grid-cols-1 lg:grid-cols-4 gap-12 relative z-10">
 
-                        {/* Summary Stats (Left) */}
-                        <div className="lg:col-span-1 space-y-12">
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2">EMAILS</p>
-                                <h2 className="text-6xl font-black italic tracking-tighter text-white">{totalViews || 1}</h2>
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2">DELIVERABILITY RATE</p>
-                                <h2 className="text-6xl font-black italic tracking-tighter text-white">{deliverabilityRate}%</h2>
-                            </div>
-                        </div>
+                        {/* Summary Stats (Left) — Animated */}
+                        <motion.div
+                            className="lg:col-span-1 space-y-12"
+                            variants={containerVariants}
+                            initial="hidden"
+                            animate="visible"
+                        >
+                            <motion.div variants={itemVariants}>
+                                <motion.p
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.5, delay: 0.2 }}
+                                    className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2"
+                                >
+                                    TOTAL VIEWS
+                                </motion.p>
+                                <motion.h2
+                                    variants={numberVariants}
+                                    className="text-6xl font-black italic tracking-tighter text-white"
+                                >
+                                    {animatedViews}
+                                </motion.h2>
+                            </motion.div>
+                            <motion.div variants={itemVariants}>
+                                <motion.p
+                                    initial={{ opacity: 0, x: -20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    transition={{ duration: 0.5, delay: 0.5 }}
+                                    className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600 mb-2"
+                                >
+                                    DELIVERABILITY RATE
+                                </motion.p>
+                                <motion.h2
+                                    variants={numberVariants}
+                                    className="text-6xl font-black italic tracking-tighter text-white"
+                                >
+                                    {animatedRate}%
+                                </motion.h2>
+                            </motion.div>
+                        </motion.div>
 
                         {/* Chart Area (Right) */}
-                        <div className="lg:col-span-3 relative h-[400px]">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+                            className="lg:col-span-3 relative h-[400px]"
+                        >
                             <div className="absolute top-0 right-0 z-20">
                                 <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#121212]/50 border border-white/5 text-xs font-bold text-zinc-400">
                                     All Events <ChevronDown className="h-3 w-3" />
@@ -149,7 +241,7 @@ export default function AnalyticsPage() {
                                 <ChartContainer config={chartConfig} className="h-full w-full">
                                     <LineChart
                                         data={data}
-                                        margin={{ top: 20, right: 10, left: 10, bottom: 0 }}
+                                        margin={{ top: 20, right: 10, left: 10, bottom: 30 }}
                                     >
                                         <CartesianGrid
                                             vertical={false}
@@ -161,8 +253,11 @@ export default function AnalyticsPage() {
                                             dataKey="date"
                                             axisLine={false}
                                             tickLine={false}
-                                            tick={{ fill: "white", fillOpacity: 0.3, fontSize: 11, fontWeight: 600 }}
-                                            dy={20}
+                                            tick={{ fill: "white", fillOpacity: 0.35, fontSize: 10, fontWeight: 600 }}
+                                            dy={15}
+                                            interval={1}
+                                            angle={-35}
+                                            textAnchor="end"
                                         />
                                         <YAxis
                                             orientation="right"
@@ -182,17 +277,23 @@ export default function AnalyticsPage() {
                                             strokeWidth={3}
                                             dot={false}
                                             activeDot={{ r: 6, fill: "#10b981", stroke: "#050505", strokeWidth: 2 }}
-                                            animationDuration={1500}
+                                            animationDuration={2000}
+                                            animationEasing="ease-out"
                                         />
                                     </LineChart>
                                 </ChartContainer>
                             )}
-                        </div>
+                        </motion.div>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* 3. PERFORMANCE TABLE */}
-                <div className="space-y-8">
+                <motion.div
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.3 }}
+                    className="space-y-8"
+                >
                     <div className="flex justify-between items-center px-4">
                         <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Link Performance Breakdown</h3>
                     </div>
@@ -209,8 +310,14 @@ export default function AnalyticsPage() {
                             </div>
                         ) : (
                             <div className="divide-y divide-white/[0.03]">
-                                {links.map((link) => (
-                                    <div key={link.id} className="p-8 sm:p-10 flex flex-col sm:row items-center justify-between hover:bg-white/[0.01] transition-colors group gap-8">
+                                {links.map((link, index) => (
+                                    <motion.div
+                                        key={link.id}
+                                        initial={{ opacity: 0, x: -20 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ duration: 0.5, delay: 0.1 * index }}
+                                        className="p-8 sm:p-10 flex flex-col sm:row items-center justify-between hover:bg-white/[0.01] transition-colors group gap-8"
+                                    >
                                         <div className="flex items-center gap-8 w-full sm:w-auto">
                                             <div className="h-16 w-16 rounded-[1.25rem] bg-black border border-white/5 flex items-center justify-center group-hover:border-emerald-500/40 transition-all shadow-inner">
                                                 <Link2 className="h-7 w-7 text-zinc-700 group-hover:text-emerald-500 transition-colors" />
@@ -252,17 +359,22 @@ export default function AnalyticsPage() {
                                                 </Button>
                                             </div>
                                         </div>
-                                    </div>
+                                    </motion.div>
                                 ))}
                             </div>
                         )}
                     </div>
-                </div>
+                </motion.div>
 
                 {/* 4. FOOTER NOTE */}
-                <div className="flex justify-center pt-8">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: 0.6 }}
+                    className="flex justify-center pt-8"
+                >
                     <p className="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-800">Elite Career Intelligence Layer</p>
-                </div>
+                </motion.div>
             </div>
         </div>
     )

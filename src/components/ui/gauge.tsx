@@ -1,10 +1,12 @@
-import React from "react"
+"use client"
+
+import React, { useEffect, useState } from "react"
 
 const sizes = {
     tiny: 20,
     small: 32,
     medium: 64,
-    large: 128
+    large: 160
 };
 
 type TArcPriority = "default" | "equal";
@@ -16,7 +18,8 @@ interface GaugeProps {
     showValue?: boolean;
     arcPriority?: TArcPriority;
     indeterminate?: boolean;
-    className?: string; // Added for flexibility
+    className?: string;
+    animated?: boolean;
 }
 
 const gapPercent = {
@@ -26,21 +29,10 @@ const gapPercent = {
     large: 5
 };
 
-const rotateStyles = {
-    primary: {
-        default: (size: keyof typeof sizes, value: number) => ({ transform: 'rotate(-90deg)' }),
-        equal: (size: keyof typeof sizes, value: number) => ({ transform: `rotate(calc(-90deg + (0.5 * ${gapPercent[size]} * 3.6deg)))` })
-    },
-    secondary: {
-        default: (size: keyof typeof sizes, value: number) => ({ transform: `rotate(calc(1turn - 90deg - (${gapPercent[size]} * 3.6deg)))` }),
-        equal: (size: keyof typeof sizes, value: number) => ({ transform: `rotate(calc(1turn - 90deg - (0.5 * ${gapPercent[size]} * 3.6deg)))` })
-    }
-};
-
 const defaultColors = {
-    "0": "#ef4444", // Red (Tailwind red-500)
-    "34": "#f59e0b", // Orange (Tailwind amber-500)
-    "68": "#10b981"  // Green (Tailwind emerald-500)
+    "0": "#ef4444",
+    "34": "#f59e0b",
+    "68": "#10b981"
 };
 
 export const Gauge = ({
@@ -50,15 +42,55 @@ export const Gauge = ({
     showValue = false,
     arcPriority = "default",
     indeterminate = false,
-    className = ""
+    className = "",
+    animated = true,
 }: GaugeProps) => {
     const r = size === "tiny" ? 42.5 : 45;
     const circumference = 2 * r * Math.PI;
+
+    // Animated value
+    const [displayValue, setDisplayValue] = useState(animated ? 0 : value)
+    const [animatedStroke, setAnimatedStroke] = useState(animated ? 0 : value)
+
+    useEffect(() => {
+        if (!animated) {
+            setDisplayValue(value)
+            setAnimatedStroke(value)
+            return
+        }
+
+        const duration = 1500
+        const startTime = Date.now()
+        const startVal = 0
+
+        const timer = setInterval(() => {
+            const elapsed = Date.now() - startTime
+            const progress = Math.min(elapsed / duration, 1)
+            // easeOutExpo
+            const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress)
+            const current = Math.floor(startVal + (value - startVal) * eased)
+            setDisplayValue(current)
+            setAnimatedStroke(startVal + (value - startVal) * eased)
+            if (progress >= 1) clearInterval(timer)
+        }, 16)
+
+        return () => clearInterval(timer)
+    }, [value, animated])
 
     // Find the color based on the value
     const colorKeys = Object.keys(colors).map(Number).sort((a, b) => b - a);
     const colorKey = colorKeys.find(key => key <= value) || colorKeys[colorKeys.length - 1];
     const primary = colors?.primary || colors[colorKey.toString()];
+
+    const primaryDash = arcPriority === "default"
+        ? (circumference * animatedStroke / 100)
+        : ((circumference * (100 - 2 * gapPercent[size]) / 100) / 2)
+
+    const secondaryDash = indeterminate
+        ? circumference
+        : arcPriority === "default"
+            ? (circumference * (100 - (animatedStroke === 0 ? 0 : (2 * gapPercent[size])) - animatedStroke) / 100)
+            : ((circumference * (100 - 2 * gapPercent[size]) / 100) / 2)
 
     return (
         <div
@@ -76,6 +108,18 @@ export const Gauge = ({
                 viewBox="0 0 100 100"
                 strokeWidth="2"
             >
+                {/* Glow filter */}
+                <defs>
+                    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                        <feMerge>
+                            <feMergeNode in="coloredBlur" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+
+                {/* Background circle */}
                 <circle
                     cx="50"
                     cy="50"
@@ -84,12 +128,19 @@ export const Gauge = ({
                     strokeDashoffset="0"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    style={rotateStyles.secondary[arcPriority](size, value)}
-                    className={`scale-y-[-1] origin-center${!colors?.secondary ? " stroke-zinc-800" : ""}`}
+                    style={{
+                        transform: arcPriority === "equal"
+                            ? `scaleY(-1) rotate(calc(-90deg + (0.5 * ${gapPercent[size]} * 3.6deg)))`
+                            : `scaleY(-1) rotate(calc(1turn - 90deg - (${gapPercent[size]} * 3.6deg)))`,
+                        transformOrigin: 'center',
+                    }}
+                    className={!colors?.secondary ? "stroke-zinc-800" : ""}
                     stroke={colors.secondary}
-                    strokeDasharray={`${indeterminate ? circumference : arcPriority === "default" ? (circumference * (100 - (value === 0 ? 0 : (2 * gapPercent[size])) - value) / 100) : ((circumference * (100 - 2 * gapPercent[size]) / 100) / 2)} ${circumference}`}
+                    strokeDasharray={`${secondaryDash} ${circumference}`}
                 />
-                {(value > 0 || arcPriority === "equal") && !indeterminate && (
+
+                {/* Primary arc with glow */}
+                {(animatedStroke > 0 || arcPriority === "equal") && !indeterminate && (
                     <circle
                         cx="50"
                         cy="50"
@@ -98,21 +149,26 @@ export const Gauge = ({
                         strokeDashoffset="0"
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        style={rotateStyles.primary[arcPriority](size, value)}
-                        className="origin-center transition-all duration-1000 ease-out"
+                        style={{
+                            transform: 'rotate(-90deg)',
+                            transformOrigin: 'center',
+                        }}
                         stroke={primary}
-                        strokeDasharray={`${arcPriority === "default" ? (circumference * value / 100) : ((circumference * (100 - 2 * gapPercent[size]) / 100) / 2)} ${circumference}`}
+                        strokeDasharray={`${primaryDash} ${circumference}`}
+                        filter="url(#glow)"
                     />
                 )}
             </svg>
+
+            {/* Value with animated counter */}
             {showValue && size !== "tiny" && !indeterminate && (
                 <div aria-hidden="true" className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <p className={`text-white font-sans ${{
+                    <p className={`text-white font-sans tabular-nums ${{
                         small: "text-[11px] font-medium",
                         medium: "text-[18px] font-medium",
-                        large: "text-[32px] font-semibold"
+                        large: "text-[42px] font-bold"
                     }[size]}`}>
-                        {value}
+                        {displayValue}
                     </p>
                 </div>
             )}
