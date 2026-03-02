@@ -338,7 +338,7 @@ function SectionColumns({
     className,
 }: SectionColumnsType) {
     return (
-        <div className="animate-in fade-in grid grid-cols-1 gap-x-10 gap-y-6 pt-10 pb-4 duration-500 md:grid-cols-10">
+        <div className="animate-in fade-in grid grid-cols-1 gap-x-10 gap-y-6 pt-4 pb-4 duration-500 md:grid-cols-10">
             <div className="w-full space-y-2 md:col-span-4 max-w-sm">
                 <h2 className="font-heading text-lg leading-tight font-bold text-white">
                     {title}
