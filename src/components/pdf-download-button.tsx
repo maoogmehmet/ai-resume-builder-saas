@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 interface PdfDownloadButtonProps {
     resumeData: any;
@@ -58,13 +59,15 @@ export function PdfDownloadButton({ resumeData, disabled, template = 'classic' }
     }
 
     return (
-        <button
+        <AnimatedGenerateButton
             onClick={handleDownload}
             disabled={isDownloading || disabled || !resumeData}
-            className="h-9 px-3 gap-2 font-bold text-xs rounded-xl border border-white/[0.08] bg-white/[0.04] text-zinc-400 hover:text-white hover:bg-white/[0.08] transition-all flex items-center disabled:opacity-50"
-        >
-            {isDownloading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
-            <span className="hidden sm:inline">Download PDF</span>
-        </button>
+            generating={isDownloading}
+            labelIdle="get pdf"
+            labelActive="exporting..."
+            size="sm"
+            className="font-black italic lowercase"
+            icon={<Download className="h-3.5 w-3.5" />}
+        />
     )
 }

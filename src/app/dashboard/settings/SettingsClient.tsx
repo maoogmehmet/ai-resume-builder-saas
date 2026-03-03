@@ -1,16 +1,16 @@
 "use client";
 
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { Separator } from '@/components/ui/separator';
 import { AvatarUploader } from '@/components/ui/avatar-uploader';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button';
 import { Progress } from '@/components/ui/progress';
-import { Shield, Trash2, Loader2, Target, Globe } from 'lucide-react';
-import Link from 'next/link';
+import { Shield, Trash2, Loader2, Target, Globe, Save } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { toast } from 'sonner';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -75,246 +75,249 @@ export function SettingsClient({ email, resumeCount, isSubscribed, initialName }
 
     return (
         <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white">
-            <section className="relative w-full px-4 sm:px-8 py-4 lg:pl-12 lg:pr-8 text-white overflow-x-hidden">
-                {/* Pure Black Theme - Gradients Removed per request */}
-
-                <div className="mx-auto w-full max-w-4xl space-y-8 relative z-10 pt-2">
-                    <div className="flex flex-col">
-                        <h2 className="text-3xl font-bold tracking-tight text-white mb-2">Account Settings</h2>
-                        <p className="text-zinc-500 text-sm font-medium">
-                            Manage account and your personal information.
+            <section className="relative w-full px-6 sm:px-12 py-16 lg:pl-16 lg:pr-12 text-white overflow-x-hidden">
+                <div className="mx-auto w-full max-w-5xl space-y-12 relative z-10 pt-2">
+                    <div className="flex flex-col border-b border-white/5 pb-10">
+                        <h1 className="text-4xl sm:text-5xl font-black tracking-tighter italic lowercase mb-4">settings</h1>
+                        <p className="text-zinc-500 text-xs font-black uppercase tracking-widest italic opacity-60">
+                            architect your laboratory profile and system preferences.
                         </p>
                     </div>
-                    <Separator className="bg-white/10" />
 
-                    <div className="py-2">
+                    <div className="space-y-16">
                         {/* Profile Section */}
                         <SectionColumns
-                            title="Your Avatar"
-                            description="An avatar is optional but strongly recommended."
+                            title="Laboratory Avatar"
+                            description="An avatar is optional but serves as your professional imprint."
                         >
                             <AvatarUploader onUpload={handleUpload}>
-                                <Avatar className="relative h-20 w-20 cursor-pointer hover:opacity-50 transition-opacity ring-1 ring-white/10">
-                                    <AvatarImage src={photo} />
-                                    <AvatarFallback className="bg-zinc-900 border border-white/10 text-xl font-bold text-white uppercase">
-                                        {name ? name.substring(0, 2) : 'ME'}
+                                <Avatar className="relative h-24 w-24 cursor-pointer hover:opacity-80 transition-opacity border-2 border-white/10 p-1 group">
+                                    <AvatarImage src={photo} className="rounded-full overflow-hidden" />
+                                    <AvatarFallback className="bg-white/5 border border-white/10 text-2xl font-black text-white uppercase italic">
+                                        {name ? name.substring(0, 2) : 'LAB'}
                                     </AvatarFallback>
+                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/40 rounded-full">
+                                        <Save className="h-6 w-6 text-white" />
+                                    </div>
                                 </Avatar>
                             </AvatarUploader>
                         </SectionColumns>
 
-                        <Separator className="bg-white/10" />
+                        <Separator className="bg-white/5" />
 
                         <SectionColumns
-                            title="Your Name"
-                            description="Please enter a display name you are comfortable with."
+                            title="Identity Name"
+                            description="Enter the professional name associated with your documents."
                         >
-                            <div className="w-full space-y-2">
+                            <div className="w-full space-y-4">
                                 <Label className="sr-only">Name</Label>
-                                <div className="flex w-full items-center justify-center gap-3">
+                                <div className="flex w-full items-center gap-4">
                                     <Input
-                                        placeholder="Enter Your Name"
+                                        placeholder="Identity Name"
                                         value={name}
                                         onChange={(e) => setName(e.target.value)}
-                                        className="bg-[#0a0a0a] border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
+                                        className="bg-white/[0.02] border-white/10 text-white placeholder:text-zinc-700 h-12 rounded-xl focus:ring-emerald-500/20 font-medium px-5"
                                     />
-                                    <Button
+                                    <AnimatedGenerateButton
                                         onClick={handleSaveName}
                                         disabled={isSavingName || name === initialName}
-                                        variant="outline"
-                                        className="text-white border-white/10 bg-white/5 hover:bg-white/10 text-xs md:text-sm whitespace-nowrap min-w-[120px]"
-                                    >
-                                        {isSavingName ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save Changes"}
-                                    </Button>
+                                        generating={isSavingName}
+                                        labelIdle="update"
+                                        labelActive="syncing..."
+                                        size="sm"
+                                        className="font-black italic lowercase h-12 px-8 shrink-0"
+                                    />
                                 </div>
-                                <p className="text-zinc-600 text-xs font-medium">Max 32 characters</p>
+                                <p className="text-zinc-700 text-[10px] font-black uppercase tracking-widest italic ml-1">Maximum 32 characters per identity</p>
                             </div>
                         </SectionColumns>
 
-                        <Separator className="bg-white/10" />
+                        <Separator className="bg-white/5" />
 
                         <SectionColumns
-                            title="Your Email"
-                            description="Email addresses are managed through your auth provider."
+                            title="Neural Email"
+                            description="Email addresses are hard-linked through your laboratory login."
                         >
-                            <div className="w-full space-y-2">
+                            <div className="w-full space-y-4">
                                 <Label className="sr-only">Email</Label>
-                                <div className="flex w-full items-center justify-center gap-3">
+                                <div className="flex w-full items-center gap-4">
                                     <Input
                                         type="email"
                                         value={email}
                                         disabled
-                                        className="bg-[#0a0a0a] border-white/10 text-zinc-400 opacity-80 cursor-not-allowed"
+                                        className="bg-white/[0.01] border-white/5 text-zinc-600 opacity-50 cursor-not-allowed h-12 rounded-xl px-5 italic font-medium"
                                     />
-                                    <Button
-                                        type="button"
-                                        variant="outline"
+                                    <AnimatedGenerateButton
                                         disabled
-                                        className="text-zinc-500 border-white/5 bg-white/5 text-xs md:text-sm whitespace-nowrap cursor-not-allowed min-w-[120px]"
-                                    >
-                                        Managed
-                                    </Button>
+                                        labelIdle="encrypted"
+                                        size="sm"
+                                        className="font-black italic lowercase h-12 px-8 shrink-0 opacity-40 cursor-not-allowed"
+                                    />
                                 </div>
                             </div>
                         </SectionColumns>
 
                         {/* Career Info Expansion */}
-                        <Separator className="bg-white/10 mt-8" />
+                        <Separator className="bg-white/5" />
                         <SectionColumns
-                            title="Career Information"
-                            description="Help AI tailor your resumes by providing your target industry or role."
+                            title="Neural Targeting"
+                            description="Specify target industries to help AI optimize your career trajectory."
                         >
-                            <div className="w-full space-y-2">
+                            <div className="w-full space-y-4">
                                 <Label className="sr-only">Industry</Label>
-                                <div className="flex w-full items-center justify-center gap-3">
+                                <div className="flex w-full items-center gap-4">
                                     <div className="relative w-full">
-                                        <Target className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-500" />
+                                        <Target className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-700" />
                                         <Input
-                                            placeholder="e.g. Software Engineering, Marketing..."
+                                            placeholder="e.g. Quantitative Engineering, Marketing..."
                                             value={industry}
                                             onChange={(e) => setIndustry(e.target.value)}
-                                            className="bg-[#0a0a0a] border-white/10 pl-10 text-white placeholder:text-zinc-600 focus-visible:ring-emerald-500/50"
+                                            className="bg-white/[0.02] border-white/10 pl-12 h-12 rounded-xl text-white placeholder:text-zinc-700 focus:ring-emerald-500/20"
                                         />
                                     </div>
-                                    <Button
+                                    <AnimatedGenerateButton
                                         onClick={handleSaveIndustry}
                                         disabled={isSavingIndustry || !industry}
-                                        variant="outline"
-                                        className="text-white border-white/10 bg-white/5 hover:bg-white/10 text-xs md:text-sm whitespace-nowrap min-w-[120px]"
-                                    >
-                                        {isSavingIndustry ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save Changes"}
-                                    </Button>
+                                        generating={isSavingIndustry}
+                                        labelIdle="update"
+                                        labelActive="mapping..."
+                                        size="sm"
+                                        className="font-black italic lowercase h-12 px-8 shrink-0"
+                                    />
                                 </div>
                             </div>
                         </SectionColumns>
 
-                        <Separator className="bg-white/10" />
+                        <Separator className="bg-white/5" />
 
                         <SectionColumns
-                            title="Resume Language"
-                            description="Select your primary language for AI generation and formatting."
+                            title="Communication Mode"
+                            description="Select the primary language for neural generation outputs."
                         >
-                            <div className="w-full space-y-2">
+                            <div className="w-full space-y-4">
                                 <Label className="sr-only">Language</Label>
-                                <div className="flex w-full items-center justify-center gap-3">
+                                <div className="flex w-full items-center gap-4">
                                     <Select value={language} onValueChange={setLanguage}>
-                                        <SelectTrigger className="w-full bg-[#0a0a0a] border-white/10 text-white focus:ring-emerald-500/50">
-                                            <div className="flex items-center gap-2">
-                                                <Globe className="h-4 w-4 text-zinc-500" />
-                                                <SelectValue placeholder="Select Language" />
+                                        <SelectTrigger className="w-full bg-white/[0.02] border-white/10 text-white h-12 rounded-xl px-5 focus:ring-emerald-500/20 italic font-medium">
+                                            <div className="flex items-center gap-3">
+                                                <Globe className="h-4 w-4 text-zinc-600" />
+                                                <SelectValue placeholder="System Language" />
                                             </div>
                                         </SelectTrigger>
-                                        <SelectContent className="bg-zinc-950 border-white/10 text-white">
-                                            <SelectItem value="English">English</SelectItem>
-                                            <SelectItem value="Turkish">Turkish</SelectItem>
-                                            <SelectItem value="German">German</SelectItem>
-                                            <SelectItem value="Spanish">Spanish</SelectItem>
+                                        <SelectContent className="bg-black border-white/10 text-white shadow-2xl rounded-xl">
+                                            <SelectItem value="English" className="focus:bg-white focus:text-black font-medium">English</SelectItem>
+                                            <SelectItem value="Turkish" className="focus:bg-white focus:text-black font-medium">Turkish</SelectItem>
+                                            <SelectItem value="German" className="focus:bg-white focus:text-black font-medium">German</SelectItem>
+                                            <SelectItem value="Spanish" className="focus:bg-white focus:text-black font-medium">Spanish</SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    <Button
+                                    <AnimatedGenerateButton
                                         onClick={() => toast.success("Language preference updated.")}
-                                        variant="outline"
-                                        className="text-white border-white/10 bg-white/5 hover:bg-white/10 text-xs md:text-sm whitespace-nowrap min-w-[120px]"
-                                    >
-                                        Save Changes
-                                    </Button>
+                                        labelIdle="update"
+                                        size="sm"
+                                        className="font-black italic lowercase h-12 px-8 shrink-0"
+                                    />
                                 </div>
                             </div>
                         </SectionColumns>
 
                         {/* Plan & Usage */}
-                        <Separator className="bg-white/10 mt-8" />
+                        <Separator className="bg-white/5" />
 
                         <SectionColumns
-                            title="Plan & Usage"
-                            description="Manage your current subscription, billing, and resource limits."
+                            title="Protocols & Usage"
+                            description="Manage your subscription status and laboratory resource limits with precision metrics."
                         >
-                            <div className="space-y-6 w-full">
-                                <div className="bg-zinc-950 border border-white/[0.08] rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 w-full">
-                                    <div className="flex items-center gap-4">
-                                        <div className="h-12 w-12 rounded-xl bg-white flex items-center justify-center text-black">
-                                            <Shield className="h-6 w-6" />
+                            <div className="space-y-12 w-full">
+                                <div className="bg-gradient-to-b from-white/[0.04] to-transparent border border-white/10 rounded-[2.5rem] p-10 md:p-14 flex flex-col sm:flex-row items-center justify-between gap-10 w-full shadow-[0_50px_100px_rgba(0,0,0,0.9)] relative overflow-hidden group">
+                                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.03)_0,transparent_60%)] pointer-events-none" />
+
+                                    <div className="flex items-center gap-8 relative z-10">
+                                        <div className="h-20 w-20 rounded-3xl bg-white flex items-center justify-center text-black shadow-[0_0_40px_rgba(255,255,255,0.2)] transition-all duration-700 group-hover:scale-110 group-hover:rotate-3 rotate-0">
+                                            <Shield className="h-10 w-10" />
                                         </div>
-                                        <div>
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <h3 className="font-bold text-white text-lg">
-                                                    {isSubscribed ? 'Pro Plan' : 'Free Plan'}
+                                        <div className="space-y-2">
+                                            <div className="flex items-center gap-4">
+                                                <h3 className="font-black text-white text-4xl uppercase italic tracking-tighter leading-none">
+                                                    {isSubscribed ? 'Pro Node' : 'Free Tier'}
                                                 </h3>
-                                                <div className={`h-1.5 w-1.5 rounded-full ${isSubscribed ? 'bg-emerald-500' : 'bg-red-500'}`} />
+                                                <div className={`h-3 w-3 rounded-full shadow-[0_0_20px_rgba(255,255,255,0.4)] ${isSubscribed ? 'bg-emerald-500' : 'bg-red-500 animate-pulse'}`} />
                                             </div>
-                                            <p className="text-xs text-zinc-500 font-medium">
-                                                {isSubscribed ? 'Auto-renews on March 12, 2026' : 'Basic limits apply'}
+                                            <p className="text-[11px] text-zinc-600 font-bold uppercase tracking-[0.4em] italic leading-none">
+                                                {isSubscribed ? 'accessing unlimited neural bandwidth' : 'access restricted to trial parameters'}
                                             </p>
                                         </div>
                                     </div>
 
-                                    {!isSubscribed && (
-                                        <Button asChild className="bg-white text-black hover:bg-zinc-200 font-bold h-11 px-8 rounded-xl transition-all">
-                                            <Link href="/dashboard/upgrade">Upgrade now</Link>
-                                        </Button>
-                                    )}
-                                    {isSubscribed && (
-                                        <Button variant="outline" className="border-white/10 bg-white/5 text-white hover:bg-white/10 font-bold h-11 px-8 rounded-xl">
-                                            Manage billing
-                                        </Button>
-                                    )}
+                                    <div className="relative z-10">
+                                        {!isSubscribed ? (
+                                            <AnimatedGenerateButton
+                                                href="/dashboard/upgrade"
+                                                labelIdle="upgrade pulse"
+                                                size="lg"
+                                                className="font-black italic lowercase px-14 h-16 shadow-2xl shadow-emerald-500/10"
+                                                noMinWidth
+                                            />
+                                        ) : (
+                                            <AnimatedGenerateButton
+                                                labelIdle="manage protocol"
+                                                size="lg"
+                                                className="font-black italic lowercase px-14 h-16"
+                                                highlightHueDeg={200}
+                                                noMinWidth
+                                            />
+                                        )}
+                                    </div>
                                 </div>
 
-                                {/* Minimalist Usage Stats matching MCP request */}
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between items-end">
-                                            <div className="space-y-1">
-                                                <h4 className="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">CV Projects</h4>
-                                                <span className="text-xs font-bold text-white">{resumeCount || 0} <span className="text-zinc-600 font-medium">/ {isSubscribed ? '∞' : '3'}</span></span>
-                                            </div>
-                                        </div>
-                                        <Progress value={isSubscribed ? 10 : ((resumeCount || 0) / 3) * 100} className="h-0.5 bg-white/5 [&>div]:bg-zinc-400" />
-                                    </div>
-
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between items-end">
-                                            <div className="space-y-1">
-                                                <h4 className="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">Letters</h4>
-                                                <span className="text-xs font-bold text-white">0 <span className="text-zinc-600 font-medium">/ {isSubscribed ? '∞' : '5'}</span></span>
-                                            </div>
-                                        </div>
-                                        <Progress value={0} className="h-0.5 bg-white/5 [&>div]:bg-zinc-400" />
-                                    </div>
-
-                                    <div className="space-y-3">
-                                        <div className="flex justify-between items-end">
-                                            <div className="space-y-1">
-                                                <h4 className="text-[10px] font-bold text-zinc-500 tracking-widest uppercase">AI Credits</h4>
-                                                <span className="text-xs font-bold text-white">0 <span className="text-zinc-600 font-medium">/ {isSubscribed ? '∞' : '10'}</span></span>
-                                            </div>
-                                        </div>
-                                        <Progress value={0} className="h-0.5 bg-white/5 [&>div]:bg-zinc-400" />
-                                    </div>
+                                {/* Usage Stats - High tech grid */}
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 pt-4">
+                                    <MetricItem
+                                        label="CV Logic"
+                                        value={resumeCount || 0}
+                                        total={isSubscribed ? '∞' : '3'}
+                                        percent={isSubscribed ? 10 : ((resumeCount || 0) / 3) * 100}
+                                    />
+                                    <MetricItem
+                                        label="Letters"
+                                        value={0}
+                                        total={isSubscribed ? '∞' : '5'}
+                                        percent={0}
+                                    />
+                                    <MetricItem
+                                        label="AI Units"
+                                        value={0}
+                                        total={isSubscribed ? '∞' : '10'}
+                                        percent={0}
+                                    />
                                 </div>
                             </div>
                         </SectionColumns>
 
-                        <Separator className="bg-red-500/20 mt-12" />
+                        <Separator className="bg-red-500/10" />
 
                         <SectionColumns
                             title={
-                                <span className="flex items-center gap-2 text-red-500">
-                                    Danger Zone
+                                <span className="flex items-center gap-2 text-red-500 uppercase font-black italic tracking-tighter">
+                                    Erasure Zone
                                 </span>
                             }
-                            description="Permanently remove your account and all associated data. This action is irreversible."
-                            className="mt-2"
+                            description="Permanently remove your identity and all laboratory data. Irreversible."
                         >
-                            <div className="bg-red-500/[0.02] border border-red-500/10 rounded-2xl p-6 md:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 w-full mt-2">
-                                <div className="space-y-1 text-center sm:text-left">
-                                    <h3 className="font-bold text-white text-base">Delete Account</h3>
-                                    <p className="text-sm text-zinc-500 leading-relaxed max-w-[280px]">Permanently remove your account and data.</p>
+                            <div className="bg-red-500/[0.01] border border-red-500/5 rounded-[2.5rem] p-8 md:p-10 flex flex-col sm:flex-row items-center justify-between gap-8 w-full mt-2">
+                                <div className="space-y-2 text-center sm:text-left">
+                                    <h3 className="font-black text-white text-xl uppercase italic tracking-tighter">Delete Identity</h3>
+                                    <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest leading-relaxed max-w-[280px] italic">Wipe all neural nodes associated with this account.</p>
                                 </div>
 
-                                <Button variant="ghost" className="text-red-500 hover:text-red-400 hover:bg-red-500/10 font-bold h-11 px-6 md:px-8 rounded-xl whitespace-nowrap shrink-0 border border-red-500/20">
-                                    <Trash2 className="h-4 w-4 mr-2" /> Delete Account
-                                </Button>
+                                <AnimatedGenerateButton
+                                    labelIdle="erase data"
+                                    size="lg"
+                                    highlightHueDeg={0} // Red
+                                    className="font-black italic lowercase"
+                                    icon={<Trash2 className="h-4 w-4" />}
+                                    noMinWidth
+                                />
                             </div>
                         </SectionColumns>
                     </div>
@@ -322,6 +325,30 @@ export function SettingsClient({ email, resumeCount, isSubscribed, initialName }
             </section>
         </div>
     );
+}
+
+function MetricItem({ label, value, total, percent }: { label: string, value: number, total: string, percent: number }) {
+    return (
+        <div className="space-y-5 group">
+            <div className="flex justify-between items-end">
+                <div className="space-y-2">
+                    <h4 className="text-[10px] font-black text-zinc-700 tracking-[0.5em] uppercase italic group-hover:text-zinc-500 transition-colors">{label}</h4>
+                    <div className="flex items-baseline gap-2">
+                        <span className="text-3xl font-black text-white italic tracking-tighter leading-none">{value}</span>
+                        <span className="text-zinc-800 font-bold text-xs uppercase tracking-widest">/ {total}</span>
+                    </div>
+                </div>
+            </div>
+            <div className="relative h-[2px] w-full bg-white/5 rounded-full overflow-hidden">
+                <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${percent}%` }}
+                    transition={{ duration: 1.5, ease: "circOut" }}
+                    className="absolute inset-y-0 left-0 bg-white/40 group-hover:bg-white/60 transition-colors"
+                />
+            </div>
+        </div>
+    )
 }
 
 interface SectionColumnsType {
@@ -338,12 +365,12 @@ function SectionColumns({
     className,
 }: SectionColumnsType) {
     return (
-        <div className="animate-in fade-in grid grid-cols-1 gap-x-10 gap-y-6 pt-4 pb-4 duration-500 md:grid-cols-10">
-            <div className="w-full space-y-2 md:col-span-4 max-w-sm">
-                <h2 className="font-heading text-lg leading-tight font-bold text-white">
+        <div className="animate-in fade-in grid grid-cols-1 gap-x-12 gap-y-8 pt-4 pb-4 duration-700 md:grid-cols-10">
+            <div className="w-full space-y-3 md:col-span-4 max-w-sm">
+                <h2 className="text-2xl italic tracking-tighter font-black text-white uppercase leading-none">
                     {title}
                 </h2>
-                <p className="text-zinc-500 text-sm leading-relaxed">
+                <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest italic leading-relaxed opacity-60">
                     {description}
                 </p>
             </div>

@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { notFound, redirect } from 'next/navigation'
 import { ResumePreview } from '@/components/resume-preview'
-import { Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Logo } from '@/components/ui/logo'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import Link from 'next/link'
 import { PdfDownloadButton } from '@/components/pdf-download-button'
 import { PresentationOverlay } from '@/components/presentation-overlay'
@@ -80,32 +80,34 @@ export default async function PublicResumePage({ params }: { params: Promise<{ s
     }
 
     return (
-        <div className="min-h-screen bg-zinc-50 flex flex-col selection:bg-zinc-900 selection:text-white">
-            <header className="bg-white/80 backdrop-blur-md border-b sticky top-0 z-50 px-6 sm:px-12 py-4 flex items-center justify-between shadow-sm">
-                <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 bg-zinc-900 rounded-xl flex items-center justify-center shadow-lg">
-                        <Sparkles className="h-5 w-5 text-white" />
+        <div className="min-h-screen bg-black flex flex-col selection:bg-white/10 font-sans">
+            <header className="bg-black/80 backdrop-blur-2xl border-b border-white/5 sticky top-0 z-50 px-6 sm:px-12 py-4 flex items-center justify-between shadow-2xl">
+                <div className="flex items-center gap-4">
+                    <div className="h-10 w-10 bg-black rounded-xl flex items-center justify-center shadow-lg border border-white/10">
+                        <Logo className="h-5 w-5 text-white" />
                     </div>
                     <div className="flex flex-col">
-                        <span className="font-black text-lg tracking-tighter leading-none text-zinc-900">AI RESUME.</span>
-                        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mt-0.5">Verified Profile</span>
+                        <span className="font-black text-lg tracking-tighter leading-none text-white italic lowercase">novatypalcv</span>
+                        <span className="text-[9px] font-black text-zinc-600 uppercase tracking-[0.3em] mt-1 italic">Verified Professional</span>
                     </div>
                 </div>
-                <div className="flex gap-3 items-center">
+                <div className="flex gap-4 items-center">
                     <PresentationOverlay slides={slides} />
                     <PdfDownloadButton resumeData={resumeData} template={template as any} />
-                    <Button asChild variant="default" className="bg-zinc-900 shadow-xl hidden sm:flex h-10 px-6 font-bold rounded-xl hover:bg-black">
-                        <Link href="/">Build Yours Free</Link>
-                    </Button>
+                    <AnimatedGenerateButton
+                        href="/"
+                        labelIdle="Build Yours"
+                        className="hidden sm:flex h-10 px-8 font-black italic lowercase"
+                    />
                 </div>
             </header>
 
-            <main className="flex-1 w-full max-w-6xl mx-auto p-4 sm:p-10 lg:p-16 h-[calc(100vh-73px)] overflow-hidden">
-                <div className="w-full h-full pb-24 shadow-2xl relative mx-auto bg-white rounded-3xl overflow-hidden border border-zinc-200">
+            <main className="flex-1 w-full max-w-7xl mx-auto p-4 sm:p-12 lg:p-20 overflow-hidden">
+                <div className="w-full h-full pb-24 shadow-[0_100px_200px_rgba(0,0,0,0.8)] relative mx-auto bg-white rounded-[3rem] overflow-hidden border border-white/5">
                     <ResumePreview data={resumeData} isLoading={false} template={template as any} />
                 </div>
-                <div className="mt-8 text-center text-zinc-400 font-bold text-xs uppercase tracking-[0.2em]">
-                    Powered by AI Resume Builder • Claude 3.5 Sonnet
+                <div className="mt-12 text-center text-zinc-700 font-black text-[9px] uppercase tracking-[0.5em] italic opacity-40">
+                    Neural Intelligence Protocol • Claude 3.5 Sonnet Synthesis
                 </div>
             </main>
         </div>

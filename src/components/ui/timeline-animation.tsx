@@ -35,19 +35,17 @@ export function TimelineContent({
     const variants = customVariants || defaultVariants;
     const inView = useInView(timelineRef, { once: true, margin: "-100px" });
 
+    const MotionComponent = (motion as any)[Component] || motion.div;
+
     return (
-        <Component
-            as={motion[Component as keyof typeof motion] ? undefined : undefined}
+        <MotionComponent
             className={className}
+            initial="hidden"
+            animate={inView ? "visible" : "hidden"}
+            variants={variants}
+            custom={animationNum}
         >
-            <motion.div
-                initial="hidden"
-                animate={inView ? "visible" : "hidden"}
-                variants={variants}
-                custom={animationNum}
-            >
-                {children}
-            </motion.div>
-        </Component>
+            {children}
+        </MotionComponent>
     );
 }

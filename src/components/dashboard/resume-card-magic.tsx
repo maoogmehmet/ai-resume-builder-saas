@@ -10,7 +10,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { Button } from '@/components/ui/button'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 interface ResumeMagicCardProps {
     resume: {
@@ -78,14 +78,12 @@ export function ResumeMagicCard({
                     <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button
-                                    variant="ghost"
+                                <AnimatedGenerateButton
                                     size="icon"
                                     className="h-9 w-9 bg-black/40 hover:bg-black/80 text-white border border-white/10 rounded-xl backdrop-blur-xl"
                                     onClick={(e) => e.stopPropagation()}
-                                >
-                                    <MoreHorizontal className="h-4 w-4" />
-                                </Button>
+                                    icon={<MoreHorizontal className="h-4 w-4" />}
+                                />
                             </DropdownMenuTrigger>
                             <DropdownMenuContent
                                 align="end"

@@ -1,10 +1,10 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { signout } from '@/app/auth/actions'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { Loader2 } from 'lucide-react'
+import { LogOut, Settings } from 'lucide-react'
 
 export function DashboardHeaderProfile({
     fullName,
@@ -35,29 +35,37 @@ export function DashboardHeaderProfile({
     }
 
     return (
-        <div className="flex items-center gap-4 bg-white p-2 rounded-xl border shadow-sm px-4">
-            <div className="flex flex-col text-right">
-                <span className="text-sm font-bold text-zinc-900">{fullName || email?.split('@')[0]}</span>
-                <span className="text-[10px] uppercase tracking-wider font-bold text-zinc-400">
-                    {isSubscribed ? 'Premium Account' : 'Free Trial'}
+        <div className="flex items-center gap-6 bg-black p-1.5 pr-2 rounded-2xl border border-white/5 shadow-2xl">
+            <div className="flex flex-col text-right pl-4">
+                <span className="text-xs font-black text-white italic tracking-tighter lowercase">{fullName || email?.split('@')[0]}</span>
+                <span className="text-[8px] uppercase tracking-[0.2em] font-black text-zinc-600 italic">
+                    {isSubscribed ? 'Elite Tier' : 'Standard Core'}
                 </span>
             </div>
 
-            {isSubscribed && (
-                <Button
-                    variant="outline"
-                    size="sm"
-                    className="h-8 border-zinc-200"
-                    onClick={handleManageSubscription}
-                    disabled={isPortalLoading}
-                >
-                    {isPortalLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Manage'}
-                </Button>
-            )}
+            <div className="flex items-center gap-2">
+                {isSubscribed && (
+                    <AnimatedGenerateButton
+                        onClick={handleManageSubscription}
+                        disabled={isPortalLoading}
+                        generating={isPortalLoading}
+                        labelIdle="Manage"
+                        labelActive="..."
+                        size="sm"
+                        className="h-9 px-4 font-black italic lowercase text-[11px] bg-white/5 border-white/10"
+                        icon={<Settings className="h-3.5 w-3.5" />}
+                    />
+                )}
 
-            <form action={signout}>
-                <Button variant="ghost" size="sm" className="h-8 text-zinc-500 hover:text-red-600 hover:bg-red-50">Sign Out</Button>
-            </form>
+                <form action={signout}>
+                    <AnimatedGenerateButton
+                        type="submit"
+                        size="icon"
+                        className="h-9 w-9 bg-transparent border-transparent text-zinc-600 hover:text-red-500 hover:bg-red-500/5"
+                        icon={<LogOut className="h-3.5 w-3.5" />}
+                    />
+                </form>
+            </div>
         </div>
     )
 }

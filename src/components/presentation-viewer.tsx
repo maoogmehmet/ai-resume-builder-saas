@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronLeft, ChevronRight, Maximize, Minimize, X } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 interface Slide {
     title: string;
@@ -58,51 +58,70 @@ export function PresentationViewer({ slides, onClose }: PresentationViewerProps)
     const progress = ((currentIndex + 1) / slides.length) * 100
 
     return (
-        <div className={`fixed inset-0 z-50 bg-zinc-950 flex flex-col font-sans transition-all duration-300 ${isFullscreen ? 'p-0' : 'p-4 sm:p-8 lg:p-12'}`}>
+        <div className={`fixed inset-0 z-50 bg-black flex flex-col font-sans transition-all duration-700 ${isFullscreen ? 'p-0' : 'p-6 sm:p-12 lg:p-20'}`}>
+            {/* Background Grain/Grid */}
+            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent pointer-events-none" />
+            <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent pointer-events-none" />
+
             {/* Top Bar */}
-            <div className={`absolute top-0 left-0 right-0 z-10 flex items-center justify-between pointer-events-none p-6 ${isFullscreen ? 'opacity-0 hover:opacity-100 transition-opacity' : ''}`}>
-                <div className="flex items-center gap-4 pointer-events-auto">
+            <div className={`absolute top-0 left-0 right-0 z-30 flex items-center justify-between p-10 pointer-events-none transition-all duration-700 ${isFullscreen ? 'opacity-0 hover:opacity-100' : ''}`}>
+                <div className="flex items-center gap-6 pointer-events-auto">
                     {onClose && (
-                        <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full text-zinc-400 hover:bg-zinc-800 hover:text-white">
-                            <X className="h-5 w-5" />
-                        </Button>
+                        <AnimatedGenerateButton
+                            size="icon"
+                            onClick={onClose}
+                            className="h-12 w-12 bg-white/5 border-white/10 text-zinc-500 hover:text-white rounded-2xl"
+                            icon={<X className="h-5 w-5" />}
+                        />
                     )}
-                    <span className="text-zinc-500 font-bold text-sm tracking-widest uppercase">
-                        Slide {currentIndex + 1} of {slides.length}
-                    </span>
+                    <div className="flex flex-col">
+                        <span className="text-zinc-600 font-black text-[9px] tracking-[0.4em] uppercase italic">
+                            timeline segment
+                        </span>
+                        <span className="text-white font-black text-sm tracking-tighter italic">
+                            {currentIndex + 1} <span className="text-zinc-700 not-italic">/</span> {slides.length}
+                        </span>
+                    </div>
                 </div>
                 <div className="pointer-events-auto">
-                    <Button variant="ghost" size="icon" onClick={toggleFullscreen} className="rounded-full text-zinc-400 hover:bg-zinc-800 hover:text-white">
-                        {isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
-                    </Button>
+                    <AnimatedGenerateButton
+                        size="icon"
+                        onClick={toggleFullscreen}
+                        className="h-12 w-12 bg-white/5 border-white/10 text-zinc-500 hover:text-white rounded-2xl"
+                        icon={isFullscreen ? <Minimize className="h-5 w-5" /> : <Maximize className="h-5 w-5" />}
+                    />
                 </div>
             </div>
 
             {/* Progress Bar */}
-            <div className="absolute top-0 left-0 right-0 h-1 bg-zinc-900 z-20">
-                <div
-                    className="h-full bg-[#2563EB] transition-all duration-500 ease-out"
-                    style={{ width: `${progress}%` }}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-white/5 z-40 overflow-hidden">
+                <motion.div
+                    className="h-full bg-white transition-all duration-700 ease-[0.16,1,0.3,1]"
+                    initial={{ width: 0 }}
+                    animate={{ width: `${progress}%` }}
                 />
             </div>
 
             {/* Main Stage */}
-            <div className="flex-1 w-full max-w-7xl mx-auto relative overflow-hidden flex items-center justify-center bg-zinc-900/50 rounded-3xl shadow-2xl border border-zinc-800/50">
+            <div className="flex-1 w-full max-w-[1400px] mx-auto relative overflow-hidden flex items-center justify-center bg-black/40 rounded-[3rem] shadow-[0_100px_200px_rgba(0,0,0,0.9)] border border-white/5 group">
+                {/* Decorative background glow */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-[150px] pointer-events-none opacity-20" />
+
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentIndex}
-                        initial={{ opacity: 0, x: 100, filter: 'blur(10px)' }}
+                        initial={{ opacity: 0, x: 150, filter: 'blur(15px)' }}
                         animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
-                        exit={{ opacity: 0, x: -100, filter: 'blur(10px)' }}
-                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                        className="w-full max-w-4xl p-8 sm:p-16 flex flex-col justify-center min-h-[50vh]"
+                        exit={{ opacity: 0, x: -150, filter: 'blur(15px)' }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="w-full max-w-5xl p-10 sm:p-24 flex flex-col justify-center min-h-[60vh] relative z-10"
                     >
                         {currentSlide.subtitle && (
                             <motion.span
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2, duration: 0.4 }}
-                                className="text-blue-500 font-black tracking-[0.2em] uppercase text-sm mb-4 block"
+                                transition={{ delay: 0.4, duration: 0.8 }}
+                                className="text-zinc-600 font-black tracking-[0.5em] uppercase text-[10px] mb-6 block italic"
                             >
                                 {currentSlide.subtitle}
                             </motion.span>
@@ -110,8 +129,8 @@ export function PresentationViewer({ slides, onClose }: PresentationViewerProps)
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.3, duration: 0.4 }}
-                            className="text-4xl sm:text-5xl lg:text-7xl font-black text-white tracking-tight leading-[1.1] mb-8"
+                            transition={{ delay: 0.5, duration: 0.8 }}
+                            className="text-5xl sm:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.95] mb-12 italic lowercase"
                         >
                             {currentSlide.title}
                         </motion.h1>
@@ -119,55 +138,55 @@ export function PresentationViewer({ slides, onClose }: PresentationViewerProps)
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.4, duration: 0.4 }}
-                            className="prose prose-invert prose-lg max-w-none text-zinc-300 space-y-4"
+                            transition={{ delay: 0.6, duration: 0.8 }}
+                            className="max-w-none text-zinc-500 space-y-8"
                         >
                             {currentSlide.content.split('\\n').map((paragraph, idx) => (
-                                <p key={idx} className="leading-relaxed text-lg sm:text-xl font-medium">{paragraph.trim()}</p>
+                                <p key={idx} className="leading-relaxed text-xl sm:text-2xl font-black tracking-tight italic">{paragraph.trim()}</p>
                             ))}
                         </motion.div>
                     </motion.div>
                 </AnimatePresence>
 
-                {/* Left/Right Navigation Areas */}
+                {/* Left/Right Navigation Areas (Invisible but active) */}
                 <button
                     onClick={prevSlide}
                     disabled={currentIndex === 0}
-                    className="absolute left-0 top-0 bottom-0 w-1/4 sm:w-32 flex items-center justify-start px-4 opacity-0 hover:opacity-100 disabled:hidden transition-opacity bg-gradient-to-r from-zinc-950/80 to-transparent z-10"
-                >
-                    <div className="h-12 w-12 rounded-full bg-white/10 backdrop-blur-md flex items-center justify-center text-white">
-                        <ChevronLeft className="h-6 w-6 relative right-0.5" />
-                    </div>
-                </button>
+                    className="absolute left-0 top-0 bottom-0 w-1/4 z-20 cursor-pointer disabled:cursor-default"
+                />
                 <button
                     onClick={nextSlide}
                     disabled={currentIndex === slides.length - 1}
-                    className="absolute right-0 top-0 bottom-0 w-1/4 sm:w-32 flex items-center justify-end px-4 opacity-0 hover:opacity-100 disabled:hidden transition-opacity bg-gradient-to-l from-zinc-950/80 to-transparent z-10"
-                >
-                    <div className="h-12 w-12 rounded-full bg-[#2563EB] flex items-center justify-center text-white shadow-xl shadow-blue-500/20">
-                        <ChevronRight className="h-6 w-6 relative left-0.5" />
-                    </div>
-                </button>
+                    className="absolute right-0 top-0 bottom-0 w-1/4 z-20 cursor-pointer disabled:cursor-default"
+                />
             </div>
 
-            {/* Bottom Controls Indicator */}
-            <div className="absolute bottom-6 left-0 right-0 flex justify-center pointer-events-none">
-                <div className="flex gap-2 bg-zinc-900/80 backdrop-blur border border-zinc-800 py-2 px-4 rounded-full shadow-2xl items-center pointer-events-auto">
-                    <Button variant="ghost" size="sm" onClick={prevSlide} disabled={currentIndex === 0} className="rounded-full text-zinc-400 hover:text-white px-2">
-                        <ChevronLeft className="h-4 w-4" />
-                    </Button>
-                    <div className="flex gap-1.5 px-2">
+            {/* Bottom Controls */}
+            <div className="absolute bottom-12 left-0 right-0 flex justify-center pointer-events-none z-30">
+                <div className="flex gap-4 bg-white/5 backdrop-blur-3xl border border-white/10 p-2.5 rounded-[2rem] shadow-[0_50px_100px_rgba(0,0,0,0.8)] items-center pointer-events-auto group/controls">
+                    <AnimatedGenerateButton
+                        size="icon"
+                        onClick={prevSlide}
+                        disabled={currentIndex === 0}
+                        className="h-10 w-10 bg-transparent border-transparent text-zinc-600 hover:text-white"
+                        icon={<ChevronLeft className="h-5 w-5" />}
+                    />
+                    <div className="flex gap-2.5 px-3">
                         {slides.map((_, idx) => (
                             <button
                                 key={idx}
                                 onClick={() => setCurrentIndex(idx)}
-                                className={`h-1.5 rounded-full transition-all duration-300 ${idx === currentIndex ? 'w-6 bg-blue-500' : 'w-1.5 bg-zinc-700 hover:bg-zinc-500'}`}
+                                className={`h-1 rounded-full transition-all duration-700 ${idx === currentIndex ? 'w-10 bg-white shadow-[0_0_15px_rgba(255,255,255,0.5)]' : 'w-2 bg-white/10 hover:bg-white/30'}`}
                             />
                         ))}
                     </div>
-                    <Button variant="ghost" size="sm" onClick={nextSlide} disabled={currentIndex === slides.length - 1} className="rounded-full text-zinc-400 hover:text-white px-2">
-                        <ChevronRight className="h-4 w-4" />
-                    </Button>
+                    <AnimatedGenerateButton
+                        size="icon"
+                        onClick={nextSlide}
+                        disabled={currentIndex === slides.length - 1}
+                        className="h-10 w-10 bg-transparent border-transparent text-zinc-600 hover:text-white"
+                        icon={<ChevronRight className="h-5 w-5" />}
+                    />
                 </div>
             </div>
         </div>

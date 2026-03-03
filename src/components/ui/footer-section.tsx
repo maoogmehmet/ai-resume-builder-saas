@@ -2,7 +2,8 @@
 import React from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon, Link2 } from 'lucide-react';
+import { FacebookIcon, InstagramIcon, LinkedinIcon, YoutubeIcon } from 'lucide-react';
+import { Logo } from "./logo";
 import { cn } from "@/lib/utils";
 
 interface FooterLink {
@@ -63,16 +64,16 @@ export function Footer() {
             <div className="grid w-full gap-16 xl:grid-cols-3 xl:gap-8">
                 <AnimatedContainer className="space-y-6">
                     <div className="flex items-center gap-2 group cursor-pointer">
-                        <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl">
-                            <Link2 className="h-6 w-6 text-black" />
+                        <div className="h-10 w-10 rounded-xl bg-black flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl border border-white/5">
+                            <Logo className="h-6 w-6 text-white" />
                         </div>
-                        <span className="text-2xl font-black text-white italic tracking-tighter">CV Builder</span>
+                        <span className="text-2xl font-black text-white italic tracking-tighter">Novatypalcv</span>
                     </div>
                     <p className="text-zinc-500 text-sm font-medium leading-relaxed max-w-xs">
                         Professional Resume components for professional people. Build your future today.
                     </p>
                     <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-700">
-                        © {new Date().getFullYear()} CV Builder. All rights reserved.
+                        © {new Date().getFullYear()} Novatypalcv. All rights reserved.
                     </p>
                 </AnimatedContainer>
 

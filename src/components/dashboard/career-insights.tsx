@@ -2,10 +2,10 @@
 
 import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { Input } from '@/components/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Search, Briefcase, Users, Loader2, ExternalLink, AlertCircle } from 'lucide-react'
+import { Search, Briefcase, Users, Loader2, ExternalLink, AlertCircle, Sparkles } from 'lucide-react'
 import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 
@@ -77,96 +77,107 @@ export function CareerInsights() {
     }
 
     return (
-        <Card className="border-none shadow-2xl overflow-hidden bg-white/80 backdrop-blur-xl rounded-[2.5rem]">
-            <CardHeader className="bg-gradient-to-br from-zinc-900 to-zinc-800 p-8 text-white">
-                <div className="flex justify-between items-center mb-4">
-                    <div className="h-10 w-10 bg-white/10 rounded-xl flex items-center justify-center">
-                        <Search className="h-5 w-5 text-yellow-400" />
-                    </div>
-                    <Badge className="bg-white/10 text-white/80 border-white/20 px-3 py-1 text-[10px] tracking-widest uppercase font-black">AI Powered Intelligence</Badge>
+        <Card className="border border-white/5 shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden bg-black rounded-[2.5rem]">
+            <CardHeader className="bg-white/5 p-10 text-white relative overflow-hidden group">
+                <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:opacity-10 transition-opacity">
+                    <Search className="h-64 w-64 -mr-16 -mt-16 text-white" />
                 </div>
-                <CardTitle className="text-3xl font-black tracking-tighter">
-                    Career Research
-                </CardTitle>
-                <CardDescription className="text-zinc-400 text-base font-medium mt-2">
-                    Access elite market data. Research top companies and find industry experts to benchmark your growth.
-                </CardDescription>
+
+                <div className="relative z-10">
+                    <div className="flex justify-between items-center mb-6">
+                        <div className="h-12 w-12 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center">
+                            <Sparkles className="h-6 w-6 text-yellow-400" />
+                        </div>
+                        <Badge variant="outline" className="bg-white/5 text-zinc-500 border-white/10 px-4 py-1 text-[10px] tracking-[0.3em] uppercase font-black italic">Neural Intelligence active</Badge>
+                    </div>
+                    <CardTitle className="text-4xl font-black tracking-tighter italic lowercase">
+                        career research
+                    </CardTitle>
+                    <CardDescription className="text-zinc-500 text-sm font-black uppercase tracking-widest italic mt-2 opacity-60">
+                        Benchmark your growth against elite market data and industry leaders.
+                    </CardDescription>
+                </div>
             </CardHeader>
-            <CardContent className="p-8">
-                <Tabs defaultValue="jobs" className="space-y-8">
-                    <TabsList className="flex w-fit bg-zinc-100/50 p-1.5 rounded-2xl border border-zinc-200/50">
-                        <TabsTrigger value="jobs" className="px-6 py-2.5 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-xl data-[state=active]:text-zinc-900 text-zinc-500 font-bold transition-all">
-                            <Briefcase className="h-4 w-4 mr-2" /> Market Jobs
+            <CardContent className="p-10">
+                <Tabs defaultValue="jobs" className="space-y-10">
+                    <TabsList className="flex w-fit bg-white/5 p-1.5 rounded-2xl border border-white/10">
+                        <TabsTrigger value="jobs" className="px-8 py-3 rounded-xl data-[state=active]:bg-white data-[state=active]:text-black text-zinc-500 font-black uppercase text-[10px] tracking-widest italic transition-all">
+                            <Briefcase className="h-3.5 w-3.5 mr-2" /> Market Jobs
                         </TabsTrigger>
-                        <TabsTrigger value="people" className="px-6 py-2.5 rounded-xl data-[state=active]:bg-white data-[state=active]:shadow-xl data-[state=active]:text-zinc-900 text-zinc-500 font-bold transition-all">
-                            <Users className="h-4 w-4 mr-2" /> Expert Profiles
+                        <TabsTrigger value="people" className="px-8 py-3 rounded-xl data-[state=active]:bg-white data-[state=active]:text-black text-zinc-500 font-black uppercase text-[10px] tracking-widest italic transition-all">
+                            <Users className="h-3.5 w-3.5 mr-2" /> Expert Profiles
                         </TabsTrigger>
                     </TabsList>
 
-                    <TabsContent value="jobs" className="space-y-6">
+                    <TabsContent value="jobs" className="space-y-8">
                         <div className="relative group">
                             <Input
                                 placeholder="Search roles, companies, or locations..."
-                                className="h-14 pl-12 pr-32 rounded-2xl border-zinc-200 bg-zinc-50/50 focus:bg-white transition-all text-base font-medium shadow-inner"
+                                className="h-16 pl-14 pr-44 rounded-[1.5rem] border-white/5 bg-white/[0.02] focus:bg-white/[0.04] transition-all text-sm font-medium placeholder:text-zinc-700 italic"
                                 value={jobQuery}
                                 onChange={(e) => setJobQuery(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleJobSearch()}
                             />
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
-                            <Button
-                                onClick={handleJobSearch}
-                                disabled={isJobsLoading}
-                                className="absolute right-2 top-2 bottom-2 bg-zinc-900 hover:bg-black text-white rounded-xl px-6 font-bold"
-                            >
-                                {isJobsLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Search Jobs'}
-                            </Button>
+                            <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600" />
+                            <div className="absolute right-2 top-2 bottom-2 w-40">
+                                <AnimatedGenerateButton
+                                    onClick={handleJobSearch}
+                                    disabled={isJobsLoading}
+                                    generating={isJobsLoading}
+                                    labelIdle="Deep Search"
+                                    labelActive="Scanning..."
+                                    className="w-full h-full font-black italic lowercase"
+                                    size="lg"
+                                />
+                            </div>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {jobs.map((job, i) => (
-                                <div key={i} className="group relative flex flex-col border border-zinc-100 p-6 rounded-[2rem] bg-zinc-50/20 hover:bg-white hover:border-zinc-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500">
-                                    <div className="flex justify-between items-start mb-6">
-                                        <div className="h-12 w-12 bg-white rounded-2xl shadow-sm border border-zinc-100 flex items-center justify-center shrink-0">
-                                            {job.companyLogo ? <img src={job.companyLogo} className="w-8 h-8 rounded-lg" /> : <Briefcase className="h-6 w-6 text-zinc-400" />}
+                                <div key={i} className="group relative flex flex-col border border-white/5 p-8 rounded-[2.5rem] bg-white/[0.01] hover:bg-white/[0.02] hover:border-white/10 transition-all duration-700 shadow-2xl">
+                                    <div className="flex justify-between items-start mb-8">
+                                        <div className="h-14 w-14 bg-white/5 rounded-2xl border border-white/10 flex items-center justify-center shrink-0">
+                                            {job.companyLogo ? <img src={job.companyLogo} className="w-10 h-10 rounded-lg grayscale group-hover:grayscale-0 transition-all" /> : <Briefcase className="h-7 w-7 text-zinc-700" />}
                                         </div>
-                                        <Button variant="ghost" size="icon" asChild className="h-9 w-9 rounded-full bg-zinc-50 group-hover:bg-zinc-900 group-hover:text-white transition-all">
-                                            <a href={job.jobUrl} target="_blank" rel="noopener noreferrer">
-                                                <ExternalLink className="h-4 w-4" />
-                                            </a>
-                                        </Button>
+                                        <AnimatedGenerateButton
+                                            size="icon"
+                                            href={job.jobUrl}
+                                            className="h-10 w-10 opacity-0 group-hover:opacity-100 transition-opacity"
+                                            icon={<ExternalLink className="h-4 w-4" />}
+                                        />
                                     </div>
                                     <div className="flex-1">
-                                        <h4 className="font-bold text-lg text-zinc-900 leading-tight group-hover:text-zinc-900 mb-1">{job.title}</h4>
-                                        <p className="text-zinc-500 font-semibold mb-4 text-sm">{job.companyName}</p>
+                                        <h4 className="font-black text-xl text-white tracking-tighter leading-tight italic truncate mb-1">{job.title}</h4>
+                                        <p className="text-zinc-500 font-black uppercase tracking-widest text-[9px] mb-6 opacity-60 italic">{job.companyName}</p>
 
-                                        <div className="flex items-center gap-2 mb-4">
-                                            <Badge variant="secondary" className="bg-zinc-100/80 text-zinc-600 border-none font-bold text-[10px] py-1">{job.location}</Badge>
-                                            {job.salary && <Badge variant="secondary" className="bg-green-50 text-green-700 border-none font-bold text-[10px] py-1">{job.salary}</Badge>}
+                                        <div className="flex flex-wrap items-center gap-2 mb-6">
+                                            <Badge variant="outline" className="bg-white/5 text-zinc-500 border-white/5 font-black text-[9px] px-3 py-1 uppercase italic">{job.location}</Badge>
+                                            {job.salary && <Badge variant="outline" className="bg-emerald-500/5 text-emerald-500/60 border-emerald-500/10 font-black text-[9px] px-3 py-1 uppercase italic">{job.salary}</Badge>}
                                         </div>
                                     </div>
-                                    <div className="pt-4 border-t border-zinc-100 flex justify-between items-center mt-4">
-                                        <span className="text-[10px] text-zinc-400 font-black uppercase tracking-tighter">{job.postedAt || 'Recently Posted'}</span>
-                                        <Badge className="bg-zinc-900 text-[10px] font-bold">Apply Now</Badge>
+                                    <div className="pt-6 border-t border-white/[0.03] flex justify-between items-center mt-4">
+                                        <span className="text-[9px] text-zinc-700 font-black uppercase tracking-[0.2em] italic">{job.postedAt || 'Recently Posted'}</span>
+                                        <Badge variant="outline" className="border-white/10 text-white font-black text-[9px] px-4 py-1 uppercase italic bg-black">Apply</Badge>
                                     </div>
                                 </div>
                             ))}
                             {jobs.length === 0 && !isJobsLoading && (
-                                <div className="col-span-full py-20 flex flex-col items-center justify-center text-center">
+                                <div className="col-span-full py-32 flex flex-col items-center justify-center text-center opacity-40 italic">
                                     {jobError ? (
                                         <>
-                                            <div className="h-16 w-16 bg-red-50 rounded-full flex items-center justify-center mb-4">
-                                                <AlertCircle className="h-8 w-8 text-red-400" />
+                                            <div className="h-20 w-20 bg-red-500/5 rounded-full flex items-center justify-center mb-6 border border-red-500/10">
+                                                <AlertCircle className="h-10 w-10 text-red-500/40" />
                                             </div>
-                                            <h5 className="text-lg font-bold text-zinc-900">Search Error</h5>
-                                            <p className="text-red-500 max-w-sm mt-2 text-sm font-medium">{jobError}</p>
+                                            <h5 className="text-xl font-black text-white italic lowercase tracking-tighter">Search Error</h5>
+                                            <p className="text-zinc-500 max-w-sm mt-2 text-[10px] font-black uppercase tracking-widest">{jobError}</p>
                                         </>
                                     ) : (
                                         <>
-                                            <div className="opacity-30">
-                                                <Search className="h-12 w-12 text-zinc-300 mb-4 mx-auto" />
+                                            <div className="h-20 w-20 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10">
+                                                <Search className="h-10 w-10 text-zinc-700" />
                                             </div>
-                                            <h5 className="text-xl font-bold text-zinc-900 opacity-50">Start Your Market Research</h5>
-                                            <p className="text-zinc-400 max-w-xs mt-2 font-medium opacity-50">Search for positions to see skill requirements and salary benchmarks.</p>
+                                            <h5 className="text-2xl font-black text-white italic lowercase tracking-tighter">Market Research Hub</h5>
+                                            <p className="text-zinc-500 max-w-xs mt-2 text-[10px] font-black uppercase tracking-widest">Neural diagnostic for positions, requirements, and benchmarks.</p>
                                         </>
                                     )}
                                 </div>
@@ -174,68 +185,73 @@ export function CareerInsights() {
                         </div>
                     </TabsContent>
 
-                    <TabsContent value="people" className="space-y-6">
+                    <TabsContent value="people" className="space-y-8">
                         <div className="relative group">
                             <Input
                                 placeholder="Search for experts (e.g. 'CTO San Francisco' or 'Lead Designer')..."
-                                className="h-14 pl-12 pr-32 rounded-2xl border-zinc-200 bg-zinc-50/50 focus:bg-white transition-all text-base font-medium shadow-inner"
+                                className="h-16 pl-14 pr-44 rounded-[1.5rem] border-white/5 bg-white/[0.02] focus:bg-white/[0.04] transition-all text-sm font-medium placeholder:text-zinc-700 italic"
                                 value={peopleQuery}
                                 onChange={(e) => setPeopleQuery(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handlePeopleSearch()}
                             />
-                            <Users className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-400" />
-                            <Button
-                                onClick={handlePeopleSearch}
-                                disabled={isPeopleLoading}
-                                className="absolute right-2 top-2 bottom-2 bg-zinc-900 hover:bg-black text-white rounded-xl px-6 font-bold"
-                            >
-                                {isPeopleLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Find Experts'}
-                            </Button>
+                            <Users className="absolute left-6 top-1/2 -translate-y-1/2 h-5 w-5 text-zinc-600" />
+                            <div className="absolute right-2 top-2 bottom-2 w-40">
+                                <AnimatedGenerateButton
+                                    onClick={handlePeopleSearch}
+                                    disabled={isPeopleLoading}
+                                    generating={isPeopleLoading}
+                                    labelIdle="Locate Peers"
+                                    labelActive="Parsing..."
+                                    className="w-full h-full font-black italic lowercase"
+                                    size="lg"
+                                />
+                            </div>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             {people.map((person, i) => (
-                                <div key={i} className="group relative flex items-center gap-6 border border-zinc-100 p-6 rounded-[2.5rem] bg-zinc-50/20 hover:bg-white hover:border-zinc-200 hover:shadow-[0_20px_50px_rgba(0,0,0,0.08)] transition-all duration-500">
-                                    <div className="h-20 w-20 rounded-[1.5rem] bg-zinc-200 overflow-hidden shrink-0 border-4 border-white shadow-lg ring-1 ring-zinc-100">
+                                <div key={i} className="group relative flex items-center gap-8 border border-white/5 p-8 rounded-[3rem] bg-white/[0.01] hover:bg-white/[0.02] hover:border-white/10 transition-all duration-700 shadow-2xl overflow-hidden">
+                                    <div className="h-24 w-24 rounded-[2rem] bg-zinc-900 overflow-hidden shrink-0 border-2 border-white/10 shadow-2xl relative">
                                         {person.profilePicture ? (
-                                            <img src={person.profilePicture} className="object-cover w-full h-full" alt={person.fullName} />
+                                            <img src={person.profilePicture} className="object-cover w-full h-full grayscale group-hover:grayscale-0 transition-all duration-500" alt={person.fullName} />
                                         ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-zinc-400 font-black text-2xl bg-zinc-100">
+                                            <div className="w-full h-full flex items-center justify-center text-zinc-700 font-black text-3xl italic">
                                                 {person.fullName?.charAt(0)}
                                             </div>
                                         )}
                                     </div>
-                                    <div className="flex-1 min-w-0 pr-10">
-                                        <h4 className="font-bold text-xl text-zinc-900 truncate leading-tight mb-1">{person.fullName}</h4>
-                                        <p className="text-sm text-zinc-500 line-clamp-2 font-medium leading-relaxed mb-3">{person.headline || person.title || 'Elite Industry Professional'}</p>
-                                        <div className="flex items-center gap-2">
-                                            <Badge variant="outline" className="text-[10px] text-zinc-400 font-bold uppercase tracking-tight border-zinc-200">{person.location || 'LinkedIn Expert'}</Badge>
+                                    <div className="flex-1 min-w-0 pr-12">
+                                        <h4 className="font-black text-2xl text-white italic tracking-tighter truncate leading-none mb-2">{person.fullName}</h4>
+                                        <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest italic line-clamp-2 leading-relaxed opacity-60">{person.headline || person.title || 'Elite Industry Professional'}</p>
+                                        <div className="flex items-center gap-3 mt-4">
+                                            <Badge variant="outline" className="text-[8px] text-zinc-600 font-black uppercase tracking-widest border-white/5 bg-white/5 italic">{person.location || 'Encrypted Node'}</Badge>
                                         </div>
                                     </div>
-                                    <Button variant="ghost" size="icon" asChild className="h-10 w-10 shrink-0 absolute top-6 right-6 hover:bg-zinc-900 hover:text-white rounded-full transition-all">
-                                        <a href={person.url} target="_blank" rel="noopener noreferrer">
-                                            <ExternalLink className="h-5 w-5" />
-                                        </a>
-                                    </Button>
+                                    <AnimatedGenerateButton
+                                        size="icon"
+                                        href={person.url}
+                                        className="h-12 w-12 shrink-0 absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-opacity"
+                                        icon={<ExternalLink className="h-5 w-5" />}
+                                    />
                                 </div>
                             ))}
                             {people.length === 0 && !isPeopleLoading && (
-                                <div className="col-span-full py-20 flex flex-col items-center justify-center text-center">
+                                <div className="col-span-full py-32 flex flex-col items-center justify-center text-center opacity-30 italic">
                                     {peopleError ? (
                                         <>
-                                            <div className="h-16 w-16 bg-red-50 rounded-full flex items-center justify-center mb-4">
-                                                <AlertCircle className="h-8 w-8 text-red-400" />
+                                            <div className="h-20 w-20 bg-red-500/5 rounded-full flex items-center justify-center mb-6 border border-red-500/10">
+                                                <AlertCircle className="h-10 w-10 text-red-500/40" />
                                             </div>
-                                            <h5 className="text-lg font-bold text-zinc-900">Search Error</h5>
-                                            <p className="text-red-500 max-w-sm mt-2 text-sm font-medium">{peopleError}</p>
+                                            <h5 className="text-xl font-black text-white italic lowercase tracking-tighter">Diagnostic Error</h5>
+                                            <p className="text-zinc-500 max-w-sm mt-2 text-[10px] font-black uppercase tracking-widest">{peopleError}</p>
                                         </>
                                     ) : (
                                         <>
-                                            <div className="opacity-30">
-                                                <Users className="h-12 w-12 text-zinc-300 mb-4 mx-auto" />
+                                            <div className="h-20 w-20 bg-white/5 rounded-full flex items-center justify-center mb-6 border border-white/10">
+                                                <Users className="h-10 w-10 text-zinc-700" />
                                             </div>
-                                            <h5 className="text-xl font-bold text-zinc-900 opacity-50">Discover Top Professionals</h5>
-                                            <p className="text-zinc-400 max-w-xs mt-2 font-medium opacity-50">Study profiles of successful people in your dream roles to optimize your own path.</p>
+                                            <h5 className="text-2xl font-black text-white italic lowercase tracking-tighter">Expert Discovery</h5>
+                                            <p className="text-zinc-500 max-w-xs mt-2 text-[10px] font-black uppercase tracking-widest">Benchmark your trajectory against successful high-impact professionals.</p>
                                         </>
                                     )}
                                 </div>

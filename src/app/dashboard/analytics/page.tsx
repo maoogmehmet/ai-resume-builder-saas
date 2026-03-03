@@ -8,16 +8,9 @@ import {
     Eye, MousePointerClick, TrendingUp, Clock, BarChart3, Users
 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Button } from '@/components/ui/button'
 import AnimatedText from '@/components/ui/animated-text'
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-} from 'recharts'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
+import * as RechartsPrimitive from 'recharts'
 import {
     ChartContainer,
     ChartTooltip,
@@ -190,16 +183,16 @@ export default function AnalyticsPage() {
                     transition={{ duration: 0.6 }}
                     className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
                 >
-                    <AnimatedText text="Metrics" className="text-4xl font-black tracking-tightest" animationType="letters" />
+                    <AnimatedText text="metrics" className="text-4xl font-black tracking-tightest italic lowercase" animationType="letters" />
 
                     <div className="flex items-center gap-3">
                         {/* Time Period Dropdown */}
                         <div className="relative">
                             <button
                                 onClick={() => setShowTimeDropdown(!showTimeDropdown)}
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#121212] border border-white/5 text-sm font-medium text-zinc-400 hover:text-white transition-colors"
+                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0a0a0a] border border-white/10 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-all italic active:scale-95"
                             >
-                                {timePeriodLabels[timePeriod]} <ChevronDown className={`h-4 w-4 transition-transform ${showTimeDropdown ? 'rotate-180' : ''}`} />
+                                {timePeriodLabels[timePeriod]} <ChevronDown className={`h-3 w-3 transition-transform ${showTimeDropdown ? 'rotate-180' : ''}`} />
                             </button>
                             <AnimatePresence>
                                 {showTimeDropdown && (
@@ -208,15 +201,15 @@ export default function AnalyticsPage() {
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: -8, scale: 0.95 }}
                                         transition={{ duration: 0.15 }}
-                                        className="absolute right-0 top-full mt-2 w-48 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden z-50 shadow-2xl"
+                                        className="absolute right-0 top-full mt-2 w-48 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden z-50 shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
                                     >
                                         {(Object.keys(timePeriodLabels) as TimePeriod[]).map((key) => (
                                             <button
                                                 key={key}
                                                 onClick={() => { setTimePeriod(key); setShowTimeDropdown(false) }}
-                                                className={`w-full text-left px-4 py-3 text-sm font-medium transition-colors ${timePeriod === key
+                                                className={`w-full text-left px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-colors italic ${timePeriod === key
                                                     ? 'text-emerald-500 bg-emerald-500/5'
-                                                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                                                    : 'text-zinc-500 hover:text-white hover:bg-white/5'
                                                     }`}
                                             >
                                                 {timePeriodLabels[key]}
@@ -239,17 +232,31 @@ export default function AnalyticsPage() {
                     <div className="relative h-[350px] sm:h-[400px] w-full">
                         {mounted && (
                             <ChartContainer config={chartConfig} className="h-full w-full">
-                                <LineChart
+                                <RechartsPrimitive.AreaChart
                                     data={data}
                                     margin={{ top: 20, right: 10, left: 10, bottom: 30 }}
                                 >
-                                    <CartesianGrid
+                                    <defs>
+                                        <linearGradient id="fillViews" x1="0" y1="0" x2="0" y2="1">
+                                            <stop
+                                                offset="5%"
+                                                stopColor="var(--color-views)"
+                                                stopOpacity={0.4}
+                                            />
+                                            <stop
+                                                offset="95%"
+                                                stopColor="var(--color-views)"
+                                                stopOpacity={0.05}
+                                            />
+                                        </linearGradient>
+                                    </defs>
+                                    <RechartsPrimitive.CartesianGrid
                                         vertical={false}
                                         stroke="white"
                                         strokeOpacity={0.05}
                                         strokeDasharray="4 4"
                                     />
-                                    <XAxis
+                                    <RechartsPrimitive.XAxis
                                         dataKey="date"
                                         axisLine={false}
                                         tickLine={false}
@@ -259,28 +266,30 @@ export default function AnalyticsPage() {
                                         angle={-35}
                                         textAnchor="end"
                                     />
-                                    <YAxis
+                                    <RechartsPrimitive.YAxis
                                         orientation="right"
                                         axisLine={false}
                                         tickLine={false}
                                         tick={{ fill: "white", fillOpacity: 0.4, fontSize: 12, fontWeight: "bold" }}
-                                        tickFormatter={(val) => val > 0 ? val.toString() : "0"}
+                                        tickFormatter={(val: number) => val > 0 ? val.toString() : "0"}
                                     />
                                     <ChartTooltip
                                         cursor={{ stroke: "white", strokeOpacity: 0.1, strokeWidth: 1 }}
                                         content={<ChartTooltipContent hideLabel />}
                                     />
-                                    <Line
+                                    <RechartsPrimitive.Area
                                         type="monotone"
                                         dataKey="views"
                                         stroke="var(--color-views)"
                                         strokeWidth={3}
+                                        fill="url(#fillViews)"
+                                        fillOpacity={1}
                                         dot={false}
                                         activeDot={{ r: 6, fill: "#10b981", stroke: "#050505", strokeWidth: 2 }}
                                         animationDuration={2000}
                                         animationEasing="ease-out"
                                     />
-                                </LineChart>
+                                </RechartsPrimitive.AreaChart>
                             </ChartContainer>
                         )}
                     </div>
@@ -301,7 +310,7 @@ export default function AnalyticsPage() {
                                 <div className={`h-9 w-9 rounded-xl flex items-center justify-center mb-3 border ${colorMap[stat.color]}`}>
                                     <Icon className="h-4 w-4" />
                                 </div>
-                                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-zinc-600 mb-1">{stat.label}</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-zinc-600 mb-1 italic">{stat.label}</p>
                                 <p className="text-2xl font-black text-white tabular-nums tracking-tight">
                                     {stat.isText ? stat.value : stat.value}
                                 </p>
@@ -318,17 +327,17 @@ export default function AnalyticsPage() {
                     className="space-y-6"
                 >
                     <div className="flex justify-between items-center px-4">
-                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Link Performance Breakdown</h3>
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 italic">Link Performance Breakdown</h3>
                     </div>
 
                     <div className="bg-[#050505] border border-white/[0.04] rounded-[2rem] overflow-hidden shadow-2xl">
                         {isLoading ? (
                             <div className="p-32 flex flex-col items-center justify-center gap-4 text-zinc-600">
                                 <Loader2 className="h-10 w-10 animate-spin" />
-                                <span className="text-[10px] font-black uppercase tracking-widest">Hydrating data layer...</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest italic">Hydrating data layer...</span>
                             </div>
                         ) : links.length === 0 ? (
-                            <div className="p-32 text-center text-zinc-700 font-black uppercase tracking-widest text-xs">
+                            <div className="p-32 text-center text-zinc-700 font-black uppercase tracking-widest text-xs italic">
                                 No active resume links found.
                             </div>
                         ) : (
@@ -346,11 +355,11 @@ export default function AnalyticsPage() {
                                                 <Link2 className="h-7 w-7 text-zinc-700 group-hover:text-emerald-500 transition-colors" />
                                             </div>
                                             <div>
-                                                <h4 className="text-xl font-black text-white tracking-tight">{link.link_name || link.resumes?.title || 'Untitled Portfolio'}</h4>
+                                                <h4 className="text-xl font-black text-white tracking-tight italic">{link.link_name || link.resumes?.title || 'Untitled Portfolio'}</h4>
                                                 <div className="flex items-center gap-3 mt-1.5">
-                                                    <span className="text-[10px] font-bold text-emerald-500/80 uppercase tracking-widest">r/{link.slug}</span>
+                                                    <span className="text-[10px] font-black text-emerald-500/80 uppercase tracking-widest italic">r/{link.slug}</span>
                                                     <div className="h-1 w-1 rounded-full bg-zinc-800" />
-                                                    <span className="text-[10px] font-bold text-zinc-600 uppercase tracking-widest">{new Date(link.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                                                    <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest italic">{new Date(link.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -358,28 +367,23 @@ export default function AnalyticsPage() {
                                         <div className="flex items-center justify-between sm:justify-end gap-12 w-full sm:w-auto">
                                             <div className="text-center sm:text-right">
                                                 <p className="text-3xl font-black text-white">{link.view_count || 0}</p>
-                                                <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest">Views</p>
+                                                <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest italic">Views</p>
                                             </div>
 
                                             <div className="flex items-center gap-2">
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
+                                                <AnimatedGenerateButton
+                                                    size="icon"
+                                                    highlightHueDeg={copiedSlug === link.slug ? 140 : 210}
                                                     onClick={() => copyLink(link.slug)}
-                                                    className="h-12 w-12 p-0 text-zinc-500 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5"
-                                                >
-                                                    {copiedSlug === link.slug ? <Check className="h-5 w-5 text-emerald-500" /> : <Copy className="h-5 w-5" />}
-                                                </Button>
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
-                                                    asChild
-                                                    className="h-12 w-12 p-0 text-zinc-500 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] rounded-2xl border border-white/5"
-                                                >
-                                                    <a href={`/r/${link.slug}`} target="_blank" rel="noopener noreferrer">
-                                                        <ExternalLink className="h-5 w-5" />
-                                                    </a>
-                                                </Button>
+                                                    className="h-12 w-12"
+                                                    icon={copiedSlug === link.slug ? <Check className="h-5 w-5 text-emerald-500" /> : <Copy className="h-5 w-5 text-zinc-400" />}
+                                                />
+                                                <AnimatedGenerateButton
+                                                    size="icon"
+                                                    href={`/r/${link.slug}`}
+                                                    className="h-12 w-12"
+                                                    icon={<ExternalLink className="h-5 w-5 text-zinc-400" />}
+                                                />
                                             </div>
                                         </div>
                                     </motion.div>
@@ -396,7 +400,7 @@ export default function AnalyticsPage() {
                     transition={{ duration: 1, delay: 0.6 }}
                     className="flex justify-center pt-8"
                 >
-                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-800">Elite Career Intelligence Layer</p>
+                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-800 italic">Elite Career Intelligence Layer</p>
                 </motion.div>
             </div>
         </div>

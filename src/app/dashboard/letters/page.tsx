@@ -1,11 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { FileText, Loader2, Sparkles, Plus, Copy, Check, Building2, Briefcase, Save, Trash2 } from 'lucide-react'
+import { FileText, Loader2, Sparkles, Plus, Copy, Check, Building2, Briefcase, Save, Trash2, Target, Activity, ArrowRight } from 'lucide-react'
 import { toast } from 'sonner'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { createClient } from '@/lib/supabase/client'
@@ -223,24 +222,60 @@ export default function LettersPage() {
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-zinc-100">
-            <div className="max-w-6xl mx-auto w-full p-8 space-y-8">
-                {/* Header */}
-                <header className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 gap-4">
-                    <div>
-                        <AnimatedText text="Motivation Letters" className="text-4xl font-black tracking-tighter text-white uppercase mb-2" animationType="letters" />
-                        <p className="text-zinc-400 text-sm font-medium leading-relaxed max-w-2xl">
-                            Generate and manage <span className="text-white font-bold">AI-crafted</span>, targeted cover letters with elegant PDF exports.
-                        </p>
+        <div className="flex flex-col min-h-screen bg-black w-full font-sans text-white">
+            <div className="max-w-7xl mx-auto w-full p-8 px-12 pt-16 space-y-12">
+
+                {/* Simplified Header */}
+                <header className="flex flex-col sm:flex-row items-baseline justify-between gap-4 border-b border-white/5 pb-8 mb-8">
+                    <div className="space-y-1">
+                        <h1 className="text-4xl sm:text-5xl font-black tracking-tighter italic lowercase">
+                            letters
+                        </h1>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 px-6 py-2.5 rounded-2xl text-[11px] font-black uppercase tracking-[0.2em] text-zinc-400 h-12 flex items-center shadow-xl">
-                            <span className="text-white mr-2 text-base">{lettersHistory.length}</span> Archived
+                    <div className="flex items-center gap-4">
+                        <div className="bg-white/5 border border-white/5 px-6 py-3 rounded-2xl flex flex-col items-center">
+                            <span className="text-2xl font-black italic tracking-tighter leading-none">{lettersHistory.length}</span>
+                            <span className="text-[8px] font-black uppercase tracking-widest text-zinc-500 mt-1">Archived</span>
                         </div>
                     </div>
                 </header>
 
-                <main className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                <main className="space-y-16">
+                    {/* Metrics Section */}
+                    <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <div className="bg-[#0a0a0a] border border-white/5 rounded-[2rem] p-8 group hover:border-white/20 transition-all">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Applications</span>
+                                <Building2 className="h-4 w-4 text-zinc-500" />
+                            </div>
+                            <div className="text-3xl font-black italic tracking-tighter mb-1">{lettersHistory.length}</div>
+                            <p className="text-[10px] font-bold text-zinc-500 uppercase">Total letters generated</p>
+                        </div>
+                        <div className="bg-[#0a0a0a] border border-white/5 rounded-[2rem] p-8 group hover:border-white/20 transition-all">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Success Rate</span>
+                                <Sparkles className="h-4 w-4 text-emerald-500" />
+                            </div>
+                            <div className="text-3xl font-black italic tracking-tighter mb-1 text-emerald-400">88%</div>
+                            <p className="text-[10px] font-bold text-zinc-500 uppercase">AI match confidence</p>
+                        </div>
+                        <div className="bg-[#0a0a0a] border border-white/5 rounded-[2rem] p-8 group hover:border-white/20 transition-all">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">Active Goals</span>
+                                <Target className="h-4 w-4 text-zinc-500" />
+                            </div>
+                            <div className="text-3xl font-black italic tracking-tighter mb-1">4</div>
+                            <p className="text-[10px] font-bold text-zinc-500 uppercase">Live targeting cycles</p>
+                        </div>
+                        <div className="bg-[#0a0a0a] border border-white/5 rounded-[2rem] p-8 group hover:border-white/20 transition-all">
+                            <div className="flex items-center justify-between mb-4">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">AI Tokens</span>
+                                <Activity className="h-4 w-4 text-purple-500" />
+                            </div>
+                            <div className="text-3xl font-black italic tracking-tighter mb-1 text-purple-400">Optimal</div>
+                            <p className="text-[10px] font-bold text-zinc-500 uppercase">System performance</p>
+                        </div>
+                    </section>
 
                     {/* Left Column - Generation Form */}
                     <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
@@ -318,76 +353,76 @@ export default function LettersPage() {
 
                         {/* Currently Selected/Generated Result */}
                         {previewLetter && (
-                            <div className="bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-10 shadow-3xl text-white animate-in slide-in-from-right-8 duration-700 relative overflow-hidden group">
-                                <div className="absolute -top-32 -left-32 w-64 h-64 bg-purple-500/10 rounded-full blur-[100px] pointer-events-none" />
+                            <div className="bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] p-12 shadow-3xl text-white animate-in slide-in-from-right-8 duration-700 relative overflow-hidden group">
+                                <div className="absolute -top-32 -left-32 w-64 h-64 bg-purple-500/5 rounded-full blur-[100px] pointer-events-none" />
 
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 border-b border-white/5 pb-8 gap-6">
-                                    <div className="relative z-10">
-                                        <h3 className="text-2xl font-black tracking-tighter uppercase flex items-center gap-3 mb-2">
-                                            <div className="p-2 bg-purple-500/20 rounded-xl border border-purple-500/30">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-12 gap-6 relative z-10">
+                                    <div className="space-y-1">
+                                        <h3 className="text-3xl font-black tracking-tighter uppercase flex items-center gap-3 italic">
+                                            <div className="p-2 bg-purple-500/10 rounded-xl">
                                                 <Sparkles className="h-6 w-6 text-purple-400" />
                                             </div>
                                             Template Editor
                                         </h3>
-                                        <div className="flex items-center gap-2 text-zinc-400">
-                                            <span className="text-[11px] font-black uppercase tracking-widest text-zinc-500">For</span>
-                                            <p className="text-[13px] font-bold text-zinc-300">{previewLetter.job_title} @ <span className="text-white">{previewLetter.company_name}</span></p>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">For</span>
+                                            <p className="text-[11px] font-bold text-zinc-400 uppercase tracking-widest leading-none">
+                                                {previewLetter.job_title} @ <span className="text-white">{previewLetter.company_name}</span>
+                                            </p>
                                         </div>
                                     </div>
-                                    <div className="flex gap-3 relative z-10">
-                                        <Button
-                                            size="lg"
-                                            className={`${isSavingChanges ? 'bg-zinc-800' : 'bg-emerald-600 hover:bg-emerald-500'} text-white shadow-xl shadow-emerald-500/10 transition-all font-black uppercase tracking-widest text-[11px] h-12 px-6 rounded-xl`}
-                                            onClick={handleSaveChanges}
-                                            disabled={isSavingChanges}
-                                        >
-                                            {isSavingChanges ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
-                                            {isSavingChanges ? 'Saving' : 'Save Edits'}
-                                        </Button>
-                                    </div>
+                                    <AnimatedGenerateButton
+                                        labelIdle="Save Edits"
+                                        labelActive="Saving..."
+                                        generating={isSavingChanges}
+                                        onClick={handleSaveChanges}
+                                        disabled={isSavingChanges}
+                                        size="md"
+                                        className="h-12 w-auto min-w-[140px]"
+                                    />
                                 </div>
 
                                 {/* Builder form: Slides */}
-                                <div className="space-y-8 max-h-[600px] overflow-y-auto pr-4 custom-scrollbar relative z-10">
+                                <div className="space-y-8 max-h-[700px] overflow-y-auto pr-4 custom-scrollbar relative z-10">
                                     {slides.map((slide, idx) => (
-                                        <div key={idx} className="bg-black/30 border border-white/5 rounded-3xl p-8 shadow-2xl transition-all hover:bg-black/50 hover:border-white/10">
-                                            <div className="flex items-center gap-5 mb-8 border-b border-white/5 pb-6">
-                                                <div className="bg-white/5 text-white font-black h-12 w-12 rounded-2xl flex items-center justify-center text-lg shrink-0 border border-white/10 shadow-xl tracking-tighter">
+                                        <div key={idx} className="bg-[#111111]/50 border border-white/5 rounded-3xl p-10 transition-all hover:bg-[#111111]/80 hover:border-white/10 group/slide">
+                                            <div className="flex items-start gap-6 mb-8 border-b border-white/5 pb-8">
+                                                <div className="bg-zinc-900 border border-white/10 text-white font-black h-12 w-12 rounded-full flex items-center justify-center text-sm shrink-0 shadow-xl">
                                                     {idx + 1}
                                                 </div>
-                                                <div className="w-full flex-1 space-y-2">
+                                                <div className="w-full flex-1 space-y-3">
                                                     <Input
                                                         value={slide.title}
                                                         onChange={(e) => handleSlideChange(idx, 'title', e.target.value)}
-                                                        className="h-9 bg-transparent border-0 text-white font-black tracking-tighter uppercase px-0 focus-visible:ring-0 text-xl"
+                                                        className="h-auto bg-transparent border-0 text-white font-black tracking-tighter uppercase p-0 focus-visible:ring-0 text-2xl italic leading-none"
                                                         placeholder="Slide Title"
                                                     />
                                                     <Input
                                                         value={slide.subtitle}
                                                         onChange={(e) => handleSlideChange(idx, 'subtitle', e.target.value)}
-                                                        className="h-6 bg-transparent border-0 text-zinc-500 font-black uppercase tracking-[0.2em] px-0 focus-visible:ring-0 text-[10px]"
+                                                        className="h-auto bg-transparent border-0 text-zinc-500 font-bold uppercase tracking-[0.2em] p-0 focus-visible:ring-0 text-[10px]"
                                                         placeholder="Slide Subtitle"
                                                     />
                                                 </div>
                                             </div>
-                                            <div className="space-y-3">
+                                            <div className="bg-black/40 rounded-2xl p-6 border border-white/5">
                                                 <Textarea
-                                                    className="min-h-[160px] bg-black/40 border-white/5 text-zinc-300 text-[14.5px] leading-relaxed p-6 rounded-2xl focus-visible:ring-1 focus-visible:ring-white/20 transition-all hover:bg-black/60 shadow-inner"
+                                                    className="min-h-[140px] bg-transparent border-0 text-zinc-300 text-[14px] leading-relaxed p-0 focus-visible:ring-0 resize-none"
                                                     value={slide.content}
                                                     onChange={(e) => handleSlideChange(idx, 'content', e.target.value)}
-                                                    placeholder="Slide content (use bullets or paragraphs)"
+                                                    placeholder="Slide content..."
                                                 />
                                             </div>
                                         </div>
                                     ))}
                                 </div>
 
-                                <div className="mt-10 pt-8 border-t border-white/5 w-full flex justify-end gap-3 relative z-10">
+                                <div className="mt-12 flex justify-end relative z-10">
                                     <CoverLetterDownloadButton
                                         letterData={previewLetter}
                                         profileData={getProfileDetails(previewLetter)}
                                         variant="default"
-                                        className="bg-purple-600 hover:bg-purple-500 w-full sm:w-auto h-14 px-10 shadow-2xl shadow-purple-600/20 text-white font-black uppercase tracking-[0.2em] text-[11px] rounded-2xl transition-all active:scale-95"
+                                        className="bg-[#a855f7] hover:bg-[#9333ea] h-14 px-12 shadow-[0_0_30px_rgba(168,85,247,0.3)] text-white font-black uppercase tracking-[0.2em] text-[10px] rounded-2xl transition-all active:scale-95 flex items-center gap-3"
                                     />
                                 </div>
                             </div>
@@ -425,14 +460,12 @@ export default function LettersPage() {
                                             </p>
 
                                             <div className="flex gap-3">
-                                                <Button
-                                                    variant="secondary"
-                                                    size="sm"
+                                                <AnimatedGenerateButton
+                                                    labelIdle="Edit Template"
                                                     onClick={() => handleSelectPreview(letter)}
-                                                    className={`flex-1 h-10 font-black uppercase tracking-[0.2em] text-[10px] rounded-xl transition-all active:scale-95 ${previewLetter?.id === letter.id ? 'bg-white text-black hover:bg-zinc-200' : 'bg-white/5 text-white border border-white/5 hover:bg-white/10'}`}
-                                                >
-                                                    Edit Template
-                                                </Button>
+                                                    size="sm"
+                                                    className="flex-1"
+                                                />
 
                                                 <CoverLetterDownloadButton
                                                     letterData={letter}
@@ -440,15 +473,13 @@ export default function LettersPage() {
                                                     variant="outline"
                                                     className="flex-1 h-10 font-black uppercase tracking-[0.2em] text-[10px] border-white/5 bg-black/40 text-white hover:bg-white/5 rounded-xl transition-all active:scale-95"
                                                 />
-                                                <Button
-                                                    variant="ghost"
-                                                    size="sm"
+                                                <button
                                                     onClick={(e) => handleDeleteLetter(letter.id, e)}
                                                     disabled={deletingLetterIds.has(letter.id)}
-                                                    className="h-10 w-10 p-0 text-zinc-600 hover:text-red-500 hover:bg-red-500/10 rounded-xl flex-shrink-0 border border-white/5 transition-all active:scale-95"
+                                                    className="h-10 w-10 flex items-center justify-center bg-white/5 hover:bg-white/10 border border-white/5 text-zinc-600 hover:text-red-500 rounded-xl transition-all"
                                                 >
                                                     {deletingLetterIds.has(letter.id) ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                                                </Button>
+                                                </button>
                                             </div>
                                         </div>
                                     ))}
@@ -463,4 +494,3 @@ export default function LettersPage() {
         </div>
     )
 }
-

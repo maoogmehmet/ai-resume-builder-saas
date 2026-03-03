@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { RotateCcw, Copy, LinkIcon, CheckIcon } from 'lucide-react';
+import { RotateCcw, Copy, LinkIcon, CheckIcon, Sparkles, Globe, Link2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'sonner'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button';
 
 const LinkShortenerWidget = () => {
   const [longLink, setLongLink] = useState('');
@@ -28,7 +28,7 @@ const LinkShortenerWidget = () => {
     return new Promise<string>((resolve) => {
       setTimeout(() => {
         const uniqueCode = Math.random().toString(36).substring(2, 8);
-        resolve(`https://short.url/${uniqueCode}`); // Dummy short URL
+        resolve(`https://novatypal.cv/${uniqueCode}`); // Dummy short URL
       }, 1500); // Simulate network delay
     });
   }, []);
@@ -52,8 +52,8 @@ const LinkShortenerWidget = () => {
     try {
       const generatedShortLink = await simulateShortenLink(longLink);
       setShortLink(generatedShortLink);
-      toast.success('Link Shortened!', {
-        description: 'Your link has been successfully shortened.',
+      toast.success('Protocol Executed!', {
+        description: 'Your career node link has been successfully synthesized.',
       });
     } catch (err) {
       setError('Failed to shorten link. Please try again.');
@@ -92,20 +92,14 @@ const LinkShortenerWidget = () => {
 
   // Framer Motion Variants for animations
   const cardVariants = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: 'easeOut' as const } },
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
   };
 
   const resultVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.9 },
-    visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.4, ease: 'easeOut' as const, delay: 0.1 } },
-    exit: { opacity: 0, y: -20, scale: 0.9, transition: { duration: 0.3, ease: 'easeIn' as const } },
-  };
-
-  const errorVariants = {
-    hidden: { opacity: 0, height: 0 },
-    visible: { opacity: 1, height: 'auto', transition: { duration: 0.3, ease: 'easeOut' as const } },
-    exit: { opacity: 0, height: 0, transition: { duration: 0.2, ease: 'easeIn' as const } },
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } },
+    exit: { opacity: 0, y: -20, transition: { duration: 0.4 } },
   };
 
   return (
@@ -115,42 +109,40 @@ const LinkShortenerWidget = () => {
       animate="visible"
       className="max-w-md w-full mx-auto p-4"
     >
-      <Card className="shadow-lg border-primary/20 bg-background/90 backdrop-blur-sm">
-        <CardHeader className="pb-4">
-          <CardTitle className="text-center text-2xl font-bold flex items-center justify-center gap-2 text-primary">
-            <LinkIcon className="h-7 w-7" />
-            Link Shortener
+      <Card className="rounded-[2.5rem] border border-white/5 bg-black/40 backdrop-blur-3xl shadow-[0_50px_100px_rgba(0,0,0,0.8)] overflow-hidden p-2">
+        <CardHeader className="pb-8 pt-10 px-8">
+          <CardTitle className="text-2xl font-black flex items-center gap-4 text-white italic lowercase tracking-tighter">
+            <div className="h-12 w-12 rounded-2xl bg-white/[0.02] border border-white/10 flex items-center justify-center">
+              <Link2 className="h-6 w-6 text-white opacity-40" />
+            </div>
+            node synthesizer
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-5">
-            <div className="grid w-full items-center gap-1.5">
-              <Label htmlFor="long-link" className="text-muted-foreground">
-                Enter your long URL
+        <CardContent className="px-8 pb-10">
+          <div className="space-y-8">
+            <div className="space-y-3">
+              <Label htmlFor="long-link" className="text-zinc-600 font-black italic lowercase tracking-tight opacity-60">
+                target professional URL
               </Label>
               <Input
                 id="long-link"
                 type="url"
-                placeholder="https://www.google.com/search?q=very+long+url+example"
+                placeholder="https://linkedin.com/in/architect..."
                 value={longLink}
                 onChange={(e) => {
                   setLongLink(e.target.value);
                   setError(null);
                 }}
-                className={`transition-all duration-200 ${error
-                  ? 'border-destructive focus-visible:ring-destructive'
-                  : 'focus-visible:ring-primary'
-                  }`}
+                className="h-14 rounded-2xl bg-white/[0.02] border border-white/5 focus:border-white/10 transition-all font-black text-white italic lowercase placeholder:text-zinc-800"
                 disabled={isLoading}
               />
               <AnimatePresence>
                 {error && (
                   <motion.p
-                    className="text-destructive text-sm mt-1"
-                    variants={errorVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
+                    className="text-red-500/60 font-black italic lowercase text-[10px] tracking-widest mt-2 uppercase"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
                   >
                     {error}
                   </motion.p>
@@ -158,38 +150,14 @@ const LinkShortenerWidget = () => {
               </AnimatePresence>
             </div>
 
-            <Button
+            <AnimatedGenerateButton
               onClick={handleShorten}
-              className="w-full relative h-10 overflow-hidden"
+              labelIdle="Shorten Protocol"
+              labelActive="Synthesizing..."
+              generating={isLoading}
               disabled={isLoading || !longLink.trim()}
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                {isLoading ? (
-                  <motion.span
-                    key="loading"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center absolute inset-0 justify-center"
-                  >
-                    <RotateCcw className="mr-2 h-4 w-4 animate-spin" />
-                    Shortening...
-                  </motion.span>
-                ) : (
-                  <motion.span
-                    key="shorten"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex items-center absolute inset-0 justify-center"
-                  >
-                    Shorten Link
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </Button>
+              className="w-full h-14 rounded-2xl font-black italic lowercase shadow-2xl"
+            />
 
             <AnimatePresence>
               {shortLink && (
@@ -198,60 +166,39 @@ const LinkShortenerWidget = () => {
                   initial="hidden"
                   animate="visible"
                   exit="exit"
-                  className="space-y-4 pt-4 border-t border-dashed border-border mt-5"
+                  className="space-y-6 pt-8 border-t border-white/5"
                 >
-                  <div className="grid w-full items-center gap-1.5">
-                    <Label htmlFor="short-link" className="text-muted-foreground">
-                      Your Shortened Link
+                  <div className="space-y-3">
+                    <Label htmlFor="short-link" className="text-zinc-600 font-black italic lowercase tracking-tight opacity-60">
+                      architected node link
                     </Label>
-                    <div className="relative">
+                    <div className="relative group">
                       <Input
                         id="short-link"
                         type="text"
                         value={shortLink}
                         readOnly
-                        className="pr-12 bg-muted/50 font-mono text-primary select-text cursor-text"
+                        className="h-14 pr-16 bg-white/[0.05] border-white/10 rounded-2xl font-black italic text-white lowercase select-text cursor-text"
                       />
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="absolute right-1 top-1 h-8 w-8 text-muted-foreground hover:bg-primary/10 hover:text-primary transition-colors duration-200"
+                      <button
+                        className="absolute right-3 top-3 h-8 w-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition-colors"
                         onClick={handleCopy}
                         aria-label="Copy short link"
                       >
-                        <AnimatePresence mode="wait">
-                          {isCopied ? (
-                            <motion.span
-                              key="copied-icon"
-                              initial={{ scale: 0.5, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              exit={{ scale: 0.5, opacity: 0 }}
-                              transition={{ duration: 0.2 }}
-                            >
-                              <CheckIcon className="h-4 w-4 text-green-500" />
-                            </motion.span>
-                          ) : (
-                            <motion.span
-                              key="copy-icon"
-                              initial={{ scale: 0.5, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              exit={{ scale: 0.5, opacity: 0 }}
-                              transition={{ duration: 0.2 }}
-                            >
-                              <Copy className="h-4 w-4" />
-                            </motion.span>
-                          )}
-                        </AnimatePresence>
-                      </Button>
+                        {isCopied ? (
+                          <CheckIcon className="h-4 w-4 text-emerald-500" />
+                        ) : (
+                          <Copy className="h-4 w-4 text-zinc-500" />
+                        )}
+                      </button>
                     </div>
                   </div>
-                  <Button
+                  <button
                     onClick={handleRestart}
-                    variant="outline"
-                    className="w-full text-muted-foreground hover:text-primary hover:border-primary"
+                    className="w-full h-12 flex items-center justify-center gap-3 text-zinc-700 hover:text-white font-black italic lowercase transition-colors text-sm border border-white/5 rounded-2xl"
                   >
-                    <RotateCcw className="mr-2 h-4 w-4" /> Shorten Another Link
-                  </Button>
+                    <RotateCcw className="h-4 w-4" /> initiate new protocol
+                  </button>
                 </motion.div>
               )}
             </AnimatePresence>

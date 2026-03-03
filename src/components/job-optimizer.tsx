@@ -163,10 +163,10 @@ export function JobOptimizerDialog({ resumeId, resumeData, onOptimizationApplied
         }}>
             <DialogTrigger asChild>
                 <AnimatedGenerateButton
-                    labelIdle="ATS Analyze"
+                    labelIdle="ats analyze"
                     highlightHueDeg={200}
                     size="sm"
-                    className="h-9"
+                    className="font-black italic lowercase"
                 />
             </DialogTrigger>
 
@@ -220,14 +220,15 @@ export function JobOptimizerDialog({ resumeId, resumeData, onOptimizationApplied
                                     />
                                     <p className="text-[10px] text-zinc-600 font-medium">We will automatically extract the description for analysis.</p>
                                 </div>
-                                <button
+                                <AnimatedGenerateButton
                                     onClick={handleScrape}
                                     disabled={isLoading || !url}
-                                    className="w-full h-11 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white font-bold text-xs uppercase tracking-wider hover:bg-white/[0.10] transition-all disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                                >
-                                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
-                                    Fetch Job Details
-                                </button>
+                                    generating={isLoading}
+                                    labelIdle="fetch job details"
+                                    labelActive="extracting..."
+                                    size="lg"
+                                    className="w-full h-11"
+                                />
                             </div>
                         )}
 

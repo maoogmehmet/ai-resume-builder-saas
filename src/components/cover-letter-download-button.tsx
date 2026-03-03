@@ -1,6 +1,5 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { Download, Loader2 } from 'lucide-react'
 import { pdf } from '@react-pdf/renderer'
 import { CoverLetterPDF } from '@/components/dashboard/cover-letter-pdf'
@@ -8,16 +7,17 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
+import { cn } from '@/lib/utils'
 
 interface CoverLetterDownloadButtonProps {
     letterData: any;
     profileData: any;
     disabled?: boolean;
-    variant?: "default" | "outline" | "secondary" | "ghost" | "link" | "destructive";
     className?: string;
 }
 
-export function CoverLetterDownloadButton({ letterData, profileData, disabled, variant = "outline", className = "" }: CoverLetterDownloadButtonProps) {
+export function CoverLetterDownloadButton({ letterData, profileData, disabled, className = "" }: CoverLetterDownloadButtonProps) {
     const [isDownloading, setIsDownloading] = useState(false)
     const supabase = createClient()
     const router = useRouter()
@@ -68,14 +68,15 @@ export function CoverLetterDownloadButton({ letterData, profileData, disabled, v
     }
 
     return (
-        <Button
-            variant={variant}
+        <AnimatedGenerateButton
             onClick={handleDownload}
             disabled={isDownloading || disabled || !letterData}
-            className={`gap-2 ${className}`}
-        >
-            {isDownloading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
-            <span>{isDownloading ? 'Preparing PDF...' : 'Download PDF'}</span>
-        </Button>
+            generating={isDownloading}
+            labelIdle="get letter"
+            labelActive="exporting..."
+            size="sm"
+            className={cn("font-black italic lowercase h-10 px-8", className)}
+            icon={<Download className="h-4 w-4" />}
+        />
     )
 }

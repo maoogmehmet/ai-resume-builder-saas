@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import {
@@ -13,7 +12,8 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { ResumeMagicCard } from './resume-card-magic'
+import { ResumeCardStack } from './resume-card-stack'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 interface Resume {
     id: string;
@@ -87,7 +87,7 @@ export function ResumeCard({ resume, onRefresh }: { resume: Resume, onRefresh: (
 
     return (
         <>
-            <ResumeMagicCard
+            <ResumeCardStack
                 resume={resume}
                 onEdit={() => router.push(`/editor/${resume.id}`)}
                 onRename={() => setIsRenameOpen(true)}
@@ -98,23 +98,37 @@ export function ResumeCard({ resume, onRefresh }: { resume: Resume, onRefresh: (
             <Dialog open={isRenameOpen} onOpenChange={setIsRenameOpen}>
                 <DialogContent className="bg-black border-white/10 text-white sm:max-w-md rounded-2xl">
                     <DialogHeader>
-                        <DialogTitle className="text-xl font-bold">Rename Resume</DialogTitle>
+                        <DialogTitle className="text-xl font-black italic tracking-tighter uppercase">Rename Resume</DialogTitle>
                     </DialogHeader>
                     <div className="grid gap-4 py-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="title" className="text-zinc-500 font-bold uppercase text-[10px] tracking-widest">New Title</Label>
+                            <Label htmlFor="title" className="text-zinc-500 font-black uppercase text-[10px] tracking-[0.3em] italic">New Title</Label>
                             <Input
                                 id="title"
                                 value={newTitle}
                                 onChange={(e) => setNewTitle(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleRename()}
-                                className="bg-[#111111] border-white/5 focus-visible:ring-1 focus-visible:ring-white/20 text-white h-11"
+                                className="bg-[#0a0a0a] border-white/10 focus-visible:ring-1 focus-visible:ring-white/20 text-white h-11 font-black italic uppercase tracking-widest text-xs"
                             />
                         </div>
                     </div>
-                    <DialogFooter>
-                        <Button variant="ghost" onClick={() => setIsRenameOpen(false)} className="hover:bg-white/5 text-zinc-400">Cancel</Button>
-                        <Button onClick={handleRename} disabled={isLoading} className="bg-white text-black hover:bg-zinc-200 font-bold px-6">Save</Button>
+                    <DialogFooter className="flex gap-3">
+                        <AnimatedGenerateButton
+                            size="sm"
+                            onClick={() => setIsRenameOpen(false)}
+                            labelIdle="Cancel"
+                            className="w-auto h-10 px-6"
+                        />
+                        <AnimatedGenerateButton
+                            size="sm"
+                            onClick={handleRename}
+                            disabled={isLoading}
+                            generating={isLoading}
+                            labelIdle="Save"
+                            labelActive="Saving"
+                            highlightHueDeg={140}
+                            className="w-auto h-10 px-6"
+                        />
                     </DialogFooter>
                 </DialogContent>
             </Dialog>

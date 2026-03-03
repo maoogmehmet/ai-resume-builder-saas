@@ -2,8 +2,9 @@
 import React from 'react';
 import type { ComponentProps, ReactNode } from 'react';
 import { motion } from 'framer-motion';
-import { FacebookIcon, FrameIcon, InstagramIcon, LinkedinIcon, YoutubeIcon, Sparkles } from 'lucide-react';
+import { FacebookIcon, FrameIcon, InstagramIcon, LinkedinIcon, YoutubeIcon } from 'lucide-react';
 import Link from 'next/link';
+import { Logo } from '@/components/ui/logo';
 
 interface FooterLink {
     title: string;
@@ -62,16 +63,16 @@ export function FooterPremium() {
             <div className="max-w-7xl mx-auto grid w-full gap-16 xl:grid-cols-3">
                 <AnimatedContainer className="space-y-8">
                     <Link className="flex items-center gap-2.5 group" href="/">
-                        <div className="h-7 w-7 bg-white rounded flex items-center justify-center transform rotate-45 shadow-[0_0_15px_rgba(255,255,255,0.3)] group-hover:scale-110 transition-transform">
-                            <Sparkles className="h-3.5 w-3.5 text-black -rotate-45" />
+                        <div className="h-7 w-7 bg-black rounded flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.05)] group-hover:scale-110 transition-transform border border-white/5">
+                            <Logo className="h-4 w-4 text-white" />
                         </div>
-                        <span className="font-bold text-xl tracking-tighter text-white uppercase italic">AI Resume</span>
+                        <span className="font-bold text-xl tracking-tighter text-white italic">Novatypalcv</span>
                     </Link>
                     <p className="text-zinc-500 font-medium text-sm leading-relaxed max-w-xs">
                         Elevate your career with the world&apos;s most advanced AI-powered resume builder. Built for professionals who want to stand out.
                     </p>
                     <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-700">
-                        © {new Date().getFullYear()} AI RESUME BUILDER. ALL RIGHTS RESERVED.
+                        © {new Date().getFullYear()} Novatypalcv. ALL RIGHTS RESERVED.
                     </p>
                 </AnimatedContainer>
 

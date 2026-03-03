@@ -2,15 +2,14 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Badge } from "@/components/ui/badge"
 import { toast } from 'sonner'
-import { CheckCircle2, Sparkles, Loader2, ArrowLeft, BrainCircuit, Rocket, Star } from 'lucide-react'
+import { CheckCircle2, Sparkles, Loader2, BrainCircuit, Rocket, Star, ArrowLeft } from 'lucide-react'
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { motion, AnimatePresence } from 'framer-motion'
+import Link from 'next/link'
 
 const LOADING_STEPS = [
     { label: 'Analyzing target role requirements...', duration: 4000 },
@@ -78,45 +77,57 @@ export default function MagicBuildPage() {
     }
 
     return (
-        <div className="min-h-screen bg-black text-white font-sans selection:bg-yellow-500/30 relative flex flex-col items-center justify-center">
-            {/* Pure black background, no glows for cleaner dashboard look */}
+        <div className="min-h-screen bg-black text-white font-sans selection:bg-white/10 relative flex flex-col items-center justify-center p-6">
+            {/* Subtle background gradient */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/5 rounded-full blur-[120px] pointer-events-none opacity-20" />
 
-            <main className="relative z-10 w-full max-w-xl mx-auto px-6 py-12">
+            <div className="absolute top-10 left-10 z-20">
+                <Link href="/dashboard/builder">
+                    <AnimatedGenerateButton
+                        size="icon"
+                        className="h-10 w-10 bg-white/5 border-white/10 text-zinc-500 hover:text-white"
+                        icon={<ArrowLeft className="h-4 w-4" />}
+                    />
+                </Link>
+            </div>
+
+            <main className="relative z-10 w-full max-w-xl mx-auto py-12">
                 <AnimatePresence mode="wait">
                     {!isLoading ? (
                         <motion.div
                             key="form"
-                            initial={{ opacity: 0, y: 10 }}
+                            initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, scale: 0.98 }}
-                            className="space-y-8"
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                            className="space-y-10"
                         >
-                            {/* Hero Header - More Compact */}
-                            <div className="text-center space-y-3">
+                            {/* Hero Header */}
+                            <div className="text-center space-y-4">
                                 <motion.div
                                     initial={{ scale: 0.8, opacity: 0 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    transition={{ type: "spring", damping: 15 }}
-                                    className="h-16 w-16 bg-zinc-900 border border-white/10 rounded-2xl flex items-center justify-center mx-auto shadow-2xl mb-4 group"
+                                    transition={{ type: "spring", damping: 20, delay: 0.2 }}
+                                    className="h-20 w-20 bg-white/5 border border-white/10 rounded-[2rem] flex items-center justify-center mx-auto shadow-2xl mb-6 group hover:scale-110 transition-transform duration-700"
                                 >
-                                    <Sparkles className="h-8 w-8 text-yellow-400 group-hover:scale-110 transition-transform" />
+                                    <Sparkles className="h-10 w-10 text-yellow-400 group-hover:rotate-12 transition-transform" />
                                 </motion.div>
-                                <h1 className="text-4xl font-black tracking-tight bg-gradient-to-b from-white to-zinc-500 bg-clip-text text-transparent">
-                                    AI Magic Lab
+                                <h1 className="text-5xl font-black tracking-tighter italic lowercase bg-gradient-to-b from-white to-zinc-600 bg-clip-text text-transparent">
+                                    ai magic lab
                                 </h1>
-                                <p className="text-zinc-500 text-sm font-medium max-w-sm mx-auto">
-                                    Our AI engine crafts a high-impact, ATS-optimized resume draft in seconds.
+                                <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.4em] max-w-sm mx-auto italic opacity-60">
+                                    Architecting high-performance career narratives using advanced neural logic.
                                 </p>
                             </div>
 
-                            {/* Main Form - Reduced Padding and Width */}
-                            <form onSubmit={handleMagicBuild} className="bg-zinc-900/30 border border-white/5 p-8 rounded-[2.5rem] shadow-2xl backdrop-blur-xl animate-in fade-in zoom-in duration-500 space-y-6">
-                                <div className="grid gap-2">
-                                    <Label htmlFor="role" className="text-zinc-500 font-bold uppercase text-[9px] tracking-[0.2em] ml-1">Target Position *</Label>
+                            {/* Main Form */}
+                            <form onSubmit={handleMagicBuild} className="bg-white/[0.02] border border-white/5 p-10 rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.8)] backdrop-blur-3xl space-y-8 group">
+                                <div className="grid gap-3">
+                                    <Label htmlFor="role" className="text-zinc-600 font-black uppercase text-[9px] tracking-[0.4em] ml-2 italic">target position *</Label>
                                     <Input
                                         id="role"
-                                        placeholder="e.g. Senior Product Manager, Lead Engineer"
-                                        className="rounded-xl h-12 border-white/5 bg-black/40 focus:bg-black/60 focus:ring-1 focus:ring-yellow-500/20 transition-all font-medium px-5 text-base placeholder:text-zinc-700"
+                                        placeholder="e.g. Senior Product Manager"
+                                        className="rounded-2xl h-14 border-white/5 bg-black/40 focus:bg-white/[0.04] focus:border-white/20 transition-all font-black px-6 text-sm placeholder:text-zinc-800 italic"
                                         value={role}
                                         onChange={(e) => setRole(e.target.value)}
                                         required
@@ -124,57 +135,57 @@ export default function MagicBuildPage() {
                                     />
                                 </div>
 
-                                <div className="grid gap-2">
-                                    <Label htmlFor="skills" className="text-zinc-500 font-bold uppercase text-[9px] tracking-[0.2em] ml-1">Key Expertise</Label>
+                                <div className="grid gap-3">
+                                    <Label htmlFor="skills" className="text-zinc-600 font-black uppercase text-[9px] tracking-[0.4em] ml-2 italic">key expertise</Label>
                                     <Input
                                         id="skills"
-                                        placeholder="e.g. React, Leadership, AI, Cloud, Strategy"
-                                        className="rounded-xl h-12 border-white/5 bg-black/40 focus:bg-black/60 focus:ring-1 focus:ring-yellow-500/20 transition-all font-medium px-5 text-base placeholder:text-zinc-700"
+                                        placeholder="e.g. React, Strategy, AI"
+                                        className="rounded-2xl h-14 border-white/5 bg-black/40 focus:bg-white/[0.04] focus:border-white/20 transition-all font-black px-6 text-sm placeholder:text-zinc-800 italic"
                                         value={skills}
                                         onChange={(e) => setSkills(e.target.value)}
                                     />
                                 </div>
 
-                                <div className="grid gap-2">
-                                    <Label htmlFor="desc" className="flex justify-between text-zinc-500 font-bold uppercase text-[9px] tracking-[0.2em] ml-1">
-                                        Signature Achievement
-                                        <span className="normal-case font-normal tracking-normal opacity-40">{accomplishments.length}/500</span>
+                                <div className="grid gap-3">
+                                    <Label htmlFor="desc" className="flex justify-between text-zinc-600 font-black uppercase text-[9px] tracking-[0.4em] ml-2 italic">
+                                        signature accomplishment
+                                        <span className="opacity-40">{accomplishments.length}/500</span>
                                     </Label>
                                     <Textarea
                                         id="desc"
                                         maxLength={500}
-                                        placeholder="Describe your most impactful achievement — include numbers, scale, and results..."
-                                        className="rounded-2xl min-h-[120px] border-white/5 bg-black/40 focus:bg-black/60 focus:ring-1 focus:ring-yellow-500/20 transition-all p-5 font-medium resize-none text-base placeholder:text-zinc-700 leading-relaxed"
+                                        placeholder="Describe your highest impact achievement..."
+                                        className="rounded-[1.8rem] min-h-[140px] border-white/5 bg-black/40 focus:bg-white/[0.04] focus:border-white/20 transition-all p-6 font-black text-sm resize-none placeholder:text-zinc-800 leading-relaxed italic"
                                         value={accomplishments}
                                         onChange={(e) => setAccomplishments(e.target.value)}
                                     />
                                 </div>
 
-                                <div className="pt-2">
+                                <div className="pt-4">
                                     <AnimatedGenerateButton
                                         type="submit"
                                         disabled={!role.trim()}
                                         generating={isLoading}
-                                        labelIdle="Ignite AI Build"
-                                        labelActive="Igniting..."
+                                        labelIdle="Initialize Neural Build"
+                                        labelActive="Synthesizing..."
                                         highlightHueDeg={45}
                                         size="lg"
-                                        className="w-full h-14 shadow-lg hover:scale-[1.01] active:scale-[0.98] transition-all"
+                                        className="w-full h-16 font-black italic lowercase text-lg shadow-2xl"
                                     />
                                 </div>
 
-                                <div className="flex items-center justify-center gap-5 pt-2 text-zinc-700">
-                                    <div className="flex items-center gap-1.5">
-                                        <BrainCircuit className="h-3.5 w-3.5" />
-                                        <span className="text-[9px] font-bold uppercase tracking-widest">Neural Logic</span>
+                                <div className="flex items-center justify-center gap-6 pt-4 text-zinc-800 border-t border-white/[0.03]">
+                                    <div className="flex items-center gap-2 group/icon">
+                                        <BrainCircuit className="h-3.5 w-3.5 group-hover/icon:text-zinc-400 transition-colors" />
+                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] italic">Neural Logic</span>
                                     </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <Rocket className="h-3.5 w-3.5" />
-                                        <span className="text-[9px] font-bold uppercase tracking-widest">ATS Optimized</span>
+                                    <div className="flex items-center gap-2 group/icon">
+                                        <Rocket className="h-3.5 w-3.5 group-hover/icon:text-zinc-400 transition-colors" />
+                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] italic">ATS Optimized</span>
                                     </div>
-                                    <div className="flex items-center gap-1.5">
-                                        <Star className="h-3.5 w-3.5 text-yellow-500/50" />
-                                        <span className="text-[9px] font-bold uppercase tracking-widest">Executive Grade</span>
+                                    <div className="flex items-center gap-2 group/icon">
+                                        <Star className="h-3.5 w-3.5 group-hover/icon:text-yellow-500 transition-colors" />
+                                        <span className="text-[8px] font-black uppercase tracking-[0.2em] italic">Executive Tier</span>
                                     </div>
                                 </div>
                             </form>
@@ -184,7 +195,7 @@ export default function MagicBuildPage() {
                             key="loading"
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="flex flex-col items-center justify-center py-20 text-center space-y-12"
+                            className="flex flex-col items-center justify-center py-20 text-center space-y-16"
                         >
                             <div className="relative">
                                 <motion.div
@@ -193,48 +204,48 @@ export default function MagicBuildPage() {
                                         scale: [1, 1.1, 1]
                                     }}
                                     transition={{
-                                        rotate: { duration: 10, repeat: Infinity, ease: "linear" },
-                                        scale: { duration: 4, repeat: Infinity, ease: "easeInOut" }
+                                        rotate: { duration: 15, repeat: Infinity, ease: "linear" },
+                                        scale: { duration: 5, repeat: Infinity, ease: "easeInOut" }
                                     }}
-                                    className="h-32 w-32 bg-yellow-400/10 rounded-[2.5rem] border border-yellow-400/20 flex items-center justify-center shadow-[0_0_50px_rgba(251,191,36,0.1)]"
+                                    className="h-40 w-40 bg-white/5 rounded-[3rem] border border-white/10 flex items-center justify-center shadow-[0_0_100px_rgba(255,255,255,0.05)]"
                                 >
-                                    <Sparkles className="h-14 w-14 text-yellow-400" />
+                                    <Sparkles className="h-16 w-16 text-yellow-500/80 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)]" />
                                 </motion.div>
                                 <motion.div
-                                    className="absolute -top-2 -right-2 h-8 w-8 bg-blue-500 rounded-full border-4 border-black animate-bounce"
+                                    className="absolute -top-4 -right-4 h-10 w-10 bg-white rounded-full border-8 border-black animate-pulse"
                                 />
                             </div>
 
-                            <div className="space-y-3">
-                                <h3 className="text-3xl font-black text-white">Synthesizing Your Future</h3>
-                                <p className="text-zinc-500 text-lg font-medium">Sit back while we architect your professional narrative</p>
+                            <div className="space-y-4">
+                                <h3 className="text-4xl font-black text-white italic tracking-tighter lowercase">synthesizing narrative</h3>
+                                <p className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.4em] italic opacity-60">Architecting professional nodes and impact metrics.</p>
                             </div>
 
-                            <div className="w-full max-w-md space-y-4">
+                            <div className="w-full max-w-sm space-y-3">
                                 {LOADING_STEPS.map((step, i) => (
                                     <motion.div
                                         key={i}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: i * 0.1 }}
-                                        className={`flex items-center gap-4 px-6 py-4 rounded-2xl transition-all border ${i === loadingStep ? 'bg-white text-black border-transparent' : i < loadingStep ? 'opacity-40 border-transparent text-zinc-400' : 'opacity-10 border-white/5 text-zinc-600'}`}
+                                        className={`flex items-center gap-5 px-6 py-4 rounded-2xl transition-all duration-700 border ${i === loadingStep ? 'bg-white text-black border-transparent shadow-2xl scale-105' : i < loadingStep ? 'opacity-30 border-transparent text-zinc-500' : 'opacity-10 border-white/5 text-zinc-700'}`}
                                     >
                                         {i < loadingStep ? (
-                                            <CheckCircle2 className="h-5 w-5 text-green-500 shrink-0" />
+                                            <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
                                         ) : i === loadingStep ? (
-                                            <Loader2 className="h-5 w-5 animate-spin shrink-0" />
+                                            <Loader2 className="h-4 w-4 animate-spin shrink-0" />
                                         ) : (
-                                            <div className="h-5 w-5 rounded-full border-2 border-zinc-800 shrink-0" />
+                                            <div className="h-4 w-4 rounded-full border border-zinc-800 shrink-0" />
                                         )}
-                                        <span className="text-sm font-bold tracking-tight text-left flex-1">
+                                        <span className="text-[10px] font-black uppercase tracking-widest text-left flex-1 italic">
                                             {step.label}
                                         </span>
                                     </motion.div>
                                 ))}
                             </div>
 
-                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-700 animate-pulse">
-                                Secure Connection Established — Processing via Gemini & Anthropic
+                            <p className="text-[9px] font-black uppercase tracking-[0.5em] text-zinc-800 animate-pulse italic">
+                                neural synthesis in progress — secured tunnel established
                             </p>
                         </motion.div>
                     )}

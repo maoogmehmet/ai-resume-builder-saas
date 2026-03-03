@@ -1,10 +1,10 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Presentation } from 'lucide-react'
+import { Presentation, Sparkles } from 'lucide-react'
 import { PresentationViewer } from '@/components/presentation-viewer'
 import { AnimatePresence } from 'framer-motion'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
 interface PresentationOverlayProps {
     slides: any[] | null;
@@ -17,14 +17,13 @@ export function PresentationOverlay({ slides }: PresentationOverlayProps) {
 
     return (
         <>
-            <Button
-                variant="outline"
-                className="bg-blue-50 text-blue-600 border-blue-200 hover:bg-blue-100 hover:text-blue-700 font-bold hidden sm:flex h-10 px-4 rounded-xl shadow-sm transition-all"
+            <AnimatedGenerateButton
                 onClick={() => setIsOpen(true)}
-            >
-                <Presentation className="h-4 w-4 mr-2" />
-                Pitch Deck
-            </Button>
+                labelIdle="Pitch Deck"
+                className="hidden sm:flex h-10 px-6 font-black italic lowercase bg-white/5 border-white/10 text-white"
+                icon={<Presentation className="h-4 w-4" />}
+                highlightHueDeg={200}
+            />
 
             <AnimatePresence>
                 {isOpen && (

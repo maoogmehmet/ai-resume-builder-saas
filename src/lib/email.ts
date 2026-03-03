@@ -7,15 +7,15 @@ export async function sendWelcomeEmail(toEmail: string) {
         const { data, error } = await resend.emails.send({
             from: 'onboarding@resend.dev',
             to: toEmail,
-            subject: 'Welcome to AI Resume Builder! 🚀',
+            subject: 'Welcome to Novatypalcv! 🚀',
             html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2>Welcome to AI Resume Builder!</h2>
+          <h2>Welcome to Novatypalcv!</h2>
           <p>We are thrilled to have you here.</p>
           <p>Get started by importing your LinkedIn profile and letting our AI optimize your resume for your next dream job!</p>
           <p>Your 7-day free trial has started. Build unlimited ATS-optimized resumes today.</p>
           <br/>
-          <p>Best regards,<br/>The AI Resume Builder Team</p>
+          <p>Best regards,<br/>The Novatypalcv Team</p>
         </div>
       `,
         });

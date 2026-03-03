@@ -2,20 +2,17 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from './button';
 import Link from 'next/link';
-
 import {
 	AppleIcon,
-	AtSignIcon,
 	ChevronLeftIcon,
-	GithubIcon,
-	Grid2x2PlusIcon,
 } from 'lucide-react';
+import { Logo } from './logo';
 import { Input } from './input';
 import { cn } from '@/lib/utils';
 import { Label } from './label';
 import { ShaderAnimation } from './shader-animation';
+import AnimatedGenerateButton from './animated-generate-button';
 
 interface AuthPageProps {
 	type: 'signin' | 'signup';
@@ -28,63 +25,64 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 	const isSignIn = type === 'signin';
 
 	return (
-		<main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2">
-			<div className="bg-muted/60 relative hidden h-full flex-col border-r p-10 lg:flex">
-				<div className="from-background absolute inset-0 z-10 bg-gradient-to-t to-transparent" />
-				<div className="z-10 flex items-center gap-2">
-					<div className="h-8 w-8 bg-zinc-900 rounded-lg flex items-center justify-center">
-						<Grid2x2PlusIcon className="h-4 w-4 text-white" />
+		<main className="relative md:h-screen md:overflow-hidden lg:grid lg:grid-cols-2 bg-black">
+			<div className="bg-black relative hidden h-full flex-col border-r border-white/5 p-12 lg:flex overflow-hidden">
+				<div className="absolute inset-0 z-[1] bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
+				<div className="z-20 flex items-center gap-4">
+					<div className="h-12 w-12 bg-white/[0.02] border border-white/10 rounded-2xl flex items-center justify-center backdrop-blur-3xl">
+						<Logo className="h-6 w-6 text-white" />
 					</div>
-					<p className="text-xl font-bold tracking-tight">AI RESUME.</p>
+					<p className="text-2xl font-black tracking-tighter text-white">Novatypalcv</p>
 				</div>
-				<div className="z-10 mt-auto">
-					<blockquote className="space-y-4">
-						<p className="text-2xl font-medium leading-relaxed">
-							&ldquo;The ATS optimization completely transformed my job search. It&apos;s not just a builder, it&apos;s a career growth engine.&rdquo;
+				<div className="z-20 mt-auto pb-12">
+					<motion.blockquote
+						initial={{ opacity: 0, y: 20 }}
+						animate={{ opacity: 1, y: 0 }}
+						transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+						className="space-y-6"
+					>
+						<p className="text-4xl font-black tracking-tighter text-white leading-[0.9]">
+							&ldquo;The modern system <br /> that <span className="text-zinc-700 font-normal">redefined</span> my professional career.&rdquo;
 						</p>
-						<footer className="font-mono text-sm font-semibold">
-							~ Sofia Davis, Software Engineer
+						<footer className="font-bold text-zinc-600 text-[10px] uppercase tracking-[0.4em] opacity-40">
+							— Sofia Davis, Software Engineer
 						</footer>
-					</blockquote>
+					</motion.blockquote>
 				</div>
-				<div className="absolute inset-0">
+				<div className="absolute inset-0 z-0 grayscale opacity-40">
 					<ShaderAnimation />
 				</div>
 			</div>
-			<div className="relative flex min-h-screen flex-col justify-center p-4">
+			<div className="relative flex min-h-screen flex-col justify-center p-8 md:p-12 lg:p-16">
 				<div
 					aria-hidden
 					className="absolute inset-0 isolate contain-strict -z-10 opacity-60"
 				>
-					<div className="bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,--theme(--color-foreground/.06)_0,hsla(0,0%,55%,.02)_50%,--theme(--color-foreground/.01)_80%)] absolute top-0 right-0 h-320 w-140 -translate-y-87.5 rounded-full" />
-					<div className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)] absolute top-0 right-0 h-320 w-60 [translate:5%_-50%] rounded-full" />
-					<div className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)] absolute top-0 right-0 h-320 w-60 -translate-y-87.5 rounded-full" />
+					<div className="bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0,transparent_70%)] absolute top-0 right-0 h-full w-full" />
 				</div>
-				<Button variant="ghost" className="absolute top-7 left-5" asChild>
-					<Link href="/">
-						<ChevronLeftIcon className='size-4 me-2' />
-						Home
-					</Link>
-				</Button>
-				<div className="mx-auto space-y-4 sm:w-sm">
-					<div className="flex items-center gap-2 lg:hidden mb-8">
-						<div className="h-8 w-8 bg-zinc-900 rounded-lg flex items-center justify-center">
-							<Grid2x2PlusIcon className="h-4 w-4 text-white" />
-						</div>
-						<p className="text-xl font-bold tracking-tight">AI RESUME.</p>
-					</div>
-					<div className="flex flex-col space-y-1">
-						<h1 className="font-heading text-3xl font-bold tracking-tight">
+
+				<div className="absolute top-10 left-8 md:left-12">
+					<AnimatedGenerateButton
+						href="/"
+						labelIdle="Return Home"
+						size="sm"
+						className="bg-transparent border-none text-zinc-600 hover:text-white px-0 h-auto font-black italic lowercase tracking-tight shadow-none"
+						icon={<ChevronLeftIcon className="h-4 w-4" />}
+					/>
+				</div>
+
+				<div className="mx-auto space-y-12 sm:w-[450px] relative z-10 px-6">
+					<div className="flex flex-col space-y-2">
+						<h1 className="text-5xl font-black text-white leading-tight">
 							{isSignIn ? 'Welcome back' : 'Create an account'}
 						</h1>
-						<p className="text-muted-foreground text-sm">
+						<p className="text-zinc-500 font-medium text-lg">
 							{isSignIn ? 'Enter your credentials to access your dashboard.' : 'Enter your details below to create your account.'}
 						</p>
 					</div>
 
-					<div className="space-y-3">
+					<div className="space-y-4">
 						<button
-							type="button"
 							onClick={async () => {
 								const { createClient } = await import('@/lib/supabase/client');
 								const supabase = createClient();
@@ -95,13 +93,12 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 									},
 								});
 							}}
-							className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm transition-colors hover:bg-zinc-50 active:scale-[0.98]"
+							className="w-full h-14 rounded-2xl bg-white border-2 border-transparent text-black font-bold flex items-center justify-center gap-3 transition-all hover:bg-zinc-100 shadow-xl"
 						>
-							<GoogleIcon className="size-5" />
+							<GoogleIcon className="size-6" />
 							Continue with Google
 						</button>
 						<button
-							type="button"
 							onClick={async () => {
 								const { createClient } = await import('@/lib/supabase/client');
 								const supabase = createClient();
@@ -112,44 +109,44 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 									},
 								});
 							}}
-							className="flex w-full items-center justify-center gap-3 rounded-xl border border-zinc-200 bg-white px-4 py-3 text-sm font-semibold text-zinc-900 shadow-sm transition-colors hover:bg-zinc-50 active:scale-[0.98]"
+							className="w-full h-14 rounded-2xl bg-white border-2 border-transparent text-black font-bold flex items-center justify-center gap-3 transition-all hover:bg-zinc-100 shadow-xl"
 						>
-							<AppleIcon className="size-5" />
+							<AppleIcon className="size-6" />
 							Continue with Apple
 						</button>
 					</div>
 
 					<AuthSeparator />
 
-					<form action={action} className="space-y-4 pt-4">
+					<form action={action} className="space-y-6">
 						{!isSignIn && (
-							<div className="space-y-2">
-								<Label htmlFor="fullName">Full Name</Label>
+							<div className="space-y-3">
+								<Label htmlFor="fullName" className="text-white font-bold ml-1">Full Name</Label>
 								<Input
 									id="fullName"
 									name="fullName"
 									placeholder="John Doe"
 									required
-									className="bg-zinc-50 border-zinc-200"
+									className="h-14 rounded-2xl bg-white border-none text-black font-medium placeholder:text-zinc-400 focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
 								/>
 							</div>
 						)}
-						<div className="space-y-2">
-							<Label htmlFor="email">Email</Label>
+						<div className="space-y-3">
+							<Label htmlFor="email" className="text-white font-bold ml-1">Email</Label>
 							<Input
 								id="email"
 								name="email"
 								type="email"
 								placeholder="name@example.com"
 								required
-								className="bg-zinc-50 border-zinc-200"
+								className="h-14 rounded-2xl bg-white border-none text-black font-medium placeholder:text-zinc-400 focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
 							/>
 						</div>
-						<div className="space-y-2">
-							<div className="flex items-center justify-between">
-								<Label htmlFor="password">Password</Label>
+						<div className="space-y-3">
+							<div className="flex items-center justify-between ml-1">
+								<Label htmlFor="password" className="text-white font-bold">Password</Label>
 								{isSignIn && (
-									<Link href="#" className="text-sm font-medium text-blue-600 hover:underline">
+									<Link href="#" className="text-sm font-bold text-blue-600 hover:text-blue-500 transition-colors">
 										Forgot password?
 									</Link>
 								)}
@@ -159,101 +156,62 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 								name="password"
 								type="password"
 								required
-								className="bg-zinc-50 border-zinc-200"
+								className="h-14 rounded-2xl bg-white border-none text-black font-medium focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
 							/>
 						</div>
 
 						{!isSignIn && (
-							<div className="space-y-2">
-								<Label htmlFor="confirmPassword">Confirm Password</Label>
+							<div className="space-y-3">
+								<Label htmlFor="confirmPassword" className="text-white font-bold ml-1">Confirm Password</Label>
 								<Input
 									id="confirmPassword"
 									name="confirmPassword"
 									type="password"
 									required
-									className="bg-zinc-50 border-zinc-200"
+									className="h-14 rounded-2xl bg-white border-none text-black font-medium focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
 								/>
 							</div>
 						)}
 
 						{error && (
-							<div className="p-3 bg-red-50 border border-red-100 text-red-600 rounded-xl text-sm font-medium">
+							<div className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl text-sm font-bold">
 								{error}
 							</div>
 						)}
 						{message && (
-							<div className="p-3 bg-green-50 border border-green-100 text-green-600 rounded-xl text-sm font-medium">
+							<div className="p-4 bg-blue-500/10 border border-blue-500/20 text-blue-500 rounded-2xl text-sm font-bold">
 								{message}
 							</div>
 						)}
 
-						<Button type="submit" className="w-full h-11 bg-zinc-900 text-white font-bold hover:bg-zinc-800 rounded-xl mt-4">
+						<button
+							type="submit"
+							className="w-full h-14 rounded-2xl bg-[#111111] text-white font-bold transition-all hover:bg-zinc-800 shadow-2xl mt-4"
+						>
 							{isSignIn ? 'Sign In' : 'Create Account'}
-						</Button>
+						</button>
 					</form>
 
-					<div className="text-center text-sm text-zinc-500 mt-6 pt-4 border-t border-zinc-100">
-						{isSignIn ? "Don't have an account? " : "Already have an account? "}
-						<Link href={isSignIn ? "/auth/signup" : "/auth/signin"} className="font-semibold text-blue-600 hover:underline">
-							{isSignIn ? "Sign up today" : "Sign in"}
-						</Link>
+					<div className="text-center pt-8 border-t border-white/10">
+						<p className="text-zinc-500 font-medium">
+							{isSignIn ? "Don't have an account? " : "Already have an account? "}
+							<Link href={isSignIn ? "/auth/signup" : "/auth/signin"} className="text-blue-600 font-bold hover:text-blue-500">
+								{isSignIn ? "Sign up today" : "Sign in"}
+							</Link>
+						</p>
 					</div>
 
 					{!isSignIn && (
-						<p className="text-muted-foreground text-center text-xs px-8 mt-4">
+						<p className="text-zinc-600 font-medium text-center text-xs px-8">
 							By clicking create account, you agree to our{' '}
-							<Link href="#" className="hover:text-zinc-900 underline underline-offset-4">Terms of Service</Link>{' '}
+							<Link href="#" className="underline">Terms of Service</Link>{' '}
 							and{' '}
-							<Link href="#" className="hover:text-zinc-900 underline underline-offset-4">Privacy Policy</Link>.
+							<Link href="#" className="underline">Privacy Policy</Link>.
 						</p>
 					)}
 				</div>
 			</div>
 		</main>
-	);
-}
-
-function FloatingPaths({ position }: { position: number }) {
-	const paths = Array.from({ length: 36 }, (_, i) => ({
-		id: i,
-		d: `M-${380 - i * 5 * position} -${189 + i * 6}C-${380 - i * 5 * position
-			} -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${152 - i * 5 * position
-			} ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${684 - i * 5 * position
-			} ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-		color: `rgba(15,23,42,${0.1 + i * 0.03})`,
-		width: 0.5 + i * 0.03,
-	}));
-
-	return (
-		<div className="pointer-events-none absolute inset-0">
-			<svg
-				className="h-full w-full text-slate-950 dark:text-white"
-				viewBox="0 0 696 316"
-				fill="none"
-			>
-				<title>Background Paths</title>
-				{paths.map((path) => (
-					<motion.path
-						key={path.id}
-						d={path.d}
-						stroke="currentColor"
-						strokeWidth={path.width}
-						strokeOpacity={0.1 + path.id * 0.03}
-						initial={{ pathLength: 0.3, opacity: 0.6 }}
-						animate={{
-							pathLength: 1,
-							opacity: [0.3, 0.6, 0.3],
-							pathOffset: [0, 1, 0],
-						}}
-						transition={{
-							duration: 15 + (path.id % 10) * 2,
-							repeat: Number.POSITIVE_INFINITY,
-							ease: 'linear',
-						}}
-					/>
-				))}
-			</svg>
-		</div>
 	);
 }
 
@@ -272,10 +230,10 @@ const GoogleIcon = (props: React.ComponentProps<'svg'>) => (
 
 const AuthSeparator = () => {
 	return (
-		<div className="flex w-full items-center justify-center">
-			<div className="bg-border h-px w-full" />
-			<span className="text-muted-foreground px-2 text-xs">OR</span>
-			<div className="bg-border h-px w-full" />
+		<div className="flex w-full items-center justify-center py-6">
+			<div className="bg-white/5 h-px w-full" />
+			<span className="text-zinc-800 font-black px-4 text-[10px] italic tracking-[0.4em] uppercase opacity-40">OR</span>
+			<div className="bg-white/5 h-px w-full" />
 		</div>
 	);
 };

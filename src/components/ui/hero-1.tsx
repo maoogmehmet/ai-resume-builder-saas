@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { RocketIcon, ArrowRightIcon, PhoneCallIcon } from "lucide-react";
+import { RocketIcon, ArrowRightIcon, PhoneCallIcon, Sparkles } from "lucide-react";
 import { LogoCloud } from "@/components/ui/logo-cloud";
 
 export function HeroSection() {
@@ -39,43 +39,39 @@ export function HeroSection() {
 
 				<a
 					className={cn(
-						"group mx-auto flex w-fit items-center gap-3 rounded-full border bg-card px-3 py-1 shadow",
-						"fade-in slide-in-from-bottom-10 animate-in fill-mode-backwards transition-all delay-500 duration-500 ease-out"
+						"group mx-auto flex w-fit items-center gap-3 rounded-full border border-white/10 bg-white/5 backdrop-blur-3xl px-4 py-2 shadow-2xl transition-all duration-500 hover:scale-105 hover:bg-white/10",
+						"fade-in slide-in-from-bottom-10 animate-in fill-mode-backwards transition-all delay-500 duration-500 ease-out font-heading uppercase tracking-widest text-[10px] italic font-black"
 					)}
 					href="#"
 				>
-					<RocketIcon className="size-3 text-muted-foreground" />
-					<span className="text-xs font-medium">✨ Powered by Claude 3 Haiku</span>
-					<span className="block h-5 border-l" />
-
-					<ArrowRightIcon className="size-3 duration-150 ease-out group-hover:translate-x-1" />
+					<Sparkles className="size-3 text-white opacity-40" />
+					<span>Neural Pipeline • Powered by Claude 3.5 Sonnet</span>
+					<ArrowRightIcon className="size-3 opacity-40 group-hover:translate-x-1 transition-transform" />
 				</a>
 
 				<h1
 					className={cn(
-						"fade-in slide-in-from-bottom-10 animate-in text-balance fill-mode-backwards text-center text-5xl font-black tracking-tight delay-100 duration-500 ease-out md:text-7xl lg:text-8xl",
-						"text-shadow-[0_0px_50px_theme(--color-foreground/.2)]"
+						"fade-in slide-in-from-bottom-10 animate-in text-balance fill-mode-backwards text-center text-6xl font-black tracking-[-0.04em] delay-100 duration-700 ease-out md:text-8xl lg:text-9xl font-heading leading-[0.9]",
+						"text-shadow-[0_0px_60px_theme(--color-foreground/.1)]"
 					)}
 				>
-					Build a Professional <br /> <span className="text-zinc-400">CV in Minutes.</span>
+					The Career <br /> Operating System.
 				</h1>
 
-				<p className="fade-in slide-in-from-bottom-10 mx-auto max-w-xl animate-in fill-mode-backwards text-center text-base text-foreground/80 font-medium delay-200 duration-500 ease-out sm:text-lg">
-					Create ATS-friendly resumes with smart suggestions and instant downloads.
+				<p className="fade-in slide-in-from-bottom-10 mx-auto max-w-2xl animate-in fill-mode-backwards text-center text-lg text-foreground/60 font-medium delay-200 duration-700 ease-out sm:text-xl px-6">
+					The ultimate ATS-optimized builder for elite professionals. <br /> Stop applying, start being recruited with AI narratives.
 				</p>
 
-				<div className="fade-in slide-in-from-bottom-10 flex animate-in flex-row flex-wrap items-center justify-center gap-4 fill-mode-backwards pt-4 delay-300 duration-500 ease-out">
-					<Button asChild className="rounded-full shadow-lg h-12 px-8 font-bold" size="lg">
+				<div className="fade-in slide-in-from-bottom-10 flex animate-in flex-row flex-wrap items-center justify-center gap-10 fill-mode-backwards pt-10 delay-300 duration-700 ease-out">
+					<Button asChild className="rounded-2xl shadow-2xl h-16 px-12 font-bold text-lg bg-white text-black hover:bg-zinc-100 border-none transition-all hover:scale-105 !bg-white !text-black" size="lg">
 						<a href="/auth/signup">
-							Create My CV
-							<ArrowRightIcon className="size-4 ms-2" data-icon="inline-end" />
+							GET STARTED
+							<ArrowRightIcon className="size-5 ms-2" />
 						</a>
 					</Button>
-					<Button asChild className="rounded-full h-12 px-8 font-bold" size="lg" variant="secondary">
-						<a href="#templates">
-							See Templates
-						</a>
-					</Button>
+					<a href="#features" className="text-zinc-500 hover:text-white transition-colors font-bold text-lg">
+						EXPLORE FEATURES
+					</a>
 				</div>
 
 				<div className="fade-in slide-in-from-bottom-10 flex animate-in text-[10px] font-bold text-zinc-400 uppercase tracking-widest gap-8 mt-4 delay-500 duration-500 ease-out fill-mode-backwards">

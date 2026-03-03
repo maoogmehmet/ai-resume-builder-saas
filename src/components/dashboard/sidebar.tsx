@@ -16,12 +16,13 @@ import {
     Files
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { signout } from '@/app/auth/actions'
+import { Logo } from '@/components/ui/logo'
 
 const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
-    { name: 'CV Builder', href: '/dashboard/builder', icon: FileText },
+    { name: 'Novatypalcv', href: '/dashboard/builder', icon: FileText },
     { name: 'My CVs', href: '/dashboard/resumes', icon: Files },
     { name: 'My Letters', href: '/dashboard/letters', icon: FileCheck2 },
     { name: 'Optimize', href: '/dashboard/optimize', icon: Target },
@@ -39,14 +40,14 @@ export function Sidebar() {
             {/* Top Workspace Selector Simulation */}
             <div className="p-4 mb-2 flex items-center justify-between border-b border-white/5">
                 <Link href="/dashboard" className="flex items-center gap-3 hover:bg-white/5 p-2 rounded-md w-full transition-colors">
-                    <div className="w-6 h-6 rounded-sm bg-purple-600/20 border border-purple-500/30 flex items-center justify-center text-xs font-bold text-purple-400">
-                        C
+                    <div className="w-6 h-6 rounded-sm bg-black border border-white/10 flex items-center justify-center">
+                        <Logo className="h-4 w-4 text-white" />
                     </div>
-                    <span className="font-medium tracking-tight text-sm text-zinc-200">CV Workspace</span>
+                    <span className="font-black tracking-tighter text-sm text-zinc-200 lowercase italic">novatypalcv</span>
                 </Link>
             </div>
 
-            <div className="flex-1 px-3 space-y-0.5 overflow-y-auto">
+            <div className="flex-1 px-3 space-y-0.5 overflow-y-auto pt-4">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href || (pathname.startsWith(item.href) && item.href !== '/dashboard')
                     return (
@@ -54,26 +55,28 @@ export function Sidebar() {
                             key={item.href}
                             href={item.href}
                             className={cn(
-                                "flex items-center gap-3 px-3 py-2 rounded-md transition-colors duration-200",
+                                "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 italic group",
                                 isActive
-                                    ? "font-medium text-white bg-white/10"
-                                    : "text-zinc-400 font-medium hover:bg-white/5 hover:text-white"
+                                    ? "font-black text-white bg-white/10 shadow-2xl"
+                                    : "text-zinc-500 font-black hover:bg-white/5 hover:text-white"
                             )}
                         >
-                            <item.icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-white" : "text-zinc-400")} />
-                            <span className="text-[13px]">{item.name}</span>
+                            <item.icon className={cn("h-4 w-4 shrink-0 transition-colors", isActive ? "text-white" : "text-zinc-600 group-hover:text-white")} />
+                            <span className="text-[11px] uppercase tracking-widest">{item.name}</span>
                         </Link>
                     )
                 })}
             </div>
 
             {/* Bottom Profile / Settings block */}
-            <div className="p-4 mt-auto border-t border-white/5">
+            <div className="p-6 mt-auto border-t border-white/5">
                 <form action={signout}>
-                    <Button variant="ghost" className="w-full justify-start gap-3 h-10 px-3 text-zinc-400 hover:bg-white/5 hover:text-white rounded-md transition-all" type="submit">
-                        <LogOut className="h-4 w-4" />
-                        <span className="text-[13px] font-medium">Log out</span>
-                    </Button>
+                    <AnimatedGenerateButton
+                        type="submit"
+                        labelIdle="log out"
+                        className="w-full h-11 text-zinc-500 hover:text-red-500 font-black italic shadow-none"
+                        icon={<LogOut className="h-4 w-4" />}
+                    />
                 </form>
             </div>
         </aside>
