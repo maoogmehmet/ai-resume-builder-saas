@@ -98,23 +98,6 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 							<GoogleIcon className="size-5" />
 							Continue with Google
 						</button>
-						{/* Apple Button - Official Apple Design */}
-						<button
-							onClick={async () => {
-								const { createClient } = await import('@/lib/supabase/client');
-								const supabase = createClient();
-								await supabase.auth.signInWithOAuth({
-									provider: 'apple',
-									options: {
-										redirectTo: `${window.location.origin}/auth/callback`,
-									},
-								});
-							}}
-							className="w-full h-12 rounded-full bg-black border border-black text-white text-sm font-medium flex items-center justify-center gap-3 transition-all hover:bg-zinc-900 shadow-sm"
-						>
-							<AppleIconBrand className="size-5" />
-							Continue with Apple
-						</button>
 					</div>
 
 					<AuthSeparator />
@@ -226,12 +209,6 @@ const GoogleIcon = (props: React.ComponentProps<'svg'>) => (
 		<path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
 		<path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
 		<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
-	</svg>
-);
-
-const AppleIconBrand = (props: React.ComponentProps<'svg'>) => (
-	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 814 1000" fill="currentColor" {...props}>
-		<path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 269-317.3 70.1 0 128.4 46.4 172.5 46.4 43.1 0 111.2-49 192.5-49 34.4 0 147.4 3.2 221.8 99.6zm-261.3-192c31.3-37.9 53.1-90.8 53.1-143.7 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 137.2 0 7.7 1.3 15.5 1.9 18 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-68.5z" />
 	</svg>
 );
 
