@@ -30,17 +30,17 @@ const footerLinks: FooterSection[] = [
     {
         label: 'Legal',
         links: [
-            { title: 'Privacy Policy', href: '#' },
-            { title: 'Terms of Service', href: '#' },
-            { title: 'Cookie Policy', href: '#' },
+            { title: 'Privacy Policy', href: '/privacy' },
+            { title: 'Terms of Service', href: '/terms' },
+            { title: 'Cookie Policy', href: '/privacy#cookies' },
         ],
     },
     {
         label: 'Support',
         links: [
-            { title: 'Help Center', href: '#' },
-            { title: 'Contact Us', href: '#' },
-            { title: 'Status', href: '#' },
+            { title: 'Help Center', href: 'mailto:support@novatypalcv.com' },
+            { title: 'Contact Us', href: 'mailto:hello@novatypalcv.com' },
+            { title: 'Bug Report', href: 'mailto:bugs@novatypalcv.com' },
         ],
     },
     {
