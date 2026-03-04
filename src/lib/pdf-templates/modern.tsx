@@ -133,8 +133,8 @@ export const ModernTemplate = ({ data }: { data: any }) => {
             <Page size="A4" style={styles.page}>
                 {/* LEFT SIDEBAR */}
                 <View style={styles.leftColumn}>
-                    {personal_info.profile_image && (
-                        <Image src={personal_info.profile_image} style={styles.profileImage} />
+                    {personal_info.profile_image && personal_info.profile_image.trim() !== '' && (
+                        <Image src={{ uri: personal_info.profile_image }} style={styles.profileImage} />
                     )}
                     <Text style={styles.name}>{personal_info.full_name}</Text>
                     <Text style={styles.headerSubtitle}>{experience?.[0]?.position || experience?.[0]?.title || 'Professional'}</Text>

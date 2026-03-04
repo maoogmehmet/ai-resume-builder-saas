@@ -277,76 +277,30 @@ export default function LettersPage() {
                         </div>
                     </section>
 
-                    {/* Left Column - Generation Form */}
-                    <div className="bg-zinc-900/50 backdrop-blur-sm border border-white/5 rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-                        <div className="absolute -top-12 -right-12 w-32 h-32 bg-purple-500/5 rounded-full blur-3xl pointer-events-none" />
+                    {/* Left Column - Neural Letter Hub Link */}
+                    <div className="bg-[#050505] border border-purple-500/20 rounded-3xl p-10 shadow-2xl relative overflow-hidden group hover:border-purple-500/40 transition-colors">
+                        <div className="absolute -top-12 -right-12 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
 
-                        <h2 className="text-xl font-black tracking-tighter text-white mb-8 flex items-center gap-3 uppercase">
+                        <h2 className="text-2xl font-black tracking-tighter text-white mb-2 flex items-center gap-3 uppercase italic">
                             <Sparkles className="h-6 w-6 text-purple-400" />
-                            Target a New Role
+                            Neural Letter Hub
                         </h2>
 
-                        <div className="mb-8 space-y-3">
-                            <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Select Resume Context</Label>
-                            {resumes.length === 0 ? (
-                                <div className="text-sm text-zinc-400 bg-white/5 p-3 rounded-lg border border-white/10">
-                                    You don&apos;t have any resumes yet. Go to <Link href="/dashboard/builder" className="text-purple-400 hover:text-purple-300 underline">Builder</Link> first.
+                        <p className="text-zinc-400 text-sm mb-10 leading-relaxed font-medium">
+                            Generate hyper-targeted cover letters using the new advanced modeling engine. Features A/B/C variant generation, tone control, and active red-flag detection.
+                        </p>
+
+                        <Link href="/dashboard/letters/new" className="block">
+                            <button className="group w-full h-14 bg-white/[0.04] hover:bg-purple-500/10 border border-white/10 hover:border-purple-500/30 rounded-2xl transition-all duration-300 flex items-center justify-between px-6 hover:shadow-[0_0_30px_rgba(168,85,247,0.12)]">
+                                <div className="flex items-center gap-3">
+                                    <div className="h-8 w-8 rounded-xl bg-purple-500/10 border border-purple-500/20 group-hover:bg-purple-500/20 flex items-center justify-center transition-all">
+                                        <Sparkles className="h-4 w-4 text-purple-400" />
+                                    </div>
+                                    <span className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-300 group-hover:text-white transition-colors">Enter Letter Hub</span>
                                 </div>
-                            ) : (
-                                <Select value={selectedResumeId} onValueChange={setSelectedResumeId}>
-                                    <SelectTrigger className="w-full h-11 border-white/10 bg-black text-white font-medium text-sm focus:ring-white/20">
-                                        <SelectValue placeholder="Select a resume" />
-                                    </SelectTrigger>
-                                    <SelectContent className="bg-[#1e1e1e] border-white/10 text-white">
-                                        {resumes.map(r => (
-                                            <SelectItem key={r.id} value={r.id} className="hover:bg-white/5 focus:bg-white/5 focus:text-white cursor-pointer">{r.title || 'Untitled Resume'}</SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            )}
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4 mb-8">
-                            <div className="space-y-3">
-                                <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Target Role</Label>
-                                <Input
-                                    placeholder="e.g. Marketing Manager"
-                                    className="bg-black/40 h-12 border-white/5 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-700 rounded-xl transition-all hover:bg-black/60"
-                                    value={jobTitle}
-                                    onChange={(e) => setJobTitle(e.target.value)}
-                                />
-                            </div>
-                            <div className="space-y-3">
-                                <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Company</Label>
-                                <Input
-                                    placeholder="e.g. Apple"
-                                    className="bg-black/40 h-12 border-white/5 text-white text-sm focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-700 rounded-xl transition-all hover:bg-black/60"
-                                    value={companyName}
-                                    onChange={(e) => setCompanyName(e.target.value)}
-                                />
-                            </div>
-                        </div>
-
-                        <div className="space-y-3 mb-10">
-                            <Label className="text-[11px] font-black uppercase tracking-[0.2em] text-zinc-500">Target Job Description</Label>
-                            <Textarea
-                                placeholder="Paste the exact job description here..."
-                                className="min-h-[180px] bg-black/40 resize-y border-white/5 p-5 leading-relaxed text-sm text-zinc-300 focus-visible:ring-1 focus-visible:ring-white/20 placeholder:text-zinc-700 rounded-2xl transition-all hover:bg-black/60"
-                                value={jobDescription}
-                                onChange={(e) => setJobDescription(e.target.value)}
-                            />
-                        </div>
-
-                        <AnimatedGenerateButton
-                            onClick={handleGenerate}
-                            disabled={!isValid || isGenerating || resumes.length === 0}
-                            generating={isGenerating}
-                            labelIdle="Generate Perfect Letter"
-                            labelActive="AI is gathering company intel & writing..."
-                            highlightHueDeg={270}
-                            size="lg"
-                            className="w-full h-14"
-                        />
+                                <ArrowRight className="h-4 w-4 text-zinc-600 group-hover:text-purple-400 group-hover:translate-x-1 transition-all" />
+                            </button>
+                        </Link>
                     </div>
 
                     <div className="space-y-6">

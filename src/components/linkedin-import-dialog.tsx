@@ -18,7 +18,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent } from "@/components/ui/card"
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 
-export function LinkedinImportDialog() {
+export function LinkedinImportDialog({ customTrigger }: { customTrigger?: React.ReactNode }) {
     const [url, setUrl] = useState('')
     const [isLoading, setIsLoading] = useState(false)
     const [open, setOpen] = useState(false)
@@ -57,13 +57,12 @@ export function LinkedinImportDialog() {
             }
 
             toast.success('Successfully imported!', {
-                description: 'Your LinkedIn profile has been imported.',
+                description: 'Please verify the extracted data...',
             })
 
             setOpen(false)
-            // Navigate to the dashboard or resume editor with the new ID
-            router.push(`/editor/${data.resumeId}`)
-
+            // Redirect to mapping Validation UI
+            router.push('/dashboard/linkedin-mapping')
         } catch (error: any) {
             setError(error.message || 'An unexpected error occurred.')
             toast.error('Import Error', {
@@ -83,13 +82,17 @@ export function LinkedinImportDialog() {
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                <AnimatedGenerateButton
-                    labelIdle="Import from LinkedIn"
-                    icon={<Linkedin className="h-4 w-4" />}
-                    size="md"
-                    className="w-auto"
-                    noMinWidth
-                />
+                {customTrigger ? (
+                    customTrigger
+                ) : (
+                    <AnimatedGenerateButton
+                        labelIdle="Import from LinkedIn"
+                        icon={<Linkedin className="h-4 w-4" />}
+                        size="md"
+                        className="w-auto"
+                        noMinWidth
+                    />
+                )}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden border-none bg-transparent shadow-none">
                 <Card className="shadow-2xl border-white/10 bg-black/90 backdrop-blur-md">

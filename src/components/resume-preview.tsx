@@ -5,12 +5,13 @@ import { Loader2 } from 'lucide-react'
 
 interface ResumePreviewProps {
     data: any;
-    isLoading: boolean;
+    isLoading?: boolean;
     template?: 'classic' | 'modern' | 'executive';
     isTwoPage?: boolean;
+    isAtsSafe?: boolean;
 }
 
-export function ResumePreview({ data, isLoading, template = 'classic', isTwoPage = false }: ResumePreviewProps) {
+export function ResumePreview({ data, isLoading, template = 'classic', isTwoPage = false, isAtsSafe = false }: ResumePreviewProps) {
     const [isClient, setIsClient] = useState(false)
     const [pdfUrl, setPdfUrl] = useState<string | null>(null)
     const [isGenerating, setIsGenerating] = useState(false)
@@ -31,7 +32,7 @@ export function ResumePreview({ data, isLoading, template = 'classic', isTwoPage
                 const { pdf } = await import('@react-pdf/renderer');
                 const { ResumePDFDocument } = await import('@/lib/pdf-generator');
 
-                const doc = <ResumePDFDocument data={data} template={template} />;
+                const doc = <ResumePDFDocument data={data} template={template} isAtsSafe={isAtsSafe} />;
                 const blob = await pdf(doc).toBlob();
 
                 if (isMounted) {
@@ -54,7 +55,7 @@ export function ResumePreview({ data, isLoading, template = 'classic', isTwoPage
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data, template, isClient])
+    }, [data, template, isClient, isAtsSafe])
 
     if (!isClient || isLoading) {
         return (

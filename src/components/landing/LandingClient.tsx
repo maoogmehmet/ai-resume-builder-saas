@@ -12,12 +12,8 @@ import { PricingPremium } from './PricingPremium'
 import LogoCloud from '@/components/ui/new-logo-cloud'
 import { Footer } from '@/components/ui/footer-section'
 import { BlurTextEffect } from '@/components/ui/blur-text-effect'
-import SectionWithMockup from '@/components/ui/section-with-mockup'
-import { DashboardFeature } from './DashboardFeature'
-import { AIAgentIntegrations } from './AIAgentIntegrations'
 import { SmartEditorFeature } from './SmartEditorFeature'
 import { LandingStats } from './LandingStats'
-import { LandingFAQs } from './LandingFAQs'
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { Button } from '@/components/ui/button'
 
@@ -244,37 +240,9 @@ export function LandingClient({ user }: { user: any }) {
                             </div>
                         </div>
 
-                        <div className="mt-64 flex flex-col items-center text-center">
-                            <div className="h-24 w-24 bg-white/5 border border-white/10 rounded-[2.5rem] flex items-center justify-center mb-12 shadow-3xl group hover:scale-110 transition-transform duration-700">
-                                <Sparkles className="h-12 w-12 text-zinc-700 group-hover:text-white transition-colors" />
-                            </div>
-                            <h2 className="text-6xl sm:text-9xl font-black italic tracking-tighter text-white mb-10 lowercase">
-                                one core. <span className="text-zinc-700 font-normal">infinite evolution.</span>
-                            </h2>
-                            <p className="text-zinc-600 text-2xl sm:text-3xl max-w-4xl leading-tight font-black italic lowercase opacity-60">
-                                Our neural engine is constantly architecting from millions of successful candidate nodes to give you the ultimate professional edge.
-                            </p>
-                        </div>
                     </div>
                 </section>
 
-                {/* 3.5 NOVATYPALCV SUB-FEATURES */}
-                <SectionWithMockup
-                    title={
-                        <span className="italic lowercase">
-                            neural synthesis <br />
-                            <span className="text-zinc-700 font-normal">protocol</span>
-                        </span>
-                    }
-                    description="Craft the ultimate career node with AI-driven content synthesis, real-time neural scoring, and executive-tier templates. Eliminate friction and optimize for recruitment logic."
-                    primaryImageSrc="/realistic_cv_mockup.png"
-                    secondaryImageSrc="https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=3000&auto=format&fit=crop"
-                    reverseLayout={false}
-                />
-
-                {/* 3.6 ADVANCED ECOSYSTEM FEATURES */}
-                <DashboardFeature />
-                <AIAgentIntegrations />
 
                 {/* 4. TESTIMONIALS */}
                 <TestimonialsSection
@@ -285,7 +253,6 @@ export function LandingClient({ user }: { user: any }) {
 
                 <PricingPremium />
 
-                <LandingFAQs />
             </main>
 
             <Footer />

@@ -3,13 +3,12 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { Badge } from '@/components/ui/badge'
 import { Label } from '@/components/ui/label'
 import { toast } from 'sonner'
 import {
-    Loader2, ArrowLeft, CheckCircle2, Sparkles, Layout, CloudUpload, ChevronDown,
-    User, Briefcase, GraduationCap, Wrench, FileText,
-    Check, MessageSquarePlus
+    Loader2, ArrowLeft, CheckCircle2, Sparkles, Layout, CloudUpload, ChevronDown, ChevronRight,
+    User, Briefcase, GraduationCap, Wrench, FileText, Clock, RotateCcw, Wand2, Target, X, ShieldCheck, MessageSquarePlus,
+    Download, Share2, AlertTriangle, Save, Eye, EyeOff, Zap, BookOpen
 } from 'lucide-react'
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { pdf } from '@react-pdf/renderer'
@@ -19,17 +18,16 @@ import { ExperienceSection } from '@/components/resume-editor/experience-section
 import { EducationSection } from '@/components/resume-editor/education-section'
 import { SkillsSection } from '@/components/resume-editor/skills-section'
 import { ResumePreview } from '@/components/resume-preview'
-import { JobOptimizerDialog } from '@/components/job-optimizer'
 import { PdfDownloadButton } from '@/components/pdf-download-button'
 import { PublicLinkManager } from '@/components/public-link-manager'
 import { ResumeVersions } from '@/components/resume-versions'
 
 type TemplateType = 'classic' | 'modern' | 'executive'
 
-const TEMPLATES: { id: TemplateType; label: string; description: string }[] = [
-    { id: 'classic', label: 'Classic', description: 'Clean ATS-friendly layout' },
-    { id: 'modern', label: 'Modern', description: 'Dark sidebar with skills' },
-    { id: 'executive', label: 'Executive', description: 'Premium bold design' },
+const TEMPLATES: { id: TemplateType; label: string; description: string; badge?: string }[] = [
+    { id: 'classic', label: 'Classic', description: 'Clean, ATS-friendly single-column layout' },
+    { id: 'modern', label: 'Modern', description: 'Dark sidebar with skill bars', badge: 'Popular' },
+    { id: 'executive', label: 'Executive', description: 'Premium bold typographic design', badge: 'Premium' },
 ]
 
 const EMPTY_RESUME = {
@@ -43,12 +41,12 @@ const EMPTY_RESUME = {
 }
 
 const SECTIONS = [
-    { id: 'personal_info', label: 'Personal Information', icon: User, num: '01' },
-    { id: 'summary', label: 'Professional Summary', icon: FileText, num: '02' },
-    { id: 'experience', label: 'Work Experience', icon: Briefcase, num: '03' },
-    { id: 'education', label: 'Education', icon: GraduationCap, num: '04' },
-    { id: 'skills', label: 'Skills', icon: Wrench, num: '05' },
-    { id: 'additional_explanations', label: 'Additional Explanations', icon: MessageSquarePlus, num: '06' },
+    { id: 'personal_info', label: 'Personal Information', icon: User, num: '01', hint: 'Name, email, contact details' },
+    { id: 'summary', label: 'Professional Summary', icon: FileText, num: '02', hint: 'Who you are & what you bring' },
+    { id: 'experience', label: 'Work Experience', icon: Briefcase, num: '03', hint: 'Your career history' },
+    { id: 'education', label: 'Education', icon: GraduationCap, num: '04', hint: 'Degrees and certifications' },
+    { id: 'skills', label: 'Skills', icon: Wrench, num: '05', hint: 'Technical and soft skills' },
+    { id: 'additional_explanations', label: 'Additional Notes', icon: BookOpen, num: '06', hint: 'Projects, certifications, interests' },
 ]
 
 export function ResumeEditorPage() {
@@ -63,10 +61,15 @@ export function ResumeEditorPage() {
     const [currentVersionId, setCurrentVersionId] = useState<string | undefined>()
     const [template, setTemplate] = useState<TemplateType>('classic')
     const [showTemplates, setShowTemplates] = useState(false)
-    const [isTwoPageView, setIsTwoPageView] = useState(false)
     const [isUploadingPdf, setIsUploadingPdf] = useState(false)
     const [isGeneratingSummary, setIsGeneratingSummary] = useState(false)
     const [openSections, setOpenSections] = useState<Set<string>>(new Set(['personal_info']))
+    const [showOptimizerPanel, setShowOptimizerPanel] = useState(false)
+    const [isAtsSafe, setIsAtsSafe] = useState(false)
+    const [showPreview, setShowPreview] = useState(true)
+    const [jdText, setJdText] = useState('')
+    const [isAnalyzingJd, setIsAnalyzingJd] = useState(false)
+    const [jdAnalysis, setJdAnalysis] = useState<{ missing: string[]; matched: string[] } | null>(null)
 
     const resumeId = params?.id as string
 
@@ -101,10 +104,7 @@ export function ResumeEditorPage() {
             }
 
             const jsonData = data.ai_generated_json || data.original_linkedin_json || EMPTY_RESUME
-            setResumeData({
-                ...EMPTY_RESUME,
-                ...jsonData
-            })
+            setResumeData({ ...EMPTY_RESUME, ...jsonData })
             if (jsonData.template) {
                 setTemplate(jsonData.template as TemplateType)
             }
@@ -121,7 +121,7 @@ export function ResumeEditorPage() {
 
     const requestAIGeneration = async () => {
         setIsLoading(true)
-        toast.info('Generating Novatypalcv...', { description: 'Converting LinkedIn data to ATS-optimized format...' })
+        toast.info('Generating resume...', { description: 'Converting LinkedIn data to ATS-optimized format...' })
         try {
             const response = await fetch('/api/ai/generate-resume', {
                 method: 'POST',
@@ -130,29 +130,27 @@ export function ResumeEditorPage() {
             })
 
             const result = await response.json()
+            if (!response.ok) {
+                if (result.error === 'subscription_required') {
+                    toast.error('Premium Required', { description: result.message || 'Please upgrade to Elite Tier to continue.' })
+                    router.push('/dashboard/upgrade')
+                    return
+                }
+                throw new Error(result.error || result.message || 'AI generation failed')
+            }
 
-            if (!response.ok) throw new Error(result.error || 'AI generation failed')
+            setResumeData((prev: any) => ({ ...prev, ...result.aiGenerated }))
 
-            setResumeData((prev: any) => ({
-                ...prev,
-                ...result.aiGenerated
-            }))
-
-            const jobTitle = result.aiGenerated?.personal_info?.title || result.aiGenerated?.experience?.[0]?.position || 'Professional';
+            const jobTitle = result.aiGenerated?.personal_info?.title || result.aiGenerated?.experience?.[0]?.position || 'Professional'
             fetch('/api/ai/generate-letter', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    resumeId,
-                    jobTitle,
-                    companyName: 'Future Employer',
-                    jobDescription: 'General application'
-                })
-            }).catch(e => console.error("Pitch deck auto-gen failed", e));
+                body: JSON.stringify({ resumeId, jobTitle, companyName: 'Future Employer', jobDescription: 'General application' })
+            }).catch(e => console.error('Pitch deck auto-gen failed', e))
 
-            syncPdfToCloud(result.aiGenerated, template, true).catch(e => console.error("Auto PDF sync failed", e));
+            syncPdfToCloud(result.aiGenerated, template, true).catch(e => console.error('Auto PDF sync failed', e))
 
-            toast.success('AI Resume Generated!', { description: 'Your resume has been optimized.' })
+            toast.success('Resume Generated!', { description: 'Your resume has been optimized.' })
         } catch (error: any) {
             toast.error('AI Generation Failed', { description: error.message })
         } finally {
@@ -161,26 +159,58 @@ export function ResumeEditorPage() {
     }
 
     const handleGenerateSummary = async () => {
-        if (!resumeData) return;
-        setIsGeneratingSummary(true);
-        toast.info('Generating Professional Summary...', { description: 'Analyzing your experience and skills...' });
+        if (!resumeData) return
+        setIsGeneratingSummary(true)
+        toast.info('Generating Professional Summary...', { description: 'Analyzing your experience and skills...' })
 
         try {
             const response = await fetch('/api/ai/generate-summary', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ resumeData })
-            });
+            })
 
-            const result = await response.json();
-            if (!response.ok) throw new Error(result.error || 'Summary generation failed');
+            const result = await response.json()
+            if (!response.ok) throw new Error(result.error || 'Summary generation failed')
 
-            handleUpdate('summary', result.summary);
-            toast.success('Summary Generated!', { description: 'Your professional summary has been drafted.' });
+            handleUpdate('summary', result.summary)
+            toast.success('Summary Generated!', { description: 'Your professional summary has been drafted.' })
         } catch (error: any) {
-            toast.error('Generation Failed', { description: error.message });
+            toast.error('Generation Failed', { description: error.message })
         } finally {
-            setIsGeneratingSummary(false);
+            setIsGeneratingSummary(false)
+        }
+    }
+
+    const handleAnalyzeJd = async () => {
+        if (!jdText.trim()) {
+            toast.error('Please paste a job description first')
+            return
+        }
+        setIsAnalyzingJd(true)
+        try {
+            const response = await fetch('/api/ai/ats-match', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    resumeId,
+                    jobTitle: resumeData?.experience?.[0]?.position || 'Professional',
+                    companyName: 'Target Company',
+                    jobDescription: jdText
+                })
+            })
+            const result = await response.json()
+            if (!response.ok) throw new Error(result.error || 'Analysis failed')
+
+            setJdAnalysis({
+                missing: result.result?.keyword_analysis?.missing_keywords || [],
+                matched: result.result?.keyword_analysis?.matched_keywords || []
+            })
+            toast.success('Gap analysis complete!')
+        } catch (error: any) {
+            toast.error('Analysis Failed', { description: error.message })
+        } finally {
+            setIsAnalyzingJd(false)
         }
     }
 
@@ -192,10 +222,7 @@ export function ResumeEditorPage() {
             setIsSaving(true)
             const { error } = await supabase
                 .from('resumes')
-                .update({
-                    ai_generated_json: resumeData,
-                    updated_at: new Date().toISOString()
-                })
+                .update({ ai_generated_json: resumeData, updated_at: new Date().toISOString() })
                 .eq('id', resumeId)
 
             if (error) {
@@ -220,59 +247,63 @@ export function ResumeEditorPage() {
         if (version.optimized_json?.template) {
             setTemplate(version.optimized_json.template as TemplateType)
         }
-        syncPdfToCloud(version.optimized_json, (version.optimized_json?.template || template) as TemplateType, true).catch(e => console.error(e));
-        toast.info(`Switched to version: ${version.company_name || 'Saved Version'}`)
+        syncPdfToCloud(version.optimized_json, (version.optimized_json?.template || template) as TemplateType, true).catch(e => console.error(e))
+        toast.info(`Version restored: ${version.company_name || 'Saved Version'}`)
     }
 
     const syncPdfToCloud = async (data: any, currentTemplate: TemplateType, silenceToast = false) => {
-        setIsUploadingPdf(true);
-        if (!silenceToast) toast.loading('Generating & Uploading PDF...', { id: 'pdf-upload' });
+        setIsUploadingPdf(true)
+        if (!silenceToast) toast.loading('Uploading PDF to cloud...', { id: 'pdf-upload' })
 
         try {
             const doc = <ResumePDFDocument data={data} template={currentTemplate} />
-            const blob = await pdf(doc).toBlob();
+            const blob = await pdf(doc).toBlob()
 
-            const formData = new FormData();
-            formData.append('file', blob, 'resume.pdf');
-            formData.append('resumeId', resumeId);
+            const formData = new FormData()
+            formData.append('file', blob, 'resume.pdf')
+            formData.append('resumeId', resumeId)
 
-            const res = await fetch('/api/resume/upload-pdf', {
-                method: 'POST',
-                body: formData,
-            });
-
-            const responseText = await res.text();
-            let result;
-            try {
-                result = JSON.parse(responseText);
-            } catch (e) {
-                console.error("Non-JSON response:", responseText);
-                throw new Error("Server returned an invalid response.");
+            const res = await fetch('/api/resume/upload-pdf', { method: 'POST', body: formData })
+            const responseText = await res.text()
+            let result
+            try { result = JSON.parse(responseText) } catch (e) {
+                console.error('Non-JSON response:', responseText)
+                throw new Error('Server returned an invalid response.')
             }
 
-            if (!res.ok) throw new Error(result.error || 'Failed to upload PDF');
-
-            if (!silenceToast) toast.success('PDF saved to cloud!', { id: 'pdf-upload', description: 'Your PDF is now publicly available for download links.' });
+            if (!res.ok) throw new Error(result.error || 'Failed to upload PDF')
+            if (!silenceToast) toast.success('PDF saved to cloud!', { id: 'pdf-upload' })
         } catch (error: any) {
-            if (!silenceToast) toast.error('Failed to sync PDF', { id: 'pdf-upload', description: error.message });
-            console.error(error);
+            if (!silenceToast) toast.error('Failed to sync PDF', { id: 'pdf-upload', description: error.message })
+            console.error(error)
         } finally {
-            setIsUploadingPdf(false);
+            setIsUploadingPdf(false)
         }
     }
 
     const handleSavePdfToCloud = async () => {
-        if (!resumeData) return;
-        await syncPdfToCloud(resumeData, template, false);
+        if (!resumeData) return
+        await syncPdfToCloud(resumeData, template, false)
+    }
+
+    const handleDownloadDocx = () => {
+        toast.info('DOCX export coming soon', { description: 'We\'re working on Word document export.' })
+    }
+
+    const handleShare = () => {
+        toast.info('Copy the public link above to share your CV')
     }
 
     if (isLoading && !resumeData) {
         return (
-            <div className="flex w-full min-h-screen items-center justify-center bg-[#0a0a0a] flex-col gap-4">
-                <div className="h-16 w-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center shadow-2xl animate-pulse">
-                    <Sparkles className="h-8 w-8 text-emerald-400" />
+            <div className="flex w-full min-h-screen items-center justify-center bg-[#0a0a0a] flex-col gap-5">
+                <div className="h-16 w-16 bg-white/5 border border-white/10 rounded-2xl flex items-center justify-center shadow-2xl">
+                    <Sparkles className="h-8 w-8 text-emerald-400 animate-pulse" />
                 </div>
-                <p className="text-zinc-500 font-medium font-black uppercase tracking-widest text-[10px] italic">Loading Lab...</p>
+                <div className="text-center">
+                    <p className="text-white font-bold text-sm">Loading your resume...</p>
+                    <p className="text-zinc-600 text-xs mt-1">Setting up the editor</p>
+                </div>
             </div>
         )
     }
@@ -282,99 +313,106 @@ export function ResumeEditorPage() {
     return (
         <div className="flex flex-col min-h-screen bg-[#0a0a0a] w-full relative selection:bg-emerald-500/30">
             {/* ── HEADER ── */}
-            <header className="sticky top-0 z-40 bg-black border-b border-white/[0.06] px-4 lg:px-12 py-4 flex items-center justify-between shadow-2xl">
-                <div className="flex items-center gap-6">
-                    <AnimatedGenerateButton
-                        size="icon"
-                        href="/dashboard"
-                        className="h-10 w-10"
-                        icon={<ArrowLeft className="h-4 w-4" />}
-                    />
-                    <div className="flex flex-col h-full justify-center">
-                        <h1 className="text-xl font-black text-white tracking-tighter italic uppercase leading-none">resume lab</h1>
-                        <div className="flex items-center gap-2 mt-1.5 h-3">
+            <header className="sticky top-0 z-40 bg-black/95 backdrop-blur-xl border-b border-white/[0.06] px-4 lg:px-8 py-3.5 flex items-center justify-between shadow-2xl">
+                <div className="flex items-center gap-4">
+                    <button
+                        onClick={() => router.push('/dashboard')}
+                        className="h-9 w-9 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center transition-all"
+                    >
+                        <ArrowLeft className="h-4 w-4 text-zinc-400" />
+                    </button>
+                    <div>
+                        <h1 className="text-base font-black text-white tracking-tight uppercase leading-none">Resume Editor</h1>
+                        <div className="flex items-center gap-2 mt-1">
                             {isSaving ? (
-                                <span className="text-[10px] text-zinc-600 font-black uppercase tracking-widest flex items-center gap-1.5 animate-pulse italic">
-                                    <Loader2 className="h-2.5 w-2.5 animate-spin" /> saving process...
+                                <span className="text-[10px] text-zinc-500 font-medium flex items-center gap-1.5">
+                                    <Loader2 className="h-2.5 w-2.5 animate-spin" /> Saving...
                                 </span>
                             ) : lastSaved ? (
-                                <span className="text-[10px] text-emerald-500/60 font-black uppercase tracking-widest flex items-center gap-1.5 italic">
-                                    <CheckCircle2 className="h-2.5 w-2.5" /> secured {lastSaved.toLocaleTimeString()}
+                                <span className="text-[10px] text-emerald-500/70 font-medium flex items-center gap-1.5">
+                                    <CheckCircle2 className="h-2.5 w-2.5" /> Saved {lastSaved.toLocaleTimeString()}
                                 </span>
                             ) : currentVersionId ? (
-                                <span className="text-[10px] text-blue-500/60 font-black uppercase tracking-widest flex items-center gap-1.5 italic">
-                                    saved version active
+                                <span className="text-[10px] text-blue-400/70 font-medium flex items-center gap-1.5">
+                                    <RotateCcw className="h-2.5 w-2.5" /> Version restored
                                 </span>
-                            ) : null}
+                            ) : (
+                                <span className="text-[10px] text-zinc-700 font-medium">Auto-save enabled</span>
+                            )}
                         </div>
                     </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                     {/* Template Selector */}
                     <div className="relative">
-                        <AnimatedGenerateButton
+                        <button
                             onClick={() => setShowTemplates(!showTemplates)}
-                            labelIdle={template}
-                            size="sm"
-                            className="font-black italic lowercase"
-                            icon={<Layout className={`h-3.5 w-3.5 transition-transform ${showTemplates ? 'rotate-90' : ''}`} />}
-                        />
+                            className="flex items-center gap-2 px-3 py-2 h-9 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 text-xs font-bold rounded-xl transition-all"
+                        >
+                            <Layout className="h-3.5 w-3.5" />
+                            <span className="capitalize hidden sm:block">{template}</span>
+                            <ChevronDown className={`h-3 w-3 text-zinc-500 transition-transform ${showTemplates ? 'rotate-180' : ''}`} />
+                        </button>
                         {showTemplates && (
-                            <div className="absolute right-0 top-12 z-50 bg-black rounded-2xl shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 p-2 w-72 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
-                                <div className="px-4 py-3 border-b border-white/5 mb-1.5">
-                                    <span className="text-[9px] font-black text-zinc-600 uppercase tracking-[0.3em] italic">Architectural Style</span>
-                                </div>
+                            <div className="absolute right-0 top-11 z-50 bg-[#101010] rounded-2xl shadow-[0_40px_100px_rgba(0,0,0,0.8)] border border-white/10 p-2 w-72 overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                                <p className="px-4 py-2.5 text-[9px] font-bold text-zinc-600 uppercase tracking-widest border-b border-white/5 mb-1">Template Style</p>
                                 {TEMPLATES.map((t) => (
                                     <button
                                         key={t.id}
                                         onClick={() => {
-                                            setTemplate(t.id);
-                                            handleUpdate('template', t.id);
-                                            setShowTemplates(false);
-                                            toast.success(`Style transitioned to ${t.label}`);
+                                            setTemplate(t.id)
+                                            handleUpdate('template', t.id)
+                                            setShowTemplates(false)
+                                            toast.success(`Template changed to ${t.label}`)
                                         }}
-                                        className={`w-full text-left px-4 py-3.5 rounded-xl transition-all flex items-center justify-between group mb-1 ${template === t.id ? 'bg-white/5 text-emerald-400' : 'hover:bg-white/[0.04] text-zinc-500 hover:text-white'}`}
+                                        className={`w-full text-left px-4 py-3 rounded-xl transition-all flex items-center justify-between group mb-1 ${template === t.id ? 'bg-white/5 text-emerald-400' : 'hover:bg-white/[0.04] text-zinc-500 hover:text-white'}`}
                                     >
                                         <div>
-                                            <div className="flex items-center gap-2 font-black text-xs tracking-tighter uppercase italic">
+                                            <div className="flex items-center gap-2 font-bold text-xs">
                                                 {t.label}
-                                                {(t.id === 'modern' || t.id === 'executive') && <Sparkles className="h-3 w-3 text-emerald-500/40" />}
+                                                {t.badge && <span className="text-[8px] font-black px-1.5 py-0.5 bg-emerald-500/10 text-emerald-400 rounded border border-emerald-500/20">{t.badge}</span>}
                                             </div>
-                                            <div className={`text-[10px] mt-1 font-bold ${template === t.id ? 'text-zinc-500' : 'text-zinc-700 group-hover:text-zinc-500'}`}>{t.description}</div>
+                                            <div className={`text-[10px] mt-0.5 font-medium ${template === t.id ? 'text-zinc-500' : 'text-zinc-700 group-hover:text-zinc-500'}`}>{t.description}</div>
                                         </div>
-                                        {template === t.id && <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />}
+                                        {template === t.id && <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />}
                                     </button>
                                 ))}
                             </div>
                         )}
                     </div>
 
-                    <AnimatedGenerateButton
+                    {/* Cloud Sync */}
+                    <button
                         onClick={handleSavePdfToCloud}
                         disabled={isUploadingPdf}
-                        generating={isUploadingPdf}
-                        labelIdle="sync"
-                        labelActive="clouding..."
-                        size="sm"
-                        className="font-black italic lowercase"
-                        icon={<CloudUpload className="h-3.5 w-3.5" />}
-                    />
+                        className="flex items-center gap-2 px-3 py-2 h-9 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 text-xs font-bold rounded-xl transition-all disabled:opacity-50"
+                        title="Upload PDF to cloud (for shareable links)"
+                    >
+                        {isUploadingPdf ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <CloudUpload className="h-3.5 w-3.5" />}
+                        <span className="hidden sm:block">Sync</span>
+                    </button>
 
+                    {/* Share */}
                     <PublicLinkManager resumeId={resumeId} template={template} versionId={currentVersionId} />
+
+                    {/* Download PDF */}
                     <PdfDownloadButton resumeData={resumeData} template={template} />
-                    <JobOptimizerDialog
-                        resumeId={resumeId}
-                        resumeData={resumeData}
-                        onOptimizationApplied={(v) => handleVersionSelect(v)}
-                    />
+
+                    {/* Toggle preview on mobile */}
+                    <button
+                        onClick={() => setShowPreview(!showPreview)}
+                        className="lg:hidden flex items-center gap-2 px-3 py-2 h-9 bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 text-xs font-bold rounded-xl transition-all"
+                    >
+                        {showPreview ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                    </button>
                 </div>
             </header>
 
             <main className="flex-1 flex w-full relative">
                 {/* LEFT PANE - Editor */}
-                <div className={`overflow-y-auto border-r border-white/5 p-4 sm:p-10 bg-[#0a0a0a] pb-40 h-[calc(100vh-73px)] custom-scrollbar transition-all duration-300 ${isTwoPageView ? 'hidden lg:block lg:w-[30%]' : 'w-full lg:w-[45%]'}`}>
-                    <div className="space-y-4">
+                <div className={`overflow-y-auto border-r border-white/5 bg-[#0a0a0a] pb-40 h-[calc(100vh-61px)] custom-scrollbar transition-all duration-300 ${showPreview ? 'w-full lg:w-[44%]' : 'w-full'} p-4 sm:p-8`}>
+                    <div className="space-y-3 max-w-2xl mx-auto">
                         {SECTIONS.map((section) => {
                             const isOpen = openSections.has(section.id)
                             const Icon = section.icon
@@ -384,25 +422,30 @@ export function ResumeEditorPage() {
                                         : null
 
                             return (
-                                <div key={section.id} className={`rounded-[2rem] border transition-all duration-500 relative overflow-hidden ${isOpen ? 'bg-white/[0.02] border-white/10 shadow-2xl' : 'bg-transparent border-white/5 hover:border-white/10'}`}>
+                                <div key={section.id} className={`rounded-2xl border transition-all duration-300 ${isOpen ? 'bg-white/[0.018] border-white/10 shadow-xl' : 'bg-transparent border-white/[0.06] hover:border-white/10'}`}>
                                     <button
                                         onClick={() => toggleSection(section.id)}
-                                        className="w-full flex items-center justify-between px-8 py-7 group"
+                                        className="w-full flex items-center justify-between px-5 py-4 group"
                                     >
-                                        <div className="flex items-center gap-4">
-                                            <div className={`h-10 w-10 rounded-2xl border flex items-center justify-center transition-all duration-300 ${isOpen ? 'bg-white text-black border-transparent scale-110 shadow-2xl shadow-white/10' : 'bg-white/5 border-white/5 group-hover:bg-white/10'}`}>
-                                                <Icon className={`h-4.5 w-4.5 transition-colors ${isOpen ? 'text-black' : 'text-zinc-600 group-hover:text-white'}`} />
+                                        <div className="flex items-center gap-3.5">
+                                            <div className={`h-9 w-9 rounded-xl border flex items-center justify-center transition-all duration-200 ${isOpen ? 'bg-white text-black border-transparent shadow-lg' : 'bg-white/5 border-white/5 group-hover:bg-white/10'}`}>
+                                                <Icon className={`h-4 w-4 transition-colors ${isOpen ? 'text-black' : 'text-zinc-500 group-hover:text-white'}`} />
                                             </div>
                                             <div className="text-left">
-                                                <span className={`block font-black uppercase text-xs tracking-tighter italic transition-colors ${isOpen ? 'text-white' : 'text-zinc-500 group-hover:text-zinc-300'}`}>{section.label}</span>
-                                                <span className="text-[9px] font-black text-zinc-700 uppercase tracking-widest">{section.num}{count !== null && count > 0 ? ` — ${count} items` : ''}</span>
+                                                <span className={`block font-bold text-sm transition-colors ${isOpen ? 'text-white' : 'text-zinc-400 group-hover:text-zinc-200'}`}>{section.label}</span>
+                                                <span className="text-[10px] font-medium text-zinc-700">
+                                                    {count !== null && count > 0 ? `${count} ${count === 1 ? 'item' : 'items'}` : section.hint}
+                                                </span>
                                             </div>
                                         </div>
-                                        <ChevronDown className={`h-4 w-4 text-zinc-700 transition-transform duration-500 ${isOpen ? 'rotate-180 text-white' : 'group-hover:text-zinc-400'}`} />
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[9px] font-bold text-zinc-800 tabular-nums">{section.num}</span>
+                                            <ChevronDown className={`h-4 w-4 text-zinc-600 transition-transform duration-300 ${isOpen ? 'rotate-180 text-zinc-400' : 'group-hover:text-zinc-400'}`} />
+                                        </div>
                                     </button>
 
                                     {isOpen && (
-                                        <div className="px-8 pb-10 pt-2 border-t border-white/[0.03] animate-in fade-in slide-in-from-top-2 duration-500">
+                                        <div className="px-5 pb-6 pt-2 border-t border-white/[0.04] animate-in fade-in slide-in-from-top-2 duration-300">
                                             {section.id === 'personal_info' && (
                                                 <PersonalInfoSection
                                                     data={resumeData.personal_info}
@@ -410,30 +453,24 @@ export function ResumeEditorPage() {
                                                 />
                                             )}
                                             {section.id === 'summary' && (
-                                                <div className="space-y-4">
+                                                <div className="space-y-3">
                                                     <textarea
-                                                        className="w-full min-h-[160px] p-6 rounded-2xl border border-white/5 bg-black focus:ring-1 focus:ring-emerald-500/20 focus:border-emerald-500/20 outline-none transition-all text-sm leading-relaxed resize-none text-zinc-400 placeholder:text-zinc-700 font-medium font-sans"
+                                                        className="w-full min-h-[160px] p-4 rounded-xl border border-white/5 bg-black focus:ring-1 focus:ring-emerald-500/20 focus:border-emerald-500/20 outline-none transition-all text-sm leading-relaxed resize-none text-zinc-300 placeholder:text-zinc-700 font-normal"
                                                         value={resumeData.summary || ''}
                                                         maxLength={1000}
                                                         onChange={(e) => handleUpdate('summary', e.target.value)}
-                                                        placeholder="Write a compelling professional summary..."
+                                                        placeholder="Write a compelling professional summary that showcases your expertise, key achievements, and what you bring to potential employers..."
                                                     />
-                                                    <div className="pt-2">
-                                                        <AnimatedGenerateButton
+                                                    <div className="flex items-center justify-between">
+                                                        <button
                                                             onClick={handleGenerateSummary}
                                                             disabled={isGeneratingSummary}
-                                                            generating={isGeneratingSummary}
-                                                            labelIdle="magic summary"
-                                                            labelActive="writing..."
-                                                            highlightHueDeg={140}
-                                                            size="sm"
-                                                            className="w-full italic font-black lowercase"
-                                                        />
-                                                        <div className="flex justify-end mt-2">
-                                                            <span className="text-[10px] font-black text-zinc-800 uppercase tracking-widest italic">
-                                                                {(resumeData.summary || '').length} <span className="text-zinc-900">/ 1000</span>
-                                                            </span>
-                                                        </div>
+                                                            className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded-xl transition-colors disabled:opacity-50"
+                                                        >
+                                                            {isGeneratingSummary ? <Loader2 className="h-3 w-3 animate-spin" /> : <Sparkles className="h-3 w-3" />}
+                                                            {isGeneratingSummary ? 'Generating...' : 'Generate with AI'}
+                                                        </button>
+                                                        <span className="text-[10px] text-zinc-700 font-medium">{(resumeData.summary || '').length} / 1000</span>
                                                     </div>
                                                 </div>
                                             )}
@@ -450,13 +487,13 @@ export function ResumeEditorPage() {
                                                 />
                                             )}
                                             {section.id === 'additional_explanations' && (
-                                                <div className="space-y-4">
-                                                    <p className="text-[10px] font-bold text-zinc-600 uppercase tracking-[0.2em] italic mb-1 px-1">Custom Additions</p>
+                                                <div className="space-y-3">
+                                                    <p className="text-xs text-zinc-600">Add certifications, awards, projects, languages, or interests</p>
                                                     <textarea
-                                                        className="w-full min-h-[160px] p-6 rounded-2xl border border-white/5 bg-black focus:ring-1 focus:ring-emerald-500/20 focus:border-emerald-500/20 outline-none transition-all text-sm leading-relaxed resize-none text-zinc-400 placeholder:text-zinc-700 font-medium font-sans"
+                                                        className="w-full min-h-[140px] p-4 rounded-xl border border-white/5 bg-black focus:ring-1 focus:ring-emerald-500/20 focus:border-emerald-500/20 outline-none transition-all text-sm leading-relaxed resize-none text-zinc-300 placeholder:text-zinc-700 font-normal"
                                                         value={resumeData.additional_explanations || ''}
                                                         onChange={(e) => handleUpdate('additional_explanations', e.target.value)}
-                                                        placeholder="Add certifications, projects, or interests..."
+                                                        placeholder="• AWS Certified Solutions Architect (2023)&#10;• Speaker at React Conf 2022&#10;• Languages: English (fluent), Spanish (intermediate)"
                                                     />
                                                 </div>
                                             )}
@@ -467,7 +504,9 @@ export function ResumeEditorPage() {
                         })}
                     </div>
 
-                    <div className="mt-12">
+                    {/* Bottom tools */}
+                    <div className="mt-6 max-w-2xl mx-auto space-y-3">
+                        {/* Version History */}
                         <ResumeVersions
                             resumeId={resumeId}
                             currentVersionId={currentVersionId}
@@ -476,36 +515,142 @@ export function ResumeEditorPage() {
                     </div>
                 </div>
 
-                {/* RIGHT PANE - Live PDF Preview */}
-                <div className={`hidden lg:flex flex-col bg-[#050505] h-[calc(100vh-73px)] overflow-y-auto transition-all duration-300 relative ${isTwoPageView ? 'w-[70%]' : 'w-[55%]'}`}>
-                    <div className="sticky top-0 z-10 flex items-center justify-between px-10 py-5 bg-black/40 backdrop-blur-3xl border-b border-white/5">
-                        <div className="flex items-center gap-3">
-                            <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
-                            <span className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.5em] italic">Live Intelligence Render</span>
+                {/* RIGHT PANE - Preview + Optimizer */}
+                <div className={`${showPreview ? 'hidden lg:flex' : 'hidden'} bg-[#050505] h-[calc(100vh-61px)] overflow-hidden transition-all duration-300 relative flex-1`}>
+
+                    {/* Slide-Out JD Optimizer Panel */}
+                    <div className={`h-full border-r border-white/5 bg-[#0a0a0a] transition-all duration-500 flex-shrink-0 flex flex-col ${showOptimizerPanel ? 'w-[360px] opacity-100' : 'w-0 opacity-0 overflow-hidden'}`}>
+                        <div className="p-5 border-b border-white/5 flex items-center justify-between">
+                            <div className="flex items-center gap-2.5">
+                                <div className="h-8 w-8 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center">
+                                    <Target className="h-3.5 w-3.5 text-purple-400" />
+                                </div>
+                                <div>
+                                    <h3 className="text-sm font-bold text-white">JD Optimizer</h3>
+                                    <p className="text-[10px] text-zinc-600">Analyze keyword gaps</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setShowOptimizerPanel(false)} className="h-7 w-7 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center text-zinc-500 hover:text-white transition-colors">
+                                <X className="h-3.5 w-3.5" />
+                            </button>
                         </div>
-                        <div className="flex items-center gap-3">
-                            <PdfDownloadButton
-                                resumeData={resumeData}
-                                template={template}
-                            />
+
+                        <div className="p-5 flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-4">
+                            <div className="space-y-2">
+                                <Label className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Job Description</Label>
+                                <textarea
+                                    className="w-full h-48 bg-black border border-white/5 rounded-xl p-4 text-xs text-zinc-300 resize-none focus:border-purple-500/30 focus:ring-1 focus:ring-purple-500/20 outline-none transition-all placeholder:text-zinc-700"
+                                    placeholder="Paste the job description here to find keyword gaps and optimize your CV for this specific role..."
+                                    value={jdText}
+                                    onChange={(e) => setJdText(e.target.value)}
+                                />
+                            </div>
+
+                            <button
+                                onClick={handleAnalyzeJd}
+                                disabled={isAnalyzingJd || !jdText.trim()}
+                                className="w-full py-2.5 bg-purple-500/10 hover:bg-purple-500/20 border border-purple-500/20 text-purple-400 text-[10px] font-bold rounded-xl transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                            >
+                                {isAnalyzingJd ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Sparkles className="h-3.5 w-3.5" />}
+                                {isAnalyzingJd ? 'Analyzing...' : 'Analyze Keyword Gaps'}
+                            </button>
+
+                            {jdAnalysis && (
+                                <div className="space-y-4 animate-in fade-in duration-500">
+                                    {jdAnalysis.missing.length > 0 && (
+                                        <div className="p-4 rounded-xl bg-red-500/5 border border-red-500/10 space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-2">
+                                                    <AlertTriangle className="h-3.5 w-3.5 text-red-400" />
+                                                    <span className="text-xs font-bold text-red-300">Missing Keywords</span>
+                                                </div>
+                                                <span className="text-[9px] text-red-400 font-bold">{jdAnalysis.missing.length} gaps</span>
+                                            </div>
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {jdAnalysis.missing.map(k => (
+                                                    <span key={k} className="px-2.5 py-1 rounded-lg bg-red-500/10 text-red-400 text-[9px] font-bold uppercase tracking-wide border border-red-500/20">{k}</span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                    {jdAnalysis.matched.length > 0 && (
+                                        <div className="p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 space-y-3">
+                                            <div className="flex items-center gap-2">
+                                                <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
+                                                <span className="text-xs font-bold text-emerald-300">Matched Keywords</span>
+                                            </div>
+                                            <div className="flex flex-wrap gap-1.5">
+                                                {jdAnalysis.matched.map(k => (
+                                                    <span key={k} className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 text-[9px] font-bold uppercase tracking-wide border border-emerald-500/20">{k}</span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <div className="flex-1 p-12 flex items-start justify-center">
-                        <div className={`transition-all duration-1000 w-full max-w-[1000px] shadow-[0_50px_100px_rgba(0,0,0,1)] rounded-3xl overflow-hidden border border-white/10 group ${isTwoPageView ? 'aspect-[1.414/1]' : 'aspect-[1/1.414]'}`} style={{ minHeight: '700px' }}>
-                            <ResumePreview data={resumeData} isLoading={isLoading} template={template} isTwoPage={isTwoPageView} />
+
+                    {/* PDF Preview Wrapper */}
+                    <div className="flex-1 flex flex-col h-full overflow-y-auto custom-scrollbar">
+                        {/* Preview Top Bar */}
+                        <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-3.5 bg-black/50 backdrop-blur-xl border-b border-white/5">
+                            <div className="flex items-center gap-3">
+                                <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                                <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Live Preview</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                {/* JD Optimizer Trigger */}
+                                <button
+                                    onClick={() => setShowOptimizerPanel(!showOptimizerPanel)}
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide transition-colors ${showOptimizerPanel ? 'bg-purple-500/20 text-purple-300 border border-purple-500/20' : 'bg-white/5 border border-white/5 text-zinc-400 hover:text-white hover:border-white/10'}`}
+                                >
+                                    <Target className="h-3 w-3" /> Optimize
+                                </button>
+
+                                <div className="w-px h-4 bg-white/10" />
+
+                                {/* ATS Toggle */}
+                                <button
+                                    onClick={() => { setIsAtsSafe(!isAtsSafe); toast.success(isAtsSafe ? 'ATS Safe mode off' : 'ATS Safe mode on — simplified layout') }}
+                                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide border transition-colors ${isAtsSafe ? 'bg-blue-500/20 text-blue-300 border-blue-500/20' : 'bg-white/5 border-white/5 text-zinc-400 hover:text-white hover:border-white/10'}`}
+                                    title="Strip complex layouts for ATS parsers"
+                                >
+                                    <ShieldCheck className="h-3 w-3" /> ATS Safe
+                                </button>
+
+                                {/* DOCX */}
+                                <button
+                                    onClick={handleDownloadDocx}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide bg-white/5 border border-white/5 text-zinc-400 hover:text-white hover:border-white/10 transition-colors"
+                                >
+                                    <FileText className="h-3 w-3" /> DOCX
+                                </button>
+
+                                {/* Share */}
+                                <button
+                                    onClick={handleShare}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide bg-white/5 border border-white/5 text-zinc-400 hover:text-white hover:border-white/10 transition-colors"
+                                >
+                                    <Share2 className="h-3 w-3" /> Share
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* PDF Preview */}
+                        <div className="flex-1 p-8 flex items-start justify-center">
+                            <div className="w-full max-w-[900px] shadow-[0_40px_80px_rgba(0,0,0,1)] rounded-2xl overflow-hidden border border-white/[0.06]" style={{ minHeight: '700px', aspectRatio: '1/1.414' }}>
+                                <ResumePreview data={resumeData} isLoading={isLoading} template={template} isTwoPage={false} isAtsSafe={isAtsSafe} />
+                            </div>
                         </div>
                     </div>
                 </div>
             </main>
 
-            {showTemplates && (
-                <div className="fixed inset-0 z-40 bg-black/20 backdrop-blur-[2px]" onClick={() => { setShowTemplates(false); }} />
-            )}
-
             <style jsx global>{`
                 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
                 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-                .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #1a1a1a; border-radius: 20px; }
+                .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #1e1e1e; border-radius: 20px; }
                 .custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: #2a2a2a; }
             `}</style>
         </div>

@@ -20,6 +20,9 @@ import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { signout } from '@/app/auth/actions'
 import { Logo } from '@/components/ui/logo'
 
+import { ProfileDropdown } from '@/components/ui/profile-dropdown'
+import { FeedbackModal } from '@/components/feedback-modal'
+
 const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
     { name: 'Novatypalcv', href: '/dashboard/builder', icon: FileText },
@@ -69,15 +72,13 @@ export function Sidebar() {
             </div>
 
             {/* Bottom Profile / Settings block */}
-            <div className="p-6 mt-auto border-t border-white/5">
-                <form action={signout}>
-                    <AnimatedGenerateButton
-                        type="submit"
-                        labelIdle="log out"
-                        className="w-full h-11 text-zinc-500 hover:text-red-500 font-black italic shadow-none"
-                        icon={<LogOut className="h-4 w-4" />}
-                    />
-                </form>
+            <div className="mt-auto border-t border-white/5 flex flex-col items-center">
+                <div className="w-full border-b border-white/5 p-2">
+                    <FeedbackModal />
+                </div>
+                <div className="p-4 w-full">
+                    <ProfileDropdown className="w-full" />
+                </div>
             </div>
         </aside>
     )

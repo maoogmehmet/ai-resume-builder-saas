@@ -15,9 +15,10 @@ interface CoverLetterDownloadButtonProps {
     profileData: any;
     disabled?: boolean;
     className?: string;
+    variant?: string;
 }
 
-export function CoverLetterDownloadButton({ letterData, profileData, disabled, className = "" }: CoverLetterDownloadButtonProps) {
+export function CoverLetterDownloadButton({ letterData, profileData, disabled, className = "", variant }: CoverLetterDownloadButtonProps) {
     const [isDownloading, setIsDownloading] = useState(false)
     const supabase = createClient()
     const router = useRouter()

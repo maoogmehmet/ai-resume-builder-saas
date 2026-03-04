@@ -30,8 +30,8 @@ export const ClassicTemplate = ({ data }: { data: any }) => {
         <Document>
             <Page size="A4" style={styles.page}>
                 <View style={styles.header}>
-                    {personal_info.profile_image && (
-                        <Image src={personal_info.profile_image} style={styles.profileImage} />
+                    {personal_info.profile_image && personal_info.profile_image.trim() !== '' && (
+                        <Image src={{ uri: personal_info.profile_image }} style={styles.profileImage} />
                     )}
                     <View style={styles.headerText}>
                         <Text style={styles.name}>{personal_info.full_name}</Text>
@@ -94,7 +94,7 @@ export const ClassicTemplate = ({ data }: { data: any }) => {
     );
 };
 
-export const ResumePDFDocument = ({ data, template = 'classic' }: { data: any, template?: string }) => {
+export const ResumePDFDocument = ({ data, template = 'classic', isAtsSafe = false }: { data: any, template?: string, isAtsSafe?: boolean }) => {
     if (!data || !data.personal_info) return (
         <Document>
             <Page size="A4">
@@ -102,6 +102,11 @@ export const ResumePDFDocument = ({ data, template = 'classic' }: { data: any, t
             </Page>
         </Document>
     );
+
+    // If ATS Safe is enforced, ALWAYS use the classic layout as it lacks columns and graphics
+    if (isAtsSafe) {
+        return <ClassicTemplate data={data} />;
+    }
 
     if (template === 'modern') {
         return <ModernTemplate data={data} />;

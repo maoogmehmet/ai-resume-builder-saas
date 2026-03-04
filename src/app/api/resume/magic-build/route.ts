@@ -23,6 +23,18 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'AI service not configured. Please add ANTHROPIC_API_KEY.' }, { status: 503 });
         }
 
+        const { data: profile, error: profileError } = await supabase.from('profiles').select('trial_end_date, subscription_status').eq('id', user.id).single();
+        if (profileError || !profile) {
+            return NextResponse.json({ error: 'Profile not found' }, { status: 404 });
+        }
+
+        const isTrialActive = profile.trial_end_date && new Date(profile.trial_end_date) > new Date();
+        const isSubscribed = profile.subscription_status === 'active' || profile.subscription_status === 'trialing';
+
+        if (!isTrialActive && !isSubscribed) {
+            return NextResponse.json({ error: 'subscription_required', message: 'Your trial has expired. Please upgrade to Elite Tier to generate AI resumes.' }, { status: 403 });
+        }
+
         const { role, skills, accomplishments } = await req.json();
 
         if (!role?.trim()) {

@@ -31,3 +31,34 @@ export async function sendWelcomeEmail(toEmail: string) {
         return { success: false, error: err };
     }
 }
+
+export async function sendFeedbackEmail(userEmail: string, message: string, type: string) {
+    try {
+        const adminEmail = process.env.ADMIN_EMAIL || 'admin@cvbuilder.com'; // Fallback admin email
+        const { data, error } = await resend.emails.send({
+            from: 'feedback@resend.dev',
+            to: adminEmail,
+            subject: `[Feedback - ${type}] from ${userEmail}`,
+            html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>New Feedback Received</h2>
+          <p><strong>From:</strong> ${userEmail}</p>
+          <p><strong>Type:</strong> ${type}</p>
+          <hr/>
+          <p><strong>Message:</strong></p>
+          <p style="white-space: pre-wrap;">${message}</p>
+        </div>
+      `,
+        });
+
+        if (error) {
+            console.error('Error sending feedback email:', error);
+            return { success: false, error };
+        }
+
+        return { success: true, data };
+    } catch (err) {
+        console.error('Failed to send feedback email:', err);
+        return { success: false, error: err };
+    }
+}

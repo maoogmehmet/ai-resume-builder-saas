@@ -4,7 +4,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import {
-	AppleIcon,
 	ChevronLeftIcon,
 } from 'lucide-react';
 import { Logo } from './logo';
@@ -34,22 +33,22 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 					</div>
 					<p className="text-2xl font-black tracking-tighter text-white">Novatypalcv</p>
 				</div>
-				<div className="z-20 mt-auto pb-12">
-					<motion.blockquote
+				<div className="z-20 flex-1 flex items-center justify-center">
+					<motion.div
 						initial={{ opacity: 0, y: 20 }}
 						animate={{ opacity: 1, y: 0 }}
 						transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-						className="space-y-6"
+						className="text-center space-y-6 px-8"
 					>
-						<p className="text-4xl font-black tracking-tighter text-white leading-[0.9]">
-							&ldquo;The modern system <br /> that <span className="text-zinc-700 font-normal">redefined</span> my professional career.&rdquo;
+						<p className="text-5xl font-black tracking-tighter text-white leading-[0.9] italic lowercase">
+							Your career,<br /><span className="text-zinc-500 font-normal">elevated.</span>
 						</p>
-						<footer className="font-bold text-zinc-600 text-[10px] uppercase tracking-[0.4em] opacity-40">
-							— Sofia Davis, Software Engineer
-						</footer>
-					</motion.blockquote>
+						<p className="text-zinc-600 text-sm font-black italic lowercase tracking-wide opacity-60 max-w-xs mx-auto">
+							AI-crafted resumes that get you noticed by the right people.
+						</p>
+					</motion.div>
 				</div>
-				<div className="absolute inset-0 z-0 grayscale opacity-40">
+				<div className="absolute inset-0 z-0">
 					<ShaderAnimation />
 				</div>
 			</div>
@@ -81,7 +80,8 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 						</p>
 					</div>
 
-					<div className="space-y-4">
+					<div className="space-y-3">
+						{/* Google Button - Official Google Design */}
 						<button
 							onClick={async () => {
 								const { createClient } = await import('@/lib/supabase/client');
@@ -93,11 +93,12 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 									},
 								});
 							}}
-							className="w-full h-14 rounded-2xl bg-white border-2 border-transparent text-black font-bold flex items-center justify-center gap-3 transition-all hover:bg-zinc-100 shadow-xl"
+							className="w-full h-12 rounded-full bg-white border border-[#dadce0] text-[#3c4043] text-sm font-medium flex items-center justify-center gap-3 transition-all hover:bg-[#f8f9fa] hover:shadow-md shadow-sm"
 						>
-							<GoogleIcon className="size-6" />
+							<GoogleIcon className="size-5" />
 							Continue with Google
 						</button>
+						{/* Apple Button - Official Apple Design */}
 						<button
 							onClick={async () => {
 								const { createClient } = await import('@/lib/supabase/client');
@@ -109,9 +110,9 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 									},
 								});
 							}}
-							className="w-full h-14 rounded-2xl bg-white border-2 border-transparent text-black font-bold flex items-center justify-center gap-3 transition-all hover:bg-zinc-100 shadow-xl"
+							className="w-full h-12 rounded-full bg-black border border-black text-white text-sm font-medium flex items-center justify-center gap-3 transition-all hover:bg-zinc-900 shadow-sm"
 						>
-							<AppleIcon className="size-6" />
+							<AppleIconBrand className="size-5" />
 							Continue with Apple
 						</button>
 					</div>
@@ -216,15 +217,17 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 }
 
 const GoogleIcon = (props: React.ComponentProps<'svg'>) => (
-	<svg
-		xmlns="http://www.w3.org/2000/svg"
-		viewBox="0 0 24 24"
-		fill="currentColor"
-		{...props}
-	>
-		<g>
-			<path d="M12.479,14.265v-3.279h11.049c0.108,0.571,0.164,1.247,0.164,1.979c0,2.46-0.672,5.502-2.84,7.669   C18.744,22.829,16.051,24,12.483,24C5.869,24,0.308,18.613,0.308,12S5.869,0,12.483,0c3.659,0,6.265,1.436,8.223,3.307L18.392,5.62   c-1.404-1.317-3.307-2.341-5.913-2.341C7.65,3.279,3.873,7.171,3.873,12s3.777,8.721,8.606,8.721c3.132,0,4.916-1.258,6.059-2.401   c0.927-0.927,1.537-2.251,1.777-4.059L12.479,14.265z" />
-		</g>
+	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" {...props}>
+		<path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z" />
+		<path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z" />
+		<path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z" />
+		<path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" />
+	</svg>
+);
+
+const AppleIconBrand = (props: React.ComponentProps<'svg'>) => (
+	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 814 1000" fill="currentColor" {...props}>
+		<path d="M788.1 340.9c-5.8 4.5-108.2 62.2-108.2 190.5 0 148.4 130.3 200.9 134.2 202.2-.6 3.2-20.7 71.9-68.7 141.9-42.8 61.6-87.5 123.1-155.5 123.1s-85.5-39.5-164-39.5c-76 0-103.7 40.8-165.9 40.8s-105-57.8-155.5-127.4C46 790.7 0 663 0 541.8c0-207.5 135.4-317.3 269-317.3 70.1 0 128.4 46.4 172.5 46.4 43.1 0 111.2-49 192.5-49 34.4 0 147.4 3.2 221.8 99.6zm-261.3-192c31.3-37.9 53.1-90.8 53.1-143.7 0-7.1-.6-14.3-1.9-20.1-50.6 1.9-110.8 33.7-147.1 75.8-28.5 32.4-55.1 83.6-55.1 137.2 0 7.7 1.3 15.5 1.9 18 3.2.6 8.4 1.3 13.6 1.3 45.4 0 102.5-30.4 135.5-68.5z" />
 	</svg>
 );
 

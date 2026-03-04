@@ -1,408 +1,423 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import {
-    Loader2, ChevronDown,
-    Link2, Copy, Check, ExternalLink,
-    Eye, MousePointerClick, TrendingUp, Clock, BarChart3, Users
-} from 'lucide-react'
+import React, { useState, useMemo, useEffect } from 'react'
+import { Card, CardContent } from "@/components/ui/card"
+import { motion } from 'framer-motion'
+import { Activity, BarChart3, Clock, Copy, Eye, Globe2, Link as LinkIcon, MoreHorizontal, MousePointerClick, Smartphone, Trash, TrendingUp, Users } from 'lucide-react'
+import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, Cell, PieChart, Pie } from 'recharts'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { toast } from 'sonner'
-import AnimatedText from '@/components/ui/animated-text'
-import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
-import * as RechartsPrimitive from 'recharts'
-import {
-    ChartContainer,
-    ChartTooltip,
-    ChartTooltipContent,
-    type ChartConfig,
-} from '@/components/ui/chart'
+import Link from 'next/link'
 
-interface PublicLink {
-    id: string
-    slug: string
-    is_active: boolean
-    view_count: number
-    link_name: string | null
-    created_at: string
-    resumes: { title: string } | null
+// Type Definitions
+type Timeframe = '24h' | '7d' | '30d' | 'all'
+
+interface ChartData {
+    time: string;
+    views: number;
 }
 
-interface DataPoint {
-    date: string
-    views: number
+interface FunnelData {
+    stage: string;
+    count: number;
+    color: string;
 }
 
-type TimePeriod = '15d' | '30d' | '1y' | 'all'
-
-const chartConfig = {
-    views: {
-        label: "Views",
-        color: "#10b981",
-    },
-} satisfies ChartConfig
-
-const timePeriodLabels: Record<TimePeriod, string> = {
-    '15d': 'Last 15 days',
-    '30d': 'Last 30 days',
-    '1y': 'Last 1 year',
-    'all': 'All time',
+interface LinkData {
+    id: string;
+    name: string;
+    url: string;
+    views: number;
+    uniques: number;
+    avgTime: string;
+    created: string;
+    status: 'active' | 'archived';
 }
 
-// Animated counter hook
-function useAnimatedCounter(target: number, duration: number = 1200) {
-    const [count, setCount] = useState(0)
-    useEffect(() => {
-        let start = 0
-        const startTime = Date.now()
-        const timer = setInterval(() => {
-            const elapsed = Date.now() - startTime
-            const progress = Math.min(elapsed / duration, 1)
-            const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress)
-            setCount(Math.floor(eased * target))
-            if (progress >= 1) clearInterval(timer)
-        }, 16)
-        return () => clearInterval(timer)
-    }, [target, duration])
-    return count
-}
+// Mock Data Generator Functions
+const generateViewsData = (timeframe: Timeframe): ChartData[] => {
+    const points = timeframe === '24h' ? 24 : timeframe === '7d' ? 7 : timeframe === '30d' ? 30 : 12;
+    const format = timeframe === '24h' ? (i: number) => `${i}:00` : timeframe === 'all' ? (i: number) => `Month ${i + 1}` : (i: number) => `Day ${i + 1}`;
 
-function generateData(period: TimePeriod): DataPoint[] {
-    const mockup: DataPoint[] = []
-    const now = new Date()
-    let days = 15
-    if (period === '30d') days = 30
-    else if (period === '1y') days = 365
-    else if (period === 'all') days = 730
-
-    for (let i = days - 1; i >= 0; i--) {
-        const d = new Date()
-        d.setDate(now.getDate() - i)
-
-        let format: Intl.DateTimeFormatOptions
-        if (days <= 30) {
-            format = { month: 'short', day: '2-digit' }
-        } else if (days <= 365) {
-            format = { month: 'short', day: '2-digit' }
-        } else {
-            format = { month: 'short', year: '2-digit' }
+    return Array.from({ length: points }).map((_, i) => {
+        // Create a fake spike somewhere
+        const isSpike = i === Math.floor(points * 0.7);
+        return {
+            time: format(i),
+            views: isSpike ? Math.floor(Math.random() * 500) + 1000 : Math.floor(Math.random() * 200) + 50
         }
-
-        const dateStr = d.toLocaleDateString('en-US', format)
-
-        // Generate realistic-looking data with occasional spikes
-        let val = 0
-        const spikeDay = Math.floor(days * 0.7)
-        if (i === spikeDay) val = 120 + Math.random() * 50
-        else if (Math.abs(i - spikeDay) <= 2) val = 40 + Math.random() * 30
-        else val = 5 + Math.random() * 35
-
-        mockup.push({ date: dateStr, views: Math.floor(val) })
-    }
-    return mockup
+    })
 }
 
-export default function AnalyticsPage() {
-    const [links, setLinks] = useState<PublicLink[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [copiedSlug, setCopiedSlug] = useState<string | null>(null)
-    const [timePeriod, setTimePeriod] = useState<TimePeriod>('15d')
-    const [showTimeDropdown, setShowTimeDropdown] = useState(false)
-    const [data, setData] = useState<DataPoint[]>([])
-    const [mounted, setMounted] = useState(false)
+// Main Component
+export default function AnalyticsDashboard() {
+    const [timeframe, setTimeframe] = useState<Timeframe>('7d')
+    const [chartData, setChartData] = useState<ChartData[]>([])
 
+    // Trigger chart animation on timeframe change
     useEffect(() => {
-        setMounted(true)
-        const fetchLinks = async () => {
-            try {
-                const res = await fetch('/api/analytics/list-links')
-                const json = await res.json()
-                if (json.success) setLinks(json.links)
-            } catch (err) {
-                console.error(err)
-            } finally {
-                setIsLoading(false)
-            }
-        }
-        fetchLinks()
-    }, [])
+        setChartData(generateViewsData(timeframe))
+    }, [timeframe])
 
-    // Regenerate chart data when time period changes
-    useEffect(() => {
-        setData(generateData(timePeriod))
-    }, [timePeriod])
+    // Derived Mock Metrics based on timeframe
+    const multiplier = timeframe === '24h' ? 1 : timeframe === '7d' ? 7 : timeframe === '30d' ? 30 : 120;
 
-    const totalViews = links.reduce((sum, l) => sum + (l.view_count || 0), 0)
-    const totalLinks = links.length
-    const avgViewsPerLink = totalLinks > 0 ? Math.round(totalViews / totalLinks) : 0
-    const peakViews = data.length > 0 ? Math.max(...data.map(d => d.views)) : 0
+    const stats = {
+        totalViews: 1245 * multiplier,
+        viewsChange: '+12.4%',
+        viewsPositive: true,
 
-    const animatedTotalViews = useAnimatedCounter(totalViews || 1)
-    const animatedLinks = useAnimatedCounter(totalLinks)
-    const animatedAvg = useAnimatedCounter(avgViewsPerLink)
-    const animatedPeak = useAnimatedCounter(peakViews)
+        activeLinks: 4,
+        linksChange: '0%',
+        linksPositive: true,
 
-    const copyLink = (slug: string) => {
-        const url = `${window.location.origin}/r/${slug}`
-        navigator.clipboard.writeText(url)
-        setCopiedSlug(slug)
-        toast.success('Link copied!')
-        setTimeout(() => setCopiedSlug(null), 2000)
+        avgViews: 311 * multiplier,
+        avgChange: '+8.2%',
+        avgPositive: true,
+
+        uniqueVisitors: 892 * multiplier,
+        uniqueChange: '-2.1%',
+        uniquePositive: false,
     }
 
-    // Determine XAxis interval based on data points
-    const tickInterval = data.length > 60 ? Math.floor(data.length / 12) : data.length > 30 ? 3 : 1
-
-    // Stats cards data
-    const statsCards = [
-        { icon: Eye, label: 'Total Views', value: animatedTotalViews, color: 'emerald' },
-        { icon: Link2, label: 'Active Links', value: animatedLinks, color: 'blue' },
-        { icon: BarChart3, label: 'Avg Views / Link', value: animatedAvg, color: 'violet' },
-        { icon: TrendingUp, label: 'Peak Views', value: animatedPeak, color: 'amber' },
-        { icon: Users, label: 'Unique Visitors', value: useAnimatedCounter(Math.floor((totalViews || 1) * 0.72)), color: 'rose' },
-        { icon: Clock, label: 'Avg. Time on Page', value: '2m 34s', color: 'cyan', isText: true },
+    const funnelData: FunnelData[] = [
+        { stage: 'Profile Views', count: stats.totalViews, color: '#3b82f6' },
+        { stage: 'Scroll 50%', count: Math.floor(stats.totalViews * 0.65), color: '#8b5cf6' },
+        { stage: 'Contact Click', count: Math.floor(stats.totalViews * 0.25), color: '#ec4899' },
+        { stage: 'CV Download', count: Math.floor(stats.totalViews * 0.12), color: '#eab308' },
     ]
 
-    const colorMap: Record<string, string> = {
-        emerald: 'text-emerald-500 bg-emerald-500/10 border-emerald-500/20',
-        blue: 'text-blue-500 bg-blue-500/10 border-blue-500/20',
-        violet: 'text-violet-500 bg-violet-500/10 border-violet-500/20',
-        amber: 'text-amber-500 bg-amber-500/10 border-amber-500/20',
-        rose: 'text-rose-500 bg-rose-500/10 border-rose-500/20',
-        cyan: 'text-cyan-500 bg-cyan-500/10 border-cyan-500/20',
+    const activeLinks: LinkData[] = [
+        { id: '1', name: 'Software Engineer - Google', url: 'cv.bld/johndoe-se', views: 4200, uniques: 3100, avgTime: '02m 45s', created: 'Oct 12, 2023', status: 'active' },
+        { id: '2', name: 'Product Manager - Microsoft', url: 'cv.bld/johndoe-pm', views: 850, uniques: 720, avgTime: '01m 20s', created: 'Jan 05, 2024', status: 'active' },
+        { id: '3', name: 'Startup Generalist', url: 'cv.bld/johndoe-gen', views: 320, uniques: 290, avgTime: '00m 45s', created: 'Feb 20, 2024', status: 'active' },
+        { id: '4', name: 'Legacy Resume 2022', url: 'cv.bld/johndoe-old', views: 12000, uniques: 9000, avgTime: '03m 10s', created: 'Mar 15, 2022', status: 'archived' },
+    ]
+
+    const deviceData = [
+        { name: 'Desktop', value: 65, color: '#3b82f6' },
+        { name: 'Mobile', value: 30, color: '#8b5cf6' },
+        { name: 'Tablet', value: 5, color: '#ec4899' },
+    ]
+
+    const geoData = [
+        { country: 'United States', percentage: 45 },
+        { country: 'United Kingdom', percentage: 20 },
+        { country: 'Germany', percentage: 15 },
+        { country: 'Other', percentage: 20 },
+    ]
+
+    const handleCopy = (url: string) => {
+        navigator.clipboard.writeText(`https://${url}`)
+        toast.success('Link Copied', { description: `Copied ${url} to clipboard.` })
     }
 
     return (
-        <div className="flex flex-col min-h-screen bg-[#020202] w-full font-sans text-white p-6 sm:p-12 overflow-x-hidden">
-            <div className="max-w-7xl mx-auto w-full space-y-10">
+        <div className="min-h-screen bg-black text-white font-sans selection:bg-[#3b82f6]/30 p-6 sm:p-8 lg:p-12 pb-24">
 
-                {/* 1. HEADER SECTION */}
-                <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
-                >
-                    <AnimatedText text="metrics" className="text-4xl font-black tracking-tightest italic lowercase" animationType="letters" />
-
+            {/* Header & Sticky Controls */}
+            <header className="mb-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div className="space-y-1">
                     <div className="flex items-center gap-3">
-                        {/* Time Period Dropdown */}
-                        <div className="relative">
-                            <button
-                                onClick={() => setShowTimeDropdown(!showTimeDropdown)}
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-[#0a0a0a] border border-white/10 text-[10px] font-black uppercase tracking-widest text-zinc-500 hover:text-white transition-all italic active:scale-95"
-                            >
-                                {timePeriodLabels[timePeriod]} <ChevronDown className={`h-3 w-3 transition-transform ${showTimeDropdown ? 'rotate-180' : ''}`} />
-                            </button>
-                            <AnimatePresence>
-                                {showTimeDropdown && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: -8, scale: 0.95 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, y: -8, scale: 0.95 }}
-                                        transition={{ duration: 0.15 }}
-                                        className="absolute right-0 top-full mt-2 w-48 bg-[#0a0a0a] border border-white/10 rounded-xl overflow-hidden z-50 shadow-[0_20px_40px_rgba(0,0,0,0.8)]"
-                                    >
-                                        {(Object.keys(timePeriodLabels) as TimePeriod[]).map((key) => (
-                                            <button
-                                                key={key}
-                                                onClick={() => { setTimePeriod(key); setShowTimeDropdown(false) }}
-                                                className={`w-full text-left px-4 py-3 text-[10px] font-black uppercase tracking-widest transition-colors italic ${timePeriod === key
-                                                    ? 'text-emerald-500 bg-emerald-500/5'
-                                                    : 'text-zinc-500 hover:text-white hover:bg-white/5'
-                                                    }`}
-                                            >
-                                                {timePeriodLabels[key]}
-                                            </button>
-                                        ))}
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                        <div className="h-10 w-10 bg-[#0a0a0a] border border-[#3b82f6]/30 rounded-[1rem] flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                            <Activity className="h-5 w-5 text-[#3b82f6]" strokeWidth={2.5} />
                         </div>
+                        <h1 className="text-4xl font-black tracking-[-0.08em] italic lowercase text-white">
+                            neural analytics
+                        </h1>
                     </div>
-                </motion.div>
-
-                {/* 2. FULL-WIDTH CHART */}
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.1 }}
-                    className="bg-[#050505] border border-white/[0.04] rounded-[2rem] p-6 sm:p-10 shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden"
-                >
-                    <div className="relative h-[350px] sm:h-[400px] w-full">
-                        {mounted && (
-                            <ChartContainer config={chartConfig} className="h-full w-full">
-                                <RechartsPrimitive.AreaChart
-                                    data={data}
-                                    margin={{ top: 20, right: 10, left: 10, bottom: 30 }}
-                                >
-                                    <defs>
-                                        <linearGradient id="fillViews" x1="0" y1="0" x2="0" y2="1">
-                                            <stop
-                                                offset="5%"
-                                                stopColor="var(--color-views)"
-                                                stopOpacity={0.4}
-                                            />
-                                            <stop
-                                                offset="95%"
-                                                stopColor="var(--color-views)"
-                                                stopOpacity={0.05}
-                                            />
-                                        </linearGradient>
-                                    </defs>
-                                    <RechartsPrimitive.CartesianGrid
-                                        vertical={false}
-                                        stroke="white"
-                                        strokeOpacity={0.05}
-                                        strokeDasharray="4 4"
-                                    />
-                                    <RechartsPrimitive.XAxis
-                                        dataKey="date"
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: "white", fillOpacity: 0.35, fontSize: 10, fontWeight: 600 }}
-                                        dy={15}
-                                        interval={tickInterval}
-                                        angle={-35}
-                                        textAnchor="end"
-                                    />
-                                    <RechartsPrimitive.YAxis
-                                        orientation="right"
-                                        axisLine={false}
-                                        tickLine={false}
-                                        tick={{ fill: "white", fillOpacity: 0.4, fontSize: 12, fontWeight: "bold" }}
-                                        tickFormatter={(val: number) => val > 0 ? val.toString() : "0"}
-                                    />
-                                    <ChartTooltip
-                                        cursor={{ stroke: "white", strokeOpacity: 0.1, strokeWidth: 1 }}
-                                        content={<ChartTooltipContent hideLabel />}
-                                    />
-                                    <RechartsPrimitive.Area
-                                        type="monotone"
-                                        dataKey="views"
-                                        stroke="var(--color-views)"
-                                        strokeWidth={3}
-                                        fill="url(#fillViews)"
-                                        fillOpacity={1}
-                                        dot={false}
-                                        activeDot={{ r: 6, fill: "#10b981", stroke: "#050505", strokeWidth: 2 }}
-                                        animationDuration={2000}
-                                        animationEasing="ease-out"
-                                    />
-                                </RechartsPrimitive.AreaChart>
-                            </ChartContainer>
-                        )}
-                    </div>
-                </motion.div>
-
-                {/* 3. STATS GRID — Below Chart */}
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                    {statsCards.map((stat, index) => {
-                        const Icon = stat.icon
-                        return (
-                            <motion.div
-                                key={stat.label}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: 0.05 * index }}
-                                className="bg-[#050505] border border-white/[0.04] rounded-2xl p-5 hover:border-white/[0.08] transition-all group"
-                            >
-                                <div className={`h-9 w-9 rounded-xl flex items-center justify-center mb-3 border ${colorMap[stat.color]}`}>
-                                    <Icon className="h-4 w-4" />
-                                </div>
-                                <p className="text-[10px] font-black uppercase tracking-[0.15em] text-zinc-600 mb-1 italic">{stat.label}</p>
-                                <p className="text-2xl font-black text-white tabular-nums tracking-tight">
-                                    {stat.isText ? stat.value : stat.value}
-                                </p>
-                            </motion.div>
-                        )
-                    })}
+                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.2em] italic ml-14">Aggregate telemetry and pipeline conversion data.</p>
                 </div>
 
-                {/* 4. PERFORMANCE TABLE */}
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.3 }}
-                    className="space-y-6"
-                >
-                    <div className="flex justify-between items-center px-4">
-                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 italic">Link Performance Breakdown</h3>
+                <div className="flex items-center gap-2 bg-[#050505] p-1.5 rounded-full border border-white/5">
+                    {['24h', '7d', '30d', 'all'].map((t) => (
+                        <button
+                            key={t}
+                            onClick={() => setTimeframe(t as Timeframe)}
+                            className={`px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest italic transition-all ${timeframe === t ? 'bg-white text-black shadow-md' : 'text-zinc-500 hover:text-white'}`}
+                        >
+                            {t}
+                        </button>
+                    ))}
+                </div>
+            </header>
+
+            {/* Top Level Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <Card className="bg-[#050505] border-white/5 rounded-[1.5rem] overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-40 transition-opacity">
+                        <Eye className="w-16 h-16 text-[#3b82f6]" />
                     </div>
+                    <CardContent className="p-6 relative z-10 flex flex-col justify-between h-full space-y-4">
+                        <div className="flex justify-between items-start">
+                            <span className="text-[10px] text-zinc-500 font-extrabold uppercase tracking-widest italic">Total Views</span>
+                            <span className={`text-[10px] font-bold px-2 py-1 rounded-md bg-opacity-10 border ${stats.viewsPositive ? 'text-emerald-400 bg-emerald-500 border-emerald-500/20' : 'text-rose-400 bg-rose-500 border-rose-500/20'}`}>
+                                {stats.viewsChange}
+                            </span>
+                        </div>
+                        <div className="text-4xl font-black tracking-tighter text-white">{stats.totalViews.toLocaleString()}</div>
+                    </CardContent>
+                </Card>
 
-                    <div className="bg-[#050505] border border-white/[0.04] rounded-[2rem] overflow-hidden shadow-2xl">
-                        {isLoading ? (
-                            <div className="p-32 flex flex-col items-center justify-center gap-4 text-zinc-600">
-                                <Loader2 className="h-10 w-10 animate-spin" />
-                                <span className="text-[10px] font-black uppercase tracking-widest italic">Hydrating data layer...</span>
-                            </div>
-                        ) : links.length === 0 ? (
-                            <div className="p-32 text-center text-zinc-700 font-black uppercase tracking-widest text-xs italic">
-                                No active resume links found.
-                            </div>
-                        ) : (
-                            <div className="divide-y divide-white/[0.03]">
-                                {links.map((link, index) => (
-                                    <motion.div
-                                        key={link.id}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        transition={{ duration: 0.5, delay: 0.1 * index }}
-                                        className="p-8 sm:p-10 flex flex-col sm:flex-row items-center justify-between hover:bg-white/[0.01] transition-colors group gap-8"
-                                    >
-                                        <div className="flex items-center gap-8 w-full sm:w-auto">
-                                            <div className="h-16 w-16 rounded-[1.25rem] bg-black border border-white/5 flex items-center justify-center group-hover:border-emerald-500/40 transition-all shadow-inner">
-                                                <Link2 className="h-7 w-7 text-zinc-700 group-hover:text-emerald-500 transition-colors" />
-                                            </div>
-                                            <div>
-                                                <h4 className="text-xl font-black text-white tracking-tight italic">{link.link_name || link.resumes?.title || 'Untitled Portfolio'}</h4>
-                                                <div className="flex items-center gap-3 mt-1.5">
-                                                    <span className="text-[10px] font-black text-emerald-500/80 uppercase tracking-widest italic">r/{link.slug}</span>
-                                                    <div className="h-1 w-1 rounded-full bg-zinc-800" />
-                                                    <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest italic">{new Date(link.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center justify-between sm:justify-end gap-12 w-full sm:w-auto">
-                                            <div className="text-center sm:text-right">
-                                                <p className="text-3xl font-black text-white">{link.view_count || 0}</p>
-                                                <p className="text-[10px] text-zinc-600 font-black uppercase tracking-widest italic">Views</p>
-                                            </div>
-
-                                            <div className="flex items-center gap-2">
-                                                <AnimatedGenerateButton
-                                                    size="icon"
-                                                    highlightHueDeg={copiedSlug === link.slug ? 140 : 210}
-                                                    onClick={() => copyLink(link.slug)}
-                                                    className="h-12 w-12"
-                                                    icon={copiedSlug === link.slug ? <Check className="h-5 w-5 text-emerald-500" /> : <Copy className="h-5 w-5 text-zinc-400" />}
-                                                />
-                                                <AnimatedGenerateButton
-                                                    size="icon"
-                                                    href={`/r/${link.slug}`}
-                                                    className="h-12 w-12"
-                                                    icon={<ExternalLink className="h-5 w-5 text-zinc-400" />}
-                                                />
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        )}
+                <Card className="bg-[#050505] border-white/5 rounded-[1.5rem] overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-40 transition-opacity">
+                        <LinkIcon className="w-16 h-16 text-[#8b5cf6]" />
                     </div>
-                </motion.div>
+                    <CardContent className="p-6 relative z-10 flex flex-col justify-between h-full space-y-4">
+                        <div className="flex justify-between items-start">
+                            <span className="text-[10px] text-zinc-500 font-extrabold uppercase tracking-widest italic">Active Links</span>
+                            <span className={`text-[10px] font-bold px-2 py-1 rounded-md bg-white/5 border border-white/10 text-zinc-300`}>
+                                {stats.linksChange}
+                            </span>
+                        </div>
+                        <div className="text-4xl font-black tracking-tighter text-white">{stats.activeLinks}</div>
+                    </CardContent>
+                </Card>
 
-                {/* 5. FOOTER NOTE */}
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: 0.6 }}
-                    className="flex justify-center pt-8"
-                >
-                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-zinc-800 italic">Elite Career Intelligence Layer</p>
-                </motion.div>
+                <Card className="bg-[#050505] border-white/5 rounded-[1.5rem] overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-40 transition-opacity">
+                        <BarChart3 className="w-16 h-16 text-[#eab308]" />
+                    </div>
+                    <CardContent className="p-6 relative z-10 flex flex-col justify-between h-full space-y-4">
+                        <div className="flex justify-between items-start">
+                            <span className="text-[10px] text-zinc-500 font-extrabold uppercase tracking-widest italic">Avg Views/Link</span>
+                            <span className={`text-[10px] font-bold px-2 py-1 rounded-md bg-opacity-10 border ${stats.avgPositive ? 'text-emerald-400 bg-emerald-500 border-emerald-500/20' : 'text-rose-400 bg-rose-500 border-rose-500/20'}`}>
+                                {stats.avgChange}
+                            </span>
+                        </div>
+                        <div className="text-4xl font-black tracking-tighter text-white">{stats.avgViews.toLocaleString()}</div>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-[#050505] border-white/5 rounded-[1.5rem] overflow-hidden relative group">
+                    <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-40 transition-opacity">
+                        <Users className="w-16 h-16 text-[#ec4899]" />
+                    </div>
+                    <CardContent className="p-6 relative z-10 flex flex-col justify-between h-full space-y-4">
+                        <div className="flex justify-between items-start">
+                            <span className="text-[10px] text-zinc-500 font-extrabold uppercase tracking-widest italic">Unique Visitors</span>
+                            <span className={`text-[10px] font-bold px-2 py-1 rounded-md bg-opacity-10 border ${stats.uniquePositive ? 'text-emerald-400 bg-emerald-500 border-emerald-500/20' : 'text-rose-400 bg-rose-500 border-rose-500/20'}`}>
+                                {stats.uniqueChange}
+                            </span>
+                        </div>
+                        <div className="text-4xl font-black tracking-tighter text-white">{stats.uniqueVisitors.toLocaleString()}</div>
+                    </CardContent>
+                </Card>
             </div>
+
+            {/* Main Graphs Row */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+                {/* Traffic Line Chart */}
+                <Card className="lg:col-span-2 bg-[#050505] border-white/5 rounded-[2rem] p-6 lg:p-8 flex flex-col relative overflow-hidden">
+                    <div className="absolute top-8 right-8 flex items-center gap-2">
+                        <div className="h-2 w-2 bg-[#3b82f6] rounded-full animate-pulse" />
+                        <span className="text-[9px] font-black uppercase tracking-widest text-[#3b82f6] italic">Live Telemetry</span>
+                    </div>
+                    <h3 className="text-xl font-black tracking-[-0.05em] text-white italic lowercase mb-2">traffic vector</h3>
+                    <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-8">Views mapped over {timeframe === 'all' ? 'All Time' : timeframe}</p>
+
+                    <div className="flex-1 min-h-[300px] w-full mt-4">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <LineChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" stroke="#27272a" vertical={false} />
+                                <XAxis
+                                    dataKey="time"
+                                    stroke="#52525b"
+                                    fontSize={10}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    padding={{ left: 10, right: 10 }}
+                                />
+                                <YAxis
+                                    stroke="#52525b"
+                                    fontSize={10}
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickFormatter={(val) => val >= 1000 ? `${(val / 1000).toFixed(1)}k` : val}
+                                />
+                                <RechartsTooltip
+                                    contentStyle={{ backgroundColor: '#111', borderColor: '#333', borderRadius: '12px', padding: '12px' }}
+                                    itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
+                                    labelStyle={{ color: '#a1a1aa', fontSize: '10px', textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: '4px' }}
+                                    cursor={{ stroke: '#3b82f6', strokeWidth: 1, strokeDasharray: '4 4' }}
+                                    formatter={(value: any) => {
+                                        // Spike Alert Logic inside tooltip
+                                        if (typeof value === 'number' && value > 800) return [<span key="spike" className="text-rose-400">⚠️ {value} (Unusual Spike)</span>, 'Views']
+                                        return [value, 'Views']
+                                    }}
+                                />
+                                <defs>
+                                    <linearGradient id="colorViews" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                                    </linearGradient>
+                                </defs>
+                                <Line
+                                    type="monotone"
+                                    dataKey="views"
+                                    stroke="#3b82f6"
+                                    strokeWidth={3}
+                                    dot={false}
+                                    activeDot={{ r: 6, fill: '#3b82f6', stroke: '#000', strokeWidth: 2 }}
+                                    animationDuration={1500}
+                                    animationEasing="ease-out"
+                                />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </div>
+                </Card>
+
+                {/* Conversion Funnel */}
+                <Card className="bg-[#050505] border-white/5 rounded-[2rem] p-6 lg:p-8 flex flex-col">
+                    <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-xl font-black tracking-[-0.05em] text-white italic lowercase">conversion funnel</h3>
+                        <span className="text-2xl font-black text-emerald-400 tracking-tighter">12%</span>
+                    </div>
+                    <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest mb-8">View-to-Download Rate</p>
+
+                    <div className="flex-1 w-full flex flex-col justify-end min-h-[300px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart layout="vertical" data={funnelData} margin={{ top: 0, right: 30, left: 10, bottom: 0 }}>
+                                <XAxis type="number" hide />
+                                <YAxis dataKey="stage" type="category" stroke="#a1a1aa" fontSize={10} fontWeight="bold" width={80} tickLine={false} axisLine={false} />
+                                <RechartsTooltip
+                                    cursor={{ fill: 'rgba(255,255,255,0.02)' }}
+                                    contentStyle={{ backgroundColor: '#111', borderColor: '#333', borderRadius: '12px' }}
+                                    itemStyle={{ color: '#fff', fontSize: '12px', fontWeight: 'bold' }}
+                                />
+                                <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={24} animationDuration={1000}>
+                                    {funnelData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </Card>
+            </div>
+
+            {/* Geo and Breakdown Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                {/* Device Breakdown */}
+                <Card className="bg-[#050505] border-white/5 rounded-[2rem] p-6 flex flex-col md:flex-row items-center gap-6">
+                    <div className="flex-1 w-full space-y-2">
+                        <div className="flex items-center gap-3 text-zinc-400 mb-4">
+                            <Smartphone className="w-5 h-5" />
+                            <h3 className="text-sm font-black tracking-widest uppercase italic">Device Telemetry</h3>
+                        </div>
+                        <div className="space-y-4">
+                            {deviceData.map(d => (
+                                <div key={d.name} className="space-y-1">
+                                    <div className="flex justify-between text-xs font-bold text-zinc-300">
+                                        <span>{d.name}</span>
+                                        <span>{d.value}%</span>
+                                    </div>
+                                    <div className="w-full bg-[#111] h-1.5 rounded-full overflow-hidden">
+                                        <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${d.value}%`, backgroundColor: d.color }} />
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="h-[120px] w-[120px] shrink-0">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart>
+                                <Pie data={deviceData} cx="50%" cy="50%" innerRadius={40} outerRadius={60} paddingAngle={2} dataKey="value" stroke="none">
+                                    {deviceData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.color} />
+                                    ))}
+                                </Pie>
+                                <RechartsTooltip contentStyle={{ backgroundColor: '#111', borderColor: '#333', borderRadius: '8px' }} itemStyle={{ color: '#fff', fontWeight: 'bold' }} />
+                            </PieChart>
+                        </ResponsiveContainer>
+                    </div>
+                </Card>
+
+                {/* Geo Breakdown */}
+                <Card className="bg-[#050505] border-white/5 rounded-[2rem] p-6">
+                    <div className="flex items-center gap-3 text-zinc-400 mb-6">
+                        <Globe2 className="w-5 h-5" />
+                        <h3 className="text-sm font-black tracking-widest uppercase italic">Global Heatmap</h3>
+                    </div>
+                    <div className="space-y-5">
+                        {geoData.map((loc, i) => (
+                            <div key={loc.country} className="flex items-center gap-4">
+                                <span className="text-[10px] text-zinc-600 font-black w-4">{i + 1}</span>
+                                <div className="flex-1 space-y-1.5">
+                                    <div className="flex justify-between text-xs font-bold text-zinc-300">
+                                        <span>{loc.country}</span>
+                                        <span>{loc.percentage}%</span>
+                                    </div>
+                                    <div className="w-full bg-[#111] h-1.5 rounded-full overflow-hidden">
+                                        <div className="h-full bg-indigo-500 rounded-full transition-all duration-1000" style={{ width: `${loc.percentage}%` }} />
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+            </div>
+
+            {/* Link-level Table */}
+            <Card className="bg-[#050505] border-white/5 rounded-[2rem] overflow-hidden">
+                <div className="p-8 border-b border-white/5 flex items-center justify-between">
+                    <div>
+                        <h3 className="text-xl font-black tracking-[-0.05em] text-white italic lowercase mb-1">public endpoints</h3>
+                        <p className="text-[10px] text-zinc-500 uppercase font-black tracking-widest">Link-level performance analysis</p>
+                    </div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="border-b border-white/5 bg-[#080808]">
+                                <th className="p-6 text-[10px] font-black tracking-widest uppercase italic text-zinc-500">Node Designation</th>
+                                <th className="p-6 text-[10px] font-black tracking-widest uppercase italic text-zinc-500">Status</th>
+                                <th className="p-6 text-[10px] font-black tracking-widest uppercase italic text-zinc-500 text-right">Views</th>
+                                <th className="p-6 text-[10px] font-black tracking-widest uppercase italic text-zinc-500 text-right">Uniques</th>
+                                <th className="p-6 text-[10px] font-black tracking-widest uppercase italic text-zinc-500 text-right">Avg Time</th>
+                                <th className="p-6 text-[10px] font-black tracking-widest uppercase italic text-zinc-500 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-white/5">
+                            {activeLinks.map((link) => (
+                                <tr key={link.id} className="hover:bg-white/[0.02] transition-colors group">
+                                    <td className="p-6">
+                                        <div className="font-bold text-sm text-zinc-200">{link.name}</div>
+                                        <div className="text-xs text-zinc-500 mt-1 flex items-center gap-2">
+                                            <span className="truncate max-w-[200px] hover:text-white transition-colors cursor-pointer" onClick={() => handleCopy(link.url)}>{link.url}</span>
+                                            <Copy className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer hover:text-white" onClick={() => handleCopy(link.url)} />
+                                        </div>
+                                    </td>
+                                    <td className="p-6">
+                                        <span className={`px-2.5 py-1 rounded-full text-[9px] font-black tracking-wider uppercase border ${link.status === 'active' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 'bg-zinc-800 text-zinc-400 border-zinc-700'}`}>
+                                            {link.status}
+                                        </span>
+                                    </td>
+                                    <td className="p-6 text-right font-bold text-zinc-300">{link.views.toLocaleString()}</td>
+                                    <td className="p-6 text-right font-medium text-zinc-400">{link.uniques.toLocaleString()}</td>
+                                    <td className="p-6 text-right font-medium text-zinc-400 flex items-center justify-end gap-2">
+                                        <Clock className="w-3 h-3 text-zinc-600" /> {link.avgTime}
+                                    </td>
+                                    <td className="p-6 text-center">
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger className="p-2 hover:bg-white/10 rounded-lg outline-none transition-colors">
+                                                <MoreHorizontal className="w-4 h-4 text-zinc-400" />
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end" className="bg-[#111] border-white/10 shadow-2xl rounded-xl p-2 min-w-[160px]">
+                                                <DropdownMenuItem className="text-xs font-bold text-zinc-300 focus:bg-white/10 focus:text-white cursor-pointer rounded-md mb-1"><Eye className="w-3 h-3 mr-2" /> View Public CV</DropdownMenuItem>
+                                                <DropdownMenuItem className="text-xs font-bold text-zinc-300 focus:bg-white/10 focus:text-white cursor-pointer rounded-md mb-1" onClick={() => handleCopy(link.url)}><Copy className="w-3 h-3 mr-2" /> Copy Link</DropdownMenuItem>
+                                                <div className="h-px bg-white/10 my-1 -mx-2" />
+                                                <DropdownMenuItem className="text-xs font-bold text-rose-400 focus:bg-rose-500/20 focus:text-rose-300 cursor-pointer rounded-md"><Trash className="w-3 h-3 mr-2" /> Deactivate Link</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </Card>
         </div>
     )
 }

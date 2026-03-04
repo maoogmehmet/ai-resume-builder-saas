@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
-import { Trash2, Plus, GripVertical, X } from 'lucide-react'
+import { Trash2, Plus, GripVertical, X, Sparkles, Target, Scissors } from 'lucide-react'
 import {
     DndContext,
     closestCenter,
@@ -115,30 +115,81 @@ function SortableExperienceItem({ exp, expIdx, onUpdate, onRemove, onAddBullet, 
                 </div>
 
                 {/* Bullet Points */}
-                <div className="space-y-2 mt-3">
+                <div className="space-y-4 mt-4">
                     <Label className="text-[10px] font-semibold text-zinc-600 uppercase tracking-wider">Key Achievements</Label>
-                    {(exp.bullets || []).map((bullet: string, bIdx: number) => (
-                        <div key={bIdx} className="flex items-start gap-2">
-                            <span className="text-emerald-500/60 mt-2 text-xs">•</span>
-                            <Textarea
-                                value={bullet}
-                                onChange={(e) => onBulletUpdate(expIdx, bIdx, e.target.value)}
-                                className="flex-1 min-h-[36px] h-9 py-2 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm resize-none focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30"
-                                placeholder="Led a team of..."
-                            />
-                            <button
-                                onClick={() => onRemoveBullet(expIdx, bIdx)}
-                                className="mt-1.5 h-6 w-6 rounded flex items-center justify-center text-zinc-700 hover:text-red-400 hover:bg-red-500/10 transition-all shrink-0"
-                            >
-                                <X className="h-3 w-3" />
-                            </button>
-                        </div>
-                    ))}
+                    {(exp.bullets || []).map((bullet: string, bIdx: number) => {
+                        const [isAiLoading, setIsAiLoading] = useState(false)
+                        const [activeAiAction, setActiveAiAction] = useState<string | null>(null)
+
+                        const handleAiAction = async (action: string) => {
+                            setIsAiLoading(true)
+                            setActiveAiAction(action)
+                            // Simulate AI delay
+                            await new Promise(res => setTimeout(res, 1000))
+
+                            let newText = bullet;
+                            if (action === 'rewrite') newText = `Successfully executed complex initiatives, leading to improved outcomes previously documented as: ${bullet}`;
+                            if (action === 'quantify') newText = bullet ? `[Metrics Added] Increased performance by 45% when: ${bullet}` : 'Generated $1.2M in new pipeline revenue by restructuring the outbound strategy.';
+                            if (action === 'shorten') newText = bullet ? bullet.substring(0, Math.floor(bullet.length / 2)) + '...' : 'Optimized core workflows.';
+
+                            onBulletUpdate(expIdx, bIdx, newText)
+                            setIsAiLoading(false)
+                            setActiveAiAction(null)
+                        }
+
+                        return (
+                            <div key={bIdx} className="space-y-2 group/bullet">
+                                <div className="flex items-start gap-2">
+                                    <span className="text-emerald-500/60 mt-2 text-xs">•</span>
+                                    <div className="flex-1 space-y-2">
+                                        <Textarea
+                                            value={bullet}
+                                            onChange={(e) => onBulletUpdate(expIdx, bIdx, e.target.value)}
+                                            className={`min-h-[46px] h-12 py-3 bg-white/[0.03] border-white/[0.06] text-zinc-300 placeholder:text-zinc-700 text-sm resize-none focus:ring-1 focus:ring-emerald-500/30 focus:border-emerald-500/30 transition-all ${isAiLoading ? 'opacity-50 blur-[1px]' : ''}`}
+                                            placeholder="Led a team of..."
+                                        />
+
+                                        {/* Inline AI Actions */}
+                                        <div className="flex items-center gap-2 opacity-0 group-hover/bullet:opacity-100 transition-opacity">
+                                            <button
+                                                onClick={() => handleAiAction('rewrite')}
+                                                disabled={isAiLoading}
+                                                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest italic transition-all ${activeAiAction === 'rewrite' ? 'bg-purple-500/20 text-purple-400' : 'bg-black border border-white/5 text-zinc-500 hover:text-white hover:border-white/20 hover:bg-[#111]'}`}
+                                            >
+                                                <Sparkles className="w-3 h-3" /> {activeAiAction === 'rewrite' ? 'thinking...' : 'rewrite'}
+                                            </button>
+                                            <button
+                                                onClick={() => handleAiAction('quantify')}
+                                                disabled={isAiLoading}
+                                                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest italic transition-all ${activeAiAction === 'quantify' ? 'bg-blue-500/20 text-blue-400' : 'bg-black border border-white/5 text-zinc-500 hover:text-white hover:border-white/20 hover:bg-[#111]'}`}
+                                            >
+                                                <Target className="w-3 h-3" /> {activeAiAction === 'quantify' ? 'thinking...' : 'quantify'}
+                                            </button>
+                                            <button
+                                                onClick={() => handleAiAction('shorten')}
+                                                disabled={isAiLoading}
+                                                className={`flex items-center gap-1.5 px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest italic transition-all ${activeAiAction === 'shorten' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-black border border-white/5 text-zinc-500 hover:text-white hover:border-white/20 hover:bg-[#111]'}`}
+                                            >
+                                                <Scissors className="w-3 h-3" /> {activeAiAction === 'shorten' ? 'thinking...' : 'shorten'}
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => onRemoveBullet(expIdx, bIdx)}
+                                        className="mt-1 h-8 w-8 rounded flex items-center justify-center text-zinc-700 hover:text-red-400 hover:bg-red-500/10 transition-all shrink-0"
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </button>
+                                </div>
+                            </div>
+                        )
+                    })}
                     <button
                         onClick={() => onAddBullet(expIdx)}
-                        className="flex items-center gap-1.5 text-[11px] font-semibold text-zinc-600 hover:text-zinc-400 transition-colors"
+                        className="flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest italic text-zinc-600 hover:text-white transition-colors ml-4 mt-2"
                     >
-                        <Plus className="h-3 w-3" /> Add bullet point
+                        <Plus className="h-3 w-3" /> Add milestone
                     </button>
                 </div>
             </div>

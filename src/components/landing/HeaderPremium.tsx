@@ -5,7 +5,7 @@ import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import { useScroll } from '@/components/ui/use-scroll';
 import Link from 'next/link';
 import { Logo } from '@/components/ui/logo';
-import { Sparkles, LayoutDashboard, LogOut, ArrowRightIcon } from 'lucide-react';
+import { Sparkles, ArrowRightIcon } from 'lucide-react';
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button';
 import { Button } from '@/components/ui/button';
 
@@ -75,38 +75,17 @@ export function HeaderPremium({ user }: { user: any }) {
 
                     <div className="h-4 w-px bg-white/10 mx-2" />
 
-                    {user ? (
-                        <div className="flex items-center gap-4">
-                            <AnimatedGenerateButton
-                                href="/dashboard"
-                                labelIdle="Dashboard"
-                                size="sm"
-                                className="bg-transparent border-none text-zinc-400 hover:text-white h-auto p-0 font-black italic lowercase tracking-tight shadow-none"
-                                icon={<LayoutDashboard className="h-4 w-4" />}
-                            />
-                            <form action="/auth/signout" method="POST">
-                                <AnimatedGenerateButton
-                                    type="submit"
-                                    labelIdle="Sign Out"
-                                    size="sm"
-                                    className="bg-transparent border-none text-zinc-600 hover:text-red-400 h-auto p-0 font-black italic lowercase tracking-tight shadow-none"
-                                    icon={<LogOut className="h-4 w-4" />}
-                                />
-                            </form>
-                        </div>
-                    ) : (
-                        <div className="flex items-center gap-8">
-                            <Link className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-white transition-colors" href="/auth/signin">
-                                SIGN IN
-                            </Link>
-                            <Button asChild className="rounded-xl shadow-2xl h-9 px-4 font-bold text-[11px] bg-white text-black hover:bg-zinc-100 border-none transition-all hover:scale-105 !bg-white !text-black" size="lg">
-                                <a href="/auth/signup">
-                                    GET STARTED
-                                    <ArrowRightIcon className="size-3.5 ms-2" />
-                                </a>
-                            </Button>
-                        </div>
-                    )}
+                    <div className="flex items-center gap-8">
+                        <Link className="text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-400 hover:text-white transition-colors" href="/auth/signin">
+                            SIGN IN
+                        </Link>
+                        <Button asChild className="rounded-xl shadow-2xl h-9 px-4 font-bold text-[11px] bg-white text-black hover:bg-zinc-100 border-none transition-all hover:scale-105 !bg-white !text-black" size="lg">
+                            <a href="/auth/signup">
+                                GET STARTED
+                                <ArrowRightIcon className="size-3.5 ms-2" />
+                            </a>
+                        </Button>
+                    </div>
                 </div>
                 <button
                     onClick={() => setOpen(!open)}

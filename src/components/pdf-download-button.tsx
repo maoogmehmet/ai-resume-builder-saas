@@ -8,14 +8,16 @@ import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
 import { useRouter } from 'next/navigation'
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
+import { LinkedinExportGuide } from '@/components/linkedin-export-guide'
 
 interface PdfDownloadButtonProps {
     resumeData: any;
     disabled?: boolean;
     template?: 'classic' | 'modern' | 'executive';
+    isAtsSafe?: boolean;
 }
 
-export function PdfDownloadButton({ resumeData, disabled, template = 'classic' }: PdfDownloadButtonProps) {
+export function PdfDownloadButton({ resumeData, disabled, template = 'classic', isAtsSafe = false }: PdfDownloadButtonProps) {
     const [isDownloading, setIsDownloading] = useState(false)
     const supabase = createClient()
     const router = useRouter()
@@ -39,7 +41,7 @@ export function PdfDownloadButton({ resumeData, disabled, template = 'classic' }
 
             if (!resumeData) throw new Error('No resume data to download')
 
-            const doc = <ResumePDFDocument data={resumeData} template={template} />
+            const doc = <ResumePDFDocument data={resumeData} template={template} isAtsSafe={isAtsSafe} />
             const blob = await pdf(doc).toBlob()
             const url = URL.createObjectURL(blob)
             const link = document.createElement('a')
@@ -59,15 +61,18 @@ export function PdfDownloadButton({ resumeData, disabled, template = 'classic' }
     }
 
     return (
-        <AnimatedGenerateButton
-            onClick={handleDownload}
-            disabled={isDownloading || disabled || !resumeData}
-            generating={isDownloading}
-            labelIdle="get pdf"
-            labelActive="exporting..."
-            size="sm"
-            className="font-black italic lowercase"
-            icon={<Download className="h-3.5 w-3.5" />}
-        />
+        <div className="flex items-center gap-2">
+            <AnimatedGenerateButton
+                onClick={handleDownload}
+                disabled={isDownloading || disabled || !resumeData}
+                generating={isDownloading}
+                labelIdle="get pdf"
+                labelActive="exporting..."
+                size="sm"
+                className="font-black italic lowercase"
+                icon={<Download className="h-3.5 w-3.5" />}
+            />
+            <LinkedinExportGuide />
+        </div>
     )
 }

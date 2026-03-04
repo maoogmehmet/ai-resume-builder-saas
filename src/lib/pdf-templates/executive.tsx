@@ -119,8 +119,8 @@ export const ExecutiveTemplate = ({ data }: { data: any }) => {
                         <Text style={styles.name}>{personal_info.full_name}</Text>
                         <Text style={styles.title}>{experience?.[0]?.position || experience?.[0]?.title || 'Professional'}</Text>
                     </View>
-                    {personal_info.profile_image && (
-                        <Image src={personal_info.profile_image} style={styles.profileImage} />
+                    {personal_info.profile_image && personal_info.profile_image.trim() !== '' && (
+                        <Image src={{ uri: personal_info.profile_image }} style={styles.profileImage} />
                     )}
                 </View>
 
