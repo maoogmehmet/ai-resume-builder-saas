@@ -12,7 +12,29 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const { action, resumeId, title } = await req.json();
+        const { action, resumeId, title, content, linkedinText } = await req.json();
+
+        if (action === 'create') {
+            const { data, error } = await supabase
+                .from('resumes')
+                .insert({
+                    user_id: user.id,
+                    title: title || 'LinkedIn Import',
+                    ai_generated_json: content || {
+                        personal_info: { full_name: '', email: '', phone: '', location: '', linkedin: '', portfolio: '' },
+                        summary: '',
+                        experience: [],
+                        education: [],
+                        skills: { technical: [], soft: [] }
+                    },
+                    original_linkedin_json: linkedinText ? { raw_text: linkedinText } : null
+                })
+                .select()
+                .single();
+
+            if (error) throw error;
+            return NextResponse.json({ success: true, resumeId: data.id });
+        }
 
         if (action === 'create_blank') {
             const { data, error } = await supabase
