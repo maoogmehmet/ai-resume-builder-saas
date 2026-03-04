@@ -93,7 +93,7 @@ export function ResumePreview({ data, isLoading, template = 'classic', isTwoPage
             )}
             {pdfUrl ? (
                 <iframe
-                    src={`${pdfUrl}#view=Fit${isTwoPage ? 'H' : ''}&pagemode=none`}
+                    src={`${pdfUrl}#toolbar=0&view=FitH&pagemode=none`}
                     className="w-full h-full border-none"
                     title="Resume Preview"
                 />

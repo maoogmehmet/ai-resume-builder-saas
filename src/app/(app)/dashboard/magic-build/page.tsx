@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -67,6 +67,10 @@ export default function MagicBuildPage() {
         const timer = setTimeout(advance, LOADING_STEPS[0].duration)
         return () => clearTimeout(timer)
     }, [isLoading])
+
+    const handleField = useCallback((field: keyof WizardData, value: string) => {
+        setData(prev => ({ ...prev, [field]: value }))
+    }, [])
 
     const handleNext = () => {
         if (step === 1 && !data.role.trim()) {
@@ -150,7 +154,7 @@ export default function MagicBuildPage() {
                                     placeholder="e.g. Senior Product Manager"
                                     className="rounded-2xl h-14 border border-white/10 bg-[#0f0f0f] focus:bg-[#151515] focus:border-white/20 transition-all font-bold px-6 text-sm italic text-white shadow-inner"
                                     value={data.role}
-                                    onChange={(e) => setData({ ...data, role: e.target.value })}
+                                    onChange={(e) => handleField('role', e.target.value)}
                                     autoFocus
                                 />
                             </div>
@@ -160,7 +164,7 @@ export default function MagicBuildPage() {
                                     id="seniority"
                                     className="w-full rounded-2xl h-14 border border-white/10 bg-[#0f0f0f] focus:bg-[#151515] focus:border-white/20 outline-none transition-all font-bold px-6 text-sm italic text-white shadow-inner appearance-none cursor-pointer"
                                     value={data.seniority}
-                                    onChange={(e) => setData({ ...data, seniority: e.target.value })}
+                                    onChange={(e) => handleField('seniority', e.target.value)}
                                 >
                                     <option value="" disabled className="text-zinc-700">Select Seniority</option>
                                     <option value="Entry-Level">Entry-Level</option>
@@ -188,7 +192,7 @@ export default function MagicBuildPage() {
                                     placeholder="e.g. FinTech, Healthcare, SaaS"
                                     className="rounded-2xl h-14 border border-white/10 bg-[#0f0f0f] focus:bg-[#151515] focus:border-white/20 transition-all font-bold px-6 text-sm italic text-white shadow-inner"
                                     value={data.industry}
-                                    onChange={(e) => setData({ ...data, industry: e.target.value })}
+                                    onChange={(e) => handleField('industry', e.target.value)}
                                     autoFocus
                                 />
                             </div>
@@ -199,7 +203,7 @@ export default function MagicBuildPage() {
                                     placeholder="e.g. React, Strategic Planning, Agile"
                                     className="rounded-2xl h-14 border border-white/10 bg-[#0f0f0f] focus:bg-[#151515] focus:border-white/20 transition-all font-bold px-6 text-sm italic text-white shadow-inner"
                                     value={data.skills}
-                                    onChange={(e) => setData({ ...data, skills: e.target.value })}
+                                    onChange={(e) => handleField('skills', e.target.value)}
                                 />
                             </div>
                         </div>
@@ -223,7 +227,7 @@ export default function MagicBuildPage() {
                                 placeholder="Describe a project, metric improved, or major milestone..."
                                 className="rounded-[1.5rem] min-h-[160px] border border-white/10 bg-[#0f0f0f] focus:bg-[#151515] focus:border-white/20 transition-all p-6 font-bold text-sm resize-none italic text-white shadow-inner leading-relaxed"
                                 value={data.accomplishments}
-                                onChange={(e) => setData({ ...data, accomplishments: e.target.value })}
+                                onChange={(e) => handleField('accomplishments', e.target.value)}
                                 autoFocus
                             />
                             {/* Guardrail Mock */}
