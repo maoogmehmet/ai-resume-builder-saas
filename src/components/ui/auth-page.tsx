@@ -149,7 +149,7 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 							<div className="flex items-center justify-between ml-1">
 								<Label htmlFor="password" className="text-white font-bold">Password</Label>
 								{isSignIn && (
-									<Link href="#" className="text-sm font-bold text-blue-600 hover:text-blue-500 transition-colors">
+									<Link href="/auth/reset-password" className="text-sm font-bold text-blue-600 hover:text-blue-500 transition-colors">
 										Forgot password?
 									</Link>
 								)}
@@ -209,9 +209,9 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 					{!isSignIn && (
 						<p className="text-zinc-600 font-medium text-center text-xs px-8">
 							By clicking create account, you agree to our{' '}
-							<Link href="#" className="underline">Terms of Service</Link>{' '}
+							<Link href="/terms" className="underline">Terms of Service</Link>{' '}
 							and{' '}
-							<Link href="#" className="underline">Privacy Policy</Link>.
+							<Link href="/privacy" className="underline">Privacy Policy</Link>.
 						</p>
 					)}
 				</div>

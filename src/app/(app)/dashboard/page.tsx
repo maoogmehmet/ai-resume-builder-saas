@@ -160,7 +160,7 @@ export default async function DashboardPage({
                             </div>
                         </div>
                         <Button asChild className="relative z-10 w-full sm:w-auto bg-white text-black hover:bg-zinc-200 font-black italic rounded-xl h-11 px-8">
-                            <Link href={`/dashboard/builder?id=${lastDocument.id}`}>
+                            <Link href={`/editor/${lastDocument.id}`}>
                                 Continue <ChevronRight className="w-4 h-4 ml-2" />
                             </Link>
                         </Button>
