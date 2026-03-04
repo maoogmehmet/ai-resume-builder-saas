@@ -25,7 +25,7 @@ import { FeedbackModal } from '@/components/feedback-modal'
 
 const navItems = [
     { name: 'Dashboard', href: '/dashboard', icon: Home },
-    { name: 'Novatypalcv', href: '/dashboard/builder', icon: FileText },
+    { name: 'Magic Build', href: '/dashboard/builder', icon: FileText },
     { name: 'My CVs', href: '/dashboard/resumes', icon: Files },
     { name: 'My Letters', href: '/dashboard/letters', icon: FileCheck2 },
     { name: 'Optimize', href: '/dashboard/optimize', icon: Target },
@@ -58,7 +58,7 @@ export function Sidebar() {
                             key={item.href}
                             href={item.href}
                             className={cn(
-                                "flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 italic group",
+                                "flex items-center w-full gap-3 px-3 py-2.5 rounded-xl transition-all duration-300 italic group",
                                 isActive
                                     ? "font-black text-white bg-white/10 shadow-2xl"
                                     : "text-zinc-500 font-black hover:bg-white/5 hover:text-white"

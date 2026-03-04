@@ -54,45 +54,65 @@ export default function AnalyticsDashboard() {
     const [timeframe, setTimeframe] = useState<Timeframe>('7d')
     const [chartData, setChartData] = useState<ChartData[]>([])
 
+    const [hasLinks, setHasLinks] = useState<boolean | null>(null)
+
+    useEffect(() => {
+        const fetchLinks = async () => {
+            try {
+                const res = await fetch('/api/analytics/list-links')
+                const data = await res.json()
+                if (data.success && data.links && data.links.length > 0) {
+                    setHasLinks(true)
+                } else {
+                    setHasLinks(false)
+                }
+            } catch (err) {
+                setHasLinks(false)
+            }
+        }
+        fetchLinks()
+    }, [])
+
     // Trigger chart animation on timeframe change
     useEffect(() => {
         setChartData(generateViewsData(timeframe))
     }, [timeframe])
 
     // Derived Mock Metrics based on timeframe
-    const multiplier = timeframe === '24h' ? 1 : timeframe === '7d' ? 7 : timeframe === '30d' ? 30 : 120;
+    const baseMultiplier = timeframe === '24h' ? 1 : timeframe === '7d' ? 7 : timeframe === '30d' ? 30 : 120;
+    const multiplier = hasLinks ? baseMultiplier : 0;
 
     const stats = {
         totalViews: 1245 * multiplier,
-        viewsChange: '+12.4%',
+        viewsChange: hasLinks ? '+12.4%' : '0%',
         viewsPositive: true,
 
-        activeLinks: 4,
+        activeLinks: hasLinks ? 4 : 0,
         linksChange: '0%',
         linksPositive: true,
 
         avgViews: 311 * multiplier,
-        avgChange: '+8.2%',
+        avgChange: hasLinks ? '+8.2%' : '0%',
         avgPositive: true,
 
         uniqueVisitors: 892 * multiplier,
-        uniqueChange: '-2.1%',
+        uniqueChange: hasLinks ? '-2.1%' : '0%',
         uniquePositive: false,
     }
 
-    const funnelData: FunnelData[] = [
+    const funnelData: FunnelData[] = hasLinks ? [
         { stage: 'Profile Views', count: stats.totalViews, color: '#3b82f6' },
         { stage: 'Scroll 50%', count: Math.floor(stats.totalViews * 0.65), color: '#8b5cf6' },
         { stage: 'Contact Click', count: Math.floor(stats.totalViews * 0.25), color: '#ec4899' },
         { stage: 'CV Download', count: Math.floor(stats.totalViews * 0.12), color: '#eab308' },
-    ]
+    ] : []
 
-    const activeLinks: LinkData[] = [
+    const activeLinksList: LinkData[] = hasLinks ? [
         { id: '1', name: 'Software Engineer - Google', url: 'cv.bld/johndoe-se', views: 4200, uniques: 3100, avgTime: '02m 45s', created: 'Oct 12, 2023', status: 'active' },
         { id: '2', name: 'Product Manager - Microsoft', url: 'cv.bld/johndoe-pm', views: 850, uniques: 720, avgTime: '01m 20s', created: 'Jan 05, 2024', status: 'active' },
         { id: '3', name: 'Startup Generalist', url: 'cv.bld/johndoe-gen', views: 320, uniques: 290, avgTime: '00m 45s', created: 'Feb 20, 2024', status: 'active' },
         { id: '4', name: 'Legacy Resume 2022', url: 'cv.bld/johndoe-old', views: 12000, uniques: 9000, avgTime: '03m 10s', created: 'Mar 15, 2022', status: 'archived' },
-    ]
+    ] : []
 
     const deviceData = [
         { name: 'Desktop', value: 65, color: '#3b82f6' },
@@ -380,7 +400,11 @@ export default function AnalyticsDashboard() {
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-white/5">
-                            {activeLinks.map((link) => (
+                            {activeLinksList.length === 0 ? (
+                                <tr>
+                                    <td colSpan={6} className="p-6 text-center text-sm text-zinc-500 font-bold italic">No active links created yet.</td>
+                                </tr>
+                            ) : activeLinksList.map(link => (
                                 <tr key={link.id} className="hover:bg-white/[0.02] transition-colors group">
                                     <td className="p-6">
                                         <div className="font-bold text-sm text-zinc-200">{link.name}</div>

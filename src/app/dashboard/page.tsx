@@ -25,6 +25,8 @@ function formatRelativeTime(dateString: string) {
     return date.toLocaleDateString()
 }
 
+export const dynamic = 'force-dynamic'
+
 export default async function DashboardPage({
     searchParams,
 }: {
@@ -61,29 +63,33 @@ export default async function DashboardPage({
     // Real Data
     const lastDocument = resumes?.[0]
 
-    // Mocks for new features
-    const weeklyOptimizations = 3
-    const currentStreak = 5
-    const matchScore = 84
+    // Dynamic Mocks for new features
+    const rCount = resumeCount || 0;
+    const weeklyOptimizations = rCount > 0 ? 3 : 0
+    const currentStreak = rCount > 0 ? 5 : 0
+    const matchScore = rCount > 0 ? 84 : 0
 
-    const smartInsights = [
+    const smartInsights = rCount > 0 ? [
         { id: 1, text: "Missing quantified metrics in Experience section.", action: "Fix now", href: "/dashboard/optimize", type: "warning" },
         { id: 2, text: "Your summary could use more industry keywords.", action: "Optimize", href: "/dashboard/builder", type: "info" },
         { id: 3, text: "Matched 92% with 'Senior Frontend Engineer' role.", action: "View", href: "/dashboard/analytics", type: "success" },
+    ] : [
+        { id: 1, text: "Your professional profile is completely blank.", action: "Create CV", href: "/dashboard/builder", type: "warning" },
+        { id: 2, text: "Initialize a smart resume to unlock tailored AI insights.", action: "Start", href: "/dashboard/builder", type: "info" }
     ]
 
-    const jobPipeline = [
+    const jobPipeline = rCount > 0 ? [
         { id: 1, company: "Google", role: "Frontend Engineer", stage: "Interview", date: "2d ago", resume: "Software_v3" },
         { id: 2, company: "Apple", role: "UI Intern", stage: "Applied", date: "4d ago", resume: "Design_v1" },
         { id: 3, company: "Netflix", role: "Senior Dev", stage: "Saved", date: "1w ago", resume: "-" },
-    ]
+    ] : []
 
     return (
         <div className="min-h-screen w-full bg-black text-white p-4 md:p-8 flex flex-col gap-6 md:gap-10 pb-20">
 
             {/* Header & Continue Where You Left Off */}
             <header className="flex flex-col gap-4">
-                <h1 className="text-3xl md:text-5xl font-black tracking-tighter italic lowercase text-white drop-shadow-lg">
+                <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-white drop-shadow-lg">
                     Dashboard
                 </h1>
                 <p className="text-zinc-500 text-sm md:text-base font-medium">

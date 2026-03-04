@@ -116,9 +116,13 @@ const AnimatedGenerateButton = React.forwardRef<HTMLButtonElement | HTMLAnchorEl
         </div>
         {size !== "icon" && (
           <div className={clsx("ui-anim-txt-wrapper relative flex items-center", noMinWidth ? "min-w-0 pr-2" : "min-w-[6.4em]")}>
+            {/* Invisible text block ensures the container sizes properly to fit the longest text */}
+            <div className="invisible whitespace-nowrap pointer-events-none select-none" aria-hidden="true">
+              {labelIdle.length > labelActive.length ? labelIdle : labelActive}
+            </div>
             <div
               className={clsx(
-                "ui-anim-txt-1 absolute flex items-center whitespace-nowrap",
+                "ui-anim-txt-1 absolute left-0 flex items-center whitespace-nowrap",
                 generating
                   ? "opacity-0"
                   : "animate-[ui-appear_1s_ease-in-out_forwards]"
@@ -132,7 +136,7 @@ const AnimatedGenerateButton = React.forwardRef<HTMLButtonElement | HTMLAnchorEl
             </div>
             <div
               className={clsx(
-                "ui-anim-txt-2 absolute flex items-center whitespace-nowrap",
+                "ui-anim-txt-2 absolute left-0 flex items-center whitespace-nowrap",
                 generating ? "opacity-100" : "opacity-0"
               )}
             >
