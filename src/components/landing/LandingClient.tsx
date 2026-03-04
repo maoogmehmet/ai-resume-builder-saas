@@ -161,7 +161,7 @@ export function LandingClient({ user }: { user: any }) {
                                     <div className="mt-12">
                                         <h3 className="text-4xl font-black italic tracking-tighter text-white mb-4 lowercase">ai linkedin protocol</h3>
                                         <p className="text-zinc-600 text-xl leading-snug max-w-md font-black italic lowercase opacity-60">
-                                            One click to pull your entire professional history. Our neural engine reconstructs your identity into a high-performance narrative.
+                                            Export your LinkedIn profile and let our neural engine reconstruct your professional identity into a high-performance ATS narrative — in seconds.
                                         </p>
                                     </div>
                                 </div>

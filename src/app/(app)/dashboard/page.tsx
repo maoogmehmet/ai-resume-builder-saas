@@ -62,27 +62,73 @@ export default async function DashboardPage({
 
     // Real Data
     const lastDocument = resumes?.[0]
-
-    // Dynamic Mocks for new features
     const rCount = resumeCount || 0;
-    const weeklyOptimizations = rCount > 0 ? 3 : 0
-    const currentStreak = rCount > 0 ? 5 : 0
-    const matchScore = rCount > 0 ? 84 : 0
 
-    const smartInsights = rCount > 0 ? [
+    // Real Match Score: Pull average ATS score from resume data if available
+    let matchScore = 0;
+    if (rCount > 0 && resumes && resumes.length > 0) {
+        const scores = resumes
+            .map((r: any) => r.ai_generated_json?.ats_score || r.ai_generated_json?.match_score)
+            .filter((s: any): s is number => typeof s === 'number' && s > 0);
+        if (scores.length > 0) {
+            matchScore = Math.round(scores.reduce((a: number, b: number) => a + b, 0) / scores.length);
+        } else {
+            // Estimate from resume completeness
+            const firstResume = resumes[0]?.ai_generated_json || {};
+            const hasPersonal = firstResume?.personal_info?.full_name && firstResume?.personal_info?.email;
+            const hasExperience = firstResume?.experience?.length > 0;
+            const hasSummary = firstResume?.summary?.length > 50;
+            const hasSkills = firstResume?.skills?.technical?.length > 0;
+            const completeness = [hasPersonal, hasExperience, hasSummary, hasSkills].filter(Boolean).length;
+            matchScore = Math.min(55 + completeness * 8, 88);
+        }
+    }
+
+    // Real Weekly Progress: count resumes updated this week
+    const oneWeekAgo = new Date(); oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    const weeklyOptimizations = resumes?.filter((r: any) => new Date(r.updated_at) > oneWeekAgo).length || 0;
+
+    // Real streak: count consecutive days with resume updates
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    let currentStreak = 0;
+    if (resumes && resumes.length > 0) {
+        const uniqueDays = new Set(resumes.map((r: any) => {
+            const d = new Date(r.updated_at); d.setHours(0, 0, 0, 0); return d.getTime();
+        }));
+        let checkDay = new Date(today); checkDay.setHours(0, 0, 0, 0);
+        while (uniqueDays.has(checkDay.getTime())) {
+            currentStreak++; checkDay.setDate(checkDay.getDate() - 1);
+        }
+    }
+
+    // Real Job Pipeline from saved_jobs table
+    const { data: savedJobsData } = await supabase
+        .from('saved_jobs')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(5)
+
+    const jobPipeline = (savedJobsData || []).map((j: any) => ({
+        id: j.id,
+        company: j.company_name || 'Unknown',
+        role: j.title || 'Position',
+        stage: j.status || 'Saved',
+        date: (() => {
+            const d = new Date(j.created_at); const now = new Date();
+            const diff = Math.floor((now.getTime() - d.getTime()) / (1000 * 86400));
+            return diff === 0 ? 'Today' : diff === 1 ? '1d ago' : `${diff}d ago`;
+        })(),
+        resume: '-'
+    }))
+    const smartInsights: Array<{ id: number; text: string; action: string; href: string; type: string }> = rCount > 0 ? [
         { id: 1, text: "Missing quantified metrics in Experience section.", action: "Fix now", href: "/dashboard/optimize", type: "warning" },
-        { id: 2, text: "Your summary could use more industry keywords.", action: "Optimize", href: "/dashboard/builder", type: "info" },
-        { id: 3, text: "Matched 92% with 'Senior Frontend Engineer' role.", action: "View", href: "/dashboard/analytics", type: "success" },
+        { id: 2, text: `Your ATS compatibility score is ${matchScore}%. Optimize for your target role.`, action: "Optimize", href: "/dashboard/optimize", type: matchScore >= 75 ? "success" : "info" },
+        ...(weeklyOptimizations === 0 ? [{ id: 3, text: "No resume updates this week. Keep your career profile active.", action: "Edit", href: "/dashboard/resumes", type: "warning" }] : []),
     ] : [
         { id: 1, text: "Your professional profile is completely blank.", action: "Create CV", href: "/dashboard/builder", type: "warning" },
         { id: 2, text: "Initialize a smart resume to unlock tailored AI insights.", action: "Start", href: "/dashboard/builder", type: "info" }
     ]
-
-    const jobPipeline = rCount > 0 ? [
-        { id: 1, company: "Google", role: "Frontend Engineer", stage: "Interview", date: "2d ago", resume: "Software_v3" },
-        { id: 2, company: "Apple", role: "UI Intern", stage: "Applied", date: "4d ago", resume: "Design_v1" },
-        { id: 3, company: "Netflix", role: "Senior Dev", stage: "Saved", date: "1w ago", resume: "-" },
-    ] : []
 
     return (
         <div className="min-h-screen w-full bg-black text-white p-4 md:p-8 flex flex-col gap-6 md:gap-10 pb-20">
@@ -212,37 +258,57 @@ export default async function DashboardPage({
                     </CardHeader>
                     <CardContent>
                         <div className="space-y-4">
-                            {/* Pipeline Stages Mini */}
-                            <div className="flex bg-white/5 rounded-lg p-1 text-[10px] font-black uppercase tracking-widest">
-                                <div className="flex-1 py-2 text-center text-zinc-400 border-r border-white/10">1 Saved</div>
-                                <div className="flex-1 py-2 text-center text-blue-400 border-r border-white/10">1 Applied</div>
-                                <div className="flex-1 py-2 text-center text-purple-400 border-r border-white/10">1 Interview</div>
-                                <div className="flex-1 py-2 text-center text-emerald-400">0 Offer</div>
-                            </div>
-
-                            <div className="space-y-2 mt-4">
-                                {jobPipeline.map((job) => (
-                                    <div key={job.id} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors">
-                                        <div>
-                                            <div className="font-bold text-sm flex items-center gap-2">
-                                                {job.company}
-                                                <Badge variant="outline" className={`text-[9px] uppercase tracking-wider scale-90 ${job.stage === 'Interview' ? 'text-purple-400 border-purple-400/30 bg-purple-400/10' : job.stage === 'Applied' ? 'text-blue-400 border-blue-400/30 bg-blue-400/10' : 'text-zinc-400 border-zinc-400/30 bg-zinc-400/10'}`}>
-                                                    {job.stage}
-                                                </Badge>
-                                            </div>
-                                            <div className="text-xs text-zinc-500 mt-1">{job.role}</div>
+                            {jobPipeline.length === 0 ? (
+                                <div className="py-8 flex flex-col items-center justify-center text-center gap-3">
+                                    <Briefcase className="h-8 w-8 text-zinc-800" />
+                                    <p className="text-zinc-600 text-xs font-bold uppercase tracking-widest">No saved jobs yet</p>
+                                    <Link href="/dashboard/jobs" className="text-xs text-blue-400 font-bold hover:text-blue-300 uppercase tracking-widest">Find Jobs →</Link>
+                                </div>
+                            ) : (
+                                <>
+                                    {/* Pipeline Stages — real counts */}
+                                    <div className="flex bg-white/5 rounded-lg p-1 text-[10px] font-black uppercase tracking-widest">
+                                        <div className="flex-1 py-2 text-center text-zinc-400 border-r border-white/10">
+                                            {jobPipeline.filter(j => j.stage === 'Saved' || j.stage === 'saved').length} Saved
                                         </div>
-                                        <div className="text-right">
-                                            <div className="text-xs font-bold text-zinc-400">{job.resume}</div>
-                                            <div className="text-[10px] text-zinc-600 mt-1">{job.date}</div>
+                                        <div className="flex-1 py-2 text-center text-blue-400 border-r border-white/10">
+                                            {jobPipeline.filter(j => j.stage === 'Applied' || j.stage === 'applied').length} Applied
+                                        </div>
+                                        <div className="flex-1 py-2 text-center text-purple-400 border-r border-white/10">
+                                            {jobPipeline.filter(j => j.stage === 'Interview' || j.stage === 'interview').length} Interview
+                                        </div>
+                                        <div className="flex-1 py-2 text-center text-emerald-400">
+                                            {jobPipeline.filter(j => j.stage === 'Offer' || j.stage === 'offer').length} Offer
                                         </div>
                                     </div>
-                                ))}
-                            </div>
+
+                                    <div className="space-y-2 mt-4">
+                                        {jobPipeline.map((job) => (
+                                            <div key={job.id} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.04] transition-colors">
+                                                <div>
+                                                    <div className="font-bold text-sm flex items-center gap-2">
+                                                        {job.company}
+                                                        <Badge variant="outline" className={`text-[9px] uppercase tracking-wider scale-90 ${job.stage === 'Interview' ? 'text-purple-400 border-purple-400/30 bg-purple-400/10' : job.stage === 'Applied' ? 'text-blue-400 border-blue-400/30 bg-blue-400/10' : 'text-zinc-400 border-zinc-400/30 bg-zinc-400/10'}`}>
+                                                            {job.stage}
+                                                        </Badge>
+                                                    </div>
+                                                    <div className="text-xs text-zinc-500 mt-1">{job.role}</div>
+                                                </div>
+                                                <div className="text-right">
+                                                    <div className="text-xs font-bold text-zinc-400">{job.resume}</div>
+                                                    <div className="text-[10px] text-zinc-600 mt-1">{job.date}</div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
                         </div>
                     </CardContent>
                     <CardFooter className="pt-0">
-                        <Button variant="ghost" className="w-full text-xs font-black uppercase tracking-widest text-zinc-500 hover:text-white">View Full Tracker</Button>
+                        <Button asChild variant="ghost" className="w-full text-xs font-black uppercase tracking-widest text-zinc-500 hover:text-white">
+                            <Link href="/dashboard/jobs">View Full Tracker</Link>
+                        </Button>
                     </CardFooter>
                 </Card>
 

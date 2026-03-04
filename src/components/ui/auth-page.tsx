@@ -119,7 +119,7 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 
 					<AuthSeparator />
 
-					<form action={action} className="space-y-6">
+					<form action={action} className="space-y-6" autoComplete="off">
 						{!isSignIn && (
 							<div className="space-y-3">
 								<Label htmlFor="fullName" className="text-white font-bold ml-1">Full Name</Label>
@@ -140,6 +140,8 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 								type="email"
 								placeholder="name@example.com"
 								required
+								autoComplete="email"
+								defaultValue=""
 								className="h-14 rounded-2xl bg-white border-none text-black font-medium placeholder:text-zinc-400 focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
 							/>
 						</div>
@@ -157,6 +159,8 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 								name="password"
 								type="password"
 								required
+								autoComplete="current-password"
+								defaultValue=""
 								className="h-14 rounded-2xl bg-white border-none text-black font-medium focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
 							/>
 						</div>

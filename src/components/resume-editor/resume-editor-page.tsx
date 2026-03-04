@@ -620,12 +620,13 @@ export function ResumeEditorPage() {
                                 </button>
 
                                 {/* DOCX */}
-                                <button
-                                    onClick={handleDownloadDocx}
-                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide bg-white/5 border border-white/5 text-zinc-400 hover:text-white hover:border-white/10 transition-colors"
+                                <div
+                                    title="Word export — coming Q3 2026"
+                                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wide bg-white/[0.03] border border-white/[0.04] text-zinc-700 cursor-not-allowed select-none"
                                 >
                                     <FileText className="h-3 w-3" /> DOCX
-                                </button>
+                                    <span className="ml-1 text-[7px] bg-zinc-800 text-zinc-500 px-1 py-0.5 rounded font-black tracking-widest">Q3 2026</span>
+                                </div>
 
                                 {/* Share */}
                                 <button

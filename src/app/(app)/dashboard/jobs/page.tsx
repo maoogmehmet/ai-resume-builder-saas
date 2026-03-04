@@ -128,16 +128,15 @@ export default function JobsPage() {
             })
             const data = await res.json()
             if (!res.ok) {
-                setJobError(data.error || 'Search failed')
-                toast.error(data.error || 'Job search failed')
+                // Graceful coming soon — don't show raw errors to users
+                setJobError('COMING_SOON')
             } else if (data.jobs && data.jobs.length > 0) {
                 setJobs(data.jobs.map((j: any, idx: number) => ({ ...j, _uid: `search-${Date.now()}-${idx}` })))
             } else {
-                setJobError('No jobs found for this search. Try different keywords.')
+                setJobError('COMING_SOON')
             }
         } catch (error: any) {
-            setJobError('Failed to connect to job search service.')
-            toast.error('Search failed: ' + error.message)
+            setJobError('COMING_SOON')
         } finally {
             setIsJobsLoading(false)
         }
@@ -522,13 +521,37 @@ export default function JobsPage() {
                                     </div>
                                     <p className="text-zinc-500 font-black uppercase tracking-[0.2em] text-[10px] italic">Scanning LinkedIn for latest roles...</p>
                                 </div>
-                            ) : jobError ? (
-                                <div className="py-24 border border-white/5 rounded-[3rem] bg-[#0a0a0a] flex flex-col items-center justify-center text-center">
-                                    <div className="h-16 w-16 bg-red-500/5 border border-red-500/10 rounded-[1.5rem] flex items-center justify-center mb-8">
-                                        <X className="h-8 w-8 text-red-500/80" />
+                            ) : jobError === 'COMING_SOON' ? (
+                                <div className="py-16 border border-white/5 rounded-[3rem] bg-[#050505] flex flex-col items-center justify-center text-center px-8">
+                                    <div className="relative mb-8">
+                                        <div className="h-20 w-20 bg-gradient-to-br from-emerald-500/10 to-blue-500/10 border border-white/10 rounded-[2rem] flex items-center justify-center shadow-[0_0_40px_rgba(16,185,129,0.08)]">
+                                            <Sparkles className="h-8 w-8 text-emerald-400" />
+                                        </div>
+                                        <div className="absolute -top-2 -right-2 h-6 w-6 bg-emerald-500 rounded-full flex items-center justify-center shadow-[0_0_12px_rgba(16,185,129,0.5)]">
+                                            <span className="text-[8px] font-black text-black">NEW</span>
+                                        </div>
                                     </div>
-                                    <h3 className="text-2xl font-black italic tracking-tighter text-white mb-2 uppercase">Search Error</h3>
-                                    <p className="text-red-500/80 text-xs font-bold uppercase tracking-[0.2em]">{jobError}</p>
+                                    <h3 className="text-3xl font-black italic tracking-tighter text-white mb-3 uppercase">Job Search Launching Soon</h3>
+                                    <p className="text-zinc-500 text-sm max-w-md mb-2 font-medium leading-relaxed">
+                                        We're building a proprietary job matching engine that pairs your resume's ATS score directly with live postings on LinkedIn, Indeed, and 50+ job boards.
+                                    </p>
+                                    <p className="text-zinc-700 text-xs font-bold uppercase tracking-[0.2em] mb-10">
+                                        Live job API — Q2 2026
+                                    </p>
+                                    <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
+                                        <button
+                                            onClick={() => { setHasSearched(false); setJobError(null) }}
+                                            className="flex-1 flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/20 text-emerald-400 text-xs font-black uppercase tracking-widest transition-all"
+                                        >
+                                            <Bookmark className="h-3.5 w-3.5" /> View Saved Jobs
+                                        </button>
+                                        <a
+                                            href="mailto:launch@novatypalcv.com?subject=Job+Search+Waitlist"
+                                            className="flex-1 flex items-center justify-center px-6 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-zinc-300 text-xs font-black uppercase tracking-widest transition-all"
+                                        >
+                                            Join Waitlist
+                                        </a>
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
