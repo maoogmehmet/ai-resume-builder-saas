@@ -45,8 +45,8 @@ export function FeedbackModal({ trigger }: { trigger?: React.ReactNode }) {
                 throw new Error(data.error || 'Failed to submit feedback');
             }
 
-            toast.success('Geri bildirim gönderildi!', {
-                description: 'Geliştirmemize yardımcı olduğunuz için teşekkürler.',
+            toast.success('Feedback sent!', {
+                description: 'Thank you for helping us improve.',
             });
 
             setOpen(false);
@@ -54,8 +54,8 @@ export function FeedbackModal({ trigger }: { trigger?: React.ReactNode }) {
             setType('general');
 
         } catch (error: any) {
-            toast.error('Geri bildirim gönderilirken hata oluştu', {
-                description: error.message || 'Bir şeyler yanlış gitti.'
+            toast.error('Error sending feedback', {
+                description: error.message || 'Something went wrong.'
             });
         } finally {
             setIsSubmitting(false);
@@ -68,7 +68,7 @@ export function FeedbackModal({ trigger }: { trigger?: React.ReactNode }) {
                 {trigger ? trigger : (
                     <button className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors text-sm font-medium p-2 rounded-md hover:bg-white/5">
                         <MessageSquare className="w-4 h-4" />
-                        <span>Geri Bildirim Gönder</span>
+                        <span>Send Feedback</span>
                     </button>
                 )}
             </DialogTrigger>
@@ -78,10 +78,10 @@ export function FeedbackModal({ trigger }: { trigger?: React.ReactNode }) {
                         <div className="p-2 bg-blue-500/10 rounded-xl">
                             <MessageSquare className="w-5 h-5 text-blue-400" />
                         </div>
-                        Geliştirmemize Yardımcı Olun
+                        Help Us Improve
                     </DialogTitle>
                     <DialogDescription className="text-zinc-400">
-                        Bir hata mı fark ettiniz veya bir öneriniz mi var? Sizden duymak isteriz.
+                        Notice a bug or have a suggestion? We'd love to hear from you.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -97,14 +97,14 @@ export function FeedbackModal({ trigger }: { trigger?: React.ReactNode }) {
                                     : 'text-zinc-500 hover:text-zinc-300 hover:bg-white/5'
                                     }`}
                             >
-                                {t === 'bug' ? 'Hata Bildirimi' : t === 'feature' ? 'Özellik İsteği' : 'Genel'}
+                                {t === 'bug' ? 'Bug Report' : t === 'feature' ? 'Feature Request' : 'General'}
                             </button>
                         ))}
                     </div>
 
                     <div className="space-y-2">
                         <Textarea
-                            placeholder="Lütfen belirli detayları sağlayın..."
+                            placeholder="Please provide specific details..."
                             value={message}
                             onChange={(e) => setMessage(e.target.value)}
                             rows={5}
@@ -118,9 +118,9 @@ export function FeedbackModal({ trigger }: { trigger?: React.ReactNode }) {
                         disabled={isSubmitting || !message.trim()}
                         className="w-full bg-blue-600 hover:bg-blue-500 text-white h-12 rounded-xl font-bold uppercase tracking-wider text-xs transition-colors"
                     >
-                        {isSubmitting ? 'Gönderiliyor...' : (
+                        {isSubmitting ? 'Sending...' : (
                             <span className="flex items-center gap-2">
-                                Geri Bildirim Gönder <Send className="w-4 h-4" />
+                                Submit Feedback <Send className="w-4 h-4" />
                             </span>
                         )}
                     </Button>

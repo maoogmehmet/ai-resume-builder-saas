@@ -89,7 +89,7 @@ const AnimatedGenerateButton = React.forwardRef<HTMLButtonElement | HTMLAnchorEl
         <div
           className={clsx(
             "ui-anim-btn-svg flex-grow-0 flex items-center justify-center",
-            size !== "icon" && "mr-2",
+            size !== "icon" && "mr-1.5",
             svgSizeClasses[size]
           )}
         >
