@@ -286,10 +286,6 @@ export function ResumeEditorPage() {
         await syncPdfToCloud(resumeData, template, false)
     }
 
-    const handleDownloadDocx = () => {
-        toast.info('DOCX export coming soon', { description: 'We\'re working on Word document export.' })
-    }
-
     const handleShare = () => {
         toast.info('Copy the public link above to share your CV')
     }

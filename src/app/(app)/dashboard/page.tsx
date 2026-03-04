@@ -368,7 +368,7 @@ export default async function DashboardPage({
                                                 <FileText className="w-5 h-5" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <Link href={`/dashboard/builder?id=${doc.id}`} className="font-bold text-sm md:text-base hover:text-blue-400 transition-colors">
+                                                <Link href={`/editor/${doc.id}`} className="font-bold text-sm md:text-base hover:text-blue-400 transition-colors">
                                                     {doc.title || 'Untitled Resume'}
                                                 </Link>
                                                 <div className="flex items-center gap-2 mt-1">
@@ -387,11 +387,15 @@ export default async function DashboardPage({
                                                     </Button>
                                                 </DropdownMenuTrigger>
                                                 <DropdownMenuContent align="end" className="w-48 bg-zinc-900 border-white/10 text-white rounded-xl shadow-2xl">
-                                                    <DropdownMenuItem className="focus:bg-white/10 focus:text-white cursor-pointer py-2">
-                                                        <Edit className="w-4 h-4 mr-2" /> Rename
+                                                    <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white cursor-pointer py-2">
+                                                        <Link href={`/editor/${doc.id}`}>
+                                                            <Edit className="w-4 h-4 mr-2" /> Edit
+                                                        </Link>
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem className="focus:bg-white/10 focus:text-white cursor-pointer py-2">
-                                                        <Copy className="w-4 h-4 mr-2 text-blue-400" /> Duplicate
+                                                    <DropdownMenuItem asChild className="focus:bg-white/10 focus:text-white cursor-pointer py-2">
+                                                        <Link href="/dashboard/resumes">
+                                                            <Copy className="w-4 h-4 mr-2 text-blue-400" /> Manage in Library
+                                                        </Link>
                                                     </DropdownMenuItem>
                                                     <DropdownMenuItem className="focus:bg-red-500/20 focus:text-red-400 text-red-400 cursor-pointer py-2 border-t border-white/5 mt-1">
                                                         <Trash2 className="w-4 h-4 mr-2" /> Delete
