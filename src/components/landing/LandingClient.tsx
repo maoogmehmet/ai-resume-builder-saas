@@ -11,7 +11,6 @@ import LogoCloud from '@/components/ui/new-logo-cloud'
 import { Features } from './Features'
 import { FeaturesManagement } from './FeaturesManagement'
 import IntegrationsSection from './IntegrationsSection'
-import ContentSection from './ContentSection'
 import WallOfLoveSection from './WallOfLoveSection'
 import { Footer } from '@/components/ui/footer-section'
 import { BlurTextEffect } from '@/components/ui/blur-text-effect'
@@ -120,8 +119,6 @@ export function LandingClient({ user }: { user: any }) {
                 <Features />
                 <FeaturesManagement />
                 <IntegrationsSection />
-
-                <ContentSection />
 
                 <WallOfLoveSection />
 
