@@ -9,7 +9,7 @@ export default function Pricing() {
             <div className="mx-auto max-w-6xl px-6">
                 <div className="mx-auto max-w-2xl space-y-6 text-center">
                     <h1 className="text-center text-4xl font-semibold lg:text-5xl">Pricing that Scales with You</h1>
-                    <p className="text-muted-foreground">Novatypalcv is evolving to be more than just the models. It supports an entire ecosystem — from products innovate.</p>
+                    <p className="text-muted-foreground">Turn your LinkedIn into an ATS-ready resume in minutes—then optimize for any job and share a public link recruiters can open instantly.</p>
                 </div>
 
                 <div className="mt-8 grid gap-6 md:mt-20 md:grid-cols-3">
