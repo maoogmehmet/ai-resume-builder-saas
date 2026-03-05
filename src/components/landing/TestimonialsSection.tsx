@@ -6,7 +6,7 @@ export default function TestimonialsSection() {
             <div className="mx-auto max-w-5xl px-6">
                 <div className="mx-auto max-w-2xl text-center">
                     <blockquote>
-                        <p className="text-lg font-medium sm:text-xl md:text-3xl italic text-white/90">Using this AI Resume Builder feels like having a personal resume strategist on demand. I dropped my LinkedIn URL in, and within minutes I had an ATS-friendly resume that actually highlights impact—not just job duties. The job-specific optimization and shareable public link made applying faster, cleaner, and way more confident.</p>
+                        <p className="text-lg font-medium sm:text-xl md:text-3xl italic text-white/90">Using this AI Resume Builder feels like having a personal resume strategist on demand. I dropped my LinkedIn URL in, and within minutes I had an ATS friendly resume that actually highlights impact not just job duties. The job specific optimization and shareable public link made applying faster, cleaner, and way more confident.</p>
 
                         <div className="mt-12 flex items-center justify-center gap-6">
                             <Avatar className="size-14 border-2 border-primary/20 shadow-xl">

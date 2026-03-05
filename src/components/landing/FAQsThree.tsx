@@ -16,20 +16,20 @@ export default function FAQsThree() {
         {
             id: 'item-1',
             icon: 'clock',
-            question: 'How does the LinkedIn import work—and what do you pull from my profile?',
-            answer: 'You paste your public LinkedIn profile URL, and we securely fetch the visible profile data (like your headline, experience, education, skills, and projects). Then we convert it into a clean, structured format so the AI can generate an ATS-friendly resume. If a profile is private, restricted, or temporarily unavailable, the import may fail—then you can still create a resume manually.',
+            question: 'How does the LinkedIn import work and what do you pull from my profile?',
+            answer: 'You paste your public LinkedIn profile URL, and we securely fetch the visible profile data (like your headline, experience, education, skills, and projects). Then we convert it into a clean, structured format so the AI can generate an ATS friendly resume. If a profile is private, restricted, or temporarily unavailable, the import may fail—then you can still create a resume manually.',
         },
         {
             id: 'item-2',
             icon: 'credit-card',
-            question: 'Will my resume be ATS-friendly and optimized for specific job descriptions?',
-            answer: 'Yes. Every resume is generated in an ATS-friendly structure (standard headings, simple formatting, keyword-ready content). You can also paste a job description (or a job URL if supported) and run an ATS match. We’ll give you: an ATS score (0–100), missing keywords, suggested improvements, and you can generate an optimized version tailored to that role.',
+            question: 'Will my resume be ATS friendly and optimized for specific job descriptions?',
+            answer: 'Yes. Every resume is generated in an ATS friendly structure (standard headings, simple formatting, keyword-ready content). You can also paste a job description (or a job URL if supported) and run an ATS match. We’ll give you: an ATS score (0–100), missing keywords, suggested improvements, and you can generate an optimized version tailored to that role.',
         },
         {
             id: 'item-3',
             icon: 'truck',
             question: 'How do the free trial and yearly subscription work?',
-            answer: 'When you sign up, you start a free trial with full access to core features (resume generation, editing, PDF export, and sharing). After the trial ends, if you don’t upgrade, premium actions may be limited—especially access to your public resume link. Upgrading activates the yearly plan and restores/keeps everything accessible.',
+            answer: 'When you sign up, you start a free trial with full access to core features (resume generation, editing, PDF export, and sharing). After the trial ends, if you don’t upgrade, premium actions may be limited especially access to your public resume link. Upgrading activates the yearly plan and restores/keeps everything accessible.',
         },
         {
             id: 'item-4',
