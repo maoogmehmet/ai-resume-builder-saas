@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { Link2Icon, LucideIcon, LayersIcon } from 'lucide-react'
+import { Monitor, LucideIcon, Share2 } from 'lucide-react'
 import Image from 'next/image'
 import { ReactNode } from 'react'
 
@@ -12,22 +12,22 @@ export default function FeaturesService() {
                     <FeatureCard>
                         <CardHeader className="pb-3">
                             <CardHeading
-                                icon={Link2Icon}
-                                title="Instant LinkedIn Sync"
-                                description="Import your professional history from LinkedIn in seconds."
+                                icon={Monitor}
+                                title="Recruiter Analytics"
+                                description="Track exactly when and where recruiters view your resume."
                             />
                         </CardHeader>
 
                         <div className="relative border-t border-dashed max-sm:mb-6">
                             <div
                                 aria-hidden
-                                className="absolute inset-0 [background:radial-gradient(125%_125%_at_50%_0%,transparent_40%,var(--color-blue-600),var(--color-white)_100%)] opacity-30"
+                                className="absolute inset-0 [background:radial-gradient(125%_125%_at_50%_0%,transparent_40%,#ef4444,var(--color-white)_100%)] opacity-20"
                             />
                             <div className="aspect-76/59 p-1 px-6">
                                 <DualModeImage
                                     darkSrc="/payments.png"
                                     lightSrc="/payments-light.png"
-                                    alt="LinkedIn sync illustration"
+                                    alt="Analytics sync illustration"
                                     width={1207}
                                     height={929}
                                 />
@@ -38,9 +38,9 @@ export default function FeaturesService() {
                     <FeatureCard>
                         <CardHeader className="pb-3">
                             <CardHeading
-                                icon={LayersIcon}
-                                title="Smart Resume Versions"
-                                description="Create tailored versions for every job application effortlessly."
+                                icon={Share2}
+                                title="Public Resume Link"
+                                description="Share your professional profile with a clean, custom URL anywhere."
                             />
                         </CardHeader>
 
@@ -50,7 +50,7 @@ export default function FeaturesService() {
                                     <DualModeImage
                                         darkSrc="/origin-cal-dark.png"
                                         lightSrc="/origin-cal.png"
-                                        alt="Versioning illustration"
+                                        alt="Link illustration"
                                         width={1207}
                                         height={929}
                                     />
@@ -60,26 +60,26 @@ export default function FeaturesService() {
                     </FeatureCard>
 
                     <FeatureCard className="p-6 lg:col-span-2">
-                        <p className="mx-auto my-6 max-w-md text-balance text-center text-2xl font-semibold">Smart resume scoring with automated AI improvements for ATS.</p>
+                        <p className="mx-auto my-6 max-w-md text-balance text-center text-2xl font-semibold">1-Click AI infrastructure to optimize your resume impact instantly.</p>
 
                         <div className="flex justify-center gap-6 overflow-hidden">
                             <CircularUI
-                                label="Keywords"
+                                label="Structure"
                                 circles={[{ pattern: 'border' }, { pattern: 'border' }]}
                             />
 
                             <CircularUI
-                                label="Skills"
+                                label="Impact"
                                 circles={[{ pattern: 'none' }, { pattern: 'primary' }]}
                             />
 
                             <CircularUI
-                                label="Impact"
+                                label="Keywords"
                                 circles={[{ pattern: 'blue' }, { pattern: 'none' }]}
                             />
 
                             <CircularUI
-                                label="Match Score"
+                                label="Final Score"
                                 circles={[{ pattern: 'primary' }, { pattern: 'none' }]}
                                 className="hidden sm:block"
                             />
