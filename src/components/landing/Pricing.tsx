@@ -24,7 +24,7 @@ export default function Pricing() {
                             <hr className="border-white/10 border-dashed" />
 
                             <ul className="list-outside space-y-3 text-sm text-zinc-300">
-                                {['Basic Analytics Dashboard', '5GB Cloud Storage', 'Email and Chat Support'].map((item, index) => (
+                                {['LinkedIn Import up to 1 import / 7 days', '1 Resume ', 'Resume editor + live preview', 'ATS Score Preview', 'Public Resume Link', 'Draft storage access', 'Watermarked PDF export', 'Job-specific AI optimization', 'Multiple versions', 'No-watermark premium export', 'Recruiter analytics'].map((item, index) => (
                                     <li
                                         key={index}
                                         className="flex items-center gap-2">
@@ -57,7 +57,7 @@ export default function Pricing() {
                         <CardContent className="space-y-4">
                             <hr className="border-white/10 border-dashed" />
                             <ul className="list-outside space-y-3 text-sm text-zinc-300">
-                                {['Unlimited resumes', 'Unlimited resume versions (job/company specific)', 'Advanced AI job optimization (tailor resume to any job description)', 'ATS score + 1-click improvements (apply missing keywords)', 'Public Resume Link — never expires', 'No-watermark PDF export (premium templates)', 'Recruiter analytics (views, last viewed, referrers)', 'Priority support', 'Early access to new features'].map((item, index) => (
+                                {['Unlimited resumes', 'Unlimited resume versions', 'Advanced AI job optimization', 'ATS score + 1-click improvements', 'Public Resume Link — never expires', 'No-watermark PDF export', 'Recruiter analytics', 'Priority support', 'Early access to new features'].map((item, index) => (
                                     <li
                                         key={index}
                                         className="flex items-center gap-2">
