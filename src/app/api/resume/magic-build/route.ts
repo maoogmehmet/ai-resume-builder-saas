@@ -41,7 +41,7 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Target role is required' }, { status: 400 });
         }
 
-        console.log(`[MagicBuild] Generating resume for role: "${role}"`);
+        // console.log(`[MagicBuild] Generating resume for role: "${role}"`);
 
         const systemPrompt = `You are an elite executive resume writer with 20 years of experience crafting ATS-optimized, high-impact resumes for Fortune 500 candidates. You ONLY output valid JSON — never markdown, never prose, never explanations. Just the raw JSON object.`;
 
@@ -114,7 +114,7 @@ ${RESUME_GENERATION_PROMPT}`;
             generation_type: 'resume_creation'
         }).then();
 
-        console.log(`[MagicBuild] Successfully created resume: ${insertedResume.id}`);
+        // console.log(`[MagicBuild] Successfully created resume: ${insertedResume.id}`);
         return NextResponse.json({ success: true, resumeId: insertedResume.id });
 
     } catch (error: any) {

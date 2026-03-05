@@ -5,7 +5,8 @@ async function apifyRun(actorId: string, input: any, timeoutSecs: number = 60) {
 
     const url = `https://api.apify.com/v2/acts/${actorId}/run-sync-get-dataset-items?token=${APIFY_TOKEN}&timeout=${timeoutSecs}`;
 
-    console.log(`[Apify] Calling actor ${actorId} with timeout: ${timeoutSecs}s`);
+    // removed console log
+
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -34,7 +35,7 @@ async function apifyRun(actorId: string, input: any, timeoutSecs: number = 60) {
 // LinkedIn Profile Scraper
 // ─────────────────────────────────────────────────────────────────
 export async function scrapeLinkedInProfile(profileUrl: string) {
-    console.log(`[Apify] Scraping profile: ${profileUrl}`);
+    // console.log(`[Apify] Scraping profile: ${profileUrl}`);
 
     const items = await apifyRun('dev_fusion~linkedin-profile-scraper', {
         profileUrls: [profileUrl],
@@ -50,7 +51,7 @@ export async function scrapeLinkedInProfile(profileUrl: string) {
 // LinkedIn Jobs Search
 // ─────────────────────────────────────────────────────────────────
 export async function searchLinkedInJobs(keyword: string, location: string = ''): Promise<any[]> {
-    console.log(`[Apify] Searching jobs: "${keyword}" in "${location}"`);
+    // console.log(`[Apify] Searching jobs: "${keyword}" in "${location}"`);
 
     const searchUrl = new URL('https://www.linkedin.com/jobs/search/');
     searchUrl.searchParams.append('keywords', keyword);
@@ -67,7 +68,7 @@ export async function searchLinkedInJobs(keyword: string, location: string = '')
 
     const items = await apifyRun('curious_coder~linkedin-jobs-scraper', input, 180);
 
-    console.log(`[Apify] Raw jobs count: ${items.length}`);
+    // console.log(`[Apify] Raw jobs count: ${items.length}`);
 
     return items.map((item: any) => {
         let rawUrl = item.jobUrl || item.url || item.applyUrl || '#';
@@ -96,7 +97,7 @@ export async function searchLinkedInJobs(keyword: string, location: string = '')
 // then scrape those specific URLs using dev_fusion.
 // ─────────────────────────────────────────────────────────────────
 export async function searchLinkedInPeople(keyword: string, limit: number = 5): Promise<any[]> {
-    console.log(`[Apify] Searching people via Google for: "${keyword}"`);
+    // console.log(`[Apify] Searching people via Google for: "${keyword}"`);
 
     // 1. Get raw URLs via Google Search
     const searchItems = await apifyRun('apify~google-search-scraper', {
@@ -119,14 +120,14 @@ export async function searchLinkedInPeople(keyword: string, limit: number = 5): 
         throw new Error('No valid LinkedIn profile URLs found.');
     }
 
-    console.log(`[Apify] Found ${validUrls.length} profile URLs. Now scraping with dev_fusion...`);
+    // console.log(`[Apify] Found ${validUrls.length} profile URLs. Now scraping with dev_fusion...`);
 
     // 2. Scrape the deep profiles using dev_fusion
     const scrapedProfiles = await apifyRun('dev_fusion~linkedin-profile-scraper', {
         profileUrls: validUrls,
     }, 60);
 
-    console.log(`[Apify] Successfully scraped ${scrapedProfiles.length} detailed profiles.`);
+    // console.log(`[Apify] Successfully scraped ${scrapedProfiles.length} detailed profiles.`);
 
     // 3. Map to standard format
     return scrapedProfiles.map((item: any) => ({
@@ -171,7 +172,7 @@ export async function scrapeSingleLinkedInJob(jobUrl: string) {
 // Used to gather recent context about a company for cover letters
 // ─────────────────────────────────────────────────────────────────
 export async function searchCompanyInfo(companyName: string): Promise<string> {
-    console.log(`[Apify] Gathering intelligence for company: "${companyName}"`);
+    // console.log(`[Apify] Gathering intelligence for company: "${companyName}"`);
 
     try {
         const searchItems = await apifyRun('apify~google-search-scraper', {
