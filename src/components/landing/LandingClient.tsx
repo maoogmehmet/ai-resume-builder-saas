@@ -19,6 +19,7 @@ import { BlurTextEffect } from '@/components/ui/blur-text-effect'
 import { SmartEditorFeature } from './SmartEditorFeature'
 import { LandingStats } from './LandingStats'
 import TestimonialsSection from './TestimonialsSection'
+import FAQsThree from './FAQsThree'
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { Button } from '@/components/ui/button'
 
@@ -129,6 +130,8 @@ export function LandingClient({ user }: { user: any }) {
                 <WallOfLoveSection />
 
                 <TestimonialsSection />
+
+                <FAQsThree />
 
 
             </main>
