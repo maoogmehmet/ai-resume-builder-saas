@@ -9,8 +9,8 @@ export default function TestimonialsSection() {
                         <p className="text-lg font-medium sm:text-xl md:text-3xl italic text-white/90">Novatypalcv feels like having a personal resume strategist on demand. I dropped my LinkedIn URL in, and within minutes I had an ATS friendly resume that actually highlights impact not just job duties. The job specific optimization and shareable public link made applying faster, cleaner, and way more confident.</p>
 
                         <div className="mt-12 flex items-center justify-center gap-6">
-                            <div className="flex size-14 items-center justify-center rounded-full bg-black border-2 border-white/10 shadow-xl overflow-hidden">
-                                <LogoM size={32} className="text-white" />
+                            <div className="flex size-14 items-center justify-center rounded-full overflow-hidden">
+                                <LogoM size={40} className="text-white" />
                             </div>
 
                             <div className="space-y-1 border-l-2 border-white/10 pl-6 text-left">

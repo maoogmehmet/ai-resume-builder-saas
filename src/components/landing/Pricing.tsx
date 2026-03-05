@@ -16,7 +16,7 @@ export default function Pricing() {
                     <Card className="flex flex-col bg-zinc-900/50 border-white/5 backdrop-blur-sm shadow-2xl transition-all hover:scale-[1.02]">
                         <CardHeader>
                             <CardTitle className="font-medium">Free</CardTitle>
-                            <span className="my-3 block text-2xl font-semibold text-white">$0 / mo</span>
+                            <span className="my-3 block text-2xl font-semibold text-white">$0 / year</span>
                             <CardDescription className="text-sm text-zinc-400">Perfect for individuals</CardDescription>
                         </CardHeader>
 
@@ -50,14 +50,14 @@ export default function Pricing() {
 
                         <CardHeader>
                             <CardTitle className="font-medium text-white">Pro</CardTitle>
-                            <span className="my-3 block text-2xl font-semibold text-white">$19 / mo</span>
+                            <span className="my-3 block text-2xl font-semibold text-white">$99 / year</span>
                             <CardDescription className="text-sm text-zinc-400">Power user performance</CardDescription>
                         </CardHeader>
 
                         <CardContent className="space-y-4">
                             <hr className="border-white/10 border-dashed" />
                             <ul className="list-outside space-y-3 text-sm text-zinc-300">
-                                {['Everything in Free Plan', '5GB Cloud Storage', 'Email and Chat Support', 'Access to Community Forum', 'Single User Access', 'Access to Basic Templates', 'Mobile App Access', '1 Custom Report Per Month', 'Monthly Product Updates', 'Standard Security Features'].map((item, index) => (
+                                {['Unlimited resumes', 'Unlimited resume versions (job/company specific)', 'Advanced AI job optimization (tailor resume to any job description)', 'ATS score + 1-click improvements (apply missing keywords)', 'Public Resume Link — never expires', 'No-watermark PDF export (premium templates)', 'Recruiter analytics (views, last viewed, referrers)', 'Priority support', 'Early access to new features'].map((item, index) => (
                                     <li
                                         key={index}
                                         className="flex items-center gap-2">
