@@ -1,13 +1,20 @@
 export default function LogoCloud() {
     const logos = [
-        { src: "https://storage.efferd.com/logo/nvidia-wordmark.svg", alt: "Nvidia" },
+        { src: "https://html.tailus.io/blocks/customers/nvidia.svg", alt: "Nvidia" },
         { src: "https://storage.efferd.com/logo/supabase-wordmark.svg", alt: "Supabase" },
-        { src: "https://storage.efferd.com/logo/openai-wordmark.svg", alt: "OpenAI" },
+        { src: "https://html.tailus.io/blocks/customers/openai.svg", alt: "OpenAI" },
         { src: "https://storage.efferd.com/logo/turso-wordmark.svg", alt: "Turso" },
-        { src: "https://storage.efferd.com/logo/vercel-wordmark.svg", alt: "Vercel" },
-        { src: "https://storage.efferd.com/logo/github-wordmark.svg", alt: "GitHub" },
+        { src: "https://html.tailus.io/blocks/customers/vercel.svg", alt: "Vercel" },
+        { src: "https://html.tailus.io/blocks/customers/github.svg", alt: "GitHub" },
         { src: "https://storage.efferd.com/logo/claude-wordmark.svg", alt: "Claude" },
         { src: "https://storage.efferd.com/logo/clerk-wordmark.svg", alt: "Clerk" },
+        { src: "https://html.tailus.io/blocks/customers/column.svg", alt: "Column" },
+        { src: "https://html.tailus.io/blocks/customers/nike.svg", alt: "Nike" },
+        { src: "https://html.tailus.io/blocks/customers/laravel.svg", alt: "Laravel" },
+        { src: "https://html.tailus.io/blocks/customers/lilly.svg", alt: "Lilly" },
+        { src: "https://html.tailus.io/blocks/customers/lemonsqueezy.svg", alt: "Lemon Squeezy" },
+        { src: "https://html.tailus.io/blocks/customers/tailwindcss.svg", alt: "Tailwind CSS" },
+        { src: "https://html.tailus.io/blocks/customers/zapier.svg", alt: "Zapier" },
     ]
 
     return (
