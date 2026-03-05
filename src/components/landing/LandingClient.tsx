@@ -7,9 +7,8 @@ import { motion } from 'framer-motion'
 import { Badge } from '@/components/ui/badge'
 import { Zap, Target, ArrowRight, Sparkles, Globe, Shield, Zap as ZapIcon } from 'lucide-react'
 import { HeaderPremium } from './HeaderPremium'
-import { TestimonialsSection } from './TestimonialsSection'
-import { PricingPremium } from './PricingPremium'
 import LogoCloud from '@/components/ui/new-logo-cloud'
+import { Features } from './Features'
 import { Footer } from '@/components/ui/footer-section'
 import { BlurTextEffect } from '@/components/ui/blur-text-effect'
 import { SmartEditorFeature } from './SmartEditorFeature'
@@ -113,6 +112,8 @@ export function LandingClient({ user }: { user: any }) {
                     <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_0,transparent_70%)] pointer-events-none" />
                     <LogoCloud />
                 </div>
+
+                <Features />
 
 
             </main>
