@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { Monitor, LucideIcon, Share2 } from 'lucide-react'
+import { Monitor, LucideIcon, LayoutTemplate, FileCheck } from 'lucide-react'
 import Image from 'next/image'
 import { ReactNode } from 'react'
 
@@ -13,7 +13,7 @@ export default function FeaturesService() {
                         <CardHeader className="pb-3">
                             <CardHeading
                                 icon={Monitor}
-                                title="Recruiter Analytics"
+                                title="Recruiter Insights"
                                 description="Track exactly when and where recruiters view your resume."
                             />
                         </CardHeader>
@@ -21,15 +21,16 @@ export default function FeaturesService() {
                         <div className="relative border-t border-dashed max-sm:mb-6">
                             <div
                                 aria-hidden
-                                className="absolute inset-0 [background:radial-gradient(125%_125%_at_50%_0%,transparent_40%,#ef4444,var(--color-white)_100%)] opacity-20"
+                                className="absolute inset-0 [background:radial-gradient(125%_125%_at_50%_0%,transparent_40%,var(--color-blue-600),var(--color-white)_100%)] opacity-20"
                             />
                             <div className="aspect-76/59 p-1 px-6">
                                 <DualModeImage
-                                    darkSrc="/payments.png"
-                                    lightSrc="/payments-light.png"
-                                    alt="Analytics sync illustration"
+                                    darkSrc="/professional_dashboard_mockup.png"
+                                    lightSrc="/professional_dashboard_mockup.png"
+                                    alt="Recruiter insights dashboard"
                                     width={1207}
                                     height={929}
+                                    className="object-cover rounded-t-xl"
                                 />
                             </div>
                         </div>
@@ -38,21 +39,22 @@ export default function FeaturesService() {
                     <FeatureCard>
                         <CardHeader className="pb-3">
                             <CardHeading
-                                icon={Share2}
-                                title="Public Resume Link"
-                                description="Share your professional profile with a clean, custom URL anywhere."
+                                icon={LayoutTemplate}
+                                title="AI-Optimized Layouts"
+                                description="Professional, ATS-ready designs that recruiters can parse in seconds."
                             />
                         </CardHeader>
 
                         <CardContent>
                             <div className="mask-radial-at-right mask-radial-from-75% mask-radial-[75%_75%] relative max-sm:mb-6">
-                                <div className="aspect-76/59 overflow-hidden rounded-lg border border-white/5">
+                                <div className="aspect-76/59 overflow-hidden rounded-lg border border-white/5 bg-zinc-950/20">
                                     <DualModeImage
-                                        darkSrc="/origin-cal-dark.png"
-                                        lightSrc="/origin-cal.png"
-                                        alt="Link illustration"
+                                        darkSrc="/realistic_cv_mockup.png"
+                                        lightSrc="/realistic_cv_mockup.png"
+                                        alt="Modern CV layouts"
                                         width={1207}
                                         height={929}
+                                        className="object-contain"
                                     />
                                 </div>
                             </div>
@@ -60,7 +62,12 @@ export default function FeaturesService() {
                     </FeatureCard>
 
                     <FeatureCard className="p-6 lg:col-span-2">
-                        <p className="mx-auto my-6 max-w-md text-balance text-center text-2xl font-semibold">1-Click AI infrastructure to optimize your resume impact instantly.</p>
+                        <div className="mx-auto max-w-md space-y-4 text-center">
+                            <div className="flex justify-center">
+                                <FileCheck className="size-8 text-emerald-500" />
+                            </div>
+                            <p className="my-6 text-balance text-2xl font-semibold">Advanced ATS Scoring & Match infrastructure to optimize your career impact.</p>
+                        </div>
 
                         <div className="flex justify-center gap-6 overflow-hidden">
                             <CircularUI
@@ -79,7 +86,7 @@ export default function FeaturesService() {
                             />
 
                             <CircularUI
-                                label="Final Score"
+                                label="ATS Score"
                                 circles={[{ pattern: 'primary' }, { pattern: 'none' }]}
                                 className="hidden sm:block"
                             />
