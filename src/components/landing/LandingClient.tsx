@@ -12,6 +12,7 @@ import { Features } from './Features'
 import { FeaturesManagement } from './FeaturesManagement'
 import FeaturesService from './FeaturesService'
 import IntegrationsSection from './IntegrationsSection'
+import Pricing from './Pricing'
 import WallOfLoveSection from './WallOfLoveSection'
 import { Footer } from '@/components/ui/footer-section'
 import { BlurTextEffect } from '@/components/ui/blur-text-effect'
@@ -121,6 +122,8 @@ export function LandingClient({ user }: { user: any }) {
                 <FeaturesManagement />
                 <FeaturesService />
                 <IntegrationsSection />
+
+                <Pricing />
 
                 <WallOfLoveSection />
 
