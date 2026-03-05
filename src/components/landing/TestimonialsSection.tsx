@@ -1,4 +1,4 @@
-import { LogoM } from '@/components/ui/logo-m'
+import { Logo } from '@/components/ui/logo'
 
 export default function TestimonialsSection() {
     return (
@@ -10,7 +10,7 @@ export default function TestimonialsSection() {
 
                         <div className="mt-12 flex items-center justify-center gap-6">
                             <div className="flex size-14 items-center justify-center rounded-full overflow-hidden">
-                                <LogoM size={40} className="text-white" />
+                                <Logo size={40} className="text-white" />
                             </div>
 
                             <div className="space-y-1 border-l-2 border-white/10 pl-6 text-left">
