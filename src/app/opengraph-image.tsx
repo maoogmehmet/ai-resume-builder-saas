@@ -29,11 +29,12 @@ export default async function Image() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        background: 'white',
+                        background: 'black',
                         borderRadius: '160px',
                         width: '400px',
                         height: '400px',
                         marginBottom: '40px',
+                        border: '8px solid rgba(255,255,255,0.1)'
                     }}
                 >
                     <svg
@@ -46,12 +47,12 @@ export default async function Image() {
                             cx="50"
                             cy="50"
                             r="42"
-                            stroke="black"
+                            stroke="white"
                             strokeWidth="8"
                         />
                         <path
                             d="M34 66V34L66 66V34"
-                            stroke="black"
+                            stroke="white"
                             strokeWidth="8"
                             strokeLinecap="round"
                             strokeLinejoin="round"
