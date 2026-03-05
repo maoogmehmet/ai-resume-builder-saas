@@ -27,9 +27,9 @@ export default function RootLayout({
         <TooltipProvider>
           {children}
           <Toaster />
-          <Analytics />
-          <SpeedInsights />
         </TooltipProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
