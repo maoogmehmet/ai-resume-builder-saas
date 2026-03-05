@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Check } from 'lucide-react'
+import { Check, X } from 'lucide-react'
 
 export default function Pricing() {
     return (
@@ -9,7 +9,7 @@ export default function Pricing() {
             <div className="mx-auto max-w-6xl px-6">
                 <div className="mx-auto max-w-2xl space-y-6 text-center">
                     <h1 className="text-center text-4xl font-semibold lg:text-5xl">Pricing that Scales with You</h1>
-                    <p className="text-muted-foreground">Gemini is evolving to be more than just the models. It supports an entire to the APIs and platforms helping developers and businesses innovate.</p>
+                    <p className="text-muted-foreground">Novatypalcv is evolving to be more than just the models. It supports an entire ecosystem — from products innovate.</p>
                 </div>
 
                 <div className="mt-8 grid gap-6 md:mt-20 md:grid-cols-3">
@@ -24,12 +24,30 @@ export default function Pricing() {
                             <hr className="border-white/10 border-dashed" />
 
                             <ul className="list-outside space-y-3 text-sm text-zinc-300">
-                                {['LinkedIn Import up to 1 import / 7 days', '1 Resume ', 'Resume editor + live preview', 'ATS Score Preview', 'Public Resume Link', 'Draft storage access', 'Watermarked PDF export', 'Job-specific AI optimization', 'Multiple versions', 'No-watermark premium export', 'Recruiter analytics'].map((item, index) => (
+                                {[
+                                    { text: 'LinkedIn Import up to 1 import / 7 days', included: true },
+                                    { text: '1 Resume ', included: true },
+                                    { text: 'Resume editor + live preview', included: true },
+                                    { text: 'ATS Score Preview', included: true },
+                                    { text: 'Public Resume Link', included: true },
+                                    { text: 'Draft storage access', included: true },
+                                    { text: 'Watermarked PDF export', included: true },
+                                    { text: 'Job-specific AI optimization', included: false },
+                                    { text: 'Multiple versions', included: false },
+                                    { text: 'No-watermark premium export', included: false },
+                                    { text: 'Recruiter analytics', included: false },
+                                ].map((item, index) => (
                                     <li
                                         key={index}
                                         className="flex items-center gap-2">
-                                        <Check className="size-3 text-emerald-500" />
-                                        {item}
+                                        {item.included ? (
+                                            <Check className="size-3 text-emerald-500" />
+                                        ) : (
+                                            <X className="size-3 text-zinc-500" />
+                                        )}
+                                        <span className={item.included ? "" : "text-zinc-500 line-through"}>
+                                            {item.text}
+                                        </span>
                                     </li>
                                 ))}
                             </ul>
