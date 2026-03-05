@@ -11,6 +11,7 @@ import LogoCloud from '@/components/ui/new-logo-cloud'
 import { Features } from './Features'
 import { FeaturesManagement } from './FeaturesManagement'
 import FeaturesService from './FeaturesService'
+import FeaturesSectionNew from './FeaturesSectionNew'
 import IntegrationsSection from './IntegrationsSection'
 import Pricing from './Pricing'
 import WallOfLoveSection from './WallOfLoveSection'
@@ -123,6 +124,7 @@ export function LandingClient({ user }: { user: any }) {
                 <Features />
                 <FeaturesManagement />
                 <FeaturesService />
+                <FeaturesSectionNew />
                 <IntegrationsSection />
 
                 <Pricing />
