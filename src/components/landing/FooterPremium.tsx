@@ -63,8 +63,8 @@ export function FooterPremium() {
             <div className="max-w-7xl mx-auto grid w-full gap-16 xl:grid-cols-3">
                 <AnimatedContainer className="space-y-8">
                     <Link className="flex items-center gap-2.5 group" href="/">
-                        <div className="h-7 w-7 bg-black rounded flex items-center justify-center shadow-[0_0_15px_rgba(255,255,255,0.05)] group-hover:scale-110 transition-transform border border-white/5">
-                            <Logo className="h-4 w-4 text-white" />
+                        <div className="flex items-center justify-center transition-transform group-hover:scale-110">
+                            <Logo className="h-7 w-7 text-white" />
                         </div>
                         <span className="font-bold text-xl tracking-tighter text-white italic">Novatypalcv</span>
                     </Link>

@@ -28,8 +28,8 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 			<div className="bg-black relative hidden h-full flex-col border-r border-white/5 p-12 lg:flex overflow-hidden">
 				<div className="absolute inset-0 z-[1] bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
 				<div className="z-20 flex items-center gap-4">
-					<div className="h-12 w-12 bg-white/[0.02] border border-white/10 rounded-2xl flex items-center justify-center backdrop-blur-3xl">
-						<Logo className="h-6 w-6 text-white" />
+					<div className="flex items-center justify-center">
+						<Logo className="h-10 w-10 text-white" />
 					</div>
 					<p className="text-2xl font-black tracking-tighter text-white">Novatypalcv</p>
 				</div>

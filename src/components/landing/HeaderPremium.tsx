@@ -60,8 +60,8 @@ export function HeaderPremium({ user }: { user: any }) {
                 )}
             >
                 <Link className="flex items-center gap-3 group" href="/">
-                    <div className="h-10 w-10 bg-white/[0.02] border border-white/10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110">
-                        <Logo className="h-6 w-6 text-white" />
+                    <div className="flex items-center justify-center transition-transform group-hover:scale-110">
+                        <Logo className="h-8 w-8 text-white" />
                     </div>
                     <span className="font-bold text-2xl tracking-tighter text-white">Novatypalcv</span>
                 </Link>
