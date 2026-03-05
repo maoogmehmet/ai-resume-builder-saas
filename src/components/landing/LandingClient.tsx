@@ -12,6 +12,7 @@ import { Features } from './Features'
 import { FeaturesManagement } from './FeaturesManagement'
 import IntegrationsSection from './IntegrationsSection'
 import CustomersTableCard from './CustomersTableCard'
+import Testimonials from './Testimonials'
 import { Footer } from '@/components/ui/footer-section'
 import { BlurTextEffect } from '@/components/ui/blur-text-effect'
 import { SmartEditorFeature } from './SmartEditorFeature'
@@ -123,6 +124,8 @@ export function LandingClient({ user }: { user: any }) {
                 <div className="py-24 max-w-5xl mx-auto px-6">
                     <CustomersTableCard />
                 </div>
+
+                <Testimonials />
 
 
             </main>
