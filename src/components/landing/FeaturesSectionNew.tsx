@@ -84,8 +84,8 @@ export default function FeaturesSectionNew() {
                                     </svg>
                                 </div>
                                 <div className="relative z-10 mt-6 space-y-2 text-center">
-                                    <h2 className="group-hover:text-secondary-950 text-lg font-medium transition text-white">Recruiter-Safe Data</h2>
-                                    <p className="text-zinc-500">Your professional information is protected with enterprise-grade encryption and privacy controls.</p>
+                                    <h2 className="group-hover:text-secondary-950 text-lg font-medium transition text-white">Recruiter Insights</h2>
+                                    <p className="text-zinc-500">Track exactly when and where recruiters view your resume with real-time analytics.</p>
                                 </div>
                             </CardContent>
                         </Card>
@@ -195,8 +195,8 @@ export default function FeaturesSectionNew() {
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <h2 className="group-hover:text-secondary-950 text-lg font-medium text-white transition">ATS-Ready Structure</h2>
-                                        <p className="text-zinc-500">Automatically structures your data to pass through standard Applicant Tracking Systems with ease.</p>
+                                        <h2 className="group-hover:text-secondary-950 text-lg font-medium text-white transition">Advanced ATS Scoring</h2>
+                                        <p className="text-zinc-500">Optimize your impact with advanced scoring and keyword matching infrastructure to beat the bots.</p>
                                     </div>
                                 </div>
                                 <div className="rounded-tl-(--radius) relative -mb-6 -mr-6 mt-6 h-fit border-l border-t p-6 py-6 sm:ml-6">
@@ -258,8 +258,8 @@ export default function FeaturesSectionNew() {
                                         />
                                     </div>
                                     <div className="space-y-2">
-                                        <h2 className="group-hover:text-secondary-950 text-lg font-medium text-white transition">Recruiter Collaboration</h2>
-                                        <p className="text-zinc-500">Securely share your profile with hiring managers and receive structured feedback directly in the platform.</p>
+                                        <h2 className="group-hover:text-secondary-950 text-lg font-medium text-white transition">Public Share Links</h2>
+                                        <p className="text-zinc-500">Securely share your professional profile with hiring managers via private, trackable and high-speed links.</p>
                                     </div>
                                     <div className="-mb-6 -mr-6 flex justify-end">
                                         <div className="rounded-tl-(--radius) -mb-px -mr-px bg-zinc-100 p-2 dark:bg-zinc-800">
