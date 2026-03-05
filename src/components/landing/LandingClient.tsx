@@ -10,6 +10,7 @@ import { HeaderPremium } from './HeaderPremium'
 import LogoCloud from '@/components/ui/new-logo-cloud'
 import { Features } from './Features'
 import { FeaturesManagement } from './FeaturesManagement'
+import IntegrationsSection from './IntegrationsSection'
 import { Footer } from '@/components/ui/footer-section'
 import { BlurTextEffect } from '@/components/ui/blur-text-effect'
 import { SmartEditorFeature } from './SmartEditorFeature'
@@ -116,6 +117,7 @@ export function LandingClient({ user }: { user: any }) {
 
                 <Features />
                 <FeaturesManagement />
+                <IntegrationsSection />
 
 
             </main>
