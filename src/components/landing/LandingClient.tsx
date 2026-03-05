@@ -9,6 +9,7 @@ import { Zap, Target, ArrowRight, Sparkles, Globe, Shield, Zap as ZapIcon } from
 import { HeaderPremium } from './HeaderPremium'
 import LogoCloud from '@/components/ui/new-logo-cloud'
 import { Features } from './Features'
+import { FeaturesManagement } from './FeaturesManagement'
 import { Footer } from '@/components/ui/footer-section'
 import { BlurTextEffect } from '@/components/ui/blur-text-effect'
 import { SmartEditorFeature } from './SmartEditorFeature'
@@ -114,6 +115,7 @@ export function LandingClient({ user }: { user: any }) {
                 </div>
 
                 <Features />
+                <FeaturesManagement />
 
 
             </main>
