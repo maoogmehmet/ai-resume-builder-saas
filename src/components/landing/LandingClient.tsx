@@ -8,11 +8,8 @@ import { Badge } from '@/components/ui/badge'
 import { Zap, Target, ArrowRight, Sparkles, Globe, Shield, Zap as ZapIcon } from 'lucide-react'
 import { HeaderPremium } from './HeaderPremium'
 import LogoCloud from '@/components/ui/new-logo-cloud'
-import { Features } from './Features'
-import { FeaturesManagement } from './FeaturesManagement'
-import FeaturesService from './FeaturesService'
 import FeaturesSectionNew from './FeaturesSectionNew'
-import IntegrationsSection from './IntegrationsSection'
+import { AIAgentIntegrations } from './AIAgentIntegrations'
 import Pricing from './Pricing'
 import WallOfLoveSection from './WallOfLoveSection'
 import { Footer } from '@/components/ui/footer-section'
@@ -121,11 +118,8 @@ export function LandingClient({ user }: { user: any }) {
                     <LogoCloud />
                 </div>
 
-                <Features />
-                <FeaturesManagement />
-                <FeaturesService />
                 <FeaturesSectionNew />
-                <IntegrationsSection />
+                <AIAgentIntegrations />
 
                 <Pricing />
 
@@ -134,8 +128,6 @@ export function LandingClient({ user }: { user: any }) {
                 <TestimonialsSection />
 
                 <FAQsThree />
-
-
             </main>
 
             <Footer />
