@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { Calendar, LucideIcon, MapIcon } from 'lucide-react'
+import { Link2Icon, LucideIcon, LayersIcon } from 'lucide-react'
 import Image from 'next/image'
 import { ReactNode } from 'react'
 
@@ -12,22 +12,22 @@ export default function FeaturesService() {
                     <FeatureCard>
                         <CardHeader className="pb-3">
                             <CardHeading
-                                icon={MapIcon}
-                                title="Real time location tracking"
-                                description="Advanced tracking system, Instantly locate all your assets."
+                                icon={Link2Icon}
+                                title="Instant LinkedIn Sync"
+                                description="Import your professional history from LinkedIn in seconds."
                             />
                         </CardHeader>
 
                         <div className="relative border-t border-dashed max-sm:mb-6">
                             <div
                                 aria-hidden
-                                className="absolute inset-0 [background:radial-gradient(125%_125%_at_50%_0%,transparent_40%,var(--color-blue-600),var(--color-white)_100%)]"
+                                className="absolute inset-0 [background:radial-gradient(125%_125%_at_50%_0%,transparent_40%,var(--color-blue-600),var(--color-white)_100%)] opacity-30"
                             />
                             <div className="aspect-76/59 p-1 px-6">
                                 <DualModeImage
                                     darkSrc="/payments.png"
                                     lightSrc="/payments-light.png"
-                                    alt="payments illustration"
+                                    alt="LinkedIn sync illustration"
                                     width={1207}
                                     height={929}
                                 />
@@ -38,19 +38,19 @@ export default function FeaturesService() {
                     <FeatureCard>
                         <CardHeader className="pb-3">
                             <CardHeading
-                                icon={Calendar}
-                                title="Advanced Scheduling"
-                                description="Scheduling system, Instantly locate all your assets."
+                                icon={LayersIcon}
+                                title="Smart Resume Versions"
+                                description="Create tailored versions for every job application effortlessly."
                             />
                         </CardHeader>
 
                         <CardContent>
                             <div className="mask-radial-at-right mask-radial-from-75% mask-radial-[75%_75%] relative max-sm:mb-6">
-                                <div className="aspect-76/59 overflow-hidden rounded-lg border">
+                                <div className="aspect-76/59 overflow-hidden rounded-lg border border-white/5">
                                     <DualModeImage
                                         darkSrc="/origin-cal-dark.png"
                                         lightSrc="/origin-cal.png"
-                                        alt="calendar illustration"
+                                        alt="Versioning illustration"
                                         width={1207}
                                         height={929}
                                     />
@@ -60,26 +60,26 @@ export default function FeaturesService() {
                     </FeatureCard>
 
                     <FeatureCard className="p-6 lg:col-span-2">
-                        <p className="mx-auto my-6 max-w-md text-balance text-center text-2xl font-semibold">Smart scheduling with automated reminders for maintenance.</p>
+                        <p className="mx-auto my-6 max-w-md text-balance text-center text-2xl font-semibold">Smart resume scoring with automated AI improvements for ATS.</p>
 
                         <div className="flex justify-center gap-6 overflow-hidden">
                             <CircularUI
-                                label="Inclusion"
+                                label="Keywords"
                                 circles={[{ pattern: 'border' }, { pattern: 'border' }]}
                             />
 
                             <CircularUI
-                                label="Inclusion"
+                                label="Skills"
                                 circles={[{ pattern: 'none' }, { pattern: 'primary' }]}
                             />
 
                             <CircularUI
-                                label="Join"
+                                label="Impact"
                                 circles={[{ pattern: 'blue' }, { pattern: 'none' }]}
                             />
 
                             <CircularUI
-                                label="Exclusion"
+                                label="Match Score"
                                 circles={[{ pattern: 'primary' }, { pattern: 'none' }]}
                                 className="hidden sm:block"
                             />
