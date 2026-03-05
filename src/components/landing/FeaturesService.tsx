@@ -19,18 +19,14 @@ export default function FeaturesService() {
                         </CardHeader>
 
                         <div className="relative border-t border-dashed max-sm:mb-6">
-                            <div
-                                aria-hidden
-                                className="absolute inset-0 [background:radial-gradient(125%_125%_at_50%_0%,transparent_40%,var(--color-blue-600),var(--color-white)_100%)] opacity-20"
-                            />
-                            <div className="aspect-76/59 p-1 px-6">
+                            <div className="aspect-76/59 p-4 px-6">
                                 <DualModeImage
                                     darkSrc="/professional_dashboard_mockup.png"
                                     lightSrc="/professional_dashboard_mockup.png"
                                     alt="Recruiter insights dashboard"
                                     width={1207}
                                     height={929}
-                                    className="object-cover rounded-t-xl"
+                                    className="object-cover rounded-xl border border-white/10"
                                 />
                             </div>
                         </div>
@@ -46,7 +42,7 @@ export default function FeaturesService() {
                         </CardHeader>
 
                         <CardContent>
-                            <div className="mask-radial-at-right mask-radial-from-75% mask-radial-[75%_75%] relative max-sm:mb-6">
+                            <div className="relative max-sm:mb-6">
                                 <div className="aspect-76/59 overflow-hidden rounded-lg border border-white/5 bg-zinc-950/20">
                                     <DualModeImage
                                         darkSrc="/realistic_cv_mockup.png"
