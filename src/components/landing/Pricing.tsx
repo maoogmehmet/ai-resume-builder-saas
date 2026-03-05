@@ -9,10 +9,10 @@ export default function Pricing() {
             <div className="mx-auto max-w-6xl px-6">
                 <div className="mx-auto max-w-2xl space-y-6 text-center">
                     <h1 className="text-center text-4xl font-semibold lg:text-5xl">Pricing that Scales with You</h1>
-                    <p className="text-muted-foreground">Turn your LinkedIn into an ATS-ready resume in minutes—then optimize for any job and share a public link recruiters can open instantly.</p>
+                    <p className="text-muted-foreground">Turn your LinkedIn into an ATS ready resume in minutes—then optimize for any job and share a public link recruiters can open instantly.</p>
                 </div>
 
-                <div className="mt-8 grid gap-6 md:mt-20 md:grid-cols-3">
+                <div className="mt-8 grid gap-6 md:mt-20 md:grid-cols-2 max-w-4xl mx-auto">
                     <Card className="flex flex-col bg-zinc-900/50 border-white/5 backdrop-blur-sm shadow-2xl transition-all hover:scale-[1.02]">
                         <CardHeader>
                             <CardTitle className="font-medium">Free</CardTitle>
@@ -75,7 +75,7 @@ export default function Pricing() {
                         <CardContent className="space-y-4">
                             <hr className="border-white/10 border-dashed" />
                             <ul className="list-outside space-y-3 text-sm text-zinc-300">
-                                {['Unlimited resumes', 'Unlimited resume versions', 'Advanced AI job optimization', 'ATS score + 1-click improvements', 'Public Resume Link — never expires', 'No-watermark PDF export', 'Recruiter analytics', 'Priority support', 'Early access to new features'].map((item, index) => (
+                                {['Unlimited resumes', 'Unlimited resume versions', 'Advanced AI job optimization', 'ATS score + 1 click improvements', 'Public Resume Link never expires', 'No watermark PDF export', 'Recruiter analytics', 'Priority support', 'Early access to new features'].map((item, index) => (
                                     <li
                                         key={index}
                                         className="flex items-center gap-2">
@@ -91,38 +91,6 @@ export default function Pricing() {
                                 asChild
                                 className="w-full bg-purple-600 text-white hover:bg-purple-700 shadow-lg shadow-purple-900/40 transition-all">
                                 <Link href="/login">Get Started Now</Link>
-                            </Button>
-                        </CardFooter>
-                    </Card>
-
-                    <Card className="flex flex-col bg-zinc-900/50 border-white/5 backdrop-blur-sm shadow-2xl transition-all hover:scale-[1.02]">
-                        <CardHeader>
-                            <CardTitle className="font-medium">Startup</CardTitle>
-                            <span className="my-3 block text-2xl font-semibold text-white">$29 / mo</span>
-                            <CardDescription className="text-sm text-zinc-400">Scale your vision</CardDescription>
-                        </CardHeader>
-
-                        <CardContent className="space-y-4">
-                            <hr className="border-white/10 border-dashed" />
-
-                            <ul className="list-outside space-y-3 text-sm text-zinc-300">
-                                {['Everything in Pro Plan', 'Unlimited Cloud Storage', 'Priority Support'].map((item, index) => (
-                                    <li
-                                        key={index}
-                                        className="flex items-center gap-2">
-                                        <Check className="size-3 text-white/60" />
-                                        {item}
-                                    </li>
-                                ))}
-                            </ul>
-                        </CardContent>
-
-                        <CardFooter className="mt-auto pt-6">
-                            <Button
-                                asChild
-                                variant="outline"
-                                className="w-full bg-transparent border-white/20 text-white hover:bg-white/10 transition-colors">
-                                <Link href="/login">Get Started</Link>
                             </Button>
                         </CardFooter>
                     </Card>
