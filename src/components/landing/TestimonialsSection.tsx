@@ -1,70 +1,33 @@
-'use client';
-import { cn } from "@/lib/utils";
-import { TestimonialCard, TestimonialAuthor } from "@/components/ui/testimonial-card";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 
-interface TestimonialsSectionProps {
-    title: string;
-    description: string;
-    testimonials: Array<{
-        author: TestimonialAuthor;
-        text: string;
-        href?: string;
-    }>;
-    className?: string;
-}
-
-export function TestimonialsSection({
-    title,
-    description,
-    testimonials,
-    className
-}: TestimonialsSectionProps) {
+export default function TestimonialsSection() {
     return (
-        <section id="testimonials" className={cn(
-            "bg-black text-white",
-            "py-24 sm:py-32 px-6",
-            className
-        )}>
-            <div className="mx-auto flex max-w-7xl flex-col items-center gap-12 text-center sm:gap-20">
-                <div className="flex flex-col items-center gap-6 px-4">
-                    <h2 className="max-w-[800px] text-4xl font-medium tracking-tighter sm:text-7xl leading-[1.1]">
-                        {title}
-                    </h2>
-                    <p className="text-lg max-w-[600px] font-medium text-zinc-500 sm:text-xl">
-                        {description}
-                    </p>
-                </div>
+        <section className="py-16 md:py-32">
+            <div className="mx-auto max-w-5xl px-6">
+                <div className="mx-auto max-w-2xl text-center">
+                    <blockquote>
+                        <p className="text-lg font-medium sm:text-xl md:text-3xl italic text-white/90">"Using TailsUI has been like unlocking a secret design superpower. It's the perfect fusion of simplicity and versatility, enabling us to create UIs that are as stunning as they are user-friendly."</p>
 
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
-                    <div className="group flex overflow-hidden p-4 [--gap:1.5rem] [gap:var(--gap)] flex-row">
-                        <div className="flex shrink-0 justify-around [gap:var(--gap)] animate-marquee flex-row hover:[animation-play-state:paused]">
-                            {[...Array(4)].map((_, setIndex) => (
-                                testimonials.map((testimonial, i) => (
-                                    <div key={`${setIndex}-${i}`} className="w-[350px] shrink-0">
-                                        <TestimonialCard
-                                            {...testimonial}
-                                        />
-                                    </div>
-                                ))
-                            ))}
+                        <div className="mt-12 flex items-center justify-center gap-6">
+                            <Avatar className="size-14 border-2 border-primary/20 shadow-xl">
+                                <AvatarImage
+                                    src="https://tailus.io/images/reviews/shekinah.webp"
+                                    alt="Shekinah Tshiokufila"
+                                    height="400"
+                                    width="400"
+                                    loading="lazy"
+                                />
+                                <AvatarFallback className="bg-zinc-800 text-white">ST</AvatarFallback>
+                            </Avatar>
+
+                            <div className="space-y-1 border-l-2 border-white/10 pl-6 text-left">
+                                <cite className="font-semibold text-white">John Doe</cite>
+                                <span className="text-muted-foreground block text-sm">CEO, Nvidia</span>
+                            </div>
                         </div>
-                    </div>
-
-                    {/* Gradients to fade edges */}
-                    <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-black z-10" />
-                    <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-black z-10" />
+                    </blockquote>
                 </div>
             </div>
-
-            <style jsx global>{`
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-            animation: marquee 50s linear infinite;
-        }
-      `}</style>
         </section>
-    );
+    )
 }

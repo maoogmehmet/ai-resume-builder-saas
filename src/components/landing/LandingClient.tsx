@@ -18,6 +18,7 @@ import { Footer } from '@/components/ui/footer-section'
 import { BlurTextEffect } from '@/components/ui/blur-text-effect'
 import { SmartEditorFeature } from './SmartEditorFeature'
 import { LandingStats } from './LandingStats'
+import TestimonialsSection from './TestimonialsSection'
 import AnimatedGenerateButton from '@/components/ui/animated-generate-button'
 import { Button } from '@/components/ui/button'
 
@@ -126,6 +127,8 @@ export function LandingClient({ user }: { user: any }) {
                 <Pricing />
 
                 <WallOfLoveSection />
+
+                <TestimonialsSection />
 
 
             </main>
