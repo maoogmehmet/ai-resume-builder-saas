@@ -114,14 +114,6 @@ export function LandingClient({ user }: { user: any }) {
                     <LogoCloud />
                 </div>
 
-                {/* 4. TESTIMONIALS */}
-                <TestimonialsSection
-                    title="Neural feedback"
-                    description="Novatypalcv is architecting remarkable candidate nodes with high-performance success data."
-                    testimonials={testimonials}
-                />
-
-                <PricingPremium />
 
             </main>
 
