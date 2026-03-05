@@ -61,16 +61,16 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 				</div>
 
 				<div className="absolute top-10 left-8 md:left-12">
-					<AnimatedGenerateButton
+					<Link
 						href="/"
-						labelIdle="Return Home"
-						size="sm"
-						className="bg-transparent border-none text-zinc-600 hover:text-white px-0 h-auto font-black italic lowercase tracking-tight shadow-none"
-						icon={<ChevronLeftIcon className="h-4 w-4" />}
-					/>
+						className="inline-flex items-center justify-center rounded-xl shadow-2xl h-9 px-4 font-bold text-[11px] uppercase tracking-[0.2em] bg-white text-black hover:bg-zinc-100 transition-all hover:scale-105"
+					>
+						<ChevronLeftIcon className="size-3.5 mr-2" />
+						RETURN HOME
+					</Link>
 				</div>
 
-				<div className="mx-auto space-y-12 sm:w-[450px] relative z-10 px-6">
+				<div className="mx-auto flex flex-col gap-6 sm:w-[450px] relative z-10 px-6">
 					<div className="flex flex-col space-y-2">
 						<h1 className="text-5xl font-black text-white leading-tight">
 							{isSignIn ? 'Welcome back' : 'Create an account'}
@@ -102,7 +102,7 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 
 					<AuthSeparator />
 
-					<form action={action} className="space-y-6" autoComplete="off">
+					<form action={action} className="space-y-4" autoComplete="off">
 						{!isSignIn && (
 							<div className="space-y-3">
 								<Label htmlFor="fullName" className="text-white font-bold ml-1">Full Name</Label>
@@ -214,7 +214,7 @@ const GoogleIcon = (props: React.ComponentProps<'svg'>) => (
 
 const AuthSeparator = () => {
 	return (
-		<div className="flex w-full items-center justify-center py-6">
+		<div className="flex w-full items-center justify-center py-2">
 			<div className="bg-white/5 h-px w-full" />
 			<span className="text-zinc-800 font-black px-4 text-[10px] italic tracking-[0.4em] uppercase opacity-40">OR</span>
 			<div className="bg-white/5 h-px w-full" />
