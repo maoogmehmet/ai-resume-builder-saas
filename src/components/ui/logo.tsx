@@ -20,14 +20,14 @@ export function Logo({ className, size = 32, ...props }: LogoProps) {
             <circle
                 cx="50"
                 cy="50"
-                r="44"
+                r="42"
                 stroke="currentColor"
-                strokeWidth="10"
+                strokeWidth="8"
             />
             <path
-                d="M32 68V32L68 68V32"
+                d="M34 66V34L66 66V34"
                 stroke="currentColor"
-                strokeWidth="10"
+                strokeWidth="8"
                 strokeLinecap="round"
                 strokeLinejoin="round"
             />
