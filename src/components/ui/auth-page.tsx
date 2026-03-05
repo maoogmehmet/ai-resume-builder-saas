@@ -100,12 +100,103 @@ export function AuthPage({ type, action, error, message }: AuthPageProps) {
 						</button>
 					</div>
 
-					<p className="text-zinc-600 font-medium text-center text-xs px-8 pt-8">
-						By continuing, you agree to our{' '}
-						<Link href="/terms" className="underline">Terms of Service</Link>{' '}
-						and{' '}
-						<Link href="/privacy" className="underline">Privacy Policy</Link>.
-					</p>
+					<AuthSeparator />
+
+					<form action={action} className="space-y-4" autoComplete="off">
+						{!isSignIn && (
+							<div className="space-y-3">
+								<Label htmlFor="fullName" className="text-white font-bold ml-1">Full Name</Label>
+								<Input
+									id="fullName"
+									name="fullName"
+									placeholder="John Doe"
+									required
+									className="h-14 rounded-2xl bg-white border-none text-black font-medium placeholder:text-zinc-400 focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
+								/>
+							</div>
+						)}
+						<div className="space-y-3">
+							<Label htmlFor="email" className="text-white font-bold ml-1">Email</Label>
+							<Input
+								id="email"
+								name="email"
+								type="email"
+								placeholder="name@example.com"
+								required
+								autoComplete="email"
+								defaultValue=""
+								className="h-14 rounded-2xl bg-white border-none text-black font-medium placeholder:text-zinc-400 focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
+							/>
+						</div>
+						<div className="space-y-3">
+							<div className="flex items-center justify-between ml-1">
+								<Label htmlFor="password" className="text-white font-bold">Password</Label>
+								{isSignIn && (
+									<Link href="/auth/reset-password" className="text-sm font-bold text-blue-600 hover:text-blue-500 transition-colors">
+										Forgot password?
+									</Link>
+								)}
+							</div>
+							<Input
+								id="password"
+								name="password"
+								type="password"
+								required
+								autoComplete="current-password"
+								defaultValue=""
+								className="h-14 rounded-2xl bg-white border-none text-black font-medium focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
+							/>
+						</div>
+
+						{!isSignIn && (
+							<div className="space-y-3">
+								<Label htmlFor="confirmPassword" className="text-white font-bold ml-1">Confirm Password</Label>
+								<Input
+									id="confirmPassword"
+									name="confirmPassword"
+									type="password"
+									required
+									className="h-14 rounded-2xl bg-white border-none text-black font-medium focus:ring-2 focus:ring-white/20 transition-all shadow-lg"
+								/>
+							</div>
+						)}
+
+						{error && (
+							<div className="p-4 bg-red-500/10 border border-red-500/20 text-red-500 rounded-2xl text-sm font-bold">
+								{error}
+							</div>
+						)}
+						{message && (
+							<div className="p-4 bg-blue-500/10 border border-blue-500/20 text-blue-500 rounded-2xl text-sm font-bold">
+								{message}
+							</div>
+						)}
+
+						<button
+							type="submit"
+							className="w-full h-14 rounded-2xl bg-[#111111] text-white font-bold transition-all hover:bg-zinc-800 shadow-2xl mt-4"
+						>
+							{isSignIn ? 'Sign In' : 'Create Account'}
+						</button>
+					</form>
+
+					<div className="text-center pt-8 border-t border-white/10">
+						<p className="text-zinc-500 font-medium">
+							{isSignIn ? "Don't have an account? " : "Already have an account? "}
+							<Link href={isSignIn ? "/auth/signup" : "/auth/signin"} className="text-blue-600 font-bold hover:text-blue-500">
+								{isSignIn ? "Sign up today" : "Sign in"}
+							</Link>
+						</p>
+					</div>
+
+					{!isSignIn && (
+						<p className="text-zinc-600 font-medium text-center text-xs px-8">
+							By clicking create account, you agree to our{' '}
+							<Link href="/terms" className="underline">Terms of Service</Link>{' '}
+							and{' '}
+							<Link href="/privacy" className="underline">Privacy Policy</Link>.
+						</p>
+					)}
 				</div>
 			</div>
 		</main>
