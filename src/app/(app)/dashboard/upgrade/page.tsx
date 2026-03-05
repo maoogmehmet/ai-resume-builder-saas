@@ -130,28 +130,24 @@ export default function UpgradePage() {
                 </article>
 
                 {/* Grid */}
-                <div className="flex flex-col md:flex-row items-stretch justify-center gap-8 lg:gap-12 max-w-5xl mx-auto px-2 relative z-10">
+                <div className="relative z-10 flex flex-col md:flex-row items-stretch justify-center gap-10 max-w-6xl mx-auto px-6">
                     {plans.map((plan, index) => (
-                        <div key={plan.id} className="flex-1 flex flex-col max-w-[440px] w-full mx-auto md:mx-0">
+                        <div key={plan.id} className="flex-1 flex flex-col max-w-[450px] w-full mx-auto md:mx-0 group">
                             <PricingCard.Card className={cn(
-                                "h-full flex flex-col border border-white/[0.08] hover:border-white/[0.15] transition-all duration-700 bg-black/40 backdrop-blur-3xl rounded-[3rem] shadow-[0_50px_100px_rgba(0,0,0,0.5)] overflow-hidden group",
-                                plan.popular && "ring-1 ring-white/20 shadow-[0_60px_120px_rgba(255,255,255,0.05)] bg-gradient-to-t from-black via-zinc-950/40 to-white/5"
+                                "h-full flex flex-col border border-white/5 hover:border-white/10 transition-all duration-700 bg-black/40 backdrop-blur-3xl rounded-[3rem] p-4",
+                                plan.popular && "ring-1 ring-white/10 shadow-[0_50px_100px_rgba(0,0,0,0.8)] bg-gradient-to-t from-black via-white/[0.01] to-white/[0.03]"
                             )}>
-                                <PricingCard.Header className="p-8 md:p-10 border-white/[0.05] relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                                        <Zap className="h-32 w-32 -mr-8 -mt-8" />
-                                    </div>
-
+                                <PricingCard.Header className="p-8 md:p-10 border-white/[0.05] rounded-[2.5rem]">
                                     <PricingCard.Plan>
-                                        <PricingCard.PlanName className="text-white text-[11px] font-black uppercase tracking-widest italic flex items-center gap-2">
-                                            <Zap className={cn("size-4 text-zinc-700", plan.popular && "text-emerald-500")} />
+                                        <PricingCard.PlanName className="text-zinc-600 font-black uppercase tracking-[0.3em] text-[10px] italic">
+                                            <Zap className={cn("size-3.5 text-zinc-800", plan.popular && "text-white opacity-40")} />
                                             {plan.name}
                                         </PricingCard.PlanName>
-                                        {plan.popular && <PricingCard.Badge className="text-[10px] px-3 py-1 font-black bg-white text-black italic">ELITE TIER</PricingCard.Badge>}
+                                        {plan.popular && <PricingCard.Badge className="text-[9px] px-3 py-1 font-black italic lowercase bg-white/5 text-white border-white/10">strategic choice</PricingCard.Badge>}
                                     </PricingCard.Plan>
 
-                                    <PricingCard.Price className="my-6">
-                                        <PricingCard.MainPrice className="text-white text-5xl md:text-7xl font-black italic tracking-tighter">
+                                    <PricingCard.Price className="mb-4">
+                                        <PricingCard.MainPrice className="text-white italic text-5xl md:text-7xl font-black lowercase tracking-tighter">
                                             $
                                             <NumberFlow
                                                 format={{
@@ -165,47 +161,50 @@ export default function UpgradePage() {
                                                 className="font-black"
                                             />
                                         </PricingCard.MainPrice>
-                                        <PricingCard.Period className="text-zinc-600 font-black tracking-[0.2em] uppercase text-[11px] italic ml-2">/Year</PricingCard.Period>
+                                        <PricingCard.Period className="text-zinc-700 font-black italic text-[12px] lowercase ml-2">/year</PricingCard.Period>
                                     </PricingCard.Price>
 
-                                    <PricingCard.Description className="text-zinc-500 font-bold text-xs leading-relaxed italic opacity-80">
+                                    <PricingCard.Description className="text-zinc-600 font-black italic text-[13px] leading-snug lowercase opacity-60">
                                         {plan.description}
                                     </PricingCard.Description>
+
+                                    {!plan.popular && (
+                                        <p className="mt-6 text-[9px] text-zinc-800 font-black uppercase tracking-[0.3em] italic opacity-40">Restricted Protocol</p>
+                                    )}
                                 </PricingCard.Header>
 
                                 <PricingCard.Body className="p-8 md:p-10 pt-0 flex-1 flex flex-col justify-between">
                                     <div className="space-y-6">
-                                        <PricingCard.Separator className="text-zinc-800 text-[10px] font-black uppercase tracking-[0.4em] italic mb-4">Neural Capabilities</PricingCard.Separator>
-                                        <PricingCard.List className="space-y-4">
+                                        <PricingCard.Separator className="text-zinc-800 text-[9px] font-black uppercase tracking-[0.4em] italic mb-4">Neural Features</PricingCard.Separator>
+                                        <PricingCard.List className="space-y-3.5">
                                             {plan.includes.map((feature, i) => (
-                                                <PricingCard.ListItem key={i} className="text-zinc-400 font-bold text-[14px] flex items-center gap-3 italic">
-                                                    <CheckCheck className={cn("size-4 shrink-0 transition-all duration-300", plan.popular ? "text-emerald-500" : "text-white/20")} />
+                                                <PricingCard.ListItem key={i} className="text-zinc-300 font-black italic text-[14px] lowercase group/item flex items-center gap-3">
+                                                    <CheckCheck className={cn("size-4 shrink-0 transition-all duration-300 opacity-20", plan.popular && "text-emerald-500 opacity-60")} />
                                                     {feature}
                                                 </PricingCard.ListItem>
                                             ))}
 
                                             {!plan.popular && plan.locked?.map((lock, i) => (
-                                                <PricingCard.ListItem key={i} className="text-zinc-800 line-through font-bold text-[14px] flex items-center gap-3 italic opacity-40">
-                                                    <CheckCheck className="size-4 shrink-0 text-zinc-900" />
+                                                <PricingCard.ListItem key={i} className="text-zinc-900 line-through font-black italic text-[13px] flex items-center gap-3 opacity-30 lowercase">
+                                                    <CheckCheck className="size-4 shrink-0" />
                                                     {lock}
                                                 </PricingCard.ListItem>
                                             ))}
                                         </PricingCard.List>
                                     </div>
 
-                                    <div className="mt-12 pt-8 border-t border-white/[0.05]">
+                                    <div className="mt-12 pt-8 border-t border-white/5">
                                         <AnimatedGenerateButton
                                             disabled={isLoading || !plan.popular}
                                             onClick={plan.popular ? handleUpgrade : undefined}
                                             generating={isLoading && plan.popular}
                                             labelIdle={plan.buttonText}
                                             labelActive="Initializing..."
-                                            size="lg"
                                             className={cn(
-                                                "w-full h-14 font-black italic lowercase text-lg",
-                                                !plan.popular && "opacity-40 cursor-not-allowed grayscale"
+                                                "w-full h-16 rounded-[1.5rem] font-black italic lowercase shadow-3xl",
+                                                !plan.popular && "bg-white/5 border-white/10 text-white cursor-not-allowed opacity-40"
                                             )}
-                                            highlightHueDeg={plan.popular ? 140 : 0}
+                                            highlightHueDeg={plan.popular ? 200 : 0}
                                         />
                                     </div>
                                 </PricingCard.Body>
