@@ -279,7 +279,7 @@ export default function JobsPage() {
                 <header className="flex flex-col gap-6 pb-4">
                     <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-6">
                         <div className="flex items-center gap-3">
-                            <AnimatedText text="Job Finder" className="text-3xl font-bold tracking-tight text-white italic lowercase" />
+                            <AnimatedText text="Job Finder" className="text-3xl md:text-5xl font-black tracking-tighter text-white drop-shadow-lg" />
                             {!hasSearched && savedJobs.length > 0 && (
                                 <Badge variant="outline" className="h-5 bg-white/5 border-white/10 text-zinc-500 font-bold uppercase tracking-widest text-[10px]">
                                     {savedJobs.length} Saved

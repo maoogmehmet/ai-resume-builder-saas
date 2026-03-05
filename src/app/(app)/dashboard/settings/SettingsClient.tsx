@@ -148,11 +148,11 @@ export function SettingsClient({ email: propEmail, resumeCount, isSubscribed, in
     const initials = displayName ? displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : email?.[0]?.toUpperCase() || '?';
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white font-sans">
+        <div className="min-h-screen bg-black text-white font-sans">
             <div className="max-w-5xl mx-auto px-6 py-10">
                 {/* Header */}
                 <div className="mb-10">
-                    <h1 className="text-3xl font-black tracking-tighter text-white">Settings</h1>
+                    <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-white drop-shadow-lg">Settings</h1>
                     <p className="text-zinc-500 text-sm mt-1">Manage your account preferences and application settings.</p>
                 </div>
 

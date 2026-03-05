@@ -9,8 +9,8 @@ export default function BuilderPage() {
 
                 {/* Header */}
                 <header className="flex flex-col items-baseline justify-between pb-4">
-                    <h1 className="text-4xl sm:text-5xl font-black tracking-tighter italic lowercase text-white">
-                        builder
+                    <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-white drop-shadow-lg">
+                        Builder
                     </h1>
                 </header>
 

@@ -25,10 +25,10 @@ export default async function ResumesPage() {
                 {/* Header */}
                 <header className="flex items-center justify-between pb-8 border-b border-white/5">
                     <div>
-                        <h1 className="text-5xl font-black text-white tracking-tighter italic lowercase">
-                            my cvs
+                        <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-white drop-shadow-lg">
+                            My CVs
                         </h1>
-                        <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.3em] mt-4 italic opacity-60">
+                        <p className="text-zinc-500 text-sm md:text-base font-medium">
                             Professional library of AI-optimized career variations.
                         </p>
                     </div>

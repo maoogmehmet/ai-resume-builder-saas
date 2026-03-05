@@ -111,9 +111,9 @@ export default function AnalyticsDashboard() {
                         <div className="h-10 w-10 bg-[#0a0a0a] border border-[#3b82f6]/30 rounded-[1rem] flex items-center justify-center shadow-[0_0_20px_rgba(59,130,246,0.1)]">
                             <Activity className="h-5 w-5 text-[#3b82f6]" strokeWidth={2.5} />
                         </div>
-                        <h1 className="text-4xl font-black tracking-[-0.08em] italic lowercase text-white">neural analytics</h1>
+                        <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-white drop-shadow-lg">Neural Analytics</h1>
                     </div>
-                    <p className="text-zinc-500 text-[10px] font-black uppercase tracking-[0.2em] italic ml-14">
+                    <p className="text-zinc-500 text-sm md:text-base font-medium">
                         Real-time telemetry for your public CV links.
                     </p>
                 </div>

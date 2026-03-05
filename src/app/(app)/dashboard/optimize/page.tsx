@@ -139,8 +139,8 @@ export default function OptimizePage() {
                 {/* Header */}
                 <header className="flex flex-col sm:flex-row items-baseline justify-between gap-4 border-b border-white/5 pb-8">
                     <div className="space-y-1">
-                        <h1 className="text-4xl sm:text-5xl font-black tracking-tighter italic lowercase">
-                            <AnimatedText text="cv optimizer" />
+                        <h1 className="text-3xl md:text-5xl font-black tracking-tighter text-white drop-shadow-lg">
+                            <AnimatedText text="CV Optimizer" />
                         </h1>
                     </div>
                     <div className="flex items-center gap-4">
