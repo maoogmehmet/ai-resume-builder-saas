@@ -10,6 +10,7 @@ import { HeaderPremium } from './HeaderPremium'
 import LogoCloud from '@/components/ui/new-logo-cloud'
 import { Features } from './Features'
 import { FeaturesManagement } from './FeaturesManagement'
+import FeaturesService from './FeaturesService'
 import IntegrationsSection from './IntegrationsSection'
 import WallOfLoveSection from './WallOfLoveSection'
 import { Footer } from '@/components/ui/footer-section'
@@ -118,6 +119,7 @@ export function LandingClient({ user }: { user: any }) {
 
                 <Features />
                 <FeaturesManagement />
+                <FeaturesService />
                 <IntegrationsSection />
 
                 <WallOfLoveSection />
