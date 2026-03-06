@@ -10,7 +10,7 @@ export default function TestimonialsSection() {
 
                         <div className="mt-12 flex items-center justify-center gap-6">
                             <div className="flex size-14 items-center justify-center rounded-[1rem] overflow-hidden bg-black">
-                                <MaoogLogo size={40} className="text-white" />
+                                <MaoogLogo size={40} style={{ color: '#FCC419' }} />
                             </div>
 
                             <div className="space-y-1 border-l-2 border-white/10 pl-6 text-left">
