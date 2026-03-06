@@ -8,12 +8,20 @@ const styles = StyleSheet.create({
         fontSize: 9,
         lineHeight: 1.4,
     },
+    // Fixed background for multi-page sidebar
+    sidebarBackground: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '32%',
+        height: '100%',
+        backgroundColor: '#1E293B',
+        zIndex: -1,
+    },
     leftColumn: {
         width: '32%',
-        backgroundColor: '#1E293B', // Deep Slate
         color: '#F1F5F9',
         padding: 24,
-        height: '100%',
     },
     rightColumn: {
         width: '68%',
@@ -31,14 +39,16 @@ const styles = StyleSheet.create({
     name: {
         fontSize: 22,
         fontFamily: 'Helvetica-Bold',
-        marginBottom: 2,
+        marginBottom: 4,
         color: '#FFFFFF',
         textAlign: 'center',
+        lineHeight: 1.2,
     },
     headerSubtitle: {
         fontSize: 10,
-        color: '#94A3B8',
+        color: '#FFFFFF',
         textAlign: 'center',
+        marginTop: 12, // Added marginTop to prevent overlap and push it down
         marginBottom: 24,
         textTransform: 'uppercase',
         letterSpacing: 1,
@@ -131,13 +141,18 @@ export const ModernTemplate = ({ data }: { data: any }) => {
     return (
         <Document>
             <Page size="A4" style={styles.page}>
+                {/* Fixed Background for sidebar to repeat on all pages */}
+                <View style={styles.sidebarBackground} fixed />
+
                 {/* LEFT SIDEBAR */}
                 <View style={styles.leftColumn}>
-                    {personal_info.profile_image && personal_info.profile_image.trim() !== '' && (
-                        <Image src={{ uri: personal_info.profile_image }} style={styles.profileImage} />
-                    )}
-                    <Text style={styles.name}>{personal_info.full_name}</Text>
-                    <Text style={styles.headerSubtitle}>{experience?.[0]?.position || experience?.[0]?.title || 'Professional'}</Text>
+                    <View>
+                        {personal_info.profile_image && personal_info.profile_image.trim() !== '' && (
+                            <Image src={{ uri: personal_info.profile_image }} style={styles.profileImage} />
+                        )}
+                        <Text style={styles.name}>{personal_info.full_name}</Text>
+                        <Text style={styles.headerSubtitle}>{experience?.[0]?.position || experience?.[0]?.title || 'Professional'}</Text>
+                    </View>
 
                     <View>
                         <Text style={styles.sidebarTitle}>Contact</Text>

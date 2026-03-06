@@ -26,13 +26,15 @@ const styles = StyleSheet.create({
         fontFamily: 'Helvetica-Bold',
         letterSpacing: 2,
         textTransform: 'uppercase',
+        lineHeight: 1.1,
+        marginBottom: 6,
     },
     title: {
         fontSize: 12,
         color: '#666666',
-        marginTop: 4,
         letterSpacing: 1,
         textTransform: 'uppercase',
+        marginTop: 10, // Added to prevent overlap
     },
     profileImage: {
         width: 80,
