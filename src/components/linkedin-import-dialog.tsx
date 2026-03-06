@@ -53,7 +53,7 @@ export function LinkedinImportDialog({ customTrigger }: { customTrigger?: React.
             const data = await response.json()
 
             if (!response.ok) {
-                throw new Error(data.error || 'Failed to import profile')
+                throw new Error(data.message || data.error || 'Failed to import profile')
             }
 
             toast.success('Successfully imported!', {
