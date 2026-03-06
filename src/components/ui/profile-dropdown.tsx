@@ -85,7 +85,7 @@ export function ProfileDropdown({ className, ...props }: ProfileDropdownProps) {
     const menuItems: MenuItem[] = [
         { label: "Profile", href: "/dashboard/settings", icon: <User className="w-4 h-4" /> },
         { label: "Model", value: "Gemini 2.0", href: "#", icon: <Gemini className="w-4 h-4" /> },
-        { label: "Subscription", value: subscription, href: "/dashboard/upgrade", icon: <CreditCard className="w-4 h-4" /> },
+        { label: "Subscription", value: subscription, href: "/#pricing", icon: <CreditCard className="w-4 h-4" /> },
         { label: "Settings", href: "/dashboard/settings", icon: <Settings className="w-4 h-4" /> },
         { label: "Terms & Policies", href: "/terms", icon: <FileText className="w-4 h-4" /> },
     ];

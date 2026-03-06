@@ -33,7 +33,7 @@ export function PdfDownloadButton({ resumeData, disabled, template = 'classic', 
                     const isSubscribed = profile.subscription_status === 'active' || profile.subscription_status === 'trialing';
                     if (!isTrialActive && !isSubscribed) {
                         toast.error('Trial expired', { description: 'Please upgrade to download PDFs' })
-                        router.push('/upgrade')
+                        router.push('/#pricing')
                         return;
                     }
                 }

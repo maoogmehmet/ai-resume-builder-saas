@@ -187,12 +187,12 @@ export default async function DashboardPage({
                     <Target className="w-5 h-5 text-emerald-400 mb-2 group-hover:scale-110 transition-transform" />
                     <span className="font-bold text-sm">Analyze Resume</span>
                 </Link>
-                <Link href={isPro ? "/dashboard/letters" : "/dashboard/upgrade"} className="relative flex flex-col gap-2 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-white/20 transition-all group overflow-hidden">
+                <Link href={isPro ? "/dashboard/letters" : "/#pricing"} className="relative flex flex-col gap-2 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-white/20 transition-all group overflow-hidden">
                     {!isPro && <div className="absolute top-2 right-2 text-[9px] font-black italic bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2 py-0.5 rounded-sm uppercase tracking-wider">PRO</div>}
                     <FileCheck2 className={`w-5 h-5 mb-2 group-hover:scale-110 transition-transform ${isPro ? 'text-blue-400' : 'text-zinc-600'}`} />
                     <span className={`font-bold text-sm ${!isPro && 'text-zinc-400'}`}>Cover Letter</span>
                 </Link>
-                <Link href={isPro ? "/dashboard/builder" : "/dashboard/upgrade"} className="relative flex flex-col gap-2 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-white/20 transition-all group overflow-hidden">
+                <Link href={isPro ? "/dashboard/builder" : "/#pricing"} className="relative flex flex-col gap-2 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:bg-white/[0.05] hover:border-white/20 transition-all group overflow-hidden">
                     {!isPro && <div className="absolute top-2 right-2 text-[9px] font-black italic bg-gradient-to-r from-purple-500 to-pink-500 text-white px-2 py-0.5 rounded-sm uppercase tracking-wider">PRO</div>}
                     <Linkedin className={`w-5 h-5 mb-2 group-hover:scale-110 transition-transform ${isPro ? 'text-blue-600' : 'text-zinc-600'}`} />
                     <span className={`font-bold text-sm ${!isPro && 'text-zinc-400'}`}>Import Profile</span>

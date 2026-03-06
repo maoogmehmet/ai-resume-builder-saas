@@ -31,7 +31,7 @@ const navItems = [
     { name: 'Optimize', href: '/dashboard/optimize', icon: Target },
     { name: 'Find Jobs', href: '/dashboard/jobs', icon: Briefcase },
     { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
-    { name: 'Upgrade Plan', href: '/dashboard/upgrade', icon: CreditCard },
+    { name: 'Upgrade Plan', href: '/#pricing', icon: CreditCard },
     { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
 

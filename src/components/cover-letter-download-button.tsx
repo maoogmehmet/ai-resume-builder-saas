@@ -34,7 +34,7 @@ export function CoverLetterDownloadButton({ letterData, profileData, disabled, c
                     const isSubscribed = profile.subscription_status === 'active' || profile.subscription_status === 'trialing';
                     if (!isTrialActive && !isSubscribed) {
                         toast.error('Trial expired', { description: 'Please upgrade to download PDFs' })
-                        router.push('/dashboard/upgrade')
+                        router.push('/#pricing')
                         return;
                     }
                 }

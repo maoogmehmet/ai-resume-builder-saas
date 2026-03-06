@@ -133,7 +133,7 @@ export function ResumeEditorPage() {
             if (!response.ok) {
                 if (result.error === 'subscription_required') {
                     toast.error('Premium Required', { description: result.message || 'Please upgrade to Elite Tier to continue.' })
-                    router.push('/dashboard/upgrade')
+                    router.push('/#pricing')
                     return
                 }
                 throw new Error(result.error || result.message || 'AI generation failed')

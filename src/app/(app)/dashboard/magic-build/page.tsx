@@ -118,7 +118,7 @@ export default function MagicBuildPage() {
             if (!response.ok) {
                 if (resData.error === 'subscription_required') {
                     toast.error('Premium Required', { description: resData.message || 'Please upgrade to Elite Tier to continue.' })
-                    router.push('/dashboard/upgrade')
+                    router.push('/#pricing')
                     return
                 }
                 throw new Error(resData.error || resData.message || 'Failed to generate resume')
