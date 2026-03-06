@@ -189,7 +189,7 @@ export const ModernTemplate = ({ data }: { data: any }) => {
                 <View style={styles.rightColumn}>
                     <View style={styles.section}>
                         <Text style={styles.mainTitle}>Executive Summary</Text>
-                        <Text style={{ color: '#334155', lineHeight: 1.5 }}>{summary}</Text>
+                        <Text style={{ color: '#334155', lineHeight: 1.3 }}>{summary}</Text>
                     </View>
 
                     {experience && experience.length > 0 && (
@@ -216,7 +216,7 @@ export const ModernTemplate = ({ data }: { data: any }) => {
                     {data.additional_explanations && (
                         <View style={styles.section}>
                             <Text style={styles.mainTitle}>Additional Information</Text>
-                            <Text style={{ color: '#334155', lineHeight: 1.5 }}>{data.additional_explanations}</Text>
+                            <Text style={{ color: '#334155', lineHeight: 1.3 }}>{data.additional_explanations}</Text>
                         </View>
                     )}
                 </View>
