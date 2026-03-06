@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FCFCFC',
         fontFamily: 'Helvetica',
         fontSize: 9,
-        lineHeight: 1.4,
+        lineHeight: 1.3,
     },
     // Fixed background for multi-page sidebar
     sidebarBackground: {

@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFFFFF',
         fontFamily: 'Helvetica',
         fontSize: 10,
-        lineHeight: 1.6,
+        lineHeight: 1.4,
         color: '#1A1A1A',
     },
     header: {
