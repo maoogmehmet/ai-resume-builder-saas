@@ -9,35 +9,12 @@ import { motion } from 'framer-motion'
 import NumberFlow from '@number-flow/react'
 
 export default function Pricing() {
-    const [isYearly, setIsYearly] = useState(true)
-
     return (
         <section id="pricing" className="py-16 md:py-32 text-white">
             <div className="mx-auto max-w-6xl px-6">
                 <div className="mx-auto max-w-2xl space-y-6 text-center">
                     <h2 className="text-center text-4xl font-semibold lg:text-5xl">Pricing that Scales with You</h2>
                     <p className="text-muted-foreground">Turn your LinkedIn into an ATS ready resume in minutes—then optimize for any job and share a public link recruiters can open instantly.</p>
-
-                    {/* Billing Toggle */}
-                    <div className="flex items-center justify-center pt-8">
-                        <div className="flex items-center gap-3 rounded-full bg-zinc-900/50 p-1 border border-white/5">
-                            <button
-                                onClick={() => setIsYearly(false)}
-                                className={`relative px-4 py-1.5 text-sm font-medium transition-all rounded-full ${!isYearly ? "text-white bg-white/10" : "text-zinc-500 hover:text-zinc-300"}`}
-                            >
-                                Monthly
-                            </button>
-                            <button
-                                onClick={() => setIsYearly(true)}
-                                className={`relative px-4 py-1.5 text-sm font-medium transition-all rounded-full ${isYearly ? "text-white bg-white/10" : "text-zinc-500 hover:text-zinc-300"}`}
-                            >
-                                Yearly
-                                <span className="absolute -top-3 -right-2 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-500 border border-emerald-500/20">
-                                    -30%
-                                </span>
-                            </button>
-                        </div>
-                    </div>
                 </div>
 
                 <div className="mt-8 grid gap-6 md:mt-20 md:grid-cols-2 max-w-4xl mx-auto">
@@ -95,7 +72,7 @@ export default function Pricing() {
                         <span className="bg-linear-to-br absolute inset-x-0 -top-3 mx-auto flex h-6 w-fit items-center rounded-full from-purple-400 to-amber-300 px-3 py-1 text-[10px] uppercase tracking-wider font-bold text-amber-950 shadow-lg">Most Popular</span>
 
                         <CardHeader>
-                            <CardTitle className="font-medium text-white">Pro</CardTitle>
+                            <CardTitle className="font-medium text-white">Pro Plan</CardTitle>
                             <div className="flex items-baseline gap-1 my-3">
                                 <span className="text-3xl font-semibold text-white tracking-tighter">$</span>
                                 <NumberFlow
@@ -103,10 +80,10 @@ export default function Pricing() {
                                         minimumFractionDigits: 0,
                                         maximumFractionDigits: 0,
                                     }}
-                                    value={isYearly ? 99 : 12}
+                                    value={99}
                                     className="text-4xl font-bold text-white tracking-tighter"
                                 />
-                                <span className="text-zinc-500 text-sm font-medium ml-1">/ {isYearly ? "year" : "month"}</span>
+                                <span className="text-zinc-500 text-sm font-medium ml-1">/ year</span>
                             </div>
                             <CardDescription className="text-sm text-zinc-400">Power user performance</CardDescription>
                         </CardHeader>
