@@ -51,7 +51,6 @@ const footerLinks: FooterSection[] = [
             { title: 'X', href: 'https://x.com/mehtOzdede' },
             { title: 'Instagram', href: 'https://www.instagram.com/novatypalcv/', icon: InstagramIcon },
             { title: 'LinkedIn', href: '#', icon: LinkedinIcon },
-            { title: 'Youtube', href: '#', icon: YoutubeIcon },
         ],
     },
 ];
