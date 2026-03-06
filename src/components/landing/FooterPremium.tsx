@@ -38,9 +38,9 @@ const footerLinks: FooterSection[] = [
     {
         label: 'Support',
         links: [
-            { title: 'Help Center', href: 'mailto:support@novatypalcv.com' },
-            { title: 'Contact Us', href: 'mailto:hello@novatypalcv.com' },
-            { title: 'Bug Report', href: 'mailto:bugs@novatypalcv.com' },
+            { title: 'Help Center', href: 'mailto:support@maoog.software' },
+            { title: 'Contact Us', href: 'mailto:support@maoog.software' },
+            { title: 'Bug Report', href: 'mailto:support@maoog.software' },
         ],
     },
     {

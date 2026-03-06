@@ -19,15 +19,15 @@ export default function TermsOfServicePage() {
                 </div>
                 <div className="space-y-10">
                     {[
-                        { title: '1. Acceptance of Terms', body: 'By accessing or using Novatypalcv ("Service"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service.' },
-                        { title: '2. Description of Service', body: 'Novatypalcv provides an AI-powered resume building and career optimization platform including AI resume generation, ATS optimization, cover letter creation, and career analytics. The Service may be updated at any time.' },
+                        { title: '1. Acceptance of Terms', body: 'By accessing or using Novatypalcv ("Service"), provided by Maoog Software ("we", "us"), you agree to be bound by these Terms of Service. If you do not agree, please do not use the Service.' },
+                        { title: '2. Description of Service', body: 'Novatypalcv is an AI-powered resume building and career optimization platform. The Service may be updated or modified at any time by Maoog Software.' },
                         { title: '3. User Accounts', body: 'You must create an account to access features. You are responsible for maintaining the confidentiality of your account credentials and all activities under your account. You agree to provide accurate and complete information during registration.' },
                         { title: '4. Subscription and Payments', body: 'Certain features require a paid subscription. By subscribing, you authorize recurring charges. Subscriptions renew automatically unless cancelled. Refunds are available within 14 days of initial purchase if unsatisfied.' },
                         { title: '5. Acceptable Use', body: 'You agree not to use the Service to create misleading or fraudulent content, violate applicable laws, infringe on third-party intellectual property, or attempt to reverse engineer our AI systems. We may terminate accounts that violate these terms.' },
-                        { title: '6. Intellectual Property', body: 'Content you create belongs to you. Novatypalcv retains ownership of the platform, AI models, and underlying technology. You grant us a limited license to process your content solely for providing the Service.' },
-                        { title: '7. Limitation of Liability', body: 'To the maximum extent permitted by law, Novatypalcv shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of the Service.' },
+                        { title: '6. Intellectual Property', body: 'Content you create belongs to you. Maoog Software retains ownership of the platform, designs, AI implementations, and underlying technology. You grant us a limited license to process your content solely for providing the Service.' },
+                        { title: '7. Limitation of Liability', body: 'To the maximum extent permitted by law, Maoog Software shall not be liable for any indirect, incidental, special, or consequential damages resulting from your use of the Service.' },
                         { title: '8. Changes to Terms', body: 'We may modify these Terms at any time. Users will be notified of material changes via email or the Service. Continued use after changes constitutes acceptance of the updated Terms.' },
-                        { title: '9. Contact', body: 'For questions about these Terms, contact us at legal@novatypalcv.com.' },
+                        { title: '9. Contact', body: 'For questions about these Terms, contact us at legal@maoog.software.' },
                     ].map((s) => (
                         <section key={s.title}>
                             <h2 className="text-lg font-black text-white mb-2">{s.title}</h2>

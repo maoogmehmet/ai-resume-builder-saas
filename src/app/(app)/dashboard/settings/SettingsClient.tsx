@@ -142,7 +142,7 @@ export function SettingsClient({ email: propEmail, resumeCount, isSubscribed, in
     const handleDeleteAccount = async () => {
         const confirmed = window.confirm('Are you sure you want to delete your account? This action cannot be undone.');
         if (!confirmed) return;
-        toast.error('Account deletion requires admin action. Please contact support@novatypalcv.com');
+        toast.error('Account deletion requires admin action. Please contact support@maoog.software');
     };
 
     const initials = displayName ? displayName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) : email?.[0]?.toUpperCase() || '?';

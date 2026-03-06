@@ -15,7 +15,7 @@ export async function sendWelcomeEmail(toEmail: string) {
           <p>Get started by importing your LinkedIn profile and letting our AI optimize your resume for your next dream job!</p>
           <p>Your 7-day free trial has started. Build unlimited ATS-optimized resumes today.</p>
           <br/>
-          <p>Best regards,<br/>The Novatypalcv Team</p>
+          <p>Best regards,<br/>The Maoog Software Team</p>
         </div>
       `,
         });

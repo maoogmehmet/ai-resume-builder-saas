@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   },
   description: 'The ultimate ATS-optimized resume builder for elite professionals. Reimagining high-performance careers with AI narratives.',
   keywords: ['resume builder', 'CV builder', 'ATS optimization', 'AI resume', 'career growth', 'professional CV'],
-  authors: [{ name: 'Novatypalcv Team' }],
-  creator: 'Novatypalcv',
+  authors: [{ name: 'Maoog Software' }],
+  creator: 'Maoog Software',
   openGraph: {
     type: 'website',
     locale: 'en_US',
