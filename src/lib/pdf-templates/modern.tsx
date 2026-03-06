@@ -36,19 +36,26 @@ const styles = StyleSheet.create({
         borderColor: '#334155',
         alignSelf: 'center',
     },
-    name: {
+    nameFirst: {
         fontSize: 22,
         fontFamily: 'Helvetica-Bold',
-        marginBottom: 4,
         color: '#FFFFFF',
         textAlign: 'center',
-        lineHeight: 1.2,
+        lineHeight: 1.1,
+    },
+    nameRest: {
+        fontSize: 18,
+        fontFamily: 'Helvetica-Bold',
+        color: '#FFFFFF',
+        textAlign: 'center',
+        lineHeight: 1.1,
+        marginTop: 4,
     },
     headerSubtitle: {
         fontSize: 10,
         color: '#FFFFFF',
         textAlign: 'center',
-        marginTop: 12, // Added marginTop to prevent overlap and push it down
+        marginTop: 10,
         marginBottom: 24,
         textTransform: 'uppercase',
         letterSpacing: 1,
@@ -150,7 +157,18 @@ export const ModernTemplate = ({ data }: { data: any }) => {
                         {personal_info.profile_image && personal_info.profile_image.trim() !== '' && (
                             <Image src={{ uri: personal_info.profile_image }} style={styles.profileImage} />
                         )}
-                        <Text style={styles.name}>{personal_info.full_name}</Text>
+                        {(() => {
+                            const nameParts = personal_info.full_name.trim().split(/\s+/);
+                            if (nameParts.length > 1) {
+                                return (
+                                    <>
+                                        <Text style={styles.nameFirst}>{nameParts[0]}</Text>
+                                        <Text style={styles.nameRest}>{nameParts.slice(1).join(' ')}</Text>
+                                    </>
+                                );
+                            }
+                            return <Text style={styles.nameFirst}>{personal_info.full_name}</Text>;
+                        })()}
                         <Text style={styles.headerSubtitle}>{experience?.[0]?.position || experience?.[0]?.title || 'Professional'}</Text>
                     </View>
 
