@@ -46,9 +46,9 @@ const footerLinks: FooterSection[] = [
     {
         label: 'Social',
         links: [
+            { title: 'X', href: 'https://x.com/mehtOzdede' },
+            { title: 'Instagram', href: 'https://www.instagram.com/novatypalcv/', icon: InstagramIcon },
             { title: 'LinkedIn', href: '#', icon: LinkedinIcon },
-            { title: 'Instagram', href: '#', icon: InstagramIcon },
-            { title: 'Facebook', href: '#', icon: FacebookIcon },
             { title: 'Youtube', href: '#', icon: YoutubeIcon },
         ],
     },
