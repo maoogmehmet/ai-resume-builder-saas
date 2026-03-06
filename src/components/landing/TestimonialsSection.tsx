@@ -9,7 +9,7 @@ export default function TestimonialsSection() {
                         <p className="text-lg font-semibold sm:text-xl md:text-3xl tracking-tight text-white/90">Novatypalcv feels like having a personal resume strategist on demand. I dropped my LinkedIn URL in, and within minutes I had an ATS friendly resume that actually highlights impact not just job duties. The job specific optimization and shareable public link made applying faster, cleaner, and way more confident.</p>
 
                         <div className="mt-12 flex items-center justify-center gap-6">
-                            <div className="flex size-14 items-center justify-center rounded-[1rem] overflow-hidden bg-white/5 border border-white/10">
+                            <div className="flex size-14 items-center justify-center rounded-[1rem] overflow-hidden bg-black border border-white/10">
                                 <MaoogLogo size={40} className="text-white" />
                             </div>
 
