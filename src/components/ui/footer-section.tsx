@@ -63,7 +63,7 @@ export function Footer() {
             <div className="grid w-full gap-16 xl:grid-cols-3 xl:gap-8">
                 <AnimatedContainer className="space-y-6">
                     <div className="flex items-center gap-2 group cursor-pointer">
-                        <div className="h-10 w-10 rounded-xl bg-black flex items-center justify-center group-hover:scale-110 transition-transform shadow-2xl border border-white/5">
+                        <div className="flex items-center justify-center group-hover:scale-110 transition-transform">
                             <Logo className="h-6 w-6 text-white" />
                         </div>
                         <span className="text-2xl font-black text-white italic tracking-tighter">Novatypalcv</span>
